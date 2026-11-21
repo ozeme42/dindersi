@@ -1,52 +1,127 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Maximize2, Minimize2 } from 'lucide-react';
-import type { CategorySortStep } from '@/lib/types';
+import type { CategorySortStep, CategorySortCategory, CategorySortItem } from '@/lib/types';
 
-// 🕌 Şablondaki 9 Kart ve Konumları
-const CARDS: Array<'farz' | 'vacip' | 'sunnet' | 'nafile'> = [
-    'farz', 'farz', 'vacip', 'farz', 'vacip', 'sunnet', 'farz', 'farz', 'nafile'
+// 🕌 Varsayılan 4 Kategori (Adımda özel kategori belirtilmemişse)
+const DEFAULT_CATEGORIES: CategorySortCategory[] = [
+    {
+        id: 'farz',
+        name: 'FARZ',
+        badge: 'Kesin Emir',
+        description: "Farz: Allah'ın kesin olarak emrettiği, terk edilmesi günah olan ibadetlerdir.",
+        color: 'farz',
+    },
+    {
+        id: 'vacip',
+        name: 'VACİP',
+        badge: 'Gerekli',
+        description: 'Vacip: Farza yakın, yapılması gerekli olan ibadetlerdir.',
+        color: 'vacip',
+    },
+    {
+        id: 'sunnet',
+        name: 'SÜNNET',
+        badge: 'Örnek İbadet',
+        description: 'Sünnet: Peygamberimizin yaptığı ve yapılmasını tavsiye ettiği ibadetlerdir.',
+        color: 'sunnet',
+    },
+    {
+        id: 'nafile',
+        name: 'NAFİLE',
+        badge: 'Gönüllü İbadet',
+        description: 'Nafile: Yapılması sevap, yapılmaması günah olmayan ek ibadetlerdir.',
+        color: 'nafile',
+    },
 ];
 
-const CX = [275, 408, 544, 684, 821, 960, 1097, 1234, 1374];
-
-const BINX: Record<'farz' | 'vacip' | 'sunnet' | 'nafile', number> = {
-    farz: 310,
-    vacip: 620,
-    sunnet: 928,
-    nafile: 1236,
-};
-
-const INFO: Record<'farz' | 'vacip' | 'sunnet' | 'nafile', string> = {
-    farz: "Farz: Allah'ın kesin olarak emrettiği, terk edilmesi günah olan ibadetlerdir.",
-    vacip: 'Vacip: Farza yakın, yapılması gerekli olan ibadetlerdir.',
-    sunnet: 'Sünnet: Peygamberimizin yaptığı ve yapılmasını tavsiye ettiği ibadetlerdir.',
-    nafile: 'Nafile: Yapılması sevap, yapılmaması günah olmayan ek ibadetlerdir.',
-};
-
-const IMG = [
-    '/images/category-game/card-0.jpg',
-    '/images/category-game/card-1.jpg',
-    '/images/category-game/card-2.jpg',
-    '/images/category-game/card-3.jpg',
-    '/images/category-game/card-4.jpg',
-    '/images/category-game/card-5.jpg',
-    '/images/category-game/card-6.jpg',
-    '/images/category-game/card-7.jpg',
-    '/images/category-game/card-8.jpg',
+// 🎴 Varsayılan 12 Kart (Adımda özel soru/madde yoksa)
+const DEFAULT_ITEMS: CategorySortItem[] = [
+    { id: 'it-1', text: 'Beş Vakit Namaz', hint: 'Günlük farz', categoryId: 'farz' },
+    { id: 'it-2', text: 'Cuma Namazı', hint: 'Cuma günü farz', categoryId: 'farz' },
+    { id: 'it-3', text: 'Cenaze Namazı', hint: 'Farz-ı kifâye', categoryId: 'farz' },
+    { id: 'it-4', text: 'Bayram Namazı', hint: 'Ramazan & Kurban', categoryId: 'vacip' },
+    { id: 'it-5', text: 'Vitir Namazı', hint: 'Yatsıdan sonra 3 rekat', categoryId: 'vacip' },
+    { id: 'it-6', text: 'Sabah Sünneti', hint: 'Farzdan önce', categoryId: 'sunnet' },
+    { id: 'it-7', text: 'Öğle Sünnetleri', hint: 'İlk ve son sünnet', categoryId: 'sunnet' },
+    { id: 'it-8', text: 'Akşam Sünneti', hint: 'Farzdan sonra', categoryId: 'sunnet' },
+    { id: 'it-9', text: 'Yatsı Sünneti', hint: 'İlk ve son sünnet', categoryId: 'sunnet' },
+    { id: 'it-10', text: 'Kuşluk Namazı', hint: 'Duha namazı', categoryId: 'nafile' },
+    { id: 'it-11', text: 'Teheccüd Namazı', hint: 'Gece namazı', categoryId: 'nafile' },
+    { id: 'it-12', text: 'Evvâbin Namazı', hint: 'Akşam ile yatsı arası', categoryId: 'nafile' },
 ];
 
-interface CardState {
-    id: number;
-    category: 'farz' | 'vacip' | 'sunnet' | 'nafile';
-    img: string;
+// 🎯 Akıllı İkon Eşleştirici
+function getItemIcon(text: string, subtitle?: string): string {
+    const combined = `${text} ${subtitle || ''}`.toLowerCase();
+    if (combined.includes('cuma') || combined.includes('camii')) return '☪️';
+    if (combined.includes('cenaze') || combined.includes('dua') || combined.includes('rahmet')) return '🤲';
+    if (combined.includes('bayram') || combined.includes('hilal') || combined.includes('ramazan')) return '🌙';
+    if (combined.includes('vitir') || combined.includes('yıldız')) return '⭐';
+    if (combined.includes('sabah') || combined.includes('fecr') || combined.includes('şafak')) return '🌅';
+    if (combined.includes('öğle') || combined.includes('güneş')) return '☀️';
+    if (combined.includes('akşam') || combined.includes('ikindi') || combined.includes('gurub')) return '🌆';
+    if (combined.includes('yatsı') || combined.includes('gece') || combined.includes('teheccüd')) return '🌌';
+    if (combined.includes('kuşluk') || combined.includes('duha')) return '🌤️';
+    if (combined.includes('evvabin') || combined.includes('nafile') || combined.includes('sevap')) return '✨';
+    if (combined.includes('farz') || combined.includes('namaz') || combined.includes('ezan')) return '🕌';
+    if (combined.includes('oruç') || combined.includes('iftar') || combined.includes('sahur')) return '🥣';
+    if (combined.includes('zekat') || combined.includes('sadaka') || combined.includes('infak')) return '💰';
+    if (combined.includes('hac') || combined.includes('umre') || combined.includes('kabe')) return '🕋';
+    if (combined.includes('kuran') || combined.includes('ayet') || combined.includes('sure') || combined.includes('kitap')) return '📖';
+    if (combined.includes('peygamber') || combined.includes('sünnet') || combined.includes('hadis')) return '💚';
+    if (combined.includes('melek') || combined.includes('vahiy') || combined.includes('cebrail')) return '🪽';
+    if (combined.includes('ahiret') || combined.includes('cennet') || combined.includes('kıyamet')) return '🕊️';
+    if (combined.includes('adalet') || combined.includes('terazi') || combined.includes('hak')) return '⚖️';
+    return '✨';
+}
+
+function getCategoryIcon(name: string, index: number): string {
+    const n = name.toLowerCase();
+    if (n.includes('farz')) return '🕌';
+    if (n.includes('vacip')) return '⭐';
+    if (n.includes('sünnet')) return '💚';
+    if (n.includes('nafile')) return '💜';
+    const defaults = ['🕌', '⭐', '💚', '💜', '🔷', '🔶', '🎯', '✨'];
+    return defaults[index % defaults.length];
+}
+
+// Kategori Eşleştirme Kontrolü (id ve isim esnekliği)
+function isCategoryMatch(itemCatId: string, cat: CategorySortCategory): boolean {
+    const norm = (s: string) => (s || '').trim().toLowerCase().replace(/[\s-_]/g, '');
+    const i = norm(itemCatId);
+    const cId = norm(cat.id);
+    const cName = norm(cat.name);
+    return i === cId || i === cName || cName.includes(i) || i.includes(cName);
+}
+
+// Tepsideki Kartların Yatay Konumlarını Hesapla
+function getCardPositions(count: number): number[] {
+    const cardW = 124;
+    if (count <= 1) return [836];
+    if (count === 9) {
+        return [275, 408, 544, 684, 821, 960, 1097, 1234, 1374];
+    }
+    const startX = 230;
+    const endX = 1470;
+    const step = (endX - startX - cardW) / (count - 1);
+    return Array.from({ length: count }, (_, i) => Math.round(startX + cardW / 2 + i * step));
+}
+
+interface DynamicCardState {
+    id: string;
+    text: string;
+    subtitle: string;
+    icon: string;
+    targetCategoryId: string;
     cx: number;
     placed: boolean;
-    placedIn?: 'farz' | 'vacip' | 'sunnet' | 'nafile';
+    placedInCatId?: string;
 }
 
 export function CategorySortingPlayer({
+    step,
     isFullscreen: propIsFullscreen,
 }: {
     step: CategorySortStep;
@@ -60,18 +135,46 @@ export function CategorySortingPlayer({
     const timerRef = useRef<NodeJS.Timeout | null>(null);
     const tipTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-    // Fullscreen durumu
+    // Fullscreen ve Ölçek
     const [isFullscreen, setIsFullscreen] = useState(Boolean(propIsFullscreen));
     const [scale, setScale] = useState(1);
 
-    // Oyun durumları
+    // Kategoriler ve Maddeler (Adımdan dinamik alınır, yoksa varsayılan)
+    const categories: CategorySortCategory[] = useMemo(() => {
+        if (Array.isArray(step.categories) && step.categories.length > 0) {
+            return step.categories;
+        }
+        return DEFAULT_CATEGORIES;
+    }, [step.categories]);
+
+    const rawItems: CategorySortItem[] = useMemo(() => {
+        if (Array.isArray(step.items) && step.items.length > 0) {
+            return step.items;
+        }
+        return DEFAULT_ITEMS;
+    }, [step.items]);
+
+    // 4 Kaide Koordinatları (Kategori sayısına göre dinamik)
+    const binXCoords = useMemo(() => {
+        const count = categories.length;
+        if (count === 4) return [310, 620, 928, 1236];
+        if (count === 3) return [420, 774, 1128];
+        if (count === 2) return [465, 928];
+        // 5+ kategori için
+        const startX = 200;
+        const totalW = 1270;
+        const stepW = totalW / count;
+        return Array.from({ length: count }, (_, i) => Math.round(startX + i * stepW));
+    }, [categories.length]);
+
+    // Oyun State'leri
     const [score, setScore] = useState(250);
     const [okCount, setOkCount] = useState(0);
     const [elapsedTime, setElapsedTime] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
-    const [cards, setCards] = useState<CardState[]>([]);
-    const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
+    const [cards, setCards] = useState<DynamicCardState[]>([]);
+    const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
 
     // Overlay ve Bilgi Balonu
     const [overlay, setOverlay] = useState<{
@@ -94,22 +197,19 @@ export function CategorySortingPlayer({
         left: 310,
     });
 
-    const [flashes, setFlashes] = useState<Record<string, 'ok' | 'bad' | 'hot' | null>>({
-        farz: null,
-        vacip: null,
-        sunnet: null,
-        nafile: null,
-    });
+    const [flashes, setFlashes] = useState<Record<string, 'ok' | 'bad' | 'hot' | null>>({});
 
-    // Refs for drag and synchronous state access
+    // Sürükleme ve senkron state erişimi için ref
     const stateRef = useRef({
         isPaused: false,
         isMuted: false,
         scale: 1,
-        cards: [] as CardState[],
+        cards: [] as DynamicCardState[],
         okCount: 0,
         score: 250,
-        selectedCardId: null as number | null,
+        selectedCardId: null as string | null,
+        categories: [] as CategorySortCategory[],
+        binXCoords: [] as number[],
     });
 
     useEffect(() => {
@@ -120,7 +220,9 @@ export function CategorySortingPlayer({
         stateRef.current.okCount = okCount;
         stateRef.current.score = score;
         stateRef.current.selectedCardId = selectedCardId;
-    }, [isPaused, isMuted, scale, cards, okCount, score, selectedCardId]);
+        stateRef.current.categories = categories;
+        stateRef.current.binXCoords = binXCoords;
+    }, [isPaused, isMuted, scale, cards, okCount, score, selectedCardId, categories, binXCoords]);
 
     // Ses Efektleri (Web Audio API Synthesizer)
     const beep = useCallback((f: number, d = 0.15, type: OscillatorType = 'sine') => {
@@ -150,7 +252,7 @@ export function CategorySortingPlayer({
         }
     }, []);
 
-    // Fullscreen listener
+    // Fullscreen dinleyicisi
     useEffect(() => {
         const handleFsChange = () => {
             setIsFullscreen(Boolean(document.fullscreenElement));
@@ -175,7 +277,7 @@ export function CategorySortingPlayer({
         }
     };
 
-    // Responsive 1672x941 fit scaling
+    // 1672x941 Duyarlı Ölçekleme
     const updateScale = useCallback(() => {
         if (!containerRef.current) return;
         const w = containerRef.current.clientWidth || window.innerWidth;
@@ -198,15 +300,15 @@ export function CategorySortingPlayer({
         };
     }, [updateScale, isFullscreen]);
 
-    // Flash glow efekti
-    const triggerFlash = useCallback((cat: 'farz' | 'vacip' | 'sunnet' | 'nafile', type: 'ok' | 'bad') => {
-        setFlashes(prev => ({ ...prev, [cat]: type }));
+    // Parlama Efekti
+    const triggerFlash = useCallback((catId: string, type: 'ok' | 'bad') => {
+        setFlashes(prev => ({ ...prev, [catId]: type }));
         setTimeout(() => {
-            setFlashes(prev => ({ ...prev, [cat]: null }));
+            setFlashes(prev => ({ ...prev, [catId]: null }));
         }, 500);
     }, []);
 
-    // Zamanlayıcı (Sonsuz / Sınır Yok - Kronometre)
+    // Kronometre (Zaman Sınırı Olmadan)
     useEffect(() => {
         if (timerRef.current) clearInterval(timerRef.current);
         if (!isPaused && !overlay.show) {
@@ -219,7 +321,7 @@ export function CategorySortingPlayer({
         };
     }, [isPaused, overlay.show]);
 
-    // Oyunu Başlat
+    // Oyunu Başlat / Sıfırla
     const startGame = useCallback(() => {
         if (timerRef.current) clearInterval(timerRef.current);
         setScore(250);
@@ -236,15 +338,18 @@ export function CategorySortingPlayer({
             isWin: false,
         });
 
-        const initialCards: CardState[] = CARDS.map((cat, i) => ({
-            id: i,
-            category: cat,
-            img: IMG[i],
-            cx: CX[i],
+        const positions = getCardPositions(rawItems.length);
+        const initialCards: DynamicCardState[] = rawItems.map((item, idx) => ({
+            id: item.id || `card-${idx}`,
+            text: item.text,
+            subtitle: item.hint || '',
+            icon: getItemIcon(item.text, item.hint),
+            targetCategoryId: item.categoryId,
+            cx: positions[idx] || 836,
             placed: false,
         }));
         setCards(initialCards);
-    }, []);
+    }, [rawItems]);
 
     useEffect(() => {
         startGame();
@@ -256,9 +361,8 @@ export function CategorySortingPlayer({
 
     // Zafer Kontrolü
     const checkWin = useCallback((currentOk: number, currentScore: number) => {
-        if (currentOk === CARDS.length) {
+        if (currentOk === rawItems.length) {
             setTimeout(() => {
-                // Zafer Melodisi
                 [523, 659, 784, 1046].forEach((f, i) => {
                     setTimeout(() => beep(f, 0.2), i * 150);
                 });
@@ -271,54 +375,58 @@ export function CategorySortingPlayer({
                 });
             }, 400);
         }
-    }, [beep]);
+    }, [rawItems.length, beep]);
 
-    // Kartı Kategoriye Yerleştir (Ortak mantık: Sürükleme veya Tıklama)
-    const placeCardIntoCategory = useCallback((cardId: number, targetCategory: 'farz' | 'vacip' | 'sunnet' | 'nafile') => {
+    // Kartı Kategoriye Yerleştir
+    const placeCardIntoCategory = useCallback((cardId: string, targetCat: CategorySortCategory) => {
         const card = stateRef.current.cards.find(c => c.id === cardId);
         if (!card || card.placed || stateRef.current.isPaused) return;
 
-        if (targetCategory === card.category) {
+        if (isCategoryMatch(card.targetCategoryId, targetCat)) {
             // Doğru yerleştirme!
             const newOk = stateRef.current.okCount + 1;
             const newScore = stateRef.current.score + 10;
             beep(660, 0.15);
-            triggerFlash(targetCategory, 'ok');
+            triggerFlash(targetCat.id, 'ok');
             setScore(newScore);
             setOkCount(newOk);
             setSelectedCardId(null);
-            setCards(prev => prev.map(c => c.id === cardId ? { ...c, placed: true, placedIn: targetCategory } : c));
+            setCards(prev => prev.map(c => c.id === cardId ? { ...c, placed: true, placedInCatId: targetCat.id } : c));
             checkWin(newOk, newScore);
         } else {
             // Yanlış yerleştirme!
             const newScore = Math.max(0, stateRef.current.score - 5);
             beep(180, 0.25, 'sawtooth');
-            triggerFlash(targetCategory, 'bad');
+            triggerFlash(targetCat.id, 'bad');
             setScore(newScore);
         }
     }, [beep, triggerFlash, checkWin]);
 
-    // Koordinattan Bini Bul
-    const getBinAt = useCallback((clientX: number, clientY: number): ('farz' | 'vacip' | 'sunnet' | 'nafile') | null => {
+    // Koordinattan Hedef Kategoriyi Bul
+    const getCategoryAt = useCallback((clientX: number, clientY: number): CategorySortCategory | null => {
         if (!stageRef.current) return null;
         const r = stageRef.current.getBoundingClientRect();
         const s = stateRef.current.scale;
         const sx = (clientX - r.left) / s;
         const sy = (clientY - r.top) / s;
 
-        if (sy < 232 || sy > 672) return null;
-        for (const k of ['farz', 'vacip', 'sunnet', 'nafile'] as const) {
-            if (sx > BINX[k] && sx < BINX[k] + 296) {
-                return k;
+        if (sy < 220 || sy > 672) return null;
+        const cats = stateRef.current.categories;
+        const binXs = stateRef.current.binXCoords;
+
+        for (let i = 0; i < cats.length; i++) {
+            const bx = binXs[i];
+            if (sx >= bx && sx <= bx + 296) {
+                return cats[i];
             }
         }
         return null;
     }, []);
 
-    // Pointer Drag Mantığı
+    // Sürükle - Bırak (Pointer Drag)
     const dragRef = useRef<{
         active: boolean;
-        cardId: number;
+        cardId: string;
         ghostEl: HTMLDivElement | null;
         dx: number;
         dy: number;
@@ -326,7 +434,7 @@ export function CategorySortingPlayer({
         startY: number;
     }>({
         active: false,
-        cardId: -1,
+        cardId: '',
         ghostEl: null,
         dx: 0,
         dy: 0,
@@ -334,15 +442,17 @@ export function CategorySortingPlayer({
         startY: 0,
     });
 
-    const handleCardPointerDown = (e: React.PointerEvent<HTMLDivElement>, card: CardState) => {
+    const handleCardPointerDown = (e: React.PointerEvent<HTMLDivElement>, card: DynamicCardState) => {
         if (stateRef.current.isPaused || card.placed) return;
         e.preventDefault();
         (e.target as HTMLElement).setPointerCapture(e.pointerId);
 
         const cardEl = e.currentTarget;
         const r = cardEl.getBoundingClientRect();
-        const ghost = document.createElement('div');
-        ghost.className = 'cat-game-ghost';
+
+        // Kartın birebir klonunu oluştur (Piksel mükemmel hayalet kart)
+        const ghost = cardEl.cloneNode(true) as HTMLDivElement;
+        ghost.className = 'game-card cat-ghost-clone';
         ghost.style.position = 'fixed';
         ghost.style.zIndex = '9999';
         ghost.style.pointerEvents = 'none';
@@ -350,10 +460,9 @@ export function CategorySortingPlayer({
         ghost.style.top = `${r.top}px`;
         ghost.style.width = `${r.width}px`;
         ghost.style.height = `${r.height}px`;
-        ghost.style.backgroundImage = `url(${card.img})`;
-        ghost.style.backgroundSize = '100% 100%';
-        ghost.style.borderRadius = '24px 24px 14px 14px';
-        ghost.style.boxShadow = '0 14px 26px rgba(0,0,0,0.7)';
+        ghost.style.margin = '0';
+        ghost.style.transform = 'none';
+        ghost.style.boxShadow = '0 18px 36px rgba(0,0,0,0.7)';
         ghost.style.transition = 'none';
         document.body.appendChild(ghost);
 
@@ -376,16 +485,16 @@ export function CategorySortingPlayer({
         ghostEl.style.left = `${e.clientX - dx}px`;
         ghostEl.style.top = `${e.clientY - dy}px`;
 
-        const bin = getBinAt(e.clientX, e.clientY);
+        const targetCat = getCategoryAt(e.clientX, e.clientY);
         setFlashes(prev => {
             const next: Record<string, 'ok' | 'bad' | 'hot' | null> = { ...prev };
-            for (const k of ['farz', 'vacip', 'sunnet', 'nafile'] as const) {
-                if (k === bin) {
-                    next[k] = 'hot';
-                } else if (next[k] === 'hot') {
-                    next[k] = null;
+            categories.forEach(cat => {
+                if (targetCat && cat.id === targetCat.id) {
+                    next[cat.id] = 'hot';
+                } else if (next[cat.id] === 'hot') {
+                    next[cat.id] = null;
                 }
-            }
+            });
             return next;
         });
     };
@@ -398,7 +507,7 @@ export function CategorySortingPlayer({
         }
         dragRef.current = {
             active: false,
-            cardId: -1,
+            cardId: '',
             ghostEl: null,
             dx: 0,
             dy: 0,
@@ -406,7 +515,7 @@ export function CategorySortingPlayer({
             startY: 0,
         };
 
-        // Temizle hover parlamasını
+        // Hover parlamasını temizle
         setFlashes(prev => {
             const next = { ...prev };
             for (const k in next) {
@@ -415,39 +524,39 @@ export function CategorySortingPlayer({
             return next;
         });
 
-        // Sürükleme mesafesi kontrolü (Çok küçük hareket tıklama sayılır)
+        // Küçük tıklama hareketi (Akıllı tahta tıklama seçimi)
         const dist = Math.hypot(e.clientX - startX, e.clientY - startY);
         if (dist < 8) {
-            // Tıklama seçimi (Akıllı tahta için)
             setSelectedCardId(prev => prev === cardId ? null : cardId);
             return;
         }
 
-        const bin = getBinAt(e.clientX, e.clientY);
-        if (bin) {
-            placeCardIntoCategory(cardId, bin);
+        const targetCat = getCategoryAt(e.clientX, e.clientY);
+        if (targetCat) {
+            placeCardIntoCategory(cardId, targetCat);
         }
     };
 
-    // Kategoriye Tıklama (Tıklanan kartı yerleştirmek için)
-    const handleCategoryClick = (cat: 'farz' | 'vacip' | 'sunnet' | 'nafile') => {
+    // Kategoriye Tıklama (Tıklanan kartı kaideye yerleştirme)
+    const handleCategoryClick = (cat: CategorySortCategory) => {
         if (selectedCardId !== null) {
             placeCardIntoCategory(selectedCardId, cat);
         }
     };
 
-    // Bilgi Butonu Tıklama
-    const handleInfoClick = (cat: 'farz' | 'vacip' | 'sunnet' | 'nafile') => {
+    // Kategori Bilgi Baloncuğu
+    const handleInfoClick = (cat: CategorySortCategory, binX: number) => {
         if (tipTimerRef.current) clearTimeout(tipTimerRef.current);
-        const left = Math.min(BINX[cat], 1672 - 360);
+        const left = Math.min(binX, 1672 - 360);
+        const text = cat.description || `${cat.name}: Bu kategoriye ait olan ibadet ve kavramları toplayın.`;
         setTip({
             show: true,
-            text: INFO[cat],
+            text,
             left,
         });
         tipTimerRef.current = setTimeout(() => {
             setTip(prev => ({ ...prev, show: false }));
-        }, 4000);
+        }, 4500);
     };
 
     // Duraklat / Devam Et
@@ -467,14 +576,14 @@ export function CategorySortingPlayer({
         }
     };
 
-    // Zaman Formatlama (Kronometre: mm:ss)
+    // Zaman Formatlama (mm:ss)
     const fmtTime = (seconds: number) => {
         const m = String(Math.floor(seconds / 60)).padStart(2, '0');
         const s = String(seconds % 60).padStart(2, '0');
         return `${m}:${s}`;
     };
 
-    const successPct = Math.round((okCount / CARDS.length) * 100);
+    const successPct = rawItems.length > 0 ? Math.round((okCount / rawItems.length) * 100) : 100;
 
     return (
         <div
@@ -484,7 +593,7 @@ export function CategorySortingPlayer({
             onPointerUp={handlePointerUp}
             onPointerCancel={handlePointerUp}
         >
-            {/* Scoped CSS for exact template rendering & animations */}
+            {/* Özel Stil ve Animasyonlar */}
             <style jsx>{`
                 @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&display=swap');
 
@@ -558,43 +667,184 @@ export function CategorySortingPlayer({
                     transform: scale(0.95);
                 }
 
+                /* 🌟 Dinamik Kategori Başlık Afişi */
+                .cat-banner {
+                    position: absolute;
+                    top: 312px;
+                    width: 296px;
+                    height: 56px;
+                    border-radius: 16px;
+                    background: linear-gradient(180deg, #5b3318 0%, #351b09 100%);
+                    border: 3.5px solid #d49b42;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.6), inset 0 2px 3px rgba(255,255,255,0.2);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 0 16px;
+                    box-sizing: border-box;
+                    z-index: 10;
+                    cursor: pointer;
+                }
+
+                .cat-banner-name {
+                    color: #ffe899;
+                    font-size: 22px;
+                    font-weight: 800;
+                    letter-spacing: 0.5px;
+                    text-shadow: 0 2px 4px #000;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .cat-banner-badge {
+                    position: absolute;
+                    bottom: -9px;
+                    background: #d49b42;
+                    color: #351b09;
+                    font-size: 11px;
+                    font-weight: 800;
+                    padding: 1px 8px;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+                }
+
+                .cat-info-btn {
+                    position: absolute;
+                    right: -12px;
+                    top: -12px;
+                    width: 34px;
+                    height: 34px;
+                    border-radius: 50%;
+                    background: radial-gradient(circle, #e6a835 0%, #a66a1a 100%);
+                    border: 2px solid #fff;
+                    color: #fff;
+                    font-weight: 800;
+                    font-size: 18px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+                    transition: transform 0.15s;
+                    z-index: 15;
+                }
+
+                .cat-info-btn:hover {
+                    transform: scale(1.15);
+                }
+
+                /* 🎴 Dinamik Parşömen Kart Tasarımı */
                 .game-card {
                     position: absolute;
                     top: 722px;
                     width: 124px;
                     height: 154px;
-                    border-radius: 24px 24px 14px 14px;
-                    background-size: 100% 100%;
+                    border-radius: 20px 20px 12px 12px;
+                    background: linear-gradient(180deg, #fffdf7 0%, #fef5dc 45%, #fae8ba 100%);
+                    border: 3.5px solid #c9933e;
+                    box-shadow: 0 4px 10px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.8), inset 0 -2px 4px rgba(180,120,40,0.25);
                     cursor: grab;
                     touch-action: none;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.35);
-                    transition: transform 0.15s, box-shadow 0.15s;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 8px 6px;
+                    box-sizing: border-box;
+                    transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+                    user-select: none;
                 }
 
                 .game-card:hover {
-                    transform: translateY(-6px);
-                    box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+                    transform: translateY(-8px) scale(1.03);
+                    box-shadow: 0 10px 22px rgba(0,0,0,0.5);
+                    border-color: #ffd700;
+                    z-index: 30;
                 }
 
                 .game-card.selected {
-                    transform: translateY(-10px);
-                    box-shadow: 0 0 20px 4px #ffd700, 0 12px 24px rgba(0,0,0,0.6);
-                    outline: 4px solid #ffd700;
+                    transform: translateY(-12px) scale(1.05);
+                    box-shadow: 0 0 24px 5px #ffd700, 0 12px 24px rgba(0,0,0,0.6);
+                    border-color: #ffd700;
+                    outline: 3px solid #ffd700;
+                    z-index: 35;
                 }
 
                 .game-card.dragging {
                     opacity: 0.25;
                 }
 
+                .card-icon {
+                    font-size: 28px;
+                    line-height: 1;
+                    margin-top: 2px;
+                    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.15));
+                }
+
+                .card-title {
+                    font-family: 'Baloo 2', 'Trebuchet MS', sans-serif;
+                    font-weight: 800;
+                    color: #3b2010;
+                    text-align: center;
+                    line-height: 1.15;
+                    flex: 1;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 2px 4px;
+                    word-break: break-word;
+                }
+
+                .card-badge {
+                    font-size: 10px;
+                    font-weight: 700;
+                    color: #7a461b;
+                    background: rgba(140, 75, 20, 0.12);
+                    border: 1px solid rgba(140, 75, 20, 0.22);
+                    border-radius: 8px;
+                    padding: 2px 6px;
+                    max-width: 95%;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                /* 📦 Kaideye Yerleşmiş Kartlar */
                 .placed-card {
-                    position: static;
-                    width: 74px;
-                    height: 92px;
-                    cursor: default;
-                    border-radius: 14px;
-                    background-size: 100% 100%;
+                    width: 70px;
+                    height: 88px;
+                    border-radius: 10px;
+                    background: linear-gradient(180deg, #fffdf7 0%, #fae8ba 100%);
+                    border: 2px solid #c9933e;
                     box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 4px 2px;
+                    text-align: center;
                     animation: pop 0.4s ease-out;
+                    box-sizing: border-box;
+                }
+
+                .placed-card-icon {
+                    font-size: 20px;
+                    line-height: 1;
+                }
+
+                .placed-card-text {
+                    font-size: 10px;
+                    font-weight: 800;
+                    color: #3b2010;
+                    line-height: 1.1;
+                    margin-top: 3px;
+                    max-height: 34px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                 }
 
                 .zone-box {
@@ -608,6 +858,7 @@ export function CategorySortingPlayer({
                     align-content: flex-start;
                     justify-content: center;
                     cursor: pointer;
+                    overflow: hidden;
                 }
 
                 .flash-overlay {
@@ -723,7 +974,7 @@ export function CategorySortingPlayer({
                 }
             `}</style>
 
-            {/* 1672x941 Birebir Oyun Sahnesi */}
+            {/* 1672x941 Birebir Sahne */}
             <div
                 ref={stageRef}
                 className="cat-stage"
@@ -739,7 +990,7 @@ export function CategorySortingPlayer({
                     {score}
                 </div>
 
-                {/* 2. Kronometre (Süre Sınırı Olmadan Geçen Zaman) */}
+                {/* 2. Kronometre (Zaman Sınırı Olmadan) */}
                 <div
                     className="num-label"
                     style={{ left: 1272, top: 38, width: 130, height: 44, fontSize: 48 }}
@@ -755,7 +1006,7 @@ export function CategorySortingPlayer({
                     %{successPct}
                 </div>
 
-                {/* 4. Tam Ekran Tuşu (Kullanıcının İstediği Özel Düğme) */}
+                {/* 4. Tam Ekran Butonu */}
                 <button
                     className="fs-toggle-btn"
                     onClick={toggleFullscreen}
@@ -769,7 +1020,7 @@ export function CategorySortingPlayer({
                     )}
                 </button>
 
-                {/* 5. Duraklat Tuşu (Orijinal Şablondaki Konum) */}
+                {/* 5. Duraklat Butonu */}
                 <button
                     className="hit-btn"
                     style={{ left: 1443, top: 27, width: 82, height: 82 }}
@@ -778,7 +1029,7 @@ export function CategorySortingPlayer({
                     title="Duraklat / Devam Et"
                 />
 
-                {/* 6. Ses Tuşu ve Sessiz Çizgisi */}
+                {/* 6. Ses Aç/Kapa Butonu */}
                 <button
                     className="hit-btn"
                     style={{ left: 1543, top: 27, width: 82, height: 82 }}
@@ -807,7 +1058,7 @@ export function CategorySortingPlayer({
                     </div>
                 )}
 
-                {/* 7. Yeniden Başla Tuşu */}
+                {/* 7. Yeniden Başla Butonu */}
                 <button
                     className="hit-btn"
                     style={{ left: 10, top: 810, width: 160, height: 95, borderRadius: 40 }}
@@ -816,65 +1067,66 @@ export function CategorySortingPlayer({
                     title="Yeniden Başla"
                 />
 
-                {/* 8. 4 Kategori Bölgesi (Zones) ve Parlama Efektleri (Flashes) */}
-                {(['farz', 'vacip', 'sunnet', 'nafile'] as const).map(k => (
-                    <React.Fragment key={k}>
-                        {/* Parlama Efekti Katmanı */}
-                        <div
-                            className={`flash-overlay ${flashes[k] || ''}`}
-                            style={{ left: BINX[k] }}
-                        />
+                {/* 8. Dinamik Kategoriler (Afiş, Zone ve Parlama Efektleri) */}
+                {categories.map((cat, idx) => {
+                    const binX = binXCoords[idx] || 310;
+                    return (
+                        <React.Fragment key={cat.id}>
+                            {/* Parlama Efekti */}
+                            <div
+                                className={`flash-overlay ${flashes[cat.id] || ''}`}
+                                style={{ left: binX }}
+                            />
 
-                        {/* Yerleşen Kartların Listelendiği Zone */}
-                        <div
-                            className="zone-box"
-                            style={{ left: BINX[k] + 30 }}
-                            onClick={() => handleCategoryClick(k)}
-                        >
-                            {cards
-                                .filter(c => c.placed && c.placedIn === k)
-                                .map(c => (
-                                    <div
-                                        key={c.id}
-                                        className="placed-card"
-                                        style={{ backgroundImage: `url(${c.img})` }}
-                                    />
-                                ))}
-                        </div>
-                    </React.Fragment>
-                ))}
+                            {/* Dinamik Kategori Afişi */}
+                            <div
+                                className="cat-banner"
+                                style={{ left: binX }}
+                                onClick={() => handleCategoryClick(cat)}
+                                title={`${cat.name}: Buraya bırakmak için tıklayın`}
+                            >
+                                <div className="cat-banner-name">
+                                    <span>{getCategoryIcon(cat.name, idx)}</span>
+                                    <span>{cat.name.toUpperCase()}</span>
+                                </div>
+                                {cat.badge && (
+                                    <div className="cat-banner-badge">{cat.badge}</div>
+                                )}
+                                {/* Bilgi Butonu (i) */}
+                                <button
+                                    type="button"
+                                    className="cat-info-btn"
+                                    onClick={e => {
+                                        e.stopPropagation();
+                                        handleInfoClick(cat, binX);
+                                    }}
+                                    title={`${cat.name} hakkında bilgi`}
+                                    aria-label="Bilgi"
+                                >
+                                    i
+                                </button>
+                            </div>
 
-                {/* 9. Kategori Bilgi Butonları (.hit.i) */}
-                <button
-                    className="hit-btn"
-                    style={{ left: 550, top: 325, width: 36, height: 36 }}
-                    onClick={() => handleInfoClick('farz')}
-                    title="Farz Nedir?"
-                    aria-label="Farz Bilgi"
-                />
-                <button
-                    className="hit-btn"
-                    style={{ left: 860, top: 325, width: 36, height: 36 }}
-                    onClick={() => handleInfoClick('vacip')}
-                    title="Vacip Nedir?"
-                    aria-label="Vacip Bilgi"
-                />
-                <button
-                    className="hit-btn"
-                    style={{ left: 1168, top: 325, width: 36, height: 36 }}
-                    onClick={() => handleInfoClick('sunnet')}
-                    title="Sünnet Nedir?"
-                    aria-label="Sünnet Bilgi"
-                />
-                <button
-                    className="hit-btn"
-                    style={{ left: 1476, top: 325, width: 36, height: 36 }}
-                    onClick={() => handleInfoClick('nafile')}
-                    title="Nafile Nedir?"
-                    aria-label="Nafile Bilgi"
-                />
+                            {/* Yerleşen Kartların Dizildiği Zone */}
+                            <div
+                                className="zone-box"
+                                style={{ left: binX + 30 }}
+                                onClick={() => handleCategoryClick(cat)}
+                            >
+                                {cards
+                                    .filter(c => c.placed && c.placedInCatId === cat.id)
+                                    .map(c => (
+                                        <div key={c.id} className="placed-card">
+                                            <span className="placed-card-icon">{c.icon}</span>
+                                            <span className="placed-card-text">{c.text}</span>
+                                        </div>
+                                    ))}
+                            </div>
+                        </React.Fragment>
+                    );
+                })}
 
-                {/* 10. Bilgi Kutusu (#tip) */}
+                {/* 9. Bilgi Baloncuğu (#tip) */}
                 {tip.show && (
                     <div
                         className="tip-box"
@@ -884,26 +1136,37 @@ export function CategorySortingPlayer({
                     </div>
                 )}
 
-                {/* 11. Alt Tepsi: Henüz Yerleşmemiş Kartlar (#tray) */}
+                {/* 10. Alt Tepsi: Dinamik Parşömen Kartlar (#tray) */}
                 {cards
                     .filter(c => !c.placed)
                     .map(c => {
                         const isDragging = dragRef.current.active && dragRef.current.cardId === c.id;
                         const isSelected = selectedCardId === c.id;
+                        const fontSize = c.text.length > 22 ? 13 : c.text.length > 15 ? 14 : 16;
+
                         return (
                             <div
                                 key={c.id}
                                 className={`game-card ${isDragging ? 'dragging' : ''} ${isSelected ? 'selected' : ''}`}
                                 style={{
                                     left: c.cx - 62,
-                                    backgroundImage: `url(${c.img})`,
                                 }}
                                 onPointerDown={e => handleCardPointerDown(e, c)}
-                            />
+                            >
+                                <span className="card-icon">{c.icon}</span>
+                                <span className="card-title" style={{ fontSize }}>
+                                    {c.text}
+                                </span>
+                                {c.subtitle && (
+                                    <span className="card-badge" title={c.subtitle}>
+                                        {c.subtitle}
+                                    </span>
+                                )}
+                            </div>
                         );
                     })}
 
-                {/* 12. Oyun Sonu ve Duraklatma Katmanı (#ov) */}
+                {/* 11. Oyun Sonu / Duraklatma Katmanı (#ov) */}
                 {overlay.show && (
                     <div className="game-overlay">
                         <div className="game-overlay-card">
