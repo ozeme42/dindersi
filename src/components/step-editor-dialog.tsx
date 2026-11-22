@@ -283,6 +283,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
     const [customTextForQuestions, setCustomTextForQuestions] = useState('');
     const [showCustomTextInput, setShowCustomTextInput] = useState(false);
     const [templateCategoryTab, setTemplateCategoryTab] = useState<'all' | 'kavram' | 'soru'>('all');
+    const [miniGameQuestionCount, setMiniGameQuestionCount] = useState<number>(5);
 
     const handlePdfFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -2675,7 +2676,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                     try {
                         const result = await extractGameQuestions({
                             text: textToUse,
-                            count: mode === 'concepts' ? 4 : 5,
+                            count: mode === 'concepts' ? 4 : miniGameQuestionCount,
                             mode: mode,
                             topicTitle: context?.topicTitle
                         });
@@ -2697,10 +2698,10 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                         }
 
                         toast({
-                            title: mode === 'concepts' ? "Anahtar Kavramlar Çıkarıldı! 🧠🎉" : "5 Test Sorusu Başarıyla Çıkarıldı! 🎯🎉",
+                            title: mode === 'concepts' ? "Anahtar Kavramlar Çıkarıldı! 🧠🎉" : `${result.questions.length} Test Sorusu Başarıyla Çıkarıldı! 🎯🎉`,
                             description: mode === 'concepts' 
                                 ? `Metinden ${result.questions.length} adet anahtar kavram ve tanımı oyuna aktarıldı (Eşleşen Çiftler, Eşleştirme, Adam Asmaca vb.).`
-                                : `Metinden 5 adet soru (3 normal test sorusu + 2 çoktan seçmeli boşluk doldurma) oyuna eklendi.`
+                                : `Metinden ${result.questions.length} adet soru oyuna eklendi.`
                         });
                         setShowCustomTextInput(false);
                     } catch (err: any) {
@@ -2832,11 +2833,32 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                 {/* 🎯 Mod 2: Test & Çoktan Seçmeli Sorular */}
                                 <div className="p-3 bg-amber-950/40 border border-amber-500/30 rounded-xl space-y-2 flex flex-col justify-between">
                                     <div>
-                                        <div className="flex items-center gap-1.5 text-xs font-black text-amber-300">
-                                            <span>🎯</span> Soru & Test Oyunları (5 Soru: 3 Test + 2 Boşluk Doldurma)
+                                        <div className="flex flex-wrap items-center justify-between gap-1.5 text-xs font-black text-amber-300">
+                                            <span className="flex items-center gap-1.5">
+                                                <span>🎯</span> Soru & Test Oyunları
+                                            </span>
+                                            {/* Soru Sayısı Belirleme Butonları */}
+                                            <div className="flex items-center gap-1 bg-amber-950/80 px-1.5 py-0.5 rounded-lg border border-amber-500/40">
+                                                <span className="text-[10px] text-amber-300 font-bold">Sayı:</span>
+                                                {[3, 5, 7, 10].map(cnt => (
+                                                    <button
+                                                        key={cnt}
+                                                        type="button"
+                                                        onClick={() => setMiniGameQuestionCount(cnt)}
+                                                        className={cn(
+                                                            "px-1.5 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer",
+                                                            miniGameQuestionCount === cnt
+                                                                ? "bg-amber-500 text-slate-950 font-black shadow-sm"
+                                                                : "text-amber-200/70 hover:bg-amber-500/20 hover:text-white"
+                                                        )}
+                                                    >
+                                                        {cnt}
+                                                    </button>
+                                                ))}
+                                            </div>
                                         </div>
                                         <p className="text-[10px] text-amber-200/70 leading-tight mt-0.5">
-                                            Çarkıfelek, Kutuyu Aç, Oyun Arenası için 3 normal test + 2 çoktan seçmeli boşluk doldurma sorusu üretir.
+                                            Çarkıfelek, Kutuyu Aç, Oyun Arenası için {miniGameQuestionCount} adet çoktan seçmeli ve boşluk doldurma sorusu üretir.
                                         </p>
                                     </div>
                                     <div className="flex flex-wrap items-center gap-1.5 pt-1">
@@ -2847,10 +2869,10 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                                 disabled={isExtractingQuestions}
                                                 onClick={() => handleExtractQuestionsFromText('previousStep', 'questions')}
                                                 className="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold text-xs rounded-lg h-7 px-2.5 gap-1 shadow-md cursor-pointer"
-                                                title="Bir önceki slayt cümlelerinden 5 soru (3 test + 2 boşluk doldurma) üret"
+                                                title={`Bir önceki slayt cümlelerinden ${miniGameQuestionCount} soru üret`}
                                             >
                                                 {isExtractingQuestions ? <Loader2 className="w-3 h-3 animate-spin" /> : <FileText className="w-3 h-3" />}
-                                                <span>Önceki Adımdan 5 Soru Üret</span>
+                                                <span>Önceki Adımdan {miniGameQuestionCount} Soru Üret</span>
                                             </Button>
                                         )}
                                         {context?.sourceText && (
@@ -2860,9 +2882,9 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                                 variant="outline"
                                                 disabled={isExtractingQuestions}
                                                 onClick={() => handleExtractQuestionsFromText('sourceText', 'questions')}
-                                                className="border-amber-500/40 text-amber-300 hover:bg-amber-600/20 text-xs font-bold rounded-lg h-7 px-2"
+                                                className="border-amber-500/40 text-amber-300 hover:bg-amber-600/20 text-xs font-bold rounded-lg h-7 px-2 cursor-pointer"
                                             >
-                                                Kaynak Metinden
+                                                Kaynak Metinden ({miniGameQuestionCount} Soru)
                                             </Button>
                                         )}
                                     </div>
@@ -2897,7 +2919,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                                 size="sm"
                                                 disabled={isExtractingQuestions || !customTextForQuestions.trim()}
                                                 onClick={() => handleExtractQuestionsFromText('custom', 'concepts')}
-                                                className="bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-bold text-xs h-7 px-3 rounded-lg gap-1"
+                                                className="bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-bold text-xs h-7 px-3 rounded-lg gap-1 cursor-pointer"
                                             >
                                                 <span>🧠 Kavramları Çıkar</span>
                                             </Button>
@@ -2906,9 +2928,9 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                                 size="sm"
                                                 disabled={isExtractingQuestions || !customTextForQuestions.trim()}
                                                 onClick={() => handleExtractQuestionsFromText('custom', 'questions')}
-                                                className="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold text-xs h-7 px-3 rounded-lg gap-1"
+                                                className="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold text-xs h-7 px-3 rounded-lg gap-1 cursor-pointer"
                                             >
-                                                <span>🎯 Test Soruları Çıkar</span>
+                                                <span>🎯 {miniGameQuestionCount} Test Sorusu Çıkar</span>
                                             </Button>
                                         </div>
                                     </div>

@@ -101,7 +101,7 @@ export const ALL_ACTIVITY_OPTIONS: ActivityOption[] = [
     { id: 'conceptMap', label: '🧠 Kavram Haritası Şeması', description: 'Kavramlar arası ilişkileri gösteren etkileşimli görsel ağ', icon: <Brain className="w-4 h-4 text-purple-400" />, category: 'anlatim' },
 
     // 🎯 Değerlendirme & Oyun Modülleri (Assessment)
-    { id: 'multipleChoiceQuestions', label: '🎮 Toplu Test Arenası (5 Soru: 3 Test + 2 Boşluk Doldurma)', description: '5 soruluk yarışma/oyun adımı (3 normal test + 2 çoktan seçmeli boşluk doldurma)', icon: <Gamepad2 className="w-4 h-4 text-amber-400" />, category: 'degerlendirme' },
+    { id: 'multipleChoiceQuestions', label: '🎮 Toplu Test Arenası (Yarışma & Test Oyunu)', description: 'Çoktan seçmeli yarışma ve oyun adımı (Soru sayısı ayarlanabilir, Çarkıfelek, Kutuyu Aç vb.)', icon: <Gamepad2 className="w-4 h-4 text-amber-400" />, category: 'degerlendirme' },
     { id: 'clozeParagraph', label: '🧩 Paragraf Boşluk Doldurma (Cloze Oyunu)', description: 'Metinden 3-4 kilit kavramı boşluk bırakarak kelime taşlarıyla oyunlaştırılmış tek adım üretir', icon: <FileText className="w-4 h-4 text-emerald-400" />, category: 'degerlendirme' },
     { id: 'categorySort', label: '📁 Kategorilere Yerleştirme (3D Sandık Oyunu)', description: 'Metindeki kavramları 3D sandıklara dokunarak yerleştirme oyunu olarak tek adımda toplar', icon: <Boxes className="w-4 h-4 text-purple-400" />, category: 'degerlendirme' },
     { id: 'openEndedQuestions', label: '💭 Açık Uçlu Düşün & Tartış (Spiralli Defter)', description: 'Yeni spiralli defter tasarımıyla 3 adet düşündürücü soru, ipucu ve model cevap', icon: <MessageSquare className="w-4 h-4 text-amber-400" />, category: 'degerlendirme' },
@@ -143,6 +143,7 @@ export function AiLessonStepGenerationDialog({
   const sourceText = rawSourceText || context?.sourceText || '';
   const [localSourceText, setLocalSourceText] = useState(sourceText || topicTitle || '');
   const [selectedModules, setSelectedModules] = useState<{ [key: string]: boolean }>({});
+  const [multipleChoiceCount, setMultipleChoiceCount] = useState<number>(5);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [activeTab, setActiveTab] = useState<'prompt' | 'anlatim' | 'degerlendirme'>('prompt');
@@ -448,6 +449,8 @@ export function AiLessonStepGenerationDialog({
             const input: GenerateLessonContentInput = {
                 topicSummary: trimmedText,
                 modules: standardModules,
+                multipleChoiceCount: multipleChoiceCount,
+                itemCount: multipleChoiceCount,
                 apiKey: activeKey,
                 modelName: activeModel,
             };
@@ -1409,6 +1412,38 @@ export function AiLessonStepGenerationDialog({
                                     <p className="text-[10px] text-slate-400 group-hover:text-slate-300 leading-snug line-clamp-2">
                                         {opt.description}
                                     </p>
+
+                                    {/* 🎮 Toplu Test Arenası Soru Sayısı Belirleme */}
+                                    {opt.id === 'multipleChoiceQuestions' && isChecked && (
+                                        <div 
+                                            className="mt-2.5 pt-2 border-t border-amber-500/20 flex items-center justify-between gap-1"
+                                            onClick={(e) => e.stopPropagation()}
+                                        >
+                                            <span className="text-[10px] font-bold text-amber-300 flex items-center gap-1">
+                                                <span>🎯 Soru Sayısı:</span>
+                                            </span>
+                                            <div className="flex items-center gap-1 bg-amber-950/80 p-0.5 rounded-lg border border-amber-500/40">
+                                                {[3, 5, 7, 10].map(cnt => (
+                                                    <button
+                                                        key={cnt}
+                                                        type="button"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setMultipleChoiceCount(cnt);
+                                                        }}
+                                                        className={cn(
+                                                            "px-2 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer",
+                                                            multipleChoiceCount === cnt
+                                                                ? "bg-amber-500 text-slate-950 font-black shadow-sm"
+                                                                : "text-amber-200/70 hover:bg-amber-500/20 hover:text-white"
+                                                        )}
+                                                    >
+                                                        {cnt}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             );
                         })}

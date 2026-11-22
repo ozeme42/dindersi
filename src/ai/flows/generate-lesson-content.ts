@@ -15,6 +15,7 @@ const GenerateLessonContentInputSchema = z.object({
   apiKey: z.string().optional(),
   modelName: z.string().optional(),
   itemCount: z.number().optional(), // e.g. 5 questions / concepts
+  multipleChoiceCount: z.number().optional(), // Toplu testte üretilecek özel soru sayısı
   modules: z.object({
     hookQuestion: z.boolean().optional(),
     notebookNote: z.boolean().optional(),
@@ -292,6 +293,10 @@ export async function generateLessonContent(input: GenerateLessonContentInput): 
       return {};
     }
 
+    const targetMcqCount = Math.max(1, Math.min(input.multipleChoiceCount || input.itemCount || 5, 15));
+    const testCount = Math.max(1, Math.round(targetMcqCount * 0.6));
+    const fillBlankCount = Math.max(0, targetMcqCount - testCount);
+
     const requestedExamples = requestedKeys.map(k => moduleInstructions[k]).join(',\n\n');
 
     const prompt = `Sen uzman bir Din Kültürü ve Ahlak Bilgisi öğretmeni, eğitim içerik üreticisi ve pedagojik ders tasarımcısısın.
@@ -326,10 +331,10 @@ ${requestedExamples}
 7. "learningObjectives" (Öğrenme Hedefleri): Doğrudan öğrencinin dersteki kazanımlarını hedefleyen, öğrenciye hitap eden 3-5 adet net kazanım cümlesi yaz ("... açıklayabileceksiniz", "... kavrayabileceksiniz" kipiyle).
 8. "conceptExplanations" ve "flashcards": Metinde geçen TÜM önemli kavramları, terimleri, şahısları, antlaşmaları ve olayları eksiksiz listele. Tanımları ortaokul düzeyine uygun, akılda kalıcı, net ve öğretici tut. Tanımlarda kilit terimleri <mark>...</mark> ile belirginleştir.
 9. Tüm içerikler MEB müfredatına ve Türkçe yazım kurallarına %100 uygun olmalıdır.
-10. 🔴 ÇOKTAN SEÇMELİ TOPLU TEST SORULARI (TAM 5 SORU - 3 NORMAL, 2 ÇOKTAN SEÇMELİ BOŞLUK DOLDURMA):
-    - "multipleChoiceQuestions" dizisinde KESİNLİKLE TAM 5 ADET SORU üretilecektir.
-    - Bu 5 sorunun 3 TANESİ standart çoktan seçmeli kazanım sorusu olmalıdır.
-    - Bu 5 sorunun 2 TANESİ ise cümle içinde '___' bırakılarak 4 seçenekli çoktan seçmeli teste dönüştürülmüş boşluk doldurma sorusu olmalıdır! (Örn: "... eylemine ___ denir. Cümlesinde boş bırakılan yere aşağıdakilerden hangisi getirilmelidir?")
+10. 🔴 ÇOKTAN SEÇMELİ TOPLU TEST SORULARI (TAM ${targetMcqCount} SORU: ${testCount} STANDART TEST + ${fillBlankCount} ÇOKTAN SEÇMELİ BOŞLUK DOLDURMA):
+    - "multipleChoiceQuestions" dizisinde KESİNLİKLE TAM ${targetMcqCount} ADET SORU üretilecektir.
+    - Bu ${targetMcqCount} sorunun ${testCount} TANESİ standart çoktan seçmeli kazanım sorusu olmalıdır.
+    ${fillBlankCount > 0 ? `- Bu ${targetMcqCount} sorunun ${fillBlankCount} TANESİ ise cümle içinde '___' bırakılarak 4 seçenekli çoktan seçmeli teste dönüştürülmüş boşluk doldurma sorusu olmalıdır! (Örn: "... eylemine ___ denir. Cümlesinde boş bırakılan yere aşağıdakilerden hangisi getirilmelidir?")` : ''}
     - Sorularda ("multipleChoiceQuestions", "trueFalseQuestions", "fillInTheBlankQuestions", "hookQuestion") ASLA "Metne göre...", "Yukarıdaki metne göre...", "Parçaya göre...", "Verilen metinden hareketle...", "Metne dayanarak..." gibi ifadeler KULLANMA!
     - Çünkü sorular akıllı tahtada oyun modüllerinde (Çarkıfelek, Kutuyu Aç, Oyun Arenası vb.) ve değerlendirmede kaynak metin OLMADAN bağımsız olarak ekrana gelecektir.
     - Soru kökü öznesiyle, konusuyla ve nesnesiyle TAM BİR SORU olmalıdır (Örnek: "Tahiyyat duasının İslam dinindeki önemi nedir?", "Aşağıdakilerden hangisi İslam'ın beş temel şartından biridir?").

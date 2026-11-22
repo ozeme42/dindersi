@@ -340,7 +340,7 @@ export function SlideFilmstrip({
                         >
                             <DropdownMenuLabel className="text-[10px] font-black uppercase text-purple-400 tracking-wider px-2 py-1">🎮 Toplu Oyun & Değerlendirme</DropdownMenuLabel>
                             {[
-                                { label: '🎮 Toplu Test Arenası (5 Soru: 3 Test + 2 Boşluk Doldurma)', type: 'miniGame' as LessonStep['type'], title: '🎮 Değerlendirme & Test Oyunu' },
+                                { label: '🎮 Toplu Test Arenası (Yarışma & Test Oyunu)', type: 'miniGame' as LessonStep['type'], title: '🎮 Değerlendirme & Test Oyunu' },
                                 { label: '🧩 Paragraf Boşluk Doldurma (Cloze Oyunu)', type: 'clozeParagraph' as LessonStep['type'], title: '🧩 Paragraf Boşluk Doldurma' },
                                 { label: '📁 Kategorilere Yerleştirme (3D Sandık Oyunu)', type: 'categorySort' as LessonStep['type'], title: '📁 Kategorilere Yerleştirme Oyunu' },
                                 { label: '💭 Açık Uçlu Düşün & Tartış (Spiralli Defter)', type: 'openEndedQuestions' as LessonStep['type'], title: '💭 Düşün, Tartış, Keşfet!' },
