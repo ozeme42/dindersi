@@ -812,14 +812,15 @@ export function ContentListPlayer({
                 );
             })()}
               
-            {/* ══ 3D OYUN MODU: SABİT SAHNE TABELASI (KARTSIZ, YAZILAR TEK TEK GELİR) ══ */}
+            {/* ══ 3D OYUN MODU: SABİT ZEMİN PANOSU (KARTSIZ, YAZILAR SABİT ZEMİN ÜZERİNE GELİR) ══ */}
             {isGame3D ? (
-                <div className="w-full flex-1 flex flex-col items-center justify-center py-2 px-2 sm:px-4">
+                <div className="w-full flex-1 h-full flex flex-col items-center justify-center py-2 px-2 sm:px-4">
+                    {/* SABİT BOYUTLU ZEMİN (BOYUTU DEĞİŞMEZ, YAZILAR GELDİKÇE BOYUT ATLAMAZ) */}
                     <div 
-                        className="w-full max-w-5xl mx-auto rounded-3xl md:rounded-[2.5rem] border-3 border-amber-400/80 border-b-[8px] border-b-amber-700/80 p-5 sm:p-7 md:p-9 shadow-2xl relative select-none overflow-hidden"
+                        className="w-full max-w-5xl h-[72vh] md:h-[75vh] max-h-[820px] flex flex-col mx-auto rounded-3xl md:rounded-[2.5rem] border-3 sm:border-4 border-amber-400/80 border-b-[8px] md:border-b-[10px] border-b-amber-800 p-5 sm:p-7 md:p-9 shadow-2xl relative select-none overflow-hidden"
                         style={{
-                            background: 'linear-gradient(180deg, rgba(15, 23, 42, 0.92) 0%, rgba(10, 15, 30, 0.96) 60%, rgba(5, 8, 20, 0.98) 100%)',
-                            boxShadow: '0 20px 50px rgba(0,0,0,0.85), inset 0 2px 4px rgba(255,255,255,0.25), 0 0 35px rgba(245, 158, 11, 0.25)',
+                            background: 'linear-gradient(180deg, rgba(15, 23, 42, 0.94) 0%, rgba(10, 15, 30, 0.97) 60%, rgba(5, 8, 20, 0.99) 100%)',
+                            boxShadow: '0 20px 60px rgba(0,0,0,0.9), inset 0 2px 4px rgba(255,255,255,0.25), 0 0 35px rgba(245, 158, 11, 0.25)',
                         }}
                     >
                         {/* Üst Işık Yansıması */}
@@ -836,49 +837,49 @@ export function ContentListPlayer({
                         />
 
                         {/* Köşe Altın Vida Detayları */}
-                        <div className="absolute top-3 left-4 w-2 h-2 rounded-full bg-amber-400 border border-amber-950 shadow-inner opacity-80" />
-                        <div className="absolute top-3 right-4 w-2 h-2 rounded-full bg-amber-400 border border-amber-950 shadow-inner opacity-80" />
-                        <div className="absolute bottom-3 left-4 w-2 h-2 rounded-full bg-amber-400 border border-amber-950 shadow-inner opacity-80" />
-                        <div className="absolute bottom-3 right-4 w-2 h-2 rounded-full bg-amber-400 border border-amber-950 shadow-inner opacity-80" />
+                        <div className="absolute top-3 left-4 w-2.5 h-2.5 rounded-full bg-amber-400 border border-amber-950 shadow-inner opacity-80" />
+                        <div className="absolute top-3 right-4 w-2.5 h-2.5 rounded-full bg-amber-400 border border-amber-950 shadow-inner opacity-80" />
+                        <div className="absolute bottom-3 left-4 w-2.5 h-2.5 rounded-full bg-amber-400 border border-amber-950 shadow-inner opacity-80" />
+                        <div className="absolute bottom-3 right-4 w-2.5 h-2.5 rounded-full bg-amber-400 border border-amber-950 shadow-inner opacity-80" />
 
-                        {/* YAZILAR TEK TEK BU ARKA PLANA GELİR (KART OLMADAN!) */}
-                        <div className="relative z-10 flex flex-col gap-3.5 sm:gap-4 md:gap-5 w-full max-h-[75vh] overflow-y-auto pr-1">
+                        {/* YAZILAR BU SABİT ZEMİN ÜZERİNE TEK TEK GELİR (KART OLMADAN!) */}
+                        <div className="relative z-10 flex-1 overflow-y-auto custom-scroll pr-1.5 flex flex-col gap-3.5 sm:gap-4.5 md:gap-5 justify-start">
                             {visibleSentences.map((sentence, index) => {
                                 const isHero = index === activeIndex;
                                 return (
                                     <motion.div
                                         key={index}
                                         ref={isHero ? scrollRef : null}
-                                        initial={{ opacity: 0, y: 14, scale: 0.98 }}
+                                        initial={{ opacity: 0, y: 16, scale: 0.98 }}
                                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                                        transition={{ duration: 0.3, ease: "easeOut" }}
+                                        transition={{ duration: 0.35, ease: "easeOut" }}
                                         onClick={() => setManualFocusIndex(index)}
                                         className={cn(
-                                            "flex items-start gap-3 sm:gap-4 p-2 sm:p-2.5 rounded-2xl transition-all duration-200 cursor-pointer",
-                                            isHero ? "bg-white/10 ring-1 ring-amber-400/40 shadow-sm" : "hover:bg-white/5"
+                                            "flex items-start gap-3.5 sm:gap-4 p-2.5 sm:p-3 rounded-2xl transition-all duration-200 cursor-pointer",
+                                            isHero ? "bg-white/10 ring-2 ring-amber-400/50 shadow-md" : "hover:bg-white/5"
                                         )}
                                     >
                                         {/* Sıra Numarası Rozeti */}
                                         <div 
-                                            className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl flex items-center justify-center shrink-0 border border-amber-300 shadow-sm mt-0.5"
+                                            className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 border-2 border-amber-300 shadow-md mt-0.5"
                                             style={{
                                                 background: 'linear-gradient(180deg, #fef08a 0%, #f59e0b 60%, #d97706 100%)',
-                                                boxShadow: '0 2px 8px rgba(245, 158, 11, 0.35)',
+                                                boxShadow: '0 3px 10px rgba(245, 158, 11, 0.45)',
                                             }}
                                         >
-                                            <span className="text-xs sm:text-sm font-black text-amber-950 font-mono">
+                                            <span className="text-sm sm:text-base font-black text-amber-950 font-mono">
                                                 {index + 1}
                                             </span>
                                         </div>
 
-                                        {/* Cümle Metni (Dengeli boyut, akıcı okuma) */}
+                                        {/* Cümle Metni (ORTA BOYUT: NE AŞIRI DEV NE DE ÇOK KÜÇÜK, İDEAL AKILLI TAHTA PUNTOSU) */}
                                         <div className="flex-1 min-w-0">
                                             <div className={cn(
-                                                "font-bold leading-relaxed tracking-normal text-slate-100 drop-shadow-sm select-text",
-                                                fontSizeScale === 'huge' ? "text-xl sm:text-2xl md:text-3xl" :
-                                                fontSizeScale === 'xl' ? "text-lg sm:text-xl md:text-2xl" :
-                                                fontSizeScale === 'xs' ? "text-sm sm:text-base" :
-                                                "text-base sm:text-lg md:text-xl lg:text-2xl"
+                                                "font-extrabold leading-relaxed tracking-normal text-slate-100 drop-shadow-[0_2px_4px_rgba(0,0,0,0.85)] select-text",
+                                                fontSizeScale === 'huge' ? "text-2xl sm:text-3xl md:text-4xl" :
+                                                fontSizeScale === 'xl' ? "text-xl sm:text-2xl md:text-3xl" :
+                                                fontSizeScale === 'xs' ? "text-base sm:text-lg" :
+                                                "text-lg sm:text-xl md:text-2xl lg:text-[1.75rem]"
                                             )}>
                                                 {speakingIndex === index ? (
                                                     <HighlightedSentence 
@@ -901,14 +902,14 @@ export function ContentListPlayer({
                                                 handleSpeakSentence(e, sentence, index);
                                             }}
                                             className={cn(
-                                                "w-8 h-8 rounded-xl flex items-center justify-center transition-all cursor-pointer shrink-0 mt-0.5 border",
+                                                "w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer shrink-0 mt-0.5 border",
                                                 speakingIndex === index
                                                     ? "bg-amber-400 text-amber-950 border-amber-300 shadow-md animate-bounce"
                                                     : "bg-white/10 hover:bg-white/20 text-white/70 hover:text-white border-white/20"
                                             )}
                                             title={speakingIndex === index ? "Durdur" : "Seslendir"}
                                         >
-                                            {speakingIndex === index ? <VolumeX size={15} /> : <Volume2 size={15} />}
+                                            {speakingIndex === index ? <VolumeX size={17} /> : <Volume2 size={17} />}
                                         </button>
                                     </motion.div>
                                 );
