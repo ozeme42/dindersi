@@ -961,30 +961,47 @@ function PresentationPageContent() {
 
             {/* ══ 3D OYUN DÜNYASI: AHŞAP VE ALTIN ASMA TABELA ══ */}
             {presentationTheme === 'game-3d' ? (
-                <PresentationWoodenHeader
-                    title={(content as any)?.steps?.[currentStepIndex]?.title || content?.title || 'Ders Sunumu'}
-                    subtitle={unitName || (content as any)?.title || 'İlim ve İbadet Dünyası'}
-                    score={250 + currentStepIndex * 50}
-                    currentStep={currentStepIndex}
-                    totalSteps={totalStepsCount || (content as any)?.steps?.length || 1}
-                    elapsedTime={timerSeconds}
-                    isFullscreen={isFullscreen}
-                    isMuted={!isSoundEnabled}
-                    onToggleFullscreen={() => {
-                        if (typeof document !== 'undefined') {
-                            if (!document.fullscreenElement) {
-                                document.documentElement.requestFullscreen().catch(() => {});
-                            } else {
-                                document.exitFullscreen().catch(() => {});
+                <div 
+                    onMouseEnter={() => setIsHeaderHovered(true)}
+                    onMouseLeave={() => setIsHeaderHovered(false)}
+                    className={cn(
+                        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 pointer-events-auto",
+                        (isHeaderPinned || isHeaderHovered)
+                            ? "translate-y-0 opacity-100 pointer-events-auto"
+                            : "-translate-y-full opacity-0 pointer-events-none"
+                    )}
+                >
+                    <PresentationWoodenHeader
+                        title={(content as any)?.steps?.[currentStepIndex]?.title || content?.title || 'Ders Sunumu'}
+                        subtitle={unitName || (content as any)?.title || 'İlim ve İbadet Dünyası'}
+                        score={250 + currentStepIndex * 50}
+                        currentStep={currentStepIndex}
+                        totalSteps={totalStepsCount || (content as any)?.steps?.length || 1}
+                        elapsedTime={timerSeconds}
+                        isFullscreen={isFullscreen}
+                        isMuted={!isSoundEnabled}
+                        isHeaderPinned={isHeaderPinned}
+                        onTogglePin={toggleHeaderPinned}
+                        onHide={() => {
+                            setIsHeaderPinned(false);
+                            setIsHeaderHovered(false);
+                        }}
+                        onToggleFullscreen={() => {
+                            if (typeof document !== 'undefined') {
+                                if (!document.fullscreenElement) {
+                                    document.documentElement.requestFullscreen().catch(() => {});
+                                } else {
+                                    document.exitFullscreen().catch(() => {});
+                                }
                             }
-                        }
-                    }}
-                    onToggleMute={() => setIsSoundEnabled(prev => !prev)}
-                    onOpenTools={() => setIsToolsOpen(prev => !prev)}
-                    onOpenWheel={handleOpenWheel}
-                    showWheelButton={isWheelQuickActive}
-                    onExit={handleExit}
-                />
+                        }}
+                        onToggleMute={() => setIsSoundEnabled(prev => !prev)}
+                        onOpenTools={() => setIsToolsOpen(prev => !prev)}
+                        onOpenWheel={handleOpenWheel}
+                        showWheelButton={isWheelQuickActive}
+                        onExit={handleExit}
+                    />
+                </div>
             ) : (
                 /* ══ HIZLI VE ŞEFFAF ÖĞRETMEN ARAÇLARI ÜST MENÜSÜ ══ */
                 <header 
@@ -1341,7 +1358,10 @@ function PresentationPageContent() {
             )}
 
             {/* ══ İÇERİK ALANI: LessonContentViewer ══ */}
-            <div className="flex-grow flex flex-col min-h-0 relative z-10 w-full h-full">
+            <div className={cn(
+                "flex-grow flex flex-col min-h-0 relative z-10 w-full h-full transition-all duration-300",
+                presentationTheme === 'game-3d' && isHeaderPinned ? "pt-11 sm:pt-13" : ""
+            )}>
                 <LessonContentViewer
                     topic={content as Topic}
                     courseId={courseId!}

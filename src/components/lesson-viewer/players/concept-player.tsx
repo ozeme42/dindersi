@@ -8,7 +8,6 @@ import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
 import { motion } from 'framer-motion';
 import { prepareTurkishSpeech, getBestTurkishVoice, getTurkishSpeechParams } from '../tts-helper';
-import { PresentationQuestStage } from '@/components/presentation-quest-stage';
 
 const useTeacherMode = () => {
     const { user } = useAuth();
@@ -248,7 +247,8 @@ export function ConceptCardItem({
     onSpeak,
     isSpeaking,
     isSketchnote,
-    sketchnoteTheme
+    sketchnoteTheme,
+    isGame3D,
 }: {
     item: { concept: string; definition?: string };
     currentNum: number;
@@ -265,6 +265,7 @@ export function ConceptCardItem({
     isSpeaking?: boolean;
     isSketchnote?: boolean;
     sketchnoteTheme?: any;
+    isGame3D?: boolean;
 }) {
     const titleContainerRef = useRef<HTMLDivElement>(null);
     const titleTextRef = useRef<HTMLHeadingElement>(null);
@@ -392,6 +393,7 @@ export function ConceptCardItem({
             className={cn(
                 "relative rounded-3xl md:rounded-[2.2rem] overflow-hidden flex flex-col justify-between select-none transition-all duration-300 backdrop-blur-xl group h-full",
                 theme.card,
+                isGame3D ? "border-3 sm:border-4 border-b-[8px] sm:border-b-[10px] border-b-black/50 shadow-[0_12px_35px_rgba(0,0,0,0.85)] ring-1 ring-white/20" : "",
                 showNewBadge ? "ring-2 ring-white/50" : "",
                 hasDefinition 
                     ? (cardScale === 'xl' ? "min-h-[260px] md:min-h-[300px]" : cardScale === 'lg' ? "min-h-[220px] md:min-h-[250px]" : "min-h-[170px] md:min-h-[200px]") 
@@ -445,7 +447,8 @@ export function ConceptCardItem({
                     <h3
                         ref={titleTextRef}
                         className={cn(
-                            "font-black tracking-normal sm:tracking-wide text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)] uppercase leading-tight break-words whitespace-normal [overflow-wrap:anywhere] [word-break:normal] max-w-full text-center px-1 transition-transform group-hover:scale-[1.01] my-auto",
+                            "font-black tracking-normal sm:tracking-wide drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)] uppercase leading-tight break-words whitespace-normal [overflow-wrap:anywhere] [word-break:normal] max-w-full text-center px-1 transition-transform group-hover:scale-[1.01] my-auto",
+                            isGame3D ? "text-amber-200" : "text-white",
                             getConceptCardFontSize(item.concept, hasDefinition, cardScale, isTeacher, totalConceptCards)
                         )}
                     >
@@ -459,7 +462,7 @@ export function ConceptCardItem({
                         className={cn(
                             "w-full max-w-xl mx-auto rounded-2xl md:rounded-3xl backdrop-blur-md transition-colors overflow-hidden max-h-56 overflow-y-auto scrollbar-thin",
                             totalConceptCards >= 5 ? "mt-1.5 p-2 sm:p-2.5 md:p-3" : "mt-2 p-3 sm:p-4",
-                            theme.defBox
+                            isGame3D ? "bg-black/55 border border-amber-300/30 text-white shadow-inner font-semibold" : theme.defBox
                         )}
                     >
                         <p 
@@ -866,28 +869,7 @@ export function ConceptExplanationPlayer({
                 </div>
             ) : null}
 
-            {isGame3D ? (
-                <div className="w-full flex-1 flex flex-col items-center justify-center py-2 sm:py-4">
-                    <PresentationQuestStage
-                        items={visibleConcepts.filter(c => c.concept !== '[BAŞLIK]').map((c, i) => ({
-                            title: c.concept,
-                            text: c.definition || '',
-                        }))}
-                        revealedCount={revealedSentencesCount}
-                        title={title}
-                        onSpeakItem={(e, text, i) => {
-                            e.stopPropagation();
-                            const conceptItem = visibleConcepts.filter(c => c.concept !== '[BAŞLIK]')[i];
-                            if (conceptItem) {
-                                handleSpeakConcept(conceptItem, i);
-                            }
-                        }}
-                        speakingIndex={speakingIndex}
-                        fontSizeScale={fontSizeScale}
-                    />
-                </div>
-            ) : (
-                <div className={cn("grid pb-20 transition-all duration-300 items-stretch", getGapClass(), getGridClass())}>
+            <div className={cn("grid pb-20 transition-all duration-300 items-stretch", getGapClass(), getGridClass())}>
                 {(() => {
                     let conceptCount = 0;
                     return visibleConcepts.map((item, index) => {
@@ -926,12 +908,12 @@ export function ConceptExplanationPlayer({
                                 isSpeaking={speakingIndex === index}
                                 isSketchnote={isSketchnote}
                                 sketchnoteTheme={sketchnoteTheme}
+                                isGame3D={isGame3D}
                             />
                         );
                     });
                 })()}
             </div>
-            )}
         </div>
     );
 }

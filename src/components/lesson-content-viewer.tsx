@@ -942,7 +942,9 @@ export function LessonContentViewer({
                         }}
                         className={cn(
                             "w-11 h-11 rounded-full flex items-center justify-center transition-all backdrop-blur-2xl cursor-pointer hover:scale-110 active:scale-95 group",
-                            isLightBoard
+                            isGame3D
+                                ? "bg-[#451a03]/95 hover:bg-[#78350f] text-amber-300 shadow-[0_6px_25px_rgba(245,158,11,0.5)] border-2 border-amber-400 ring-2 ring-amber-400/30"
+                                : isLightBoard
                                 ? "bg-white/95 hover:bg-slate-100 text-slate-950 shadow-[0_6px_25px_rgba(99,102,241,0.25)] border-2 border-slate-300 ring-2 ring-indigo-500/20"
                                 : isVibrantStudio
                                     ? "bg-[#0c0f24]/95 hover:bg-[#161a38] text-white shadow-[0_6px_30px_rgba(217,70,239,0.4)] border-2 border-purple-500/50 ring-2 ring-purple-500/30"
@@ -981,19 +983,43 @@ export function LessonContentViewer({
         {isGame3D ? (() => {
             const { hasUnrevealedItems, currentCount, totalItems } = getStepRevealStatus();
             return (
-                <PresentationWoodenTray
-                    currentStepIndex={currentStepIndex}
-                    totalSteps={steps.length}
-                    score={internalProgress.score || 250 + currentStepIndex * 50}
-                    onPrev={handlePrev}
-                    onNext={handleContinueOrNext}
-                    onSkip={handleNext}
-                    isNextButtonEnabled={isNextButtonEnabled}
-                    hasUnrevealedItems={hasUnrevealedItems}
-                    currentRevealCount={currentCount}
-                    totalRevealCount={totalItems}
-                    completeButtonText={completeButtonText}
-                />
+                <div
+                    className={cn(
+                        "z-30 transition-all duration-300 ease-in-out px-2 pb-1 pt-0.5 w-full flex-shrink-0 relative pointer-events-auto",
+                        hideUI ? "h-0 p-0 overflow-hidden opacity-0 pointer-events-none" : "opacity-100"
+                    )}
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    {/* Alt Menüyü Gizle Butonu */}
+                    {!hideUI && (
+                        <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-40 pointer-events-auto">
+                            <button
+                                type="button"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setHideUI(true);
+                                }}
+                                className="h-4.5 px-3 rounded-t-xl text-[10px] font-black border-t border-x shadow-md backdrop-blur-md transition-all flex items-center justify-center cursor-pointer bg-[#290e02] hover:bg-[#451a03] text-amber-300 border-amber-500/40 shadow-black/80"
+                                title="Alt Menüyü Gizle"
+                            >
+                                <ChevronDown className="h-3 w-3" />
+                            </button>
+                        </div>
+                    )}
+                    <PresentationWoodenTray
+                        currentStepIndex={currentStepIndex}
+                        totalSteps={steps.length}
+                        score={internalProgress.score || 250 + currentStepIndex * 50}
+                        onPrev={handlePrev}
+                        onNext={handleContinueOrNext}
+                        onSkip={handleNext}
+                        isNextButtonEnabled={isNextButtonEnabled}
+                        hasUnrevealedItems={hasUnrevealedItems}
+                        currentRevealCount={currentCount}
+                        totalRevealCount={totalItems}
+                        completeButtonText={completeButtonText}
+                    />
+                </div>
             );
         })() : isTeacher ? (() => {
             const dockBtnBaseClass = isLightBoard
