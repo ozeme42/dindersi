@@ -915,24 +915,24 @@ export function ConceptExplanationPlayer({
                                         <div className="flex items-center gap-2.5 shrink-0">
                                             {/* Numara */}
                                             <div 
-                                                className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 border-2 border-amber-300 shadow-md"
+                                                className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 border-2 border-amber-300 shadow-md"
                                                 style={{
                                                     background: 'linear-gradient(180deg, #fef08a 0%, #f59e0b 60%, #d97706 100%)',
                                                     boxShadow: '0 3px 10px rgba(245, 158, 11, 0.45)',
                                                 }}
                                             >
-                                                <span className="text-sm sm:text-base font-black text-amber-950 font-mono">
+                                                <span className="text-base sm:text-lg font-black text-amber-950 font-mono">
                                                     #{index + 1}
                                                 </span>
                                             </div>
 
-                                            {/* Kavram Adı (ORTA BOYUT: ALTIN IŞILTILI VE TOK BAŞLIK) */}
+                                            {/* Kavram Adı (BÜYÜTÜLMÜŞ ALTIN IŞILTILI VE TOK BAŞLIK) */}
                                             <h3 className={cn(
                                                 "font-black uppercase tracking-wide text-amber-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.85)]",
-                                                fontSizeScale === 'huge' ? "text-2xl sm:text-3xl md:text-4xl" :
-                                                fontSizeScale === 'xl' ? "text-xl sm:text-2xl md:text-3xl" :
-                                                fontSizeScale === 'xs' ? "text-base sm:text-lg" :
-                                                "text-lg sm:text-xl md:text-2xl lg:text-3xl"
+                                                fontSizeScale === 'huge' ? "text-3xl sm:text-4xl md:text-5xl" :
+                                                fontSizeScale === 'xl' ? "text-2xl sm:text-3xl md:text-4xl" :
+                                                fontSizeScale === 'xs' ? "text-lg sm:text-xl md:text-2xl" :
+                                                "text-xl sm:text-2xl md:text-3xl lg:text-4xl"
                                             )}>
                                                 {item.concept}
                                             </h3>
@@ -945,26 +945,26 @@ export function ConceptExplanationPlayer({
                                                     handleSpeakConcept(item, index);
                                                 }}
                                                 className={cn(
-                                                    "w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer border",
+                                                    "w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center transition-all cursor-pointer border",
                                                     isSpeaking
                                                         ? "bg-amber-400 text-amber-950 border-amber-300 shadow-md animate-bounce"
                                                         : "bg-white/10 hover:bg-white/20 text-white/70 hover:text-white border-white/20"
                                                 )}
                                                 title={isSpeaking ? "Durdur" : "Seslendir"}
                                             >
-                                                {isSpeaking ? <VolumeX size={17} /> : <Volume2 size={17} />}
+                                                {isSpeaking ? <VolumeX size={18} /> : <Volume2 size={18} />}
                                             </button>
                                         </div>
 
-                                        {/* Kavram Tanımı (ORTA BOYUT: NE AŞIRI DEV NE DE KÜÇÜK, GÜÇLÜ KONTRAST VE BOLD) */}
+                                        {/* Kavram Tanımı (BÜYÜTÜLMÜŞ, GÜÇLÜ KONTRAST VE BOLD) */}
                                         {item.definition && (
                                             <div className="flex-1 min-w-0 pl-11 sm:pl-0">
                                                 <p className={cn(
                                                     "font-bold text-slate-100 leading-relaxed tracking-normal select-text drop-shadow-[0_1px_3px_rgba(0,0,0,0.85)]",
-                                                    fontSizeScale === 'huge' ? "text-xl sm:text-2xl md:text-3xl" :
-                                                    fontSizeScale === 'xl' ? "text-lg sm:text-xl md:text-2xl" :
-                                                    fontSizeScale === 'xs' ? "text-sm sm:text-base" :
-                                                    "text-base sm:text-lg md:text-xl lg:text-2xl"
+                                                    fontSizeScale === 'huge' ? "text-2xl sm:text-3xl md:text-4xl" :
+                                                    fontSizeScale === 'xl' ? "text-xl sm:text-2xl md:text-3xl" :
+                                                    fontSizeScale === 'xs' ? "text-base sm:text-lg md:text-xl" :
+                                                    "text-lg sm:text-xl md:text-2xl lg:text-[1.75rem]"
                                                 )}>
                                                     {item.definition}
                                                 </p>

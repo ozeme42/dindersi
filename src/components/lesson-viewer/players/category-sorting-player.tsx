@@ -879,11 +879,11 @@ export function CategorySortingPlayer({
                                             >
                                                 <span className="text-2xl md:text-3xl flex-shrink-0">{card.icon}</span>
                                                 <div className="min-w-0 flex-1">
-                                                    <div className="text-sm md:text-base lg:text-lg font-black text-amber-950 truncate">
+                                                    <div className="text-base md:text-lg lg:text-xl font-black text-amber-950 truncate">
                                                         {card.text}
                                                     </div>
                                                     {card.subtitle && (
-                                                        <div className="text-xs md:text-sm text-amber-800/90 truncate font-bold mt-0.5">
+                                                        <div className="text-xs md:text-sm lg:text-base text-amber-900 truncate font-extrabold mt-0.5">
                                                             {card.subtitle}
                                                         </div>
                                                     )}
@@ -978,11 +978,11 @@ export function CategorySortingPlayer({
                                             <div className="text-3xl md:text-4xl mb-1 filter drop-shadow">
                                                 {card.icon}
                                             </div>
-                                            <div className="w-full text-base sm:text-lg md:text-xl font-black text-amber-950 leading-snug line-clamp-2">
+                                            <div className="w-full text-lg sm:text-xl md:text-2xl font-black text-amber-950 leading-snug line-clamp-2">
                                                 {card.text}
                                             </div>
                                             {card.subtitle && (
-                                                <div className="w-full text-xs sm:text-sm font-bold text-amber-900 mt-1.5 px-3 py-1 rounded-full bg-amber-200/70 truncate shadow-xs">
+                                                <div className="w-full text-xs sm:text-sm md:text-base font-extrabold text-amber-900 mt-1.5 px-3.5 py-1 rounded-full bg-amber-200/80 truncate shadow-xs">
                                                     {card.subtitle}
                                                 </div>
                                             )}

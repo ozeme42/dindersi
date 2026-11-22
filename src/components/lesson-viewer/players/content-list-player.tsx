@@ -861,25 +861,25 @@ export function ContentListPlayer({
                                     >
                                         {/* Sıra Numarası Rozeti */}
                                         <div 
-                                            className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 border-2 border-amber-300 shadow-md mt-0.5"
+                                            className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 border-2 border-amber-300 shadow-md mt-0.5"
                                             style={{
                                                 background: 'linear-gradient(180deg, #fef08a 0%, #f59e0b 60%, #d97706 100%)',
                                                 boxShadow: '0 3px 10px rgba(245, 158, 11, 0.45)',
                                             }}
                                         >
-                                            <span className="text-sm sm:text-base font-black text-amber-950 font-mono">
+                                            <span className="text-base sm:text-lg font-black text-amber-950 font-mono">
                                                 {index + 1}
                                             </span>
                                         </div>
 
-                                        {/* Cümle Metni (ORTA BOYUT: NE AŞIRI DEV NE DE ÇOK KÜÇÜK, İDEAL AKILLI TAHTA PUNTOSU) */}
+                                        {/* Cümle Metni (BÜYÜTÜLMÜŞ TOK PUNTOLAR, AKILLI TAHTADA EN ARKA SIRADAN DAHİ CAM GİBİ NET) */}
                                         <div className="flex-1 min-w-0">
                                             <div className={cn(
-                                                "font-extrabold leading-relaxed tracking-normal text-slate-100 drop-shadow-[0_2px_4px_rgba(0,0,0,0.85)] select-text",
-                                                fontSizeScale === 'huge' ? "text-2xl sm:text-3xl md:text-4xl" :
-                                                fontSizeScale === 'xl' ? "text-xl sm:text-2xl md:text-3xl" :
-                                                fontSizeScale === 'xs' ? "text-base sm:text-lg" :
-                                                "text-lg sm:text-xl md:text-2xl lg:text-[1.75rem]"
+                                                "font-extrabold leading-snug tracking-normal text-slate-100 drop-shadow-[0_2px_4px_rgba(0,0,0,0.85)] select-text",
+                                                fontSizeScale === 'huge' ? "text-3xl sm:text-4xl md:text-5xl lg:text-6xl" :
+                                                fontSizeScale === 'xl' ? "text-2xl sm:text-3xl md:text-4xl lg:text-5xl" :
+                                                fontSizeScale === 'xs' ? "text-lg sm:text-xl md:text-2xl" :
+                                                "text-xl sm:text-2xl md:text-3xl lg:text-[2.2rem]"
                                             )}>
                                                 {speakingIndex === index ? (
                                                     <HighlightedSentence 
@@ -902,14 +902,14 @@ export function ContentListPlayer({
                                                 handleSpeakSentence(e, sentence, index);
                                             }}
                                             className={cn(
-                                                "w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer shrink-0 mt-0.5 border",
+                                                "w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center transition-all cursor-pointer shrink-0 mt-0.5 border",
                                                 speakingIndex === index
                                                     ? "bg-amber-400 text-amber-950 border-amber-300 shadow-md animate-bounce"
                                                     : "bg-white/10 hover:bg-white/20 text-white/70 hover:text-white border-white/20"
                                             )}
                                             title={speakingIndex === index ? "Durdur" : "Seslendir"}
                                         >
-                                            {speakingIndex === index ? <VolumeX size={17} /> : <Volume2 size={17} />}
+                                            {speakingIndex === index ? <VolumeX size={18} /> : <Volume2 size={18} />}
                                         </button>
                                     </motion.div>
                                 );
