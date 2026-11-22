@@ -869,7 +869,112 @@ export function ConceptExplanationPlayer({
                 </div>
             ) : null}
 
-            <div className={cn("grid pb-20 transition-all duration-300 items-stretch", getGapClass(), getGridClass())}>
+            {/* ══ 3D OYUN MODU: SABİT SAHNE TABELASI (KARTSIZ, KAVRAMLAR TEK TEK GELİR) ══ */}
+            {isGame3D ? (
+                <div className="w-full flex-1 flex flex-col items-center justify-center py-2 px-2 sm:px-4">
+                    <div 
+                        className="w-full max-w-5xl mx-auto rounded-3xl md:rounded-[2.5rem] border-3 border-amber-400/80 border-b-[8px] border-b-amber-700/80 p-5 sm:p-7 md:p-9 shadow-2xl relative select-none overflow-hidden"
+                        style={{
+                            background: 'linear-gradient(180deg, rgba(15, 23, 42, 0.92) 0%, rgba(10, 15, 30, 0.96) 60%, rgba(5, 8, 20, 0.98) 100%)',
+                            boxShadow: '0 20px 50px rgba(0,0,0,0.85), inset 0 2px 4px rgba(255,255,255,0.25), 0 0 35px rgba(245, 158, 11, 0.25)',
+                        }}
+                    >
+                        {/* Üst Işık Yansıması */}
+                        <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-white/10 to-transparent pointer-events-none rounded-t-3xl" />
+
+                        {/* İslami Geometrik Arka Plan Deseni */}
+                        <div 
+                            className="absolute inset-0 opacity-[0.05] pointer-events-none"
+                            style={{
+                                backgroundImage: `radial-gradient(circle at 50% 50%, rgba(255,255,255,0.4) 1px, transparent 1px),
+                                                  linear-gradient(45deg, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.15) 75%)`,
+                                backgroundSize: '28px 28px',
+                            }}
+                        />
+
+                        {/* Köşe Altın Vida Detayları */}
+                        <div className="absolute top-3 left-4 w-2 h-2 rounded-full bg-amber-400 border border-amber-950 shadow-inner opacity-80" />
+                        <div className="absolute top-3 right-4 w-2 h-2 rounded-full bg-amber-400 border border-amber-950 shadow-inner opacity-80" />
+                        <div className="absolute bottom-3 left-4 w-2 h-2 rounded-full bg-amber-400 border border-amber-950 shadow-inner opacity-80" />
+                        <div className="absolute bottom-3 right-4 w-2 h-2 rounded-full bg-amber-400 border border-amber-950 shadow-inner opacity-80" />
+
+                        {/* KAVRAMLAR TEK TEK BU ARKA PLANA GELİR (KART OLMADAN!) */}
+                        <div className="relative z-10 flex flex-col gap-4 sm:gap-5 w-full max-h-[75vh] overflow-y-auto pr-1">
+                            {visibleConcepts.filter(c => c.concept !== '[BAŞLIK]').map((item, index) => {
+                                const isSpeaking = speakingIndex === index;
+                                return (
+                                    <motion.div
+                                        key={index}
+                                        initial={{ opacity: 0, y: 14, scale: 0.98 }}
+                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                        transition={{ duration: 0.3, delay: index * 0.04 }}
+                                        className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-3.5 pb-3.5 border-b border-white/10 last:border-b-0 last:pb-0"
+                                    >
+                                        {/* Sıra Numarası & Başlık */}
+                                        <div className="flex items-center gap-2.5 shrink-0">
+                                            {/* Numara */}
+                                            <div 
+                                                className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl flex items-center justify-center shrink-0 border border-amber-300 shadow-sm"
+                                                style={{
+                                                    background: 'linear-gradient(180deg, #fef08a 0%, #f59e0b 60%, #d97706 100%)',
+                                                }}
+                                            >
+                                                <span className="text-xs sm:text-sm font-black text-amber-950 font-mono">
+                                                    #{index + 1}
+                                                </span>
+                                            </div>
+
+                                            {/* Kavram Adı (Altın Işıltılı Başlık) */}
+                                            <h3 className={cn(
+                                                "font-black uppercase tracking-wide text-amber-300 drop-shadow-sm",
+                                                fontSizeScale === 'huge' ? "text-xl sm:text-2xl md:text-3xl" :
+                                                fontSizeScale === 'xl' ? "text-lg sm:text-xl md:text-2xl" :
+                                                "text-base sm:text-lg md:text-xl lg:text-2xl"
+                                            )}>
+                                                {item.concept}
+                                            </h3>
+
+                                            {/* Ses Butonu */}
+                                            <button
+                                                type="button"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleSpeakConcept(item, index);
+                                                }}
+                                                className={cn(
+                                                    "w-7 h-7 rounded-lg flex items-center justify-center transition-all cursor-pointer border",
+                                                    isSpeaking
+                                                        ? "bg-amber-400 text-amber-950 border-amber-300 shadow-md animate-bounce"
+                                                        : "bg-white/10 hover:bg-white/20 text-white/70 hover:text-white border-white/20"
+                                                )}
+                                                title={isSpeaking ? "Durdur" : "Seslendir"}
+                                            >
+                                                {isSpeaking ? <VolumeX size={14} /> : <Volume2 size={14} />}
+                                            </button>
+                                        </div>
+
+                                        {/* Kavram Tanımı (Doğrudan panoda, kart kutusu olmadan, okunaklı ve dengeli) */}
+                                        {item.definition && (
+                                            <div className="flex-1 min-w-0 pl-9 sm:pl-0">
+                                                <p className={cn(
+                                                    "font-medium text-slate-100/95 leading-relaxed tracking-normal select-text",
+                                                    fontSizeScale === 'huge' ? "text-lg sm:text-xl md:text-2xl" :
+                                                    fontSizeScale === 'xl' ? "text-base sm:text-lg md:text-xl" :
+                                                    "text-sm sm:text-base md:text-lg lg:text-xl"
+                                                )}>
+                                                    {item.definition}
+                                                </p>
+                                            </div>
+                                        )}
+                                    </motion.div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+            ) : (
+                /* ══ DİĞER TEMALAR İÇİN STANDART KART IZGARASI ══ */
+                <div className={cn("grid pb-20 transition-all duration-300 items-stretch", getGapClass(), getGridClass())}>
                 {(() => {
                     let conceptCount = 0;
                     return visibleConcepts.map((item, index) => {
@@ -914,6 +1019,7 @@ export function ConceptExplanationPlayer({
                     });
                 })()}
             </div>
+            )}
         </div>
     );
 }
