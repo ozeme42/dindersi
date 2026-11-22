@@ -142,6 +142,63 @@ export const CONCEPT_THEMES = [
     },
 ];
 
+export const GAME3D_CONCEPT_THEMES = [
+    {
+        border: 'border-sky-400/80',
+        borderBottom: 'border-b-[6px] sm:border-b-[8px] border-b-sky-800',
+        bg: 'linear-gradient(180deg, rgba(8, 47, 73, 0.75) 0%, rgba(15, 23, 42, 0.9) 100%)',
+        glow: 'rgba(56, 189, 248, 0.35)',
+        badgeBg: 'linear-gradient(180deg, #38bdf8 0%, #0284c7 100%)',
+        badgeBorder: 'border-sky-300',
+        titleColor: 'text-sky-300',
+    },
+    {
+        border: 'border-amber-400/80',
+        borderBottom: 'border-b-[6px] sm:border-b-[8px] border-b-amber-800',
+        bg: 'linear-gradient(180deg, rgba(69, 26, 3, 0.75) 0%, rgba(15, 23, 42, 0.9) 100%)',
+        glow: 'rgba(245, 158, 11, 0.35)',
+        badgeBg: 'linear-gradient(180deg, #fef08a 0%, #f59e0b 60%, #d97706 100%)',
+        badgeBorder: 'border-amber-300',
+        titleColor: 'text-amber-300',
+    },
+    {
+        border: 'border-emerald-400/80',
+        borderBottom: 'border-b-[6px] sm:border-b-[8px] border-b-emerald-800',
+        bg: 'linear-gradient(180deg, rgba(2, 44, 34, 0.75) 0%, rgba(15, 23, 42, 0.9) 100%)',
+        glow: 'rgba(16, 185, 129, 0.35)',
+        badgeBg: 'linear-gradient(180deg, #34d399 0%, #059669 100%)',
+        badgeBorder: 'border-emerald-300',
+        titleColor: 'text-emerald-300',
+    },
+    {
+        border: 'border-purple-400/80',
+        borderBottom: 'border-b-[6px] sm:border-b-[8px] border-b-purple-800',
+        bg: 'linear-gradient(180deg, rgba(30, 11, 54, 0.75) 0%, rgba(15, 23, 42, 0.9) 100%)',
+        glow: 'rgba(192, 132, 252, 0.35)',
+        badgeBg: 'linear-gradient(180deg, #c084fc 0%, #7c3aed 100%)',
+        badgeBorder: 'border-purple-300',
+        titleColor: 'text-purple-300',
+    },
+    {
+        border: 'border-rose-400/80',
+        borderBottom: 'border-b-[6px] sm:border-b-[8px] border-b-rose-800',
+        bg: 'linear-gradient(180deg, rgba(76, 5, 25, 0.75) 0%, rgba(15, 23, 42, 0.9) 100%)',
+        glow: 'rgba(251, 113, 133, 0.35)',
+        badgeBg: 'linear-gradient(180deg, #fb7185 0%, #e11d48 100%)',
+        badgeBorder: 'border-rose-300',
+        titleColor: 'text-rose-300',
+    },
+    {
+        border: 'border-teal-400/80',
+        borderBottom: 'border-b-[6px] sm:border-b-[8px] border-b-teal-800',
+        bg: 'linear-gradient(180deg, rgba(4, 47, 46, 0.75) 0%, rgba(15, 23, 42, 0.9) 100%)',
+        glow: 'rgba(45, 212, 191, 0.35)',
+        badgeBg: 'linear-gradient(180deg, #2dd4bf 0%, #0d9488 100%)',
+        badgeBorder: 'border-teal-300',
+        titleColor: 'text-teal-300',
+    },
+];
+
 export function getConceptCardFontSize(
     conceptText: string, 
     hasDefinition: boolean = false, 
@@ -869,12 +926,12 @@ export function ConceptExplanationPlayer({
                 </div>
             ) : null}
 
-            {/* ══ 3D OYUN MODU: SABİT ZEMİN PANOSU (KARTSIZ, KAVRAMLAR SABİT ZEMİN ÜZERİNE GELİR) ══ */}
+            {/* ══ 3D OYUN MODU: SABİT ZEMİN PANOSU (EKRANI KAPLAR, 2-3-4 SÜTUNLU KAVRAM DÜZENİ) ══ */}
             {isGame3D ? (
-                <div className="w-full flex-1 h-full flex flex-col items-center justify-center py-2 px-2 sm:px-4">
-                    {/* SABİT BOYUTLU ZEMİN (BOYUTU DEĞİŞMEZ, YAZILAR GELDİKÇE BOYUT ATLAMAZ) */}
+                <div className="w-full flex-1 h-full flex flex-col items-center justify-center py-2 px-1 sm:px-3">
+                    {/* SABİT BOYUTLU GENİŞ ZEMİN (EKRANI KAPLAR, YAZILAR GELDİKÇE BOYUT ATLAMAZ) */}
                     <div 
-                        className="w-full max-w-5xl h-[72vh] md:h-[75vh] max-h-[820px] flex flex-col mx-auto rounded-3xl md:rounded-[2.5rem] border-3 sm:border-4 border-amber-400/80 border-b-[8px] md:border-b-[10px] border-b-amber-800 p-5 sm:p-7 md:p-9 shadow-2xl relative select-none overflow-hidden"
+                        className="w-full max-w-[97vw] xl:max-w-[1750px] 2xl:max-w-[1850px] h-[78vh] md:h-[82vh] max-h-[920px] flex flex-col mx-auto rounded-3xl md:rounded-[2.5rem] border-3 sm:border-4 border-amber-400/80 border-b-[8px] md:border-b-[10px] border-b-amber-800 p-4 sm:p-6 md:p-8 shadow-2xl relative select-none overflow-hidden"
                         style={{
                             background: 'linear-gradient(180deg, rgba(15, 23, 42, 0.94) 0%, rgba(10, 15, 30, 0.97) 60%, rgba(5, 8, 20, 0.99) 100%)',
                             boxShadow: '0 20px 60px rgba(0,0,0,0.9), inset 0 2px 4px rgba(255,255,255,0.25), 0 0 35px rgba(245, 158, 11, 0.25)',
@@ -899,80 +956,108 @@ export function ConceptExplanationPlayer({
                         <div className="absolute bottom-3 left-4 w-2.5 h-2.5 rounded-full bg-amber-400 border border-amber-950 shadow-inner opacity-80" />
                         <div className="absolute bottom-3 right-4 w-2.5 h-2.5 rounded-full bg-amber-400 border border-amber-950 shadow-inner opacity-80" />
 
-                        {/* KAVRAMLAR BU SABİT ZEMİN ÜZERİNE TEK TEK GELİR (KART OLMADAN!) */}
-                        <div className="relative z-10 flex-1 overflow-y-auto custom-scroll pr-1.5 flex flex-col gap-4 sm:gap-5 justify-start">
-                            {visibleConcepts.filter(c => c.concept !== '[BAŞLIK]').map((item, index) => {
-                                const isSpeaking = speakingIndex === index;
-                                return (
-                                    <motion.div
-                                        key={index}
-                                        initial={{ opacity: 0, y: 16, scale: 0.98 }}
-                                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                                        transition={{ duration: 0.3, delay: index * 0.04 }}
-                                        className="flex flex-col sm:flex-row sm:items-baseline gap-2.5 sm:gap-4 p-2.5 sm:p-3 rounded-2xl transition-all duration-200 border-b border-white/10 last:border-b-0 hover:bg-white/5"
-                                    >
-                                        {/* Sıra Numarası & Başlık */}
-                                        <div className="flex items-center gap-2.5 shrink-0">
-                                            {/* Numara */}
-                                            <div 
-                                                className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 border-2 border-amber-300 shadow-md"
-                                                style={{
-                                                    background: 'linear-gradient(180deg, #fef08a 0%, #f59e0b 60%, #d97706 100%)',
-                                                    boxShadow: '0 3px 10px rgba(245, 158, 11, 0.45)',
-                                                }}
-                                            >
-                                                <span className="text-base sm:text-lg font-black text-amber-950 font-mono">
-                                                    #{index + 1}
-                                                </span>
+                        {/* KAVRAMLAR 2, 3 VEYA 4 SÜTUNLU DİNAMİK IZGARA İLE GELİR (EKRAN DIŞINA TAŞMAZ!) */}
+                        <div className="relative z-10 flex-1 overflow-y-auto custom-scroll pr-1.5 flex flex-col justify-start">
+                            <div className={cn(
+                                "w-full grid gap-4 sm:gap-5 md:gap-6 items-stretch",
+                                totalCards === 1 && "grid-cols-1 max-w-4xl mx-auto",
+                                totalCards === 2 && "grid-cols-1 sm:grid-cols-2",
+                                totalCards === 3 && "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
+                                totalCards === 4 && "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4",
+                                (totalCards === 5 || totalCards === 6) && "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
+                                totalCards > 6 && "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                            )}>
+                                {visibleConcepts.filter(c => c.concept !== '[BAŞLIK]').map((item, index) => {
+                                    const isSpeaking = speakingIndex === index;
+                                    const theme = GAME3D_CONCEPT_THEMES[index % GAME3D_CONCEPT_THEMES.length];
+
+                                    return (
+                                        <motion.div
+                                            key={index}
+                                            initial={{ opacity: 0, y: 16, scale: 0.98 }}
+                                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                                            transition={{ duration: 0.3, delay: index * 0.04 }}
+                                            className={cn(
+                                                "rounded-2xl sm:rounded-3xl border-2 sm:border-3 p-4 sm:p-5 md:p-6 flex flex-col justify-between transition-all duration-200 shadow-xl overflow-hidden relative",
+                                                theme.border,
+                                                theme.borderBottom,
+                                                totalCards === 1 ? "max-w-4xl mx-auto" : "h-full min-h-[160px]"
+                                            )}
+                                            style={{
+                                                background: theme.bg,
+                                                boxShadow: `0 10px 25px rgba(0,0,0,0.6), 0 0 20px ${theme.glow}, inset 0 2px 4px rgba(255,255,255,0.15)`,
+                                            }}
+                                        >
+                                            {/* Üst Satır: Numara Rozeti ve Ses Butonu */}
+                                            <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3">
+                                                <div 
+                                                    className={cn(
+                                                        "w-10 h-10 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 border-2 shadow-md",
+                                                        theme.badgeBorder
+                                                    )}
+                                                    style={{
+                                                        background: theme.badgeBg,
+                                                        boxShadow: '0 3px 10px rgba(0,0,0,0.3)',
+                                                    }}
+                                                >
+                                                    <span className="text-sm sm:text-base font-black text-amber-950 font-mono">
+                                                        #{index + 1}
+                                                    </span>
+                                                </div>
+
+                                                <button
+                                                    type="button"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleSpeakConcept(item, index);
+                                                    }}
+                                                    className={cn(
+                                                        "w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center transition-all cursor-pointer border",
+                                                        isSpeaking
+                                                            ? "bg-amber-400 text-amber-950 border-amber-300 shadow-md animate-bounce"
+                                                            : "bg-white/10 hover:bg-white/20 text-white/70 hover:text-white border-white/20"
+                                                    )}
+                                                    title={isSpeaking ? "Durdur" : "Seslendir"}
+                                                >
+                                                    {isSpeaking ? <VolumeX size={18} /> : <Volume2 size={18} />}
+                                                </button>
                                             </div>
 
-                                            {/* Kavram Adı (BÜYÜTÜLMÜŞ ALTIN IŞILTILI VE TOK BAŞLIK) */}
+                                            {/* Kavram Adı (Başlık) */}
                                             <h3 className={cn(
-                                                "font-black uppercase tracking-wide text-amber-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.85)]",
-                                                fontSizeScale === 'huge' ? "text-3xl sm:text-4xl md:text-5xl" :
-                                                fontSizeScale === 'xl' ? "text-2xl sm:text-3xl md:text-4xl" :
-                                                fontSizeScale === 'xs' ? "text-lg sm:text-xl md:text-2xl" :
-                                                "text-xl sm:text-2xl md:text-3xl lg:text-4xl"
+                                                "font-black uppercase tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] line-clamp-2",
+                                                theme.titleColor,
+                                                totalCards <= 2 
+                                                    ? (fontSizeScale === 'huge' ? "text-2xl sm:text-3xl md:text-4xl" : "text-xl sm:text-2xl md:text-3xl")
+                                                    : totalCards === 3
+                                                    ? (fontSizeScale === 'huge' ? "text-xl sm:text-2xl md:text-3xl" : "text-lg sm:text-xl md:text-2xl")
+                                                    : (fontSizeScale === 'huge' ? "text-lg sm:text-xl md:text-2xl" : "text-base sm:text-lg md:text-xl")
                                             )}>
                                                 {item.concept}
                                             </h3>
 
-                                            {/* Ses Butonu */}
-                                            <button
-                                                type="button"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleSpeakConcept(item, index);
-                                                }}
-                                                className={cn(
-                                                    "w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center transition-all cursor-pointer border",
-                                                    isSpeaking
-                                                        ? "bg-amber-400 text-amber-950 border-amber-300 shadow-md animate-bounce"
-                                                        : "bg-white/10 hover:bg-white/20 text-white/70 hover:text-white border-white/20"
-                                                )}
-                                                title={isSpeaking ? "Durdur" : "Seslendir"}
-                                            >
-                                                {isSpeaking ? <VolumeX size={18} /> : <Volume2 size={18} />}
-                                            </button>
-                                        </div>
+                                            {/* İnce Altın/Işık Çizgisi */}
+                                            <div className="w-full h-0.5 bg-gradient-to-r from-transparent via-white/20 to-transparent my-2.5 sm:my-3" />
 
-                                        {/* Kavram Tanımı (BÜYÜTÜLMÜŞ, GÜÇLÜ KONTRAST VE BOLD) */}
-                                        {item.definition && (
-                                            <div className="flex-1 min-w-0 pl-11 sm:pl-0">
-                                                <p className={cn(
-                                                    "font-bold text-slate-100 leading-relaxed tracking-normal select-text drop-shadow-[0_1px_3px_rgba(0,0,0,0.85)]",
-                                                    fontSizeScale === 'huge' ? "text-2xl sm:text-3xl md:text-4xl" :
-                                                    fontSizeScale === 'xl' ? "text-xl sm:text-2xl md:text-3xl" :
-                                                    fontSizeScale === 'xs' ? "text-base sm:text-lg md:text-xl" :
-                                                    "text-lg sm:text-xl md:text-2xl lg:text-[1.75rem]"
-                                                )}>
-                                                    {item.definition}
-                                                </p>
-                                            </div>
-                                        )}
-                                    </motion.div>
-                                );
-                            })}
+                                            {/* Kavram Tanımı (Açıklama) - Kart İçinde Kaydırılabilir */}
+                                            {item.definition && (
+                                                <div className="flex-1 overflow-y-auto custom-scroll pr-1 min-h-[60px]">
+                                                    <p className={cn(
+                                                        "font-bold text-slate-100 leading-relaxed tracking-normal select-text drop-shadow-[0_1px_3px_rgba(0,0,0,0.85)]",
+                                                        totalCards <= 2 
+                                                            ? (fontSizeScale === 'huge' ? "text-xl sm:text-2xl md:text-3xl" : "text-lg sm:text-xl md:text-2xl")
+                                                            : totalCards === 3
+                                                            ? (fontSizeScale === 'huge' ? "text-lg sm:text-xl md:text-2xl" : "text-base sm:text-lg md:text-xl")
+                                                            : (fontSizeScale === 'huge' ? "text-base sm:text-lg md:text-xl" : "text-sm sm:text-base md:text-lg")
+                                                    )}>
+                                                        {item.definition}
+                                                    </p>
+                                                </div>
+                                            )}
+                                        </motion.div>
+                                    );
+                                })}
+                            </div>
                         </div>
                     </div>
                 </div>

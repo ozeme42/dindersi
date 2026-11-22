@@ -814,10 +814,10 @@ export function ContentListPlayer({
               
             {/* ══ 3D OYUN MODU: SABİT ZEMİN PANOSU (KARTSIZ, YAZILAR SABİT ZEMİN ÜZERİNE GELİR) ══ */}
             {isGame3D ? (
-                <div className="w-full flex-1 h-full flex flex-col items-center justify-center py-2 px-2 sm:px-4">
-                    {/* SABİT BOYUTLU ZEMİN (BOYUTU DEĞİŞMEZ, YAZILAR GELDİKÇE BOYUT ATLAMAZ) */}
+                <div className="w-full flex-1 h-full flex flex-col items-center justify-center py-2 px-1 sm:px-3">
+                    {/* SABİT BOYUTLU GENİŞ ZEMİN (EKRANI KAPLAR, YAZILAR GELDİKÇE BOYUT ATLAMAZ) */}
                     <div 
-                        className="w-full max-w-5xl h-[72vh] md:h-[75vh] max-h-[820px] flex flex-col mx-auto rounded-3xl md:rounded-[2.5rem] border-3 sm:border-4 border-amber-400/80 border-b-[8px] md:border-b-[10px] border-b-amber-800 p-5 sm:p-7 md:p-9 shadow-2xl relative select-none overflow-hidden"
+                        className="w-full max-w-[97vw] xl:max-w-[1750px] 2xl:max-w-[1850px] h-[78vh] md:h-[82vh] max-h-[920px] flex flex-col mx-auto rounded-3xl md:rounded-[2.5rem] border-3 sm:border-4 border-amber-400/80 border-b-[8px] md:border-b-[10px] border-b-amber-800 p-4 sm:p-6 md:p-8 shadow-2xl relative select-none overflow-hidden"
                         style={{
                             background: 'linear-gradient(180deg, rgba(15, 23, 42, 0.94) 0%, rgba(10, 15, 30, 0.97) 60%, rgba(5, 8, 20, 0.99) 100%)',
                             boxShadow: '0 20px 60px rgba(0,0,0,0.9), inset 0 2px 4px rgba(255,255,255,0.25), 0 0 35px rgba(245, 158, 11, 0.25)',
