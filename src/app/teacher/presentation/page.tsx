@@ -292,19 +292,20 @@ function PresentationPageContent() {
     // 7. Mobil Kumanda (QR Kod Oturumu)
     const [isRemoteModalOpen, setIsRemoteModalOpen] = useState(false);
 
-    // 8. Sunum Teması (3D Macera / Oyun Dünyası Varsayılan)
-    const [presentationTheme, setPresentationTheme] = useState<'game-3d' | 'sketchnote' | 'cosmic-dark' | 'vibrant-studio' | 'clean-light'>('game-3d');
+    // 8. Sunum Teması (Defter / Sketchnote Varsayılan)
+    const [presentationTheme, setPresentationTheme] = useState<'game-3d' | 'sketchnote' | 'cosmic-dark' | 'vibrant-studio' | 'clean-light'>('sketchnote');
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            const saved = localStorage.getItem('presentation_theme_v3');
+            const saved = localStorage.getItem('presentation_theme_v4');
             if (saved === 'game-3d' || saved === 'sketchnote' || saved === 'cosmic-dark' || saved === 'vibrant-studio' || saved === 'clean-light') {
                 setPresentationTheme(saved as any);
             } else {
-                setPresentationTheme('game-3d');
-                localStorage.setItem('presentation_theme_v3', 'game-3d');
-                localStorage.setItem('presentation_theme_v2', 'game-3d');
-                localStorage.setItem('presentation_theme', 'game-3d');
+                setPresentationTheme('sketchnote');
+                localStorage.setItem('presentation_theme_v4', 'sketchnote');
+                localStorage.setItem('presentation_theme_v3', 'sketchnote');
+                localStorage.setItem('presentation_theme_v2', 'sketchnote');
+                localStorage.setItem('presentation_theme', 'sketchnote');
             }
         }
     }, []);
@@ -312,6 +313,7 @@ function PresentationPageContent() {
     const handleThemeChange = useCallback((newTheme: 'game-3d' | 'sketchnote' | 'cosmic-dark' | 'vibrant-studio' | 'clean-light') => {
         setPresentationTheme(newTheme);
         if (typeof window !== 'undefined') {
+            localStorage.setItem('presentation_theme_v4', newTheme);
             localStorage.setItem('presentation_theme_v3', newTheme);
             localStorage.setItem('presentation_theme_v2', newTheme);
             localStorage.setItem('presentation_theme', newTheme);
@@ -343,6 +345,7 @@ function PresentationPageContent() {
             const nextIdx = (themes.indexOf(prev) + 1) % themes.length;
             const next = themes[nextIdx];
             if (typeof window !== 'undefined') {
+                localStorage.setItem('presentation_theme_v4', next);
                 localStorage.setItem('presentation_theme_v3', next);
                 localStorage.setItem('presentation_theme_v2', next);
                 localStorage.setItem('presentation_theme', next);
