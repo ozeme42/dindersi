@@ -260,14 +260,6 @@ export function CategorySortingPlayer({
     const [cards, setCards] = useState<GameCard[]>([]);
     const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
 
-    // Ali'nin Konuşma Baloncuğu
-    const [aliSpeech, setAliSpeech] = useState<string>(() => {
-        if (titleText.toLowerCase().includes('namaz')) {
-            return 'Namazları doğru kategorilere yerleştir!';
-        }
-        return 'Kavramları doğru kategorilere yerleştir!';
-    });
-
     // Bilgi Baloncuğu
     const [tip, setTip] = useState<{ show: boolean; text: string; catId: string | null }>({
         show: false,
@@ -417,14 +409,12 @@ export function CategorySortingPlayer({
                 return c;
             }));
 
-            setAliSpeech(`Harika! ${card.text} doğru kategoriye yerleşti! 🌟`);
             setSelectedCardId(null);
             checkWin(nextOk);
         } else {
             triggerSound('error');
             triggerFlash(targetCat.id, 'bad');
             setScore(prev => Math.max(0, prev - 10));
-            setAliSpeech('Tekrar dene şampiyon, bu kavram başka bir kategoriye ait! 💡');
             setSelectedCardId(null);
         }
     }, [cards, okCount, triggerSound, triggerFlash, checkWin]);
@@ -515,16 +505,6 @@ export function CategorySortingPlayer({
                     50% { opacity: 1; transform: scale(1.25); filter: drop-shadow(0 0 6px #fff); }
                 }
 
-                @keyframes boyBreath {
-                    0%, 100% { transform: translateY(0); }
-                    50% { transform: translateY(-4px); }
-                }
-
-                @keyframes lanternPulse {
-                    0%, 100% { filter: drop-shadow(0 0 14px rgba(245, 158, 11, 0.7)); }
-                    50% { filter: drop-shadow(0 0 26px rgba(251, 191, 36, 0.95)); }
-                }
-
                 @keyframes ringRotate {
                     0% { stroke-dashoffset: 0; }
                     100% { stroke-dashoffset: 40; }
@@ -534,14 +514,6 @@ export function CategorySortingPlayer({
                     0% { transform: scale(0.8) translateY(10px); opacity: 0; }
                     70% { transform: scale(1.06) translateY(-2px); }
                     100% { transform: scale(1) translateY(0); opacity: 1; }
-                }
-
-                .boy-motion {
-                    animation: boyBreath 3.5s ease-in-out infinite;
-                }
-
-                .lantern-glow {
-                    animation: lanternPulse 2.2s ease-in-out infinite;
                 }
 
                 .custom-scroll::-webkit-scrollbar {
@@ -782,137 +754,11 @@ export function CategorySortingPlayer({
                 </div>
             </header>
 
-            {/* 🕌 3. ORTA ALAN: SOLDA SEVİMLİ REHBER ALİ & SAĞDA KATEGORİ SAYISI KADAR 3D KABİNLER (PORTALLAR) */}
-            <main className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-4 py-2 flex items-stretch gap-4 min-h-[300px]">
-                {/* SOL: SEVİMLİ KARAKTER ALİ & 3D FENER & KONUŞMA BALONCUĞU */}
-                <div className="hidden lg:flex flex-col items-center justify-end w-56 flex-shrink-0 select-none pb-2 relative">
-                    {/* Konuşma Baloncuğu */}
-                    <div
-                        className="mb-3 p-3 rounded-2xl border-3 border-amber-300 shadow-2xl relative cursor-pointer hover:scale-105 active:scale-95 transition-all"
-                        onClick={() => {
-                            triggerSound('pop');
-                            setAliSpeech('Kelimeleri doğru kutuya sürükle ya da dokun! 🌟');
-                        }}
-                        style={{
-                            background: 'linear-gradient(180deg, #ffffff 0%, #fef3c7 70%, #fde68a 100%)',
-                            boxShadow: '0 8px 25px rgba(0,0,0,0.6)',
-                        }}
-                    >
-                        <div className="flex items-center gap-1.5 mb-1">
-                            <span className="text-base">🧒</span>
-                            <span className="text-xs font-black text-amber-900 tracking-wide uppercase">Haydi bakalım!</span>
-                        </div>
-                        <p className="text-xs font-black text-amber-950 leading-snug">
-                            {aliSpeech}
-                        </p>
-                        {/* Baloncuk Kuyruğu */}
-                        <div
-                            className="absolute -bottom-2.5 left-10 w-4 h-4 rotate-45 border-r-3 border-b-3 border-amber-300"
-                            style={{ background: '#fde68a' }}
-                        />
-                    </div>
-
-                    {/* Ali Karakteri Vector SVG & Fener */}
-                    <div className="relative flex flex-col items-center boy-motion">
-                        <svg
-                            viewBox="0 0 200 240"
-                            className="w-40 h-48 filter drop-shadow-[0_12px_24px_rgba(0,0,0,0.8)]"
-                        >
-                            {/* Gövde / Cübbe (Thobe) */}
-                            <path
-                                d="M60 110 L140 110 L155 235 L45 235 Z"
-                                fill="url(#aliThobe)"
-                                stroke="#cbd5e1"
-                                strokeWidth="2.5"
-                            />
-                            {/* Yaka ve Düğmeler */}
-                            <path d="M100 110 L100 170" stroke="#f59e0b" strokeWidth="3" strokeLinecap="round" />
-                            <circle cx="100" cy="125" r="3" fill="#f59e0b" />
-                            <circle cx="100" cy="145" r="3" fill="#f59e0b" />
-                            <circle cx="100" cy="165" r="3" fill="#f59e0b" />
-
-                            {/* Sağ Kol (Yanda) */}
-                            <path
-                                d="M60 115 L40 160 L50 170 L70 125 Z"
-                                fill="#ffffff"
-                                stroke="#cbd5e1"
-                                strokeWidth="2"
-                            />
-                            {/* Sağ El */}
-                            <circle cx="45" cy="170" r="10" fill="#fbcfe8" />
-
-                            {/* Sol Kol & İleri İşaret Eden El (Kabinleri Gösteriyor) */}
-                            <path
-                                d="M140 115 L175 130 L170 145 L135 130 Z"
-                                fill="#ffffff"
-                                stroke="#cbd5e1"
-                                strokeWidth="2"
-                            />
-                            {/* İşaret Eden El */}
-                            <circle cx="178" cy="135" r="10" fill="#fbcfe8" />
-                            <path d="M182 133 L198 131" stroke="#fbcfe8" strokeWidth="5" strokeLinecap="round" />
-
-                            {/* Boyun */}
-                            <rect x="90" y="95" width="20" height="18" rx="6" fill="#fbcfe8" />
-
-                            {/* Yüz */}
-                            <ellipse cx="100" cy="72" rx="36" ry="34" fill="#fbcfe8" stroke="#f472b6" strokeWidth="1" />
-
-                            {/* Kulaklar */}
-                            <circle cx="64" cy="74" r="8" fill="#fbcfe8" />
-                            <circle cx="136" cy="74" r="8" fill="#fbcfe8" />
-
-                            {/* Sevimli Saçlar */}
-                            <path
-                                d="M66 60 Q100 35 134 60 Q130 45 100 42 Q70 45 66 60 Z"
-                                fill="#451a03"
-                            />
-
-                            {/* Namaz Takkesi (İşlemeli Beyaz Takke) */}
-                            <path
-                                d="M66 58 Q100 22 134 58 Z"
-                                fill="#ffffff"
-                                stroke="#f59e0b"
-                                strokeWidth="2"
-                            />
-                            <path d="M72 52 Q100 30 128 52" stroke="#f59e0b" strokeWidth="1.5" strokeDasharray="3 3" />
-
-                            {/* Büyük Çizgi Film Gözleri */}
-                            <ellipse cx="86" cy="70" rx="6.5" ry="8.5" fill="#1e1b4b" />
-                            <circle cx="84" cy="67" r="2.5" fill="#ffffff" />
-                            <ellipse cx="114" cy="70" rx="6.5" ry="8.5" fill="#1e1b4b" />
-                            <circle cx="112" cy="67" r="2.5" fill="#ffffff" />
-
-                            {/* Kaşlar */}
-                            <path d="M79 58 Q86 54 93 57" stroke="#451a03" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-                            <path d="M107 57 Q114 54 121 58" stroke="#451a03" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-
-                            {/* Gülümseyen Ağız & Yanak Pembeliği */}
-                            <path d="M88 84 Q100 96 112 84" stroke="#be123c" strokeWidth="3" fill="#fda4af" strokeLinecap="round" />
-                            <ellipse cx="76" cy="78" rx="5" ry="3" fill="#fb7185" opacity="0.6" />
-                            <ellipse cx="124" cy="78" rx="5" ry="3" fill="#fb7185" opacity="0.6" />
-
-                            {/* Degrade Tanımları */}
-                            <defs>
-                                <linearGradient id="aliThobe" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stopColor="#ffffff" />
-                                    <stop offset="100%" stopColor="#e2e8f0" />
-                                </linearGradient>
-                            </defs>
-                        </svg>
-
-                        {/* Yerde Yanan 3D Pirinç İslami Kandil / Fener */}
-                        <div className="absolute -bottom-2 -left-3 flex items-center lantern-glow">
-                            <span className="text-4xl filter drop-shadow-[0_0_20px_#f59e0b]">🏮</span>
-                            {/* Işık Haleleri */}
-                            <div className="absolute -bottom-1 left-2 w-16 h-6 rounded-full bg-amber-400/30 blur-md pointer-events-none" />
-                        </div>
-                    </div>
-                </div>
-
-                {/* SAĞ: KATEGORİ SAYISI KADAR DİNAMİK 3D KABİNLER (PORTALLAR) */}
+            {/* 🕌 3. ORTA ALAN: KATEGORİ SAYISI KADAR DİNAMİK 3D KABİNLER (PORTALLAR) */}
+            <main className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-4 py-2 flex items-stretch min-h-[360px]">
+                {/* KATEGORİ SAYISI KADAR DİNAMİK 3D KABİNLER (PORTALLAR) */}
                 <div
-                    className="flex-1 grid gap-4 items-stretch h-full min-h-[360px]"
+                    className="w-full grid gap-4 md:gap-6 items-stretch h-full min-h-[360px]"
                     style={{
                         gridTemplateColumns: `repeat(${categories.length}, minmax(0, 1fr))`,
                     }}
@@ -949,7 +795,7 @@ export function CategorySortingPlayer({
                             >
                                 {/* 3D Kemerli Tepe Kubbe Tacı */}
                                 <div
-                                    className="pt-2 pb-2 px-3 flex flex-col items-center justify-center relative border-b-3"
+                                    className="pt-2.5 pb-2.5 px-3 flex flex-col items-center justify-center relative border-b-3"
                                     style={{
                                         background: theme.headerBg,
                                         borderColor: `${theme.accent}66`,
@@ -958,7 +804,7 @@ export function CategorySortingPlayer({
                                 >
                                     {/* Tepe İkonu Rozeti */}
                                     <div
-                                        className="w-10 h-10 -mt-5 mb-1 rounded-full border-3 border-amber-300 flex items-center justify-center text-xl shadow-lg"
+                                        className="w-11 h-11 -mt-6 mb-1 rounded-full border-3 border-amber-300 flex items-center justify-center text-2xl shadow-lg"
                                         style={{
                                             background: 'linear-gradient(180deg, #fef08a 0%, #f59e0b 100%)',
                                         }}
@@ -970,13 +816,13 @@ export function CategorySortingPlayer({
                                     <div className="w-full flex items-center justify-between gap-1.5 px-1">
                                         <div className="flex-1 min-w-0 text-center">
                                             <h2
-                                                className="text-base md:text-lg lg:text-xl font-black truncate leading-tight tracking-wider text-white filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
+                                                className="text-lg md:text-xl lg:text-2xl xl:text-3xl font-black truncate leading-tight tracking-wider text-white filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
                                             >
                                                 {cat.name.toUpperCase()}
                                             </h2>
                                             {cat.badge && (
                                                 <span
-                                                    className="inline-block mt-0.5 text-[11px] font-bold px-2.5 py-0.5 rounded-full border leading-none shadow-sm"
+                                                    className="inline-block mt-1 text-xs md:text-sm font-black px-3.5 py-0.5 rounded-full border leading-none shadow-sm"
                                                     style={{
                                                         background: theme.badgeBg,
                                                         color: theme.badgeText,
@@ -995,10 +841,10 @@ export function CategorySortingPlayer({
                                                 e.stopPropagation();
                                                 handleInfoClick(cat);
                                             }}
-                                            className="p-1 rounded-full bg-white/20 hover:bg-white/35 text-white transition active:scale-90 flex-shrink-0"
+                                            className="p-1.5 rounded-full bg-white/20 hover:bg-white/35 text-white transition active:scale-90 flex-shrink-0"
                                             title={`${cat.name} hakkında bilgi`}
                                         >
-                                            <Info size={15} />
+                                            <Info size={16} />
                                         </button>
                                     </div>
                                 </div>
@@ -1006,7 +852,7 @@ export function CategorySortingPlayer({
                                 {/* Bilgi Tooltip'i */}
                                 {tip.show && tip.catId === cat.id && (
                                     <div
-                                        className="absolute top-20 left-3 right-3 z-30 p-3 rounded-2xl bg-amber-100 border-3 border-amber-500 text-amber-950 font-black text-xs shadow-2xl animate-in fade-in zoom-in-95"
+                                        className="absolute top-20 left-3 right-3 z-30 p-3.5 rounded-2xl bg-amber-100 border-3 border-amber-500 text-amber-950 font-black text-sm shadow-2xl animate-in fade-in zoom-in-95"
                                     >
                                         <p>{tip.text}</p>
                                     </div>
@@ -1019,30 +865,30 @@ export function CategorySortingPlayer({
                                         <span className="text-8xl">🕌</span>
                                     </div>
 
-                                    {/* Yerleşen Kartlar Listesi */}
-                                    <div className="relative z-10 flex flex-col gap-2 w-full">
+                                    {/* Yerleşen Kartlar Listesi (BÜYÜK YAZILAR) */}
+                                    <div className="relative z-10 flex flex-col gap-2.5 w-full">
                                         {placedInThisCat.map(card => (
                                             <div
                                                 key={card.id}
-                                                className="px-3 py-2 rounded-xl flex items-center gap-2 border-2 shadow-md w-full animate-in fade-in"
+                                                className="px-3.5 py-2.5 rounded-2xl flex items-center gap-3 border-2 shadow-md w-full animate-in fade-in"
                                                 style={{
                                                     background: 'linear-gradient(135deg, #fffdf8 0%, #fef3c7 100%)',
                                                     borderColor: theme.border,
                                                     animation: 'popToken 0.35s ease-out',
                                                 }}
                                             >
-                                                <span className="text-xl flex-shrink-0">{card.icon}</span>
+                                                <span className="text-2xl md:text-3xl flex-shrink-0">{card.icon}</span>
                                                 <div className="min-w-0 flex-1">
-                                                    <div className="text-xs md:text-sm font-black text-amber-950 truncate">
+                                                    <div className="text-sm md:text-base lg:text-lg font-black text-amber-950 truncate">
                                                         {card.text}
                                                     </div>
                                                     {card.subtitle && (
-                                                        <div className="text-[10px] text-amber-800/80 truncate font-semibold">
+                                                        <div className="text-xs md:text-sm text-amber-800/90 truncate font-bold mt-0.5">
                                                             {card.subtitle}
                                                         </div>
                                                     )}
                                                 </div>
-                                                <CheckCircle2 size={16} className="text-emerald-600 flex-shrink-0" />
+                                                <CheckCircle2 size={20} className="text-emerald-600 flex-shrink-0" />
                                             </div>
                                         ))}
                                     </div>
@@ -1050,7 +896,7 @@ export function CategorySortingPlayer({
                                     {/* Taban: 3D Perspektif Kesikli Halka (Pedestal) */}
                                     <div className="relative z-0 mt-auto pt-4 flex flex-col items-center justify-center pointer-events-none">
                                         <div
-                                            className="w-4/5 h-10 rounded-[50%] border-3 border-dashed flex items-center justify-center"
+                                            className="w-4/5 h-11 rounded-[50%] border-3 border-dashed flex items-center justify-center"
                                             style={{
                                                 borderColor: theme.pedestalBorder,
                                                 boxShadow: `0 0 20px 4px ${theme.glow}`,
@@ -1058,7 +904,7 @@ export function CategorySortingPlayer({
                                             }}
                                         >
                                             {placedInThisCat.length === 0 && (
-                                                <span className="text-[11px] font-extrabold text-white/70 uppercase tracking-wider">
+                                                <span className="text-xs md:text-sm font-black text-white/80 uppercase tracking-wider">
                                                     Buraya Bırakın
                                                 </span>
                                             )}
@@ -1091,20 +937,20 @@ export function CategorySortingPlayer({
 
                     {/* MERKEZ: 3D Oymalı Ahşap Tepsi & Oynanabilir Kartlar */}
                     <div
-                        className="flex-1 rounded-3xl border-4 border-amber-600/80 border-b-[8px] border-b-amber-950 p-2.5 shadow-[0_12px_30px_rgba(0,0,0,0.8),inset_0_3px_6px_rgba(255,255,255,0.25)] relative overflow-hidden"
+                        className="flex-1 rounded-3xl border-4 border-amber-600/90 border-b-[8px] border-b-amber-950 p-3 shadow-[0_12px_35px_rgba(0,0,0,0.85),inset_0_3px_6px_rgba(255,255,255,0.3)] relative overflow-hidden"
                         style={{
-                            background: 'linear-gradient(180deg, #451a03 0%, #1c0a00 100%)',
+                            background: 'linear-gradient(180deg, #78350f 0%, #451a03 40%, #1f0b02 100%)',
                         }}
                     >
                         {/* Köşe Pirinç Kelepçeleri */}
-                        <div className="absolute top-1 left-2 w-3 h-3 bg-amber-400/80 rounded shadow" />
-                        <div className="absolute top-1 right-2 w-3 h-3 bg-amber-400/80 rounded shadow" />
+                        <div className="absolute top-1 left-2 w-3.5 h-3.5 bg-amber-400/90 rounded shadow" />
+                        <div className="absolute top-1 right-2 w-3.5 h-3.5 bg-amber-400/90 rounded shadow" />
 
                         {/* Kartların Dizildiği Yatay Alan */}
-                        <div className="flex items-center gap-3 overflow-x-auto custom-scroll py-1 min-h-[78px] px-1">
+                        <div className="flex items-center gap-3.5 overflow-x-auto custom-scroll py-1.5 min-h-[96px] px-1">
                             {remainingCards.length === 0 ? (
-                                <div className="w-full py-2 text-center text-amber-200 font-black text-sm flex items-center justify-center gap-2">
-                                    <Sparkles size={20} className="text-amber-400 animate-spin" />
+                                <div className="w-full py-3 text-center text-amber-200 font-black text-base flex items-center justify-center gap-2">
+                                    <Sparkles size={24} className="text-amber-400 animate-spin" />
                                     <span>Tebrikler! Tüm kavramlar başarıyla ait oldukları kategorilere yerleştirildi!</span>
                                 </div>
                             ) : (
@@ -1117,7 +963,7 @@ export function CategorySortingPlayer({
                                             draggable={!isPaused && !overlay.show}
                                             onDragStart={e => handleDragStart(e, card)}
                                             onClick={() => handleCardClick(card)}
-                                            className={`flex-shrink-0 w-36 md:w-44 p-2 rounded-2xl border-3 border-b-[6px] flex flex-col items-center text-center cursor-grab active:cursor-grabbing transition-all select-none ${
+                                            className={`flex-shrink-0 w-52 md:w-64 min-w-[210px] p-3 md:p-3.5 rounded-2xl border-3 border-b-[6px] flex flex-col items-center text-center cursor-grab active:cursor-grabbing transition-all select-none ${
                                                 isSelected
                                                     ? 'scale-105 -translate-y-2 ring-4 ring-amber-400 shadow-2xl border-amber-400 border-b-amber-600'
                                                     : 'hover:-translate-y-1 hover:shadow-xl border-amber-300 border-b-amber-400'
@@ -1129,14 +975,14 @@ export function CategorySortingPlayer({
                                                     : '0 6px 14px rgba(0,0,0,0.6)',
                                             }}
                                         >
-                                            <div className="text-2xl mb-1 filter drop-shadow">
+                                            <div className="text-3xl md:text-4xl mb-1 filter drop-shadow">
                                                 {card.icon}
                                             </div>
-                                            <div className="w-full text-xs md:text-sm font-black text-amber-950 leading-tight line-clamp-2">
+                                            <div className="w-full text-base sm:text-lg md:text-xl font-black text-amber-950 leading-snug line-clamp-2">
                                                 {card.text}
                                             </div>
                                             {card.subtitle && (
-                                                <div className="w-full text-[10px] text-amber-800/80 truncate font-bold mt-1 px-1.5 py-0.5 rounded-full bg-amber-200/50">
+                                                <div className="w-full text-xs sm:text-sm font-bold text-amber-900 mt-1.5 px-3 py-1 rounded-full bg-amber-200/70 truncate shadow-xs">
                                                     {card.subtitle}
                                                 </div>
                                             )}

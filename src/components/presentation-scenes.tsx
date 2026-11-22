@@ -167,17 +167,7 @@ export function PresentationSceneBackground({
                 🌿
             </div>
 
-            {scene.themeKey === 'amber' && (
-                <>
-                    {/* Kandil Fenerleri */}
-                    <div className="absolute left-10 top-8 text-5xl opacity-85 filter drop-shadow-[0_0_20px_#f59e0b] animate-bounce duration-1000">
-                        🏮
-                    </div>
-                    <div className="absolute right-12 top-8 text-5xl opacity-85 filter drop-shadow-[0_0_20px_#f59e0b] animate-bounce duration-1000 delay-300">
-                        🏮
-                    </div>
-                </>
-            )}
+
 
             {scene.themeKey === 'emerald' && (
                 <>

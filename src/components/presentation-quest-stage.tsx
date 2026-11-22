@@ -27,7 +27,7 @@ interface PresentationQuestStageProps {
 const PORTAL_COLORS = [
     // 0: Safir Mavi Portalı
     {
-        bg: 'linear-gradient(180deg, #1e40af 0%, #1e3a8a 50%, #0f172a 100%)',
+        bg: 'linear-gradient(180deg, #1e3a8a 0%, #0f172a 50%, #020617 100%)',
         border: '#38bdf8',
         shadowBorder: '#0369a1',
         glow: 'rgba(56, 189, 248, 0.45)',
@@ -38,7 +38,7 @@ const PORTAL_COLORS = [
     },
     // 1: Amber Altın Portalı
     {
-        bg: 'linear-gradient(180deg, #b45309 0%, #78350f 50%, #451a03 100%)',
+        bg: 'linear-gradient(180deg, #78350f 0%, #451a03 50%, #1c0a00 100%)',
         border: '#fbbf24',
         shadowBorder: '#92400e',
         glow: 'rgba(245, 158, 11, 0.5)',
@@ -49,9 +49,9 @@ const PORTAL_COLORS = [
     },
     // 2: Zümrüt Yeşil Portalı
     {
-        bg: 'linear-gradient(180deg, #047857 0%, #064e3b 50%, #022c22 100%)',
+        bg: 'linear-gradient(180deg, #065f46 0%, #022c22 50%, #011a14 100%)',
         border: '#34d399',
-        shadowBorder: '#065f46',
+        shadowBorder: '#047857',
         glow: 'rgba(16, 185, 129, 0.45)',
         badgeBg: 'linear-gradient(135deg, #34d399 0%, #059669 100%)',
         badgeBorder: '#a7f3d0',
@@ -60,9 +60,9 @@ const PORTAL_COLORS = [
     },
     // 3: Ametist Mor Portalı
     {
-        bg: 'linear-gradient(180deg, #6d28d9 0%, #4c1d95 50%, #2e1065 100%)',
+        bg: 'linear-gradient(180deg, #581c87 0%, #2e1065 50%, #15052e 100%)',
         border: '#c084fc',
-        shadowBorder: '#5b21b6',
+        shadowBorder: '#4c1d95',
         glow: 'rgba(192, 132, 252, 0.45)',
         badgeBg: 'linear-gradient(135deg, #c084fc 0%, #7e22ce 100%)',
         badgeBorder: '#f3e8ff',
@@ -71,7 +71,7 @@ const PORTAL_COLORS = [
     },
     // 4: Yakut Kırmızı Portalı
     {
-        bg: 'linear-gradient(180deg, #be123c 0%, #881337 50%, #4c0519 100%)',
+        bg: 'linear-gradient(180deg, #881337 0%, #4c0519 50%, #200109 100%)',
         border: '#fb7185',
         shadowBorder: '#9f1239',
         glow: 'rgba(251, 113, 133, 0.45)',
@@ -82,7 +82,7 @@ const PORTAL_COLORS = [
     },
     // 5: Hazine Topaz Portalı
     {
-        bg: 'linear-gradient(180deg, #d97706 0%, #92400e 50%, #1e1b4b 100%)',
+        bg: 'linear-gradient(180deg, #92400e 0%, #451a03 50%, #180600 100%)',
         border: '#fde047',
         shadowBorder: '#854d0e',
         glow: 'rgba(253, 224, 71, 0.5)',
@@ -107,18 +107,34 @@ export function PresentationQuestStage({
     const visibleItems = items.slice(0, revealedCount);
     const count = visibleItems.length;
 
-    // Font boyutu hesaplama
+    // Font boyutu hesaplama (Büyük, uzaktan ve akıllı tahtadan son derece net okunabilir)
     const getCardTextSize = () => {
-        if (fontSizeScale === 'xl' || fontSizeScale === 'huge') {
-            return count <= 2 ? 'text-2xl md:text-4xl' : 'text-xl md:text-3xl';
+        if (fontSizeScale === 'huge') {
+            if (count === 1) return 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl';
+            if (count === 2) return 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl';
+            if (count <= 4) return 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl';
+            return 'text-xl sm:text-2xl md:text-3xl lg:text-4xl';
+        }
+        if (fontSizeScale === 'xl') {
+            if (count === 1) return 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl';
+            if (count === 2) return 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl';
+            if (count <= 4) return 'text-xl sm:text-2xl md:text-3xl lg:text-4xl';
+            return 'text-lg sm:text-xl md:text-2xl lg:text-3xl';
         }
         if (fontSizeScale === 'lg') {
-            return count <= 2 ? 'text-xl md:text-3xl' : 'text-lg md:text-2xl';
+            if (count === 1) return 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl';
+            if (count === 2) return 'text-xl sm:text-2xl md:text-3xl lg:text-4xl';
+            if (count <= 4) return 'text-lg sm:text-xl md:text-2xl lg:text-3xl';
+            return 'text-base sm:text-lg md:text-xl lg:text-2xl';
         }
         if (fontSizeScale === 'xs') {
-            return 'text-sm md:text-base';
+            return count <= 2 ? 'text-base md:text-lg' : 'text-sm md:text-base';
         }
-        return count <= 2 ? 'text-lg md:text-2xl' : 'text-base md:text-xl';
+        // Normal / Varsayılan (Akıllı tahta için büyük, tok ve rahat okunur)
+        if (count === 1) return 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl';
+        if (count === 2) return 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl';
+        if (count <= 4) return 'text-xl sm:text-2xl md:text-3xl lg:text-4xl';
+        return 'text-lg sm:text-xl md:text-2xl lg:text-3xl';
     };
 
     return (
@@ -150,29 +166,10 @@ export function PresentationQuestStage({
                                 onItemClick?.(idx);
                             }}
                         >
-                            {/* ══════ 1. KUBBE BAŞLIK (3D CAMİ / SARAY KUBBESİ MOTİFİ) ══════ */}
-                            <div className="relative mx-auto -mb-1 z-10 flex items-center justify-center">
-                                <div
-                                    className="px-4 py-1.5 rounded-t-2xl border-t-3 border-x-3 shadow-xl flex items-center gap-1.5 transition-transform group-hover:-translate-y-1"
-                                    style={{
-                                        background: color.bg,
-                                        borderColor: color.border,
-                                        boxShadow: `0 -4px 15px ${color.glow}, inset 0 2px 3px rgba(255,255,255,0.4)`,
-                                    }}
-                                >
-                                    <span className="text-base md:text-xl filter drop-shadow">
-                                        {item.icon || color.icon}
-                                    </span>
-                                    <span className="text-xs md:text-sm font-black text-white uppercase tracking-wider drop-shadow">
-                                        {item.title ? item.title : `Madde ${idx + 1}`}
-                                    </span>
-                                </div>
-                            </div>
-
-                            {/* ══════ 2. 3D KABARTMALI GÖVDE (TAVAN IŞIKLI OYUN TABLETİ) ══════ */}
+                            {/* ══════ 3D KABARTMALI GÖVDE (KARTIN İÇİNDE BAŞLIK VE METİN) ══════ */}
                             <div
                                 className={cn(
-                                    "flex-1 relative rounded-3xl border-4 p-4 sm:p-6 md:p-8 flex flex-col justify-between transition-all duration-300 overflow-hidden shadow-2xl",
+                                    "flex-1 relative rounded-3xl border-4 p-5 sm:p-7 md:p-8 flex flex-col justify-between transition-all duration-300 overflow-hidden shadow-2xl",
                                     "border-b-[10px] md:border-b-[14px] active:border-b-4 active:translate-y-1 hover:brightness-105"
                                 )}
                                 style={{
@@ -194,30 +191,51 @@ export function PresentationQuestStage({
                                     }}
                                 />
 
-                                {/* Kart İçerik Yazısı (Büyük, Canlı, Okunaklı) */}
-                                <div className="relative z-10 flex-1 flex items-center justify-center text-center py-2">
+                                {/* KART İÇİNDE BAŞLIK (Kavram / Madde Başlığı - Dışarıda Ayrı Başlık Değil, Kartın İçinde Altın Plaket) */}
+                                {item.title && (
+                                    <div className="relative z-10 flex items-center justify-center mb-3 sm:mb-4">
+                                        <div
+                                            className="px-5 py-2 sm:px-6 sm:py-2.5 rounded-2xl border-2 shadow-xl flex items-center gap-2.5 max-w-[95%]"
+                                            style={{
+                                                background: 'linear-gradient(180deg, #fef08a 0%, #f59e0b 60%, #d97706 100%)',
+                                                borderColor: '#fde68a',
+                                                boxShadow: '0 6px 18px rgba(0,0,0,0.5), inset 0 2px 3px rgba(255,255,255,0.7)',
+                                            }}
+                                        >
+                                            <span className="text-xl sm:text-2xl md:text-3xl filter drop-shadow shrink-0">
+                                                {item.icon || color.icon}
+                                            </span>
+                                            <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-black text-amber-950 uppercase tracking-wide drop-shadow-sm truncate">
+                                                {item.title}
+                                            </h3>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Kart İçerik / Tanım Yazısı (Büyük, Canlı, Okunaklı) */}
+                                <div className="relative z-10 flex-1 flex items-center justify-center text-center py-2 px-2">
                                     <div 
                                         className={cn(
-                                            "font-black leading-relaxed tracking-tight text-white drop-shadow-md",
+                                            "font-black leading-snug tracking-tight text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]",
                                             getCardTextSize()
                                         )}
                                         dangerouslySetInnerHTML={{ __html: item.text }}
                                     />
                                 </div>
 
-                                {/* ══════ 3. KART ALTI 3D BUTONLAR (SESLİ OKUMA & ROZET) ══════ */}
+                                {/* ══════ KART ALTI 3D BUTONLAR (SESLİ OKUMA & ROZET) ══════ */}
                                 <div className="relative z-10 mt-3 pt-3 border-t-2 border-white/20 flex items-center justify-between">
                                     
                                     {/* Yıldızlı Numara Rozeti */}
                                     <div 
-                                        className="px-2.5 py-1 rounded-full border-2 shadow-md flex items-center gap-1"
+                                        className="px-3 py-1 rounded-full border-2 shadow-md flex items-center gap-1.5"
                                         style={{
                                             background: color.badgeBg,
                                             borderColor: color.badgeBorder,
                                         }}
                                     >
-                                        <Star size={12} className="text-amber-200 fill-amber-200" />
-                                        <span className="text-[11px] font-black text-white">
+                                        <Star size={14} className="text-amber-200 fill-amber-200" />
+                                        <span className="text-xs sm:text-sm font-black text-white">
                                             #{idx + 1}
                                         </span>
                                     </div>
@@ -230,15 +248,15 @@ export function PresentationQuestStage({
                                                 onSpeakItem(e, item.text, idx);
                                             }}
                                             className={cn(
-                                                "p-2 rounded-2xl border-2 border-b-[3px] shadow-lg flex items-center gap-1 text-xs font-black transition-all active:border-b-0 active:translate-y-0.5 cursor-pointer",
+                                                "px-3.5 py-1.5 rounded-2xl border-2 border-b-[3px] shadow-lg flex items-center gap-1.5 text-xs sm:text-sm font-black transition-all active:border-b-0 active:translate-y-0.5 cursor-pointer",
                                                 isSpeaking 
                                                     ? "bg-amber-400 border-amber-200 border-b-amber-700 text-amber-950 animate-bounce" 
                                                     : "bg-white/15 hover:bg-white/25 border-white/40 border-b-white/20 text-white"
                                             )}
                                             title="Bu bilgiyi seslendir"
                                         >
-                                            <Volume2 size={15} />
-                                            <span className="hidden sm:inline">Seslendir</span>
+                                            <Volume2 size={16} />
+                                            <span>Seslendir</span>
                                         </button>
                                     )}
                                 </div>

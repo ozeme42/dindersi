@@ -20,9 +20,7 @@ import { PresentationDrawingBoard } from '@/components/presentation-drawing-boar
 import { PresentationWheelModal } from '@/components/presentation-wheel-modal';
 import { PresentationRemoteModal } from '@/components/presentation-remote-modal';
 import { PresentationSceneBackground } from '@/components/presentation-scenes';
-import { PresentationMascot } from '@/components/presentation-mascot';
 import { PresentationWoodenHeader } from '@/components/presentation-wooden-header';
-import { Presentation3DCharacter } from '@/components/presentation-3d-character';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import Link from 'next/link';
@@ -816,14 +814,7 @@ function PresentationPageContent() {
                 <PresentationSceneBackground stepIndex={currentStepIndex} />
             )}
 
-            {/* ═══ 3D OYUN DÜNYASI SEVİMLİ REHBER MASKOT (ALİ, ZEYNEP, KANDİLCAN, YILDIZCIK) ═══ */}
-            {presentationTheme === 'game-3d' && (
-                <PresentationMascot 
-                    stepIndex={currentStepIndex} 
-                    totalSteps={totalStepsCount || (content as any)?.steps?.length || 1}
-                    stepTitle={(content as any)?.steps?.[currentStepIndex]?.title || ''}
-                />
-            )}
+
 
             {/* ═══ 0. RENKLİ DEFTER KAĞIDI NOKTALI TABAN (SKETCHNOTE NOTEBOOK GRID) ═══ */}
             {(presentationTheme === 'sketchnote' || presentationBgPattern === 'notebook-dots') && presentationTheme !== 'game-3d' && (
@@ -1351,17 +1342,6 @@ function PresentationPageContent() {
 
             {/* ══ İÇERİK ALANI: LessonContentViewer ══ */}
             <div className="flex-grow flex flex-col min-h-0 relative z-10 w-full h-full">
-                {/* 3D Oyun Modunda Sol Tarafta Duran Canlı Çocuk Karakter (Ali) */}
-                {presentationTheme === 'game-3d' && (
-                    <div className="hidden xl:block absolute left-4 bottom-24 z-30 pointer-events-auto">
-                        <Presentation3DCharacter
-                            stepIndex={currentStepIndex}
-                            totalSteps={totalStepsCount || (content as any)?.steps?.length || 1}
-                            stepTitle={(content as any)?.steps?.[currentStepIndex]?.title}
-                            stepType={(content as any)?.steps?.[currentStepIndex]?.type}
-                        />
-                    </div>
-                )}
                 <LessonContentViewer
                     topic={content as Topic}
                     courseId={courseId!}
