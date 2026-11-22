@@ -131,23 +131,41 @@ export function PresentationSceneBackground({
                 }}
             />
 
-            {/* 4. Sahneye Özel Görsel Motif Öğeleri */}
-            {scene.themeKey === 'sapphire' && (
-                <>
-                    {/* Parıldayan Hilal */}
-                    <div className="absolute right-12 top-10 text-6xl opacity-80 filter drop-shadow-[0_0_25px_#38bdf8]">
-                        🌙
+            {/* 4. Ortak İslami Fantastik Cami & Saray Manzarası (Arka Plan Silüeti) */}
+            <div className="absolute bottom-12 left-0 right-0 h-44 flex items-end justify-between px-8 opacity-25 pointer-events-none">
+                {/* Sol Minare & Hurma Ağacı */}
+                <div className="flex items-end gap-3">
+                    <div className="w-5 h-44 bg-slate-900 rounded-t-full shadow-2xl relative">
+                        <div className="absolute top-4 left-1/2 -translate-x-1/2 w-8 h-2 bg-slate-800 rounded-full" />
                     </div>
-                    {/* Cami Kubbeleri ve Minare Silüeti */}
-                    <div className="absolute bottom-16 left-0 right-0 h-32 flex justify-around items-end opacity-20">
-                        <div className="w-6 h-40 bg-sky-950 rounded-t-full shadow-2xl" />
-                        <div className="w-36 h-28 bg-sky-950 rounded-t-full" />
-                        <div className="w-56 h-36 bg-sky-950 rounded-t-full" />
-                        <div className="w-36 h-28 bg-sky-950 rounded-t-full" />
-                        <div className="w-6 h-40 bg-sky-950 rounded-t-full shadow-2xl" />
+                    <span className="text-5xl opacity-40 filter drop-shadow">🌴</span>
+                </div>
+
+                {/* Orta Cami Kubbeleri Silüeti */}
+                <div className="flex items-end justify-center gap-1">
+                    <div className="w-24 h-24 bg-slate-900 rounded-t-full" />
+                    <div className="w-48 h-36 bg-slate-900 rounded-t-full relative">
+                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-4 h-6 bg-amber-400 rounded-t-full" />
                     </div>
-                </>
-            )}
+                    <div className="w-24 h-24 bg-slate-900 rounded-t-full" />
+                </div>
+
+                {/* Sağ Minare & Fıskiye / Şadırvan */}
+                <div className="flex items-end gap-3">
+                    <span className="text-4xl opacity-50 filter drop-shadow">⛲</span>
+                    <div className="w-5 h-44 bg-slate-900 rounded-t-full shadow-2xl relative">
+                        <div className="absolute top-4 left-1/2 -translate-x-1/2 w-8 h-2 bg-slate-800 rounded-full" />
+                    </div>
+                </div>
+            </div>
+
+            {/* Köşe Sarmaşık & Hurma Yaprakları (Üst Sol & Üst Sağ) */}
+            <div className="absolute -top-4 -left-4 text-7xl opacity-35 filter drop-shadow select-none pointer-events-none -rotate-45">
+                🌿
+            </div>
+            <div className="absolute -top-4 -right-4 text-7xl opacity-35 filter drop-shadow select-none pointer-events-none rotate-45">
+                🌿
+            </div>
 
             {scene.themeKey === 'amber' && (
                 <>

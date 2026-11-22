@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
 import type { ContentStep, ObjectiveListStep, AccordionStep } from '@/lib/types';
 import { motion } from 'framer-motion';
+import { PresentationQuestStage } from '@/components/presentation-quest-stage';
 import { 
     prepareTurkishSpeech, 
     getBestTurkishVoice, 
@@ -726,7 +727,7 @@ export function ContentListPlayer({
             )}
             
             {/* ══ BAŞLIK VE İLERLEME ÇUBUĞU (MODERN EDİTORYAL KART) ══ */}
-            {(() => {
+            {!isGame3D && (() => {
                 return (
                     <div className={cn(
                         "relative z-20 rounded-2xl md:rounded-3xl border flex-shrink-0 w-full max-w-full overflow-hidden shadow-xl mb-3 sm:mb-4 transition-all duration-300",
@@ -812,11 +813,28 @@ export function ContentListPlayer({
                 );
             })()}
               
-            {/* ══ CÜMLE KARTLARI LİSTESİ (TAM GENİŞLİK SAĞA-SOLA YASLI) ══ */}
-            <div className={cn(
-                "relative w-full flex flex-col items-center", 
-                isTeacher ? "pb-16 mt-1" : "pb-8 mt-1"
-            )}>
+            {/* ══ 3D OYUN MODUNDA: ASIL 3D İLİM PORTALLARI & QUEST ALANLARI ══ */}
+            {isGame3D ? (
+                <div className="w-full flex-1 flex flex-col items-center justify-center py-2 sm:py-4">
+                    <PresentationQuestStage
+                        items={visibleSentences.map((s, idx) => ({
+                            text: s,
+                            title: `GÖREV #${idx + 1}`,
+                        }))}
+                        revealedCount={revealedSentencesCount}
+                        title={step.title}
+                        onItemClick={(idx) => setManualFocusIndex(idx)}
+                        onSpeakItem={(e, text, idx) => handleSpeakSentence(e, text, idx)}
+                        speakingIndex={speakingIndex}
+                        fontSizeScale={fontSizeScale}
+                    />
+                </div>
+            ) : (
+                /* ══ CÜMLE KARTLARI LİSTESİ (TAM GENİŞLİK SAĞA-SOLA YASLI) ══ */
+                <div className={cn(
+                    "relative w-full flex flex-col items-center", 
+                    isTeacher ? "pb-16 mt-1" : "pb-8 mt-1"
+                )}>
                 {visibleSentences.length === 0 ? (
                     <div className="w-full max-w-lg mx-auto p-8 text-center rounded-3xl bg-slate-900/60 border border-white/10 text-slate-300 backdrop-blur-xl shadow-xl">
                         <Sparkles className="w-10 h-10 text-indigo-400 mx-auto mb-3 animate-pulse" />
@@ -1064,6 +1082,7 @@ export function ContentListPlayer({
                 </div>
                 )}
             </div>
+            )}
         </div>
     );
 }

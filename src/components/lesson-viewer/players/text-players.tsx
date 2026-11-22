@@ -515,6 +515,7 @@ export function NotebookNotePlayer({
 }) {
     const isTeacher = useTeacherMode();
     const isSketchnote = presentationTheme === 'sketchnote';
+    const isGame3D = presentationTheme === 'game-3d';
     const conceptDefs = step.conceptDefinitions || [];
     const noteItems = step.notes || [];
     const hasConcepts = conceptDefs.length > 0;
@@ -616,7 +617,14 @@ export function NotebookNotePlayer({
     };
 
     // Canlı, Doygun ve Yüksek Kontrastlı 6 Renk Teması (Yazılacaklar Modülü Birebir)
-    const vividColorClasses = [
+    const vividColorClasses = isGame3D ? [
+        'bg-gradient-to-b from-indigo-900/90 via-slate-900 to-indigo-950/95 border-3 border-b-[8px] border-indigo-400 border-b-indigo-700 text-white shadow-[0_10px_30px_rgba(0,0,0,0.8)]',
+        'bg-gradient-to-b from-emerald-900/90 via-slate-900 to-emerald-950/95 border-3 border-b-[8px] border-emerald-400 border-b-emerald-700 text-white shadow-[0_10px_30px_rgba(0,0,0,0.8)]',
+        'bg-gradient-to-b from-rose-900/90 via-slate-900 to-rose-950/95 border-3 border-b-[8px] border-rose-400 border-b-rose-700 text-white shadow-[0_10px_30px_rgba(0,0,0,0.8)]',
+        'bg-gradient-to-b from-amber-900/90 via-slate-900 to-amber-950/95 border-3 border-b-[8px] border-amber-400 border-b-amber-700 text-white shadow-[0_10px_30px_rgba(0,0,0,0.8)]',
+        'bg-gradient-to-b from-cyan-900/90 via-slate-900 to-cyan-950/95 border-3 border-b-[8px] border-cyan-400 border-b-cyan-700 text-white shadow-[0_10px_30px_rgba(0,0,0,0.8)]',
+        'bg-gradient-to-b from-purple-900/90 via-slate-900 to-purple-950/95 border-3 border-b-[8px] border-purple-400 border-b-purple-700 text-white shadow-[0_10px_30px_rgba(0,0,0,0.8)]',
+    ] : [
         'bg-indigo-900/60 border-2 border-indigo-400/80 text-white shadow-[0_4px_24px_rgba(99,102,241,0.35)]', 
         'bg-emerald-900/60 border-2 border-emerald-400/80 text-white shadow-[0_4px_24px_rgba(16,185,129,0.35)]', 
         'bg-rose-900/60 border-2 border-rose-400/80 text-white shadow-[0_4px_24px_rgba(244,63,94,0.35)]', 
@@ -858,7 +866,11 @@ export function NotebookNotePlayer({
                                         onClick={() => toggleCheckItem(idx)}
                                         className={cn(
                                             "flex items-start gap-3 p-3 md:p-3.5 rounded-2xl border-2 transition-all cursor-pointer",
-                                            isSketchnote
+                                            isGame3D
+                                                ? isChecked
+                                                    ? "bg-gradient-to-r from-emerald-950/90 to-slate-900 border-3 border-b-[6px] border-emerald-400 border-b-emerald-700 text-emerald-100 shadow-2xl"
+                                                    : "bg-gradient-to-r from-amber-950/90 via-slate-900 to-indigo-950/90 border-3 border-b-[6px] border-amber-400 border-b-amber-700 text-amber-50 shadow-2xl hover:scale-[1.01]"
+                                                : isSketchnote
                                                 ? cn(
                                                     "bg-white border-[2.5px]",
                                                     skItem.border,
@@ -872,7 +884,11 @@ export function NotebookNotePlayer({
                                     >
                                         <div className={cn(
                                             "flex-shrink-0 flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-xl font-black text-lg md:text-xl shadow-md border mt-0.5",
-                                            isSketchnote
+                                            isGame3D
+                                                ? isChecked
+                                                    ? "bg-emerald-500 border-2 border-emerald-200 text-white shadow-[0_0_12px_#34d399]"
+                                                    : "bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 border-2 border-amber-200 text-amber-950 font-black shadow-[0_0_12px_#fbbf24]"
+                                                : isSketchnote
                                                 ? cn("rounded-full border-2 border-white/70 text-white shadow-[2px_2px_0_rgba(0,0,0,0.2)]", skItem.numBg)
                                                 : isChecked
                                                     ? "bg-emerald-500 border-emerald-300 text-white"
@@ -978,7 +994,11 @@ export function NotebookNotePlayer({
                                     onClick={() => toggleCheckItem(idx)}
                                     className={cn(
                                         "flex items-start gap-3.5 p-4 md:p-5 rounded-2xl border-2 transition-all cursor-pointer",
-                                        isSketchnote
+                                        isGame3D
+                                            ? isChecked
+                                                ? "bg-gradient-to-r from-emerald-950/90 to-slate-900 border-3 border-b-[8px] border-emerald-400 border-b-emerald-700 text-emerald-100 shadow-2xl"
+                                                : "bg-gradient-to-r from-amber-950/90 via-slate-900 to-indigo-950/90 border-3 border-b-[8px] border-amber-400 border-b-amber-700 text-amber-50 shadow-2xl hover:scale-[1.01]"
+                                            : isSketchnote
                                             ? cn(
                                                 "bg-white border-[2.5px]",
                                                 skItem.border,
@@ -992,7 +1012,11 @@ export function NotebookNotePlayer({
                                 >
                                     <div className={cn(
                                         "flex-shrink-0 flex items-center justify-center w-11 h-11 md:w-13 md:h-13 rounded-2xl font-black text-xl md:text-2xl shadow-md border mt-0.5",
-                                        isSketchnote
+                                        isGame3D
+                                            ? isChecked
+                                                ? "bg-emerald-500 border-2 border-emerald-200 text-white shadow-[0_0_12px_#34d399]"
+                                                : "bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 border-2 border-amber-200 text-amber-950 font-black shadow-[0_0_12px_#fbbf24]"
+                                            : isSketchnote
                                             ? cn("rounded-full border-2 border-white/70 text-white shadow-[2px_2px_0_rgba(0,0,0,0.2)]", skItem.numBg)
                                             : isChecked
                                                 ? "bg-emerald-500 border-emerald-300 text-white"
@@ -1783,6 +1807,16 @@ export function TopicOutlinePlayer({
 }) {
     const isTeacher = useTeacherMode();
     const isSketchnote = presentationTheme === 'sketchnote';
+    const isGame3D = presentationTheme === 'game-3d';
+
+    const GAME_3D_OUTLINE_THEMES = [
+        { bg: 'linear-gradient(180deg, #1e40af 0%, #1e3a8a 50%, #0f172a 100%)', border: '#38bdf8', borderDark: '#0369a1', glow: 'rgba(56, 189, 248, 0.45)', badgeBg: 'linear-gradient(135deg, #38bdf8 0%, #0284c7 100%)', icon: '🌙' },
+        { bg: 'linear-gradient(180deg, #b45309 0%, #78350f 50%, #451a03 100%)', border: '#fbbf24', borderDark: '#92400e', glow: 'rgba(245, 158, 11, 0.5)', badgeBg: 'linear-gradient(135deg, #fbbf24 0%, #d97706 100%)', icon: '📜' },
+        { bg: 'linear-gradient(180deg, #047857 0%, #064e3b 50%, #022c22 100%)', border: '#34d399', borderDark: '#065f46', glow: 'rgba(16, 185, 129, 0.45)', badgeBg: 'linear-gradient(135deg, #34d399 0%, #059669 100%)', icon: '🌴' },
+        { bg: 'linear-gradient(180deg, #6d28d9 0%, #4c1d95 50%, #2e1065 100%)', border: '#c084fc', borderDark: '#5b21b6', glow: 'rgba(192, 132, 252, 0.45)', badgeBg: 'linear-gradient(135deg, #c084fc 0%, #7e22ce 100%)', icon: '✨' },
+        { bg: 'linear-gradient(180deg, #be123c 0%, #881337 50%, #4c0519 100%)', border: '#fb7185', borderDark: '#9f1239', glow: 'rgba(251, 113, 133, 0.45)', badgeBg: 'linear-gradient(135deg, #fb7185 0%, #e11d48 100%)', icon: '🌅' },
+        { bg: 'linear-gradient(180deg, #d97706 0%, #92400e 50%, #1e1b4b 100%)', border: '#fde047', borderDark: '#854d0e', glow: 'rgba(253, 224, 71, 0.5)', badgeBg: 'linear-gradient(135deg, #fde047 0%, #ca8a04 100%)', icon: '🏆' }
+    ];
 
     const SKETCHNOTE_OUTLINE_THEMES = [
         { bg: 'bg-[#fefce8]', border: 'border-[#ca8a04]', num: 'text-[#ca8a04]', shadow: 'shadow-[5px_5px_0_#ca8a04] hover:shadow-[7px_7px_0_#a16207]', dot: 'bg-[#ca8a04]' },
@@ -1942,6 +1976,67 @@ export function TopicOutlinePlayer({
                         const itemNum = (typeof item === 'object' && item.number) ? item.number : index + 1;
                         const targetIdx = getTargetStepIndex(title, index);
                         const sketchnoteTheme = SKETCHNOTE_OUTLINE_THEMES[index % SKETCHNOTE_OUTLINE_THEMES.length];
+                        const game3dTheme = GAME_3D_OUTLINE_THEMES[index % GAME_3D_OUTLINE_THEMES.length];
+
+                        if (isGame3D) {
+                            return (
+                                <motion.div
+                                    key={index}
+                                    initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    transition={{ delay: index * 0.06, duration: 0.3 }}
+                                    onClick={() => handleCardClick(title, index)}
+                                    title={targetIdx !== null ? `Bölüme Başla: ${title}` : title}
+                                    className={cn(
+                                        "group relative flex flex-col justify-between rounded-t-[32px] rounded-b-2xl border-4 border-b-[10px] md:border-b-[14px] transition-all duration-200 cursor-pointer overflow-hidden hover:scale-105 active:scale-95 active:border-b-4",
+                                        isMultiRow ? "p-4 sm:p-5" : "p-6 sm:p-7",
+                                        getCardWidthClass()
+                                    )}
+                                    style={{
+                                        background: game3dTheme.bg,
+                                        borderColor: game3dTheme.border,
+                                        borderBottomColor: game3dTheme.borderDark,
+                                        boxShadow: `0 12px 25px rgba(0,0,0,0.7), 0 0 25px ${game3dTheme.glow}, inset 0 2px 4px rgba(255,255,255,0.35)`,
+                                    }}
+                                >
+                                    {/* 3D Üst Kemer ve Madalya Rozeti */}
+                                    <div className="flex items-center justify-between w-full shrink-0">
+                                        <div
+                                            className="px-3 py-1 rounded-full border-2 border-white/40 shadow-md flex items-center gap-1.5 text-xs font-black text-white"
+                                            style={{ background: game3dTheme.badgeBg }}
+                                        >
+                                            <span className="text-base">{game3dTheme.icon}</span>
+                                            <span>Bölüm {itemNum}</span>
+                                        </div>
+
+                                        <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white group-hover:scale-110 group-hover:bg-amber-400 group-hover:text-amber-950 transition-all shadow">
+                                            <ArrowRight className="w-4 h-4" />
+                                        </div>
+                                    </div>
+
+                                    {/* Orta: 3D Kabartmalı Başlık */}
+                                    <div className="my-3 flex-1 flex flex-col justify-center">
+                                        <h3
+                                            className={cn(
+                                                "font-black text-white text-left leading-snug tracking-wide filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] group-hover:text-amber-200 transition-colors",
+                                                getTitleFontSize()
+                                            )}
+                                        >
+                                            {title}
+                                        </h3>
+                                    </div>
+
+                                    {/* Alt: 3D Başla Buton Şeridi */}
+                                    <div className="w-full flex items-center justify-between mt-auto pt-2 border-t border-white/20">
+                                        <span className="text-[11px] font-extrabold text-amber-300 uppercase tracking-wider flex items-center gap-1">
+                                            <Sparkles className="w-3 h-3 text-amber-400" />
+                                            <span>Derse Katıl</span>
+                                        </span>
+                                        <div className="w-3.5 h-3.5 rounded-full bg-amber-400 border border-white shadow-[0_0_8px_#fde047]" />
+                                    </div>
+                                </motion.div>
+                            );
+                        }
 
                         return (
                             <motion.div

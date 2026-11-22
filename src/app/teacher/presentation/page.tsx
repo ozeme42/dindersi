@@ -21,6 +21,8 @@ import { PresentationWheelModal } from '@/components/presentation-wheel-modal';
 import { PresentationRemoteModal } from '@/components/presentation-remote-modal';
 import { PresentationSceneBackground } from '@/components/presentation-scenes';
 import { PresentationMascot } from '@/components/presentation-mascot';
+import { PresentationWoodenHeader } from '@/components/presentation-wooden-header';
+import { Presentation3DCharacter } from '@/components/presentation-3d-character';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import Link from 'next/link';
@@ -966,11 +968,38 @@ function PresentationPageContent() {
                 </div>
             )}
 
-            {/* ══ ÜST HEADER: Breadcrumb, Canlı Tema Değiştirici, Saat ve Hızlı Araçlar (Varsayılan Olarak Gizli) ══ */}
-            <header 
-                onMouseEnter={() => setIsHeaderHovered(true)}
-                onMouseLeave={() => setIsHeaderHovered(false)}
-                className={cn(
+            {/* ══ 3D OYUN DÜNYASI: AHŞAP VE ALTIN ASMA TABELA ══ */}
+            {presentationTheme === 'game-3d' ? (
+                <PresentationWoodenHeader
+                    title={(content as any)?.steps?.[currentStepIndex]?.title || content?.title || 'Ders Sunumu'}
+                    subtitle={unitName || (content as any)?.title || 'İlim ve İbadet Dünyası'}
+                    score={250 + currentStepIndex * 50}
+                    currentStep={currentStepIndex}
+                    totalSteps={totalStepsCount || (content as any)?.steps?.length || 1}
+                    elapsedTime={timerSeconds}
+                    isFullscreen={isFullscreen}
+                    isMuted={!isSoundEnabled}
+                    onToggleFullscreen={() => {
+                        if (typeof document !== 'undefined') {
+                            if (!document.fullscreenElement) {
+                                document.documentElement.requestFullscreen().catch(() => {});
+                            } else {
+                                document.exitFullscreen().catch(() => {});
+                            }
+                        }
+                    }}
+                    onToggleMute={() => setIsSoundEnabled(prev => !prev)}
+                    onOpenTools={() => setIsToolsOpen(prev => !prev)}
+                    onOpenWheel={handleOpenWheel}
+                    showWheelButton={isWheelQuickActive}
+                    onExit={handleExit}
+                />
+            ) : (
+                /* ══ HIZLI VE ŞEFFAF ÖĞRETMEN ARAÇLARI ÜST MENÜSÜ ══ */
+                <header 
+                    onMouseEnter={() => setIsHeaderHovered(true)}
+                    onMouseLeave={() => setIsHeaderHovered(false)}
+                    className={cn(
                     "fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-3 sm:px-6 py-2 transition-all duration-300 shadow-2xl",
                     presentationTheme === 'cosmic-dark' 
                         ? "bg-slate-950/92 backdrop-blur-2xl border-b border-white/10 text-white shadow-black/80"
@@ -1018,15 +1047,15 @@ function PresentationPageContent() {
                         <div 
                             className="flex items-center p-0.5 rounded-full border shadow-sm backdrop-blur-md"
                             style={{ 
-                                background: presentationTheme === 'game-3d' ? 'rgba(30, 27, 75, 0.92)' : presentationTheme === 'clean-light' || presentationTheme === 'sketchnote' ? 'rgba(241,245,249,0.95)' : 'rgba(255,255,255,0.08)', 
-                                borderColor: presentationTheme === 'game-3d' ? '#f59e0b' : presentationTheme === 'clean-light' || presentationTheme === 'sketchnote' ? '#cbd5e1' : 'rgba(255,255,255,0.15)' 
+                                background: presentationTheme === 'clean-light' || presentationTheme === 'sketchnote' ? 'rgba(241,245,249,0.95)' : 'rgba(255,255,255,0.08)', 
+                                borderColor: presentationTheme === 'clean-light' || presentationTheme === 'sketchnote' ? '#cbd5e1' : 'rgba(255,255,255,0.15)' 
                             }}
                         >
                             <button 
                                 onClick={() => handleThemeChange('game-3d')}
                                 className={cn(
                                     "flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black transition-all cursor-pointer",
-                                    presentationTheme === 'game-3d' 
+                                    (presentationTheme as string) === 'game-3d' 
                                         ? "bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-amber-950 shadow-[0_0_14px_rgba(245,158,11,0.7)] border-2 border-amber-200 font-black scale-105" 
                                         : ((presentationTheme as string) === 'clean-light' || (presentationTheme as string) === 'sketchnote' ? "text-slate-600 hover:text-slate-900" : "text-slate-400 hover:text-white")
                                 )}
@@ -1318,9 +1347,21 @@ function PresentationPageContent() {
                         </button>
                     </div>
                 </header>
+            )}
 
             {/* ══ İÇERİK ALANI: LessonContentViewer ══ */}
             <div className="flex-grow flex flex-col min-h-0 relative z-10 w-full h-full">
+                {/* 3D Oyun Modunda Sol Tarafta Duran Canlı Çocuk Karakter (Ali) */}
+                {presentationTheme === 'game-3d' && (
+                    <div className="hidden xl:block absolute left-4 bottom-24 z-30 pointer-events-auto">
+                        <Presentation3DCharacter
+                            stepIndex={currentStepIndex}
+                            totalSteps={totalStepsCount || (content as any)?.steps?.length || 1}
+                            stepTitle={(content as any)?.steps?.[currentStepIndex]?.title}
+                            stepType={(content as any)?.steps?.[currentStepIndex]?.type}
+                        />
+                    </div>
+                )}
                 <LessonContentViewer
                     topic={content as Topic}
                     courseId={courseId!}

@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
 import { motion } from 'framer-motion';
 import { prepareTurkishSpeech, getBestTurkishVoice, getTurkishSpeechParams } from '../tts-helper';
+import { PresentationQuestStage } from '@/components/presentation-quest-stage';
 
 const useTeacherMode = () => {
     const { user } = useAuth();
@@ -831,12 +832,10 @@ export function ConceptExplanationPlayer({
                         </span>
                     </div>
                 </div>
-            ) : (
+            ) : !isGame3D ? (
                 <div className={cn(
                     "flex items-center justify-center gap-3 mb-6 p-4 sm:p-5 rounded-3xl border shadow-2xl relative overflow-hidden text-center backdrop-blur-xl transition-colors",
-                    isGame3D
-                        ? "bg-gradient-to-b from-[#1e1b4b]/95 via-[#0f172a]/95 to-[#020617]/98 border-4 border-amber-400 text-white shadow-2xl shadow-amber-950/60 ring-2 ring-amber-400/30"
-                        : presentationTheme === 'clean-light'
+                    presentationTheme === 'clean-light'
                         ? "bg-white/95 border-2 border-indigo-200/90 text-slate-900 shadow-xl shadow-indigo-100/60"
                         : "bg-slate-900/90 border-white/10 text-white shadow-2xl"
                 )}>
@@ -865,9 +864,30 @@ export function ConceptExplanationPlayer({
                         </div>
                     </div>
                 </div>
-            )}
+            ) : null}
 
-            <div className={cn("grid pb-20 transition-all duration-300 items-stretch", getGapClass(), getGridClass())}>
+            {isGame3D ? (
+                <div className="w-full flex-1 flex flex-col items-center justify-center py-2 sm:py-4">
+                    <PresentationQuestStage
+                        items={visibleConcepts.filter(c => c.concept !== '[BAŞLIK]').map((c, i) => ({
+                            title: c.concept,
+                            text: c.definition || '',
+                        }))}
+                        revealedCount={revealedSentencesCount}
+                        title={title}
+                        onSpeakItem={(e, text, i) => {
+                            e.stopPropagation();
+                            const conceptItem = visibleConcepts.filter(c => c.concept !== '[BAŞLIK]')[i];
+                            if (conceptItem) {
+                                handleSpeakConcept(conceptItem, i);
+                            }
+                        }}
+                        speakingIndex={speakingIndex}
+                        fontSizeScale={fontSizeScale}
+                    />
+                </div>
+            ) : (
+                <div className={cn("grid pb-20 transition-all duration-300 items-stretch", getGapClass(), getGridClass())}>
                 {(() => {
                     let conceptCount = 0;
                     return visibleConcepts.map((item, index) => {
@@ -911,6 +931,7 @@ export function ConceptExplanationPlayer({
                     });
                 })()}
             </div>
+            )}
         </div>
     );
 }

@@ -79,6 +79,7 @@ const useTeacherMode = () => {
 // --- MODÜLER BİLEŞEN VE YARDIMCI İÇERİKLER (src/components/lesson-viewer/) ---
 export * from './lesson-viewer';
 import { StepContent, DrawingCanvas } from './lesson-viewer';
+import { PresentationWoodenTray } from './presentation-wooden-tray';
 // --- ANA EKRAN: LessonContentViewer ---
 
 export function LessonContentViewer({
@@ -976,15 +977,30 @@ export function LessonContentViewer({
             </>
         )}
 
-        {/* ══ ÖĞRETMEN MODU ALT NAVİGASYON BARI (ŞEFFAF & FLOATING GLASS DOCK) ══ */}
-        {isTeacher ? (() => {
-            const dockBtnBaseClass = isGame3D
-                ? "bg-gradient-to-b from-slate-700 via-slate-800 to-slate-900 hover:brightness-110 text-white font-black border-2 border-amber-400/60 border-b-[4px] border-b-slate-950 shadow-md active:border-b-2 active:translate-y-0.5"
-                : isLightBoard
-                    ? "bg-slate-100 hover:bg-slate-200 text-slate-950 font-black border-2 border-slate-300 shadow-xs"
-                    : isVibrantStudio
-                        ? "bg-[#131635] hover:bg-[#1f2452] text-white font-black border border-purple-400/40 shadow-xs"
-                        : "bg-slate-900/90 hover:bg-slate-800 text-white font-black border border-white/20 shadow-xs";
+        {/* ══ 3D OYUN MODUNDA: ASIL 3D AHŞAP VE ALTIN RAF DOCK KONSOLU ══ */}
+        {isGame3D ? (() => {
+            const { hasUnrevealedItems, currentCount, totalItems } = getStepRevealStatus();
+            return (
+                <PresentationWoodenTray
+                    currentStepIndex={currentStepIndex}
+                    totalSteps={steps.length}
+                    score={internalProgress.score || 250 + currentStepIndex * 50}
+                    onPrev={handlePrev}
+                    onNext={handleContinueOrNext}
+                    onSkip={handleNext}
+                    isNextButtonEnabled={isNextButtonEnabled}
+                    hasUnrevealedItems={hasUnrevealedItems}
+                    currentRevealCount={currentCount}
+                    totalRevealCount={totalItems}
+                    completeButtonText={completeButtonText}
+                />
+            );
+        })() : isTeacher ? (() => {
+            const dockBtnBaseClass = isLightBoard
+                ? "bg-slate-100 hover:bg-slate-200 text-slate-950 font-black border-2 border-slate-300 shadow-xs"
+                : isVibrantStudio
+                    ? "bg-[#131635] hover:bg-[#1f2452] text-white font-black border border-purple-400/40 shadow-xs"
+                    : "bg-slate-900/90 hover:bg-slate-800 text-white font-black border border-white/20 shadow-xs";
 
             return (
                 <div
