@@ -568,26 +568,6 @@ function InsertStepDivider({
                                 {opt.label}
                             </DropdownMenuItem>
                         ))}
-                        <DropdownMenuSeparator className="bg-white/10 my-1" />
-                        <DropdownMenuLabel className="text-[10px] font-black uppercase text-slate-400 tracking-wider px-2 py-1">Tekil Sorular & Diğer</DropdownMenuLabel>
-                        {[
-                            { label: '🔘 Tekli Çoktan Seçmeli Soru', type: 'mcq' as LessonStep['type'], title: 'Kontrol Sorusu' },
-                            { label: '❓ Tekli Doğru / Yanlış', type: 'tf' as LessonStep['type'], title: 'Doğru/Yanlış' },
-                            { label: '✏️ Tekli Boşluk Doldurma', type: 'fitb' as LessonStep['type'], title: 'Boşluk Doldurma' },
-                            { label: '🔗 Kavram - Tanım Eşleştirme', type: 'matching' as LessonStep['type'], title: 'Kavram Eşleştirme' },
-                            { label: '🎴 Bilgi Kartı (Flashcard)', type: 'flashcard' as LessonStep['type'], title: 'Bilgi Kartı' },
-                            { label: '🔤 Anagram Kartları (Dokun & Çevir)', type: 'anagramFlashcard' as LessonStep['type'], title: 'Anagram Bilgi Kartı' },
-                            { label: '🎮 Kelime Dehası (Anagram Oyunu)', type: 'anagramGame' as LessonStep['type'], title: 'Kelime Dehası' },
-                            { label: '🧩 Karışık Cümle Tamamlama', type: 'sentenceScramble' as LessonStep['type'], title: 'Cümle Sıralama' },
-                        ].map(opt => (
-                            <DropdownMenuItem 
-                                key={opt.label} 
-                                onClick={() => onAddStep(opt.type!, opt.title!, insertIndex)}
-                                className="text-xs font-semibold focus:bg-purple-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
-                            >
-                                {opt.label}
-                            </DropdownMenuItem>
-                        ))}
                         {onOpenLibrary && (
                             <>
                                 <DropdownMenuSeparator className="bg-white/10 my-1" />
@@ -1409,14 +1389,7 @@ export function TopicEditor({
         { label: '📁 Kategorilere Yerleştirme (3D Sandık Oyunu)', type: 'categorySort', defaultTitle: '📁 Kategorilere Yerleştirme Oyunu' },
         { label: '💭 Açık Uçlu Düşün & Tartış (Spiralli Defter)', type: 'openEndedQuestions', defaultTitle: '💭 Düşün, Tartış, Keşfet!' },
         { label: '✅/❌ Doğru / Yanlış Listesi (Toplu Ekran)', type: 'trueFalseList', defaultTitle: 'Doğru/Yanlış Alıştırması' },
-        { label: 'Kavram - Tanım Eşleştirme', type: 'matching', defaultTitle: 'Kavram Eşleştirme' },
         { label: 'Veri Bankasından Eşleştirme Ekle', action: () => handleOpenLibrary(['definition'], true, 'matching') },
-        { label: 'Çoktan Seçmeli Soru (Tekil)', type: 'mcq', defaultTitle: 'Kontrol Sorusu' },
-        { label: 'Doğru / Yanlış (Tekil)', type: 'tf', defaultTitle: 'Doğru/Yanlış' },
-        { label: 'Boşluk Doldurma (Tekil)', type: 'fitb', defaultTitle: 'Boşluk Doldurma' },
-        { label: 'Kelime Dehası / Anagram', type: 'anagramGame', defaultTitle: 'Kelime Dehası' },
-        { label: 'Cümle Düzeltme (Karışık Cümle)', type: 'sentenceScramble', defaultTitle: 'Cümle Düzeltme' },
-        { label: 'Soru Bankasından Soru Ekle', action: () => handleOpenLibrary(['questions'], true, 'questions') },
     ];
 
     return (
@@ -1714,26 +1687,6 @@ export function TopicEditor({
                                                 { label: '📁 Kategorilere Yerleştirme (3D Sandık Oyunu)', type: 'categorySort' as LessonStep['type'], title: '📁 Kategorilere Yerleştirme Oyunu' },
                                                 { label: '💭 Açık Uçlu Düşün & Tartış (Spiralli Defter)', type: 'openEndedQuestions' as LessonStep['type'], title: '💭 Düşün, Tartış, Keşfet!' },
                                                 { label: '✅/❌ Doğru / Yanlış Listesi (Toplu Ekran)', type: 'trueFalseList' as LessonStep['type'], title: 'Doğru/Yanlış Alıştırması' },
-                                            ].map(opt => (
-                                                <DropdownMenuItem
-                                                    key={opt.label}
-                                                    onClick={() => handleAddStep(opt.type, opt.title)}
-                                                    className="text-xs font-semibold focus:bg-purple-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
-                                                >
-                                                    {opt.label}
-                                                </DropdownMenuItem>
-                                            ))}
-                                            <DropdownMenuSeparator className="bg-white/10 my-1" />
-                                            <DropdownMenuLabel className="text-[10px] font-black uppercase text-slate-400 tracking-wider px-2 py-1">Tekil Sorular & Diğer</DropdownMenuLabel>
-                                            {[
-                                                { label: '🔘 Tekli Çoktan Seçmeli Soru', type: 'mcq' as LessonStep['type'], title: 'Kontrol Sorusu' },
-                                                { label: '❓ Tekli Doğru / Yanlış', type: 'tf' as LessonStep['type'], title: 'Doğru/Yanlış' },
-                                                { label: '✏️ Tekli Boşluk Doldurma', type: 'fitb' as LessonStep['type'], title: 'Boşluk Doldurma' },
-                                                { label: '🔗 Kavram - Tanım Eşleştirme', type: 'matching' as LessonStep['type'], title: 'Kavram Eşleştirme' },
-                                                { label: '🎴 Bilgi Kartı (Flashcard)', type: 'flashcard' as LessonStep['type'], title: 'Bilgi Kartı' },
-                                                { label: '🔤 Anagram Bilgi Kartı', type: 'anagramFlashcard' as LessonStep['type'], title: 'Anagram Bilgi Kartı' },
-                                                { label: '🎮 Kelime Dehası (Anagram Oyunu)', type: 'anagramGame' as LessonStep['type'], title: 'Kelime Dehası' },
-                                                { label: '🧩 Karışık Cümle Tamamlama', type: 'sentenceScramble' as LessonStep['type'], title: 'Cümle Sıralama' },
                                             ].map(opt => (
                                                 <DropdownMenuItem
                                                     key={opt.label}

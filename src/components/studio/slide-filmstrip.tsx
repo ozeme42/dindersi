@@ -338,17 +338,13 @@ export function SlideFilmstrip({
                             sideOffset={8}
                             className="bg-slate-950/95 backdrop-blur-2xl border border-white/15 text-white w-64 max-h-[85vh] overflow-y-auto rounded-2xl shadow-2xl p-2 z-50 scrollbar-thin scrollbar-thumb-white/20"
                         >
-                            <DropdownMenuLabel className="text-[10px] font-black uppercase text-purple-400 tracking-wider px-2 py-1">Soru & Değerlendirme</DropdownMenuLabel>
+                            <DropdownMenuLabel className="text-[10px] font-black uppercase text-purple-400 tracking-wider px-2 py-1">🎮 Toplu Oyun & Değerlendirme</DropdownMenuLabel>
                             {[
-                                { label: '🔘 Çoktan Seçmeli Soru', type: 'mcq' as LessonStep['type'], title: 'Kontrol Sorusu' },
-                                { label: '✅/❌ Doğru / Yanlış Listesi', type: 'trueFalseList' as LessonStep['type'], title: 'Doğru/Yanlış Alıştırması' },
-                                { label: '❓ Tekli Doğru / Yanlış', type: 'tf' as LessonStep['type'], title: 'Doğru/Yanlış' },
-                                { label: '✏️ Boşluk Doldurma', type: 'fitb' as LessonStep['type'], title: 'Boşluk Doldurma' },
-                                { label: '🔗 Kavram Eşleştirme', type: 'matching' as LessonStep['type'], title: 'Kavram Eşleştirme' },
-                                { label: '🎴 Bilgi Kartı (Flashcard)', type: 'flashcard' as LessonStep['type'], title: 'Bilgi Kartı' },
-                                { label: '🔤 Anagram Kartları (Dokun & Çevir)', type: 'anagramFlashcard' as LessonStep['type'], title: 'Anagram Bilgi Kartı' },
-                                { label: '🎮 Kelime Dehası (Anagram Oyunu)', type: 'anagramGame' as LessonStep['type'], title: 'Kelime Dehası' },
-                                { label: '🧩 Karışık Cümle Tamamlama', type: 'sentenceScramble' as LessonStep['type'], title: 'Cümle Sıralama' },
+                                { label: '🎮 Toplu Test Arenası (5 Soru: 3 Test + 2 Boşluk Doldurma)', type: 'miniGame' as LessonStep['type'], title: '🎮 Değerlendirme & Test Oyunu' },
+                                { label: '🧩 Paragraf Boşluk Doldurma (Cloze Oyunu)', type: 'clozeParagraph' as LessonStep['type'], title: '🧩 Paragraf Boşluk Doldurma' },
+                                { label: '📁 Kategorilere Yerleştirme (3D Sandık Oyunu)', type: 'categorySort' as LessonStep['type'], title: '📁 Kategorilere Yerleştirme Oyunu' },
+                                { label: '💭 Açık Uçlu Düşün & Tartış (Spiralli Defter)', type: 'openEndedQuestions' as LessonStep['type'], title: '💭 Düşün, Tartış, Keşfet!' },
+                                { label: '✅/❌ Doğru / Yanlış Listesi (Toplu Ekran)', type: 'trueFalseList' as LessonStep['type'], title: 'Doğru/Yanlış Alıştırması' },
                             ].map(opt => (
                                 <DropdownMenuItem 
                                     key={opt.label} 
