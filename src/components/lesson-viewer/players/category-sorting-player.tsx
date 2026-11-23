@@ -887,14 +887,9 @@ export function CategorySortingPlayer({
                                             >
                                                 <span className="text-2xl md:text-3xl flex-shrink-0">{card.icon}</span>
                                                 <div className="min-w-0 flex-1">
-                                                    <div className="text-sm sm:text-base md:text-lg lg:text-xl font-black text-amber-950 break-words leading-tight">
+                                                    <div className="text-base md:text-lg lg:text-xl font-black text-amber-950 break-words leading-tight">
                                                         {card.text}
                                                     </div>
-                                                    {card.subtitle && (
-                                                        <div className="text-xs sm:text-sm md:text-base text-amber-900 font-extrabold mt-0.5 break-words">
-                                                            {card.subtitle}
-                                                        </div>
-                                                    )}
                                                 </div>
                                                 <CheckCircle2 size={20} className="text-emerald-600 flex-shrink-0" />
                                             </div>
@@ -971,7 +966,7 @@ export function CategorySortingPlayer({
                                             draggable={!isPaused && !overlay.show}
                                             onDragStart={e => handleDragStart(e, card)}
                                             onClick={() => handleCardClick(card)}
-                                            className={`flex-shrink-0 w-52 md:w-64 min-w-[210px] p-3 md:p-3.5 rounded-2xl border-3 border-b-[6px] flex flex-col items-center text-center cursor-grab active:cursor-grabbing transition-all select-none ${
+                                            className={`flex-shrink-0 w-52 md:w-64 min-w-[210px] p-3.5 md:p-4 rounded-2xl border-3 border-b-[6px] flex flex-col items-center justify-center text-center cursor-grab active:cursor-grabbing transition-all select-none ${
                                                 isSelected
                                                     ? 'scale-105 -translate-y-2 ring-4 ring-amber-400 shadow-2xl border-amber-400 border-b-amber-600'
                                                     : 'hover:-translate-y-1 hover:shadow-xl border-amber-300 border-b-amber-400'
@@ -986,14 +981,9 @@ export function CategorySortingPlayer({
                                             <div className="text-3xl md:text-4xl mb-1 filter drop-shadow">
                                                 {card.icon}
                                             </div>
-                                            <div className="w-full text-lg sm:text-xl md:text-2xl font-black text-amber-950 leading-snug line-clamp-2 break-words">
+                                            <div className="w-full text-xl sm:text-2xl md:text-3xl font-black text-amber-950 leading-snug break-words px-1">
                                                 {card.text}
                                             </div>
-                                            {card.subtitle && (
-                                                <div className="w-full text-xs sm:text-sm md:text-base font-extrabold text-amber-900 mt-1.5 px-3.5 py-1 rounded-full bg-amber-200/80 break-words shadow-xs">
-                                                    {card.subtitle}
-                                                </div>
-                                            )}
                                         </div>
                                     );
                                 })
