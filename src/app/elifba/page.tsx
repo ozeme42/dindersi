@@ -33,12 +33,14 @@ import {
     Moon,
     ZoomIn,
     ZoomOut,
-    Printer
+    Printer,
+    Gamepad2
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { QuranWorksheetPrintDialog } from '@/components/quran-worksheet-print-dialog';
+import { ElifbaStepPracticeDialog } from '@/components/elifba-step-practice-dialog';
 
 // 8 Canlı Renk Teması Paleti (Fiziksel Kart / Tahta Uyumlu)
 const CARD_COLOR_THEMES = [
@@ -205,6 +207,7 @@ export default function ElifbaPortalPage() {
     // Tam Ekran Durumu
     const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
     const [isWorksheetPrintOpen, setIsWorksheetPrintOpen] = useState<boolean>(false);
+    const [isPracticeOpen, setIsPracticeOpen] = useState<boolean>(false);
     const playerContainerRef = useRef<HTMLDivElement | null>(null);
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const autoTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -222,6 +225,12 @@ export default function ElifbaPortalPage() {
         const modeParam = params.get('mode');
         const tabParam = params.get('tab');
         const itemParam = params.get('item');
+        const practiceParam = params.get('practice');
+
+        if (practiceParam) {
+            setSelectedUnitId(practiceParam);
+            setIsPracticeOpen(true);
+        }
 
         if (unitParam) {
             setSelectedUnitId(unitParam);
@@ -658,6 +667,17 @@ export default function ElifbaPortalPage() {
                             {ambianceTheme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
                         </Button>
 
+                        {/* 🎮 Oyunla Çalış & Pekiştir Butonu */}
+                        <Button 
+                            size="sm" 
+                            onClick={() => setIsPracticeOpen(true)}
+                            className="bg-gradient-to-r from-emerald-500 via-teal-500 to-indigo-600 hover:from-emerald-400 hover:to-indigo-500 text-white font-black h-9 px-3.5 rounded-xl text-xs shadow-md shadow-emerald-950/20 flex items-center gap-1.5 cursor-pointer transition-all hover:scale-105 active:scale-95"
+                            title="Bu adımı interaktif egzersiz ve oyunla çalış, sınıfta okumaya hazırlan"
+                        >
+                            <Gamepad2 className="w-4 h-4 text-amber-300" />
+                            <span>Oyunla Çalış &amp; Pekiştir</span>
+                        </Button>
+
                         {/* Kur'an & Elifba Adım Çalışma Kağıdı Yazdır Butonu */}
                         <Button 
                             size="sm" 
@@ -898,6 +918,18 @@ export default function ElifbaPortalPage() {
                                                 <Play className="w-3.5 h-3.5 mr-1.5 fill-current" /> Sırayla Dinle (Tümü)
                                             </>
                                         )}
+                                    </Button>
+
+                                    {/* 🎮 Bu Adımı Oyunla Çalış & Pekiştir */}
+                                    <Button
+                                        size="sm"
+                                        onClick={() => setIsPracticeOpen(true)}
+                                        className="h-9 px-3 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-indigo-600 hover:from-emerald-400 hover:to-indigo-500 text-white text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer shadow-md shadow-emerald-950/20 hover:scale-105 active:scale-95"
+                                        title="Bu adımı interaktif sesli egzersiz ve oyunla çalış, sınıfa hazırlan"
+                                    >
+                                        <Gamepad2 className="w-3.5 h-3.5 text-amber-300" />
+                                        <span className="hidden sm:inline">Oyunla Çalış &amp; Pekiştir</span>
+                                        <span className="sm:hidden">Oyunla Çalış</span>
                                     </Button>
 
                                     {/* Bu Adımı / Dersi Yazdır Butonu */}
@@ -1464,6 +1496,14 @@ export default function ElifbaPortalPage() {
                 onClose={() => setIsWorksheetPrintOpen(false)}
                 initialStepId={currentUnit.id}
                 ambianceTheme={ambianceTheme}
+            />
+
+            {/* ══ ELİFBA İNTERAKTİF ADIM ÇALIŞMA & OYUN MODALI ══ */}
+            <ElifbaStepPracticeDialog 
+                open={isPracticeOpen}
+                onOpenChange={setIsPracticeOpen}
+                initialStageId={selectedUnitId}
+                onSelectNextStage={(nextId) => setSelectedUnitId(nextId)}
             />
 
         </div>

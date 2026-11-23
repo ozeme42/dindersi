@@ -1,386 +1,439 @@
 [
   {
-    "title": "Öğrenme Hedefleri",
+    "type": "hookQuestion",
+    "tag": "Merak & Düşünce Sorusu",
+    "isPublished": true,
+    "title": "🤔 Derse Başlarken: Bir Düşünelim!",
+    "thoughtStarter": "Peygamber Efendimiz gençlerle iletişim kurarken her zaman sevgi, merhamet ve anlayışla yaklaşmıştır. Sizce çevremizdeki insanlarla kurduğumuz iletişimde tatlı dilli olmak insan ilişkilerini nasıl etkiler?",
+    "question": "Birisi sizin hatanızı tatlı bir dille uyardığında mı yoksa herkesin içinde azarladığında mı hatanızı düzeltmek istersiniz?"
+  },
+  {
+    "type": "objectiveList",
+    "isPublished": true,
     "items": [
-      "Hz. Peygamber'in gençlerle iletişimde sergilediği temel özellikleri tanımlayabileceksiniz.",
-      "Hz. Peygamber'in gençlere verdiği değeri ve onlara karşı olan merhametini açıklayabileceksiniz.",
-      "Hz. Peygamber'in gençlerin yeteneklerini keşfetme ve onları sorumluluklara hazırlama yöntemlerini örneklerle gösterebileceksiniz.",
-      "Hz. Peygamber'in gençlerle istişareye verdiği önemi ve bunun toplumsal faydalarını yorumlayabileceksiniz.",
-      "Hz. Peygamber'in gençlerin hatalarına karşı yapıcı tutumunu ve hata telafisi konusundaki rehberliğini açıklayabileceksiniz."
+      "Hz. Peygamber'in gençlerle kurduğu sevgi, merhamet ve güven temelli iletişimi açıklayabileceksiniz.",
+      "İstişare kavramının anlamını ve Hz. Peygamber'in kararlarında danışmaya verdiği önemi kavrayabileceksiniz.",
+      "Hz. Peygamber'in gençlere sorumluluk verme biçimini ve ahlaki tavsiyelerini günlük hayatınızla ilişkilendirebileceksiniz."
     ],
-    "type": "objectiveList"
+    "title": "🎯 Öğrenme Hedefleri"
   },
   {
-    "title": "Anahtar Kavramlar (Veri Bankası)",
-    "type": "content",
-    "content": "<ul><li>Cahiliye</li><li>Sünnet</li><li>Tövbe</li><li>Rahmet</li><li>İstişare</li><li>Müezzin</li><li>Sahabi</li></ul>"
+    "title": "Anahtar Kavramlar",
+    "items": [
+      {
+        "concept": "Cahiliye",
+        "definition": ""
+      },
+      {
+        "definition": "",
+        "concept": "Sünnet"
+      },
+      {
+        "concept": "Tövbe",
+        "definition": ""
+      },
+      {
+        "definition": "",
+        "concept": "Rahmet"
+      },
+      {
+        "definition": "",
+        "concept": "İstişare"
+      },
+      {
+        "definition": "",
+        "concept": "Müezzin"
+      },
+      {
+        "concept": "Sahabi",
+        "definition": ""
+      }
+    ],
+    "type": "conceptExplanation"
   },
   {
-    "title": "Hz. Peygamber'in Gençlerle İletişiminin Temelleri",
-    "content": "<ul><li>Hz. Peygamber, genç sahabiler tarafından büyük bir saygı ve dikkatle dinlenirdi.</li><li>O, gençlere ve genel olarak insanlara karşı her zaman şefkat ve merhamet temelli bir yaklaşım sergiledi.</li><li>Konuşmalarında kötü sözlerden kaçınır, kaba ve katı kalpli olmaktan uzak dururdu.</li><li>Kendisine düşmanlık edenlere bile merhametle yaklaştı, hatalarını bağışlama eğilimindeydi (Ebu Mahzure örneği).</li></ul>",
+    "type": "activityLink",
+    "activityType": "/oyunlar/kelime-avi/oyun",
+    "title": "🎮 Kelime Avı Etkinliği",
+    "isPublished": true,
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "activityLabel": "Kelime Avı"
+  },
+  {
+    "title": "PDF / Sunu Slaytı",
+    "pdfUrl": "https://drive.google.com/file/d/19Aorzs_SCWTqQXiiSu2DWcQDPumaZqps/view?usp=drive_link",
+    "type": "pdfSlide"
+  },
+  {
+    "description": "Bu derste öğreneceğimiz ana başlıklar (Aşağıdaki başlıklara tıklayarak doğrudan ilgili konuya gidebilirsiniz)",
+    "title": "1. Peygamberimizin Gençlerle İletişimi - Konu Başlıkları",
+    "items": [
+      {
+        "title": "Hz. Peygamber’in Gençlik Yılları ve Ahlakı",
+        "number": 1
+      },
+      {
+        "title": "Hz. Peygamber’in Gençlerle İletişiminde Sevgi ve Merhamet",
+        "number": 2
+      },
+      {
+        "number": 3,
+        "title": "Gençlere Sorumluluk Verme ve İstişare Etme"
+      }
+    ],
+    "type": "topicOutline",
+    "isPublished": true
+  },
+  {
+    "title": "Hz. Peygamber’in Gençlik Yılları ve Ahlakı",
+    "isPublished": true,
+    "content": "<ul><li>Hz. Muhammed (sav), gençlik yıllarında çalışkanlığı, dürüstlüğü ve güvenilirliği ile tanınan bir gençti.</li><li>Genç yaşta sahip olduğu üstün ahlak sayesinde çevresindeki herkesin sevgi ve saygısını kazandı.</li><li>Kendi gençlik tecrübeleri, peygamberliği döneminde gençlerin duygularını anlamasını ve onlara empatiyle yaklaşmasını sağladı.</li></ul>",
     "type": "content"
   },
   {
-    "title": "Gençlere Değer Verme ve Yeteneklerini Keşfetme",
+    "timeLimit": 30,
+    "title": "🎮 Değerlendirme & Test Oyunu",
+    "type": "miniGame",
+    "gameTemplate": "penalti",
+    "questions": [
+      {
+        "id": "gen-q-1795451422499-1",
+        "options": [
+          "Zenginliği ve cömertliğiyle",
+          "Çalışkanlığı, dürüstlüğü ve güvenilirliği ile",
+          "Yalnızlığı ve sakinliğiyle",
+          "Güçlü hitabeti ve cesaretiyle"
+        ],
+        "correctAnswerIndex": 1,
+        "question": "Hz. Muhammed (sav) gençlik yıllarında hangi özellikleriyle tanınan bir gençti?"
+      },
+      {
+        "id": "gen-q-1795451422501-2",
+        "question": "Hz. Muhammed'in genç yaşta sahip olduğu üstün ahlak çevresinde hangi duyguların kazanılmasını sağlamıştır?",
+        "correctAnswerIndex": 0,
+        "options": [
+          "Sevgi ve saygı",
+          "Kıskançlık ve korku",
+          "Maddi kazanç ve menfaat",
+          "Merak ve hayranlık"
+        ]
+      },
+      {
+        "question": "Hz. Muhammed'in kendi gençlik tecrübeleri, peygamberliği döneminde gençlerin duygularını anlamasını ve onlara ___ yaklaşmasını sağlamıştır. Cümlesinde boş bırakılan yere aşağıdakilerden hangisi getirilmelidir?",
+        "correctAnswerIndex": 3,
+        "id": "gen-q-1795451422501-3",
+        "options": [
+          "mesafeli",
+          "şüpheyle",
+          "önyargıyla",
+          "empatiyle"
+        ]
+      }
+    ]
+  },
+  {
     "type": "content",
-    "content": "<ul><li>Hz. Peygamber, gençlerin duygularını ve ihtiyaçlarını anlamaya büyük özen gösterdi.</li><li>Onların yeteneklerini fark etti ve bu yeteneklerini geliştirmeleri için doğru bir şekilde yönlendirdi.</li><li>Gençlerin güçlü yönlerini öne çıkararak onları takdir etti ve cesaretlendirdi.</li><li>İlmi, askeri ve idari alanlarda yetkin gençlere erken yaşlardan itibaren sorumluluklar verdi.</li></ul>"
+    "isPublished": true,
+    "content": "<ul><li>Peygamber Efendimiz, tüm insanlığa bir <mark>rahmet</mark> ve merhamet elçisi olarak gönderilmiştir.</li><li>Ebu Mahzure olayında olduğu gibi, kendisiyle alay eden gençleri bile cezalandırmak yerine sevgi ve tatlı dille kazanmıştır.</li><li>Yanında uzun yıllar kalan Enes bin Malik'e (ra) bir kez bile <mark>'Öf!'</mark> dememiş ve hatalarında kırıcı davranmamıştır.</li></ul>",
+    "title": "Hz. Peygamber’in Gençlerle İletişiminde Sevgi ve Merhamet"
   },
   {
-    "title": "İstişare ve Sorumluluk Bilinci Aşılaması",
-    "content": "<ul><li>Önemli konularda gençlerle istişare ederek onların fikirlerine ve tecrübelerine değer verdi.</li><li>Gençleri sorumluluk almaya teşvik etti ve bu sorumlulukları başarıyla yerine getirmeleri için eğitti (Muaz bin Cebel örneği).</li><li>Hatalı davranışlarda bulunan gençlere kızmak yerine, hatalarından ders çıkarmayı ve nasıl telafi edeceklerini öğretti (Kab bin Malik ve Ebu Zer örnekleri).</li><li>Gençlere Allah'a, ailelerine ve çevrelerine karşı olan sorumluluklarını hatırlattı.</li></ul>",
-    "type": "content"
+    "blanks": [
+      {
+        "id": "1",
+        "hint": "Peygamberimizin tüm insanlığa gönderiliş amacını belirten temel sıfatıdır.",
+        "targetWord": "rahmet"
+      },
+      {
+        "id": "2",
+        "hint": "Gençlerin hatalarında kullanılan yapıcı ve sevgi dolu iletişim yöntemidir.",
+        "targetWord": "tatlı dil"
+      },
+      {
+        "id": "3",
+        "targetWord": "anlayışlı",
+        "hint": "Enes bin Malik ile ilişkisinde gösterdiği hoşgörülü ve sabırlı yaklaşımı ifade eder."
+      }
+    ],
+    "type": "clozeParagraph",
+    "description": "Boşluklara uygun kavramları yerleştiriniz:",
+    "distractors": [
+      "istişare",
+      "sabır"
+    ],
+    "paragraphWithBlanks": "Peygamber Efendimiz insanlığa bir [1] elçisi olarak gönderilmiş, kendisiyle alay eden gençleri bile cezalandırmak yerine [2] ile kazanmıştır. Yanında uzun yıllar kalan Enes bin Malik'e (ra) bir kez bile kırıcı davranmamış ve her zaman [3] bir tutum sergilemiştir.",
+    "title": "🧩 Paragraf Boşluk Doldurma"
   },
   {
-    "htmlContent": "<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Gençlerle İletişim Özeti</title>\n    <script src=\"https://cdn.tailwindcss.com\"></script>\n    <link href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css\" rel=\"stylesheet\">\n    <link href=\"https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600;800&display=swap\" rel=\"stylesheet\">\n    <style>\n        /* Kök font boyutunu dinamik yapıyoruz, böylece rem birimleri de ölçeklenir */\n        html {\n            font-size: clamp(14px, 1.25vw, 18px);\n        }\n\n        body {\n            background-color: #fff;\n            font-family: 'Inter', sans-serif;\n            margin: 0;\n            padding: 0;\n            width: 100vw;\n            /* Mobilde varsayılan scroll, masaüstünde stil içinde ezilecek */\n            overflow-x: hidden;\n            overflow-y: auto;\n        }\n\n        /* Ana Kapsayıcı */\n        .summary-sheet {\n            width: 100%;\n            background-color: #fff;\n            position: relative;\n            display: flex;\n            flex-direction: column;\n            /* Mobilde rahat padding, masaüstünde orantılı */\n            padding: clamp(1rem, 3vh, 3rem);\n            color: #334155;\n            box-sizing: border-box;\n            /* Mobilde min-height, masaüstünde sabit height */\n            min-height: 100vh;\n        }\n\n        /* Masaüstü (md ve üzeri) için özel ayarlar: Tek Sayfa Deneyimi */\n        @media (min-width: 768px) {\n            body {\n                height: 100vh;\n                overflow: hidden; /* Masaüstünde taşmayı engelle */\n            }\n            .summary-sheet {\n                height: 100%;\n                overflow: hidden;\n            }\n        }\n\n        /* Arkaplan Deseni */\n        .bg-pattern {\n            position: absolute;\n            top: 0; left: 0; width: 100%; height: 100%;\n            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);\n            background-size: 24px 24px;\n            opacity: 0.3;\n            z-index: 0;\n            pointer-events: none;\n        }\n\n        .content-layer {\n            position: relative;\n            z-index: 10;\n            height: 100%;\n            display: flex;\n            flex-direction: column;\n            width: 100%;\n        }\n\n        h1, h2 { font-family: 'Amiri', serif; }\n\n        @media print {\n            body { background: none; padding: 0; margin: 0; height: auto; overflow: visible; }\n            .summary-sheet { width: 100%; height: 100%; padding: 10mm; page-break-after: always; display: block; }\n            @page { size: landscape; margin: 0; }\n        }\n    </style>\n</head>\n<body>\n\n    <div class=\"summary-sheet\">\n        <div class=\"bg-pattern\"></div>\n        \n        <div class=\"content-layer\">\n            <!-- Başlık Alanı -->\n            <header class=\"flex justify-between items-end border-b-2 border-emerald-600 pb-4 mb-4 shrink-0 gap-4\">\n                <div>\n                    <h2 class=\"text-emerald-700 font-bold tracking-[0.3em] uppercase mb-1 text-[clamp(0.7rem,1.2vh,1rem)]\">2. Ünite Özeti</h2>\n                    <!-- Başlık Dinamik Büyüme: Mobilde 1.8rem, Masaüstünde büyüyerek 4rem'e kadar -->\n                    <h1 class=\"text-gray-900 font-bold leading-none text-[clamp(1.8rem,5vw,4rem)]\">Hz. Peygamber ve Gençler</h1>\n                </div>\n                <div class=\"text-right hidden sm:block\">\n                    <p class=\"font-serif italic text-gray-600 text-[clamp(1rem,1.5vw,1.5rem)]\">\"Seni ancak alemlere rahmet olarak gönderdik.\"</p>\n                    <span class=\"text-emerald-600 font-bold uppercase tracking-wider block mt-1 text-[clamp(0.6rem,0.8vw,0.8rem)]\">Enbiya Suresi, 107</span>\n                </div>\n            </header>\n\n            <!-- Ana İçerik Grid -->\n            <div class=\"grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-[2vh] flex-grow h-full md:overflow-hidden\">\n                \n                <!-- Sütun 1: Duygusal Bağ -->\n                <div class=\"flex flex-col gap-4 md:gap-[2vh] h-full\">\n                    <div class=\"bg-emerald-50 p-4 md:p-[2vh] rounded-xl border-l-4 border-emerald-500 flex flex-col justify-center flex-1 transition hover:shadow-md\">\n                        <div class=\"flex items-center mb-2\">\n                            <i class=\"fas fa-heart text-emerald-600 text-xl mr-3\"></i>\n                            <h3 class=\"font-bold text-emerald-900 text-[clamp(1.1rem,1.5vw,1.5rem)]\">Şefkat ve Merhamet</h3>\n                        </div>\n                        <p class=\"text-gray-700 mb-2 leading-relaxed text-[clamp(0.85rem,1vw,1.1rem)]\">Gençlere karşı kaba ve sert olmamış, kazanma odaklı yaklaşmıştır.</p>\n                        <div class=\"bg-white p-3 rounded-lg border border-emerald-100 shadow-sm mt-auto\">\n                            <strong class=\"block text-emerald-700 mb-1 text-[clamp(0.8rem,0.9vw,1rem)]\">Örnek: Ebu Mahzure</strong>\n                            <span class=\"text-[clamp(0.75rem,0.85vw,0.95rem)]\">Ezanla alay etmesine rağmen sesi güzel olduğu için başı okşanmış ve Mekke müezzini yapılmıştır.</span>\n                        </div>\n                    </div>\n\n                    <div class=\"bg-blue-50 p-4 md:p-[2vh] rounded-xl border-l-4 border-blue-500 flex flex-col justify-center flex-1 transition hover:shadow-md\">\n                        <div class=\"flex items-center mb-2\">\n                            <i class=\"fas fa-smile text-blue-600 text-xl mr-3\"></i>\n                            <h3 class=\"font-bold text-blue-900 text-[clamp(1.1rem,1.5vw,1.5rem)]\">Değer Verme</h3>\n                        </div>\n                        <p class=\"text-gray-700 mb-2 leading-relaxed text-[clamp(0.85rem,1vw,1.1rem)]\">Gençleri gördüğünde selam verir, gülümser ve hal hatır sorardı.</p>\n                        <div class=\"bg-white p-3 rounded-lg border border-blue-100 shadow-sm mt-auto\">\n                            <strong class=\"block text-blue-700 mb-1 text-[clamp(0.8rem,0.9vw,1rem)]\">Örnek: Cerir b. Abdullah</strong>\n                            <span class=\"text-[clamp(0.75rem,0.85vw,0.95rem)]\">\"Müslüman olduğumdan beri Resulullah beni kapıdan çevirmedi, her gördüğünde gülümsedi.\"</span>\n                        </div>\n                    </div>\n                </div>\n\n                <!-- Sütun 2: Merkez (Hadis & İletişim) -->\n                <div class=\"flex flex-col gap-4 md:gap-[2vh] h-full\">\n                    <!-- Orta Hadis Kutusu -->\n                    <div class=\"bg-gray-800 text-white p-6 rounded-xl flex flex-col justify-center items-center text-center shadow-lg shrink-0\">\n                        <i class=\"fas fa-quote-left text-emerald-400 text-2xl mb-2 opacity-50\"></i>\n                        <p class=\"font-serif italic leading-relaxed text-[clamp(1.2rem,1.8vw,2rem)]\">\"Kolaylaştırınız, zorlaştırmayınız;<br>müjdeleyiniz, nefret ettirmeyiniz.\"</p>\n                        <div class=\"w-12 h-1 bg-emerald-500 mt-4\"></div>\n                    </div>\n\n                    <!-- Telafi Kutusu -->\n                    <div class=\"bg-rose-50 p-4 md:p-[2vh] rounded-xl border-l-4 border-rose-500 flex flex-col justify-center flex-1 transition hover:shadow-md\">\n                        <div class=\"flex items-center mb-2\">\n                            <i class=\"fas fa-eraser text-rose-600 text-xl mr-3\"></i>\n                            <h3 class=\"font-bold text-rose-900 text-[clamp(1.1rem,1.5vw,1.5rem)]\">Hatanın Telafisi</h3>\n                        </div>\n                        <p class=\"text-gray-700 mb-2 leading-relaxed text-[clamp(0.85rem,1vw,1.1rem)]\">Hata yapanı toplum içinde rencide etmez, özel olarak uyarır ve telafi fırsatı verirdi.</p>\n                        <div class=\"bg-white p-3 rounded-lg border border-rose-100 shadow-sm mt-auto\">\n                            <strong class=\"block text-rose-700 mb-1 text-[clamp(0.8rem,0.9vw,1rem)]\">Örnek: Ebu Zer & Bilal</strong>\n                            <span class=\"text-[clamp(0.75rem,0.85vw,0.95rem)]\">Ebu Zer, Bilal'i rengiyle ayıplayınca uyarılmış, o da hemen pişman olup özür dilemiştir.</span>\n                        </div>\n                    </div>\n                </div>\n\n                <!-- Sütun 3: Sosyal ve İdari -->\n                <div class=\"flex flex-col gap-4 md:gap-[2vh] h-full\">\n                    <div class=\"bg-amber-50 p-4 md:p-[2vh] rounded-xl border-l-4 border-amber-500 flex flex-col justify-center flex-1 transition hover:shadow-md\">\n                        <div class=\"flex items-center mb-2\">\n                            <i class=\"fas fa-crown text-amber-600 text-xl mr-3\"></i>\n                            <h3 class=\"font-bold text-amber-900 text-[clamp(1.1rem,1.5vw,1.5rem)]\">Güven ve Sorumluluk</h3>\n                        </div>\n                        <p class=\"text-gray-700 mb-2 leading-relaxed text-[clamp(0.85rem,1vw,1.1rem)]\">Gençlerin yeteneklerini keşfeder ve onlara önemli görevler verirdi.</p>\n                        <div class=\"bg-white p-3 rounded-lg border border-amber-100 shadow-sm mt-auto\">\n                            <strong class=\"block text-amber-700 mb-1 text-[clamp(0.8rem,0.9vw,1rem)]\">Örnek: Muaz bin Cebel</strong>\n                            <span class=\"text-[clamp(0.75rem,0.85vw,0.95rem)]\">Genç yaşında Yemen'e vali, kadı ve öğretmen olarak gönderilmiştir.</span>\n                        </div>\n                    </div>\n\n                    <div class=\"bg-indigo-50 p-4 md:p-[2vh] rounded-xl border-l-4 border-indigo-500 flex flex-col justify-center flex-1 transition hover:shadow-md\">\n                        <div class=\"flex items-center mb-2\">\n                            <i class=\"fas fa-comments text-indigo-600 text-xl mr-3\"></i>\n                            <h3 class=\"font-bold text-indigo-900 text-[clamp(1.1rem,1.5vw,1.5rem)]\">İstişare (Danışma)</h3>\n                        </div>\n                        <p class=\"text-gray-700 mb-2 leading-relaxed text-[clamp(0.85rem,1vw,1.1rem)]\">Gençlerin fikirlerini önemser, kararlara onları da dahil ederdi.</p>\n                        <div class=\"bg-white p-3 rounded-lg border border-indigo-100 shadow-sm mt-auto\">\n                            <strong class=\"block text-indigo-700 mb-1 text-[clamp(0.8rem,0.9vw,1rem)]\">Örnek: Bedir Savaşı</strong>\n                            <span class=\"text-[clamp(0.75rem,0.85vw,0.95rem)]\">Hubab bin Münzir'in stratejik yer önerisini kabul ederek ordunun yerini değiştirmiştir.</span>\n                        </div>\n                    </div>\n                </div>\n\n            </div>\n\n            <!-- Alt Bilgi -->\n            <footer class=\"mt-4 border-t border-gray-200 pt-3 flex flex-col sm:flex-row justify-between items-center text-gray-500 shrink-0 gap-2\">\n                <div class=\"flex items-center gap-2\">\n                    <span class=\"bg-emerald-100 text-emerald-800 px-2 py-1 rounded font-bold text-[clamp(0.7rem,0.9vw,0.9rem)]\">Kazanım</span>\n                    <span class=\"text-[clamp(0.7rem,0.9vw,0.9rem)] text-center sm:text-left\">Hz. Peygamber’in gençlerle iletişimindeki temel ilkeleri açıklar.</span>\n                </div>\n                <div class=\"text-[clamp(0.7rem,0.9vw,0.9rem)]\">\n                    <i class=\"fas fa-book mr-1\"></i> Din Kültürü ve Ahlak Bilgisi\n                </div>\n            </footer>\n        </div>\n    </div>\n\n</body>\n</html>",
-    "type": "htmlSlide",
-    "title": "İnteraktif Sunum"
+    "isPublished": true,
+    "type": "content",
+    "content": "<ul><li>Peygamberimiz önemli kararlar almadan önce çevresindekilerle <mark>istişare</mark> etmiş, gençlerin fikirlerine de değer vermiştir.</li><li>Genç sahabilerin yeteneklerini keşfederek Muaz bin Cebel'i (ra) genç yaşta Yemen'e kadı (yönetici/hâkim) olarak görevlendirmiştir.</li><li>Hata yapan gençlere hatalarını telafi etmeyi ve kötü bir davranışın ardından hemen iyilik yapmayı öğütlemiştir.</li></ul>",
+    "title": "Gençlere Sorumluluk Verme ve İstişare Etme"
   },
   {
-    "title": "611",
-    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/tamuyum.firebasestorage.app/o/imageLibrary%2FMYZ210AYLDPf8TY1yjLnpfWPqZ33%2F1765820380324-unnamed%20(1).png?alt=media&token=82779b31-6074-4260-bd3f-d658e9b19663",
-    "type": "visual"
+    "tableTitle": "Peygamberimizin Gençlere Yaklaşımı ve Davranış Modelleri",
+    "type": "categoryTable",
+    "isPublished": true,
+    "categories": [
+      {
+        "badge": "Ahlaki Yaklaşım",
+        "name": "Sevgi ve Merhamet",
+        "color": "emerald",
+        "items": [
+          "Gençlere ve çocuklara şefkatle yaklaşmak",
+          "Hata yapan gençlere yumuşak ve affedici bir dille rehberlik etmek",
+          "Gençleri gördüğünde güler yüzlü olmak ve onları dinlemek"
+        ]
+      },
+      {
+        "color": "amber",
+        "badge": "Eğitim ve Gelişim",
+        "items": [
+          "Genç sahabilerin yeteneklerini keşfedip onları doğru alanlara yönlendirmek",
+          "Muaz bin Cebel gibi gençleri öğretmenlik ve kadılık gibi önemli görevlere atamak",
+          "Gençlerin potansiyeline güvenerek onlara sorumluluk bilinci kazandırmak"
+        ],
+        "name": "Güven ve Sorumluluk"
+      },
+      {
+        "color": "indigo",
+        "badge": "İletişim ve Danışma",
+        "items": [
+          "Önemli kararlar alırken gençlerin ve çevresindekilerin fikirlerine danışmak",
+          "Gençlerin duygu, düşünce ve özlemlerini önemsemek",
+          "Gençlerin güçlü yönlerini öne çıkararak onları takdir etmek ve cesaretlendirmek"
+        ],
+        "name": "İstişare ve Değer Vermek"
+      }
+    ],
+    "description": "Hz. Muhammed (sav) gençlerle iletişim kurarken merhamet, sorumluluk ve istişare temelli bir yöntem uygulamıştır.",
+    "title": "📊 Hz. Peygamber'in Gençlerle İletişim İlkeleri"
   },
   {
-    "type": "flashcard",
+    "timeLimit": 30,
+    "title": "🎮 Değerlendirme & Test Oyunu",
+    "gameTemplate": "carkifelek",
+    "type": "miniGame",
+    "questions": [
+      {
+        "question": "Bu konuyla ilgili 1. soru metni?",
+        "correctAnswerIndex": 0,
+        "id": "q-1",
+        "options": [
+          "Doğru Seçenek",
+          "Çeldirici A",
+          "Çeldirici B",
+          "Çeldirici C"
+        ]
+      },
+      {
+        "options": [
+          "Doğru Seçenek",
+          "Çeldirici A",
+          "Çeldirici B",
+          "Çeldirici C"
+        ],
+        "correctAnswerIndex": 0,
+        "id": "q-2",
+        "question": "Bu konuyla ilgili 2. soru metni?"
+      },
+      {
+        "correctAnswerIndex": 0,
+        "options": [
+          "Doğru Kavram",
+          "Çeldirici A",
+          "Çeldirici B",
+          "Çeldirici C"
+        ],
+        "id": "q-3",
+        "question": "Konuyla ilgili önemli bir tanımda \"...\" yerine ___ getirilmelidir."
+      }
+    ]
+  },
+  {
+    "title": "Bilgi Kartları",
     "cards": [
       {
-        "definition": "İslam öncesi dönemdeki bilgisizlik, ahlaki yozlaşma ve yanlış inanışlar dönemine ne isim verilir?",
+        "definition": "İslam öncesi dönemdeki bilgisizlik, ahlaki yozlaşma ve yanlış inanışlar dönemdir.",
         "term": "Cahiliye"
       },
       {
-        "definition": "Hz. Peygamber'in söz, fiil ve onaylarının genel adı nedir?",
+        "definition": "Hz. Peygamber'in söz, fiil ve onaylarının genel adıdır.",
         "term": "Sünnet"
       },
       {
-        "term": "Müezzin",
-        "definition": "Camide ezan okuma görevini üstlenen kişiye ne isim verilir?"
+        "definition": "Camide ezan okuma görevini üstlenen kişidir.",
+        "term": "Müezzin"
       },
       {
-        "definition": "Önemli kararlar almadan önce başkalarının görüşlerini alma ve fikir alışverişinde bulunma eylemine ne denir?",
-        "term": "İstişare"
+        "term": "İstişare",
+        "definition": "Önemli kararlar almadan önce başkalarının görüşlerini alma ve fikir alışverişinde bulunma eylemidir."
       },
       {
-        "definition": "Yapılan bir hatadan veya günahtan pişmanlık duyarak vazgeçme ve af dileme eylemine ne denir?",
+        "definition": "Yapılan bir hatadan veya günahtan pişmanlık duyarak vazgeçme ve af dileme eylemidir.",
         "term": "Tövbe"
       },
       {
         "term": "Rahmet",
-        "definition": "Allah'ın insanlara gösterdiği merhamet, sevgi ve şefkatin genel adı nedir?"
+        "definition": "Allah'ın insanlara gösterdiği merhamet, sevgi ve şefkatin genel adıdır."
       },
       {
-        "definition": "Hz. Peygamber'i görmüş, ona inanmış ve Müslüman olarak vefat etmiş kişilere ne ad verilir?",
+        "definition": "Hz. Peygamber'i görmüş, ona inanmış ve Müslüman olarak vefat etmiş kişilerdir.",
         "term": "Sahabi"
       }
     ],
-    "title": "Bilgi Kartları (Veri Bankası)"
+    "type": "flashcard"
   },
   {
-    "type": "anagramFlashcard",
-    "title": "Anagram Kartları (Veri Bankası)",
     "cards": [
       {
-        "correctAnswer": "Cahiliye",
-        "scrambledWord": "İİHYALEC",
-        "definition": "İpucu: Bu kelime \"Cahiliye\""
+        "scrambledWord": "LCİEHYİA",
+        "correctAnswer": "CAHİLİYE",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Cahiliye\""
       },
       {
-        "correctAnswer": "Sünnet",
-        "definition": "İpucu: Bu kelime \"Sünnet\"",
-        "scrambledWord": "NENÜTS"
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Sünnet\"",
+        "correctAnswer": "SÜNNET",
+        "scrambledWord": "TÜNSEN"
       },
       {
-        "definition": "İpucu: Bu kelime \"Tövbe\"",
-        "correctAnswer": "Tövbe",
-        "scrambledWord": "TÖVEB"
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Tövbe\"",
+        "correctAnswer": "TÖVBE",
+        "scrambledWord": "ÖBETV"
       },
       {
-        "correctAnswer": "Rahmet",
-        "scrambledWord": "AETRMH",
-        "definition": "İpucu: Bu kelime \"Rahmet\""
+        "scrambledWord": "EAHRMT",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Rahmet\"",
+        "correctAnswer": "RAHMET"
       },
       {
-        "scrambledWord": "İSŞEAİRT",
-        "correctAnswer": "İstişare",
-        "definition": "İpucu: Bu kelime \"İstişare\""
+        "scrambledWord": "ŞİİSETAR",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"İstişare\"",
+        "correctAnswer": "İSTİŞARE"
       },
       {
-        "definition": "İpucu: Bu kelime \"Müezzin\"",
-        "scrambledWord": "ÜEZMZNİ",
-        "correctAnswer": "Müezzin"
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Müezzin\"",
+        "correctAnswer": "MÜEZZİN",
+        "scrambledWord": "İZMÜNEZ"
       },
       {
-        "correctAnswer": "Sahabi",
-        "definition": "İpucu: Bu kelime \"Sahabi\"",
-        "scrambledWord": "BASAİH"
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Sahabi\"",
+        "correctAnswer": "SAHABİ",
+        "scrambledWord": "ASAHİB"
       }
-    ]
+    ],
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları"
   },
   {
+    "noteTitle": "1. Peygamberimizin Gençlerle İletişimi - Önemli Ders Notları & Anahtar Kavramlar",
+    "title": "✏️ Defterimize Yazalım (Kavramlar & Notlar)",
+    "type": "notebookNote",
+    "conceptDefinitions": [
+      {
+        "concept": "Cahiliye",
+        "definition": "İslam öncesi dönemdeki bilgisizlik, ahlaki yozlaşma ve yanlış inanışlar dönemdir."
+      },
+      {
+        "definition": "Hz. Peygamber'in söz, fiil ve onaylarının genel adıdır.",
+        "concept": "Sünnet"
+      },
+      {
+        "definition": "Camide ezan okuma görevini üstlenen kişidir.",
+        "concept": "Müezzin"
+      },
+      {
+        "concept": "İstişare",
+        "definition": "Önemli kararlar almadan önce başkalarının görüşlerini alma ve fikir alışverişinde bulunma eylemidir."
+      },
+      {
+        "concept": "Tövbe",
+        "definition": "Yapılan bir hatadan veya günahtan pişmanlık duyarak vazgeçme ve af dileme eylemidir."
+      },
+      {
+        "definition": "Allah'ın insanlara gösterdiği merhamet, sevgi ve şefkatin genel adıdır.",
+        "concept": "Rahmet"
+      },
+      {
+        "definition": "Hz. Peygamber'i görmüş, ona inanmış ve Müslüman olarak vefat etmiş kişilerdir.",
+        "concept": "Sahabi"
+      }
+    ],
+    "suggestedMinutes": 6,
+    "notes": [
+      "Hz. Peygamber'in genç sahabileri ona derin saygı duyar, sözlerini dikkatle dinler ve davranışlarını örnek alırlardı.",
+      "Hz. Peygamber, gençlik yıllarından itibaren dürüstlüğü, çalışkanlığı ve olgun tavırlarıyla güvenilen bir lider olmuştur.",
+      "Hz. Muhammed (sav), insanlığa bir rahmet olarak gönderilmiş, düşmanlarına bile merhametle yaklaşmıştır.",
+      "Peygamberimiz gençlerle iletişim kurarken nazik bir dil kullanır, onları bunaltmaz, anlayış ve şefkatle yaklaşırdı.",
+      "Hz. Peygamber gençlerin yeteneklerini keşfeder, onlara güvenir, sorumluluklar verir ve doğru alanlara yönlendirirdi.",
+      "Önemli kararlar alırken gençlerle istişare eder, onların fikirlerine değer verir ve ortak akılla hareket ederdi.",
+      "Hata yapan gençlere karşı affedici olur, onlara hatalarını telafi etme ve ders çıkarma fırsatı sunardı."
+    ],
+    "isPublished": true
+  },
+  {
+    "type": "activityLink",
+    "isPublished": true,
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "activityType": "/oyunlar/eslestirme/oyun",
+    "activityLabel": "Kavram Eşleştirme",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "title": "🎮 Kavram Eşleştirme Etkinliği"
+  },
+  {
+    "title": "🎮 Kavram Avı Etkinliği",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "activityType": "/oyunlar/kavram-avi/oyun",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "isPublished": true,
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "type": "activityLink",
+    "activityLabel": "Kavram Avı"
+  },
+  {
+    "timerSeconds": 60,
+    "title": "💭 Düşün, Tartış, Keşfet!",
     "questions": [
       {
-        "statement": "Sahabiler, Hz. Peygamber'i dinlerken başlarının üzerinde kuş varmış gibi sessiz ve dikkatli olurlardı.",
-        "isTrue": true
+        "modelAnswer": "Peygamberimiz gençlere güvendiğini, onların yeteneklerini takdir ettiğini ve genç yaşta büyük sorumluluklar üstlenebileceklerine inandığını göstermiştir.",
+        "difficulty": "kolay",
+        "question": "Hz. Muhammed (s.a.v.), çevresindeki genç sahabilerin yeteneklerini dikkatle incelemiş ve Kur'an-ı Kerim bilgisine güvendiği genç sahabi Muaz b. Cebel'i (r.a.) Yemen'e kadı ve öğretmen olarak görevlendirmiştir. Peygamberimizin bu tutumu, onun gençlere olan bakış açısı hakkında ne gösterir?",
+        "id": "open-q-1795452807289-1",
+        "hint": "Peygamberimizin gençlerin potansiyeline duyduğu inancı ve onlara yüklediği değeri düşününüz.",
+        "keywords": [
+          "Güven",
+          "Sorumluluk",
+          "Yetenek"
+        ]
       },
       {
-        "isTrue": false,
-        "statement": "Hz. Muhammed (sav), Allah tarafından insanlara sıkıntı vermek ve zorlaştırmak için gönderilmiştir."
+        "modelAnswer": "Hatalı davranan arkadaşa sert çıkmak yerine sabırla yaklaşılmalı, onun olumlu yönleri ve yetenekleri öne çıkarılarak kazanıcı bir iletişim kurulmalıdır.",
+        "question": "Hz. Muhammed (s.a.v.), kendisiyle ve ezanla alay eden Ebu Mahzure isimli genci cezalandırmak yerine onun güzel sesini takdir edip ona tatlı dille ezanı öğretmiş ve onu Mekke'ye müezzin tayin etmiştir. Bir gencin, okul ortamında olumsuz bir davranış sergileyen arkadaşına karşı Hz. Peygamber'in bu yapıcı tutumunu nasıl örnek alabileceğini açıklayınız.",
+        "id": "open-q-1795452807295-2",
+        "difficulty": "orta",
+        "keywords": [
+          "Hoşgörü",
+          "Yapıcı İletişim",
+          "Kazanma Bilinci"
+        ],
+        "hint": "Hatalara sert tepki vermek yerine kişinin olumlu yönlerini öne çıkararak onu kazanma yöntemini değerlendiriniz."
       },
       {
-        "statement": "Ebu Mahzure, Mekke'nin fethinden sonra hemen Müslüman olmuş ve Hz. Peygamber'e karşı hiçbir kin beslememiştir.",
-        "isTrue": false
-      },
-      {
-        "statement": "Hz. Peygamber, gençlerle iletişim kurarken onların hatalarına karşı her zaman sert ve kaba bir dil kullanmıştır.",
-        "isTrue": false
-      },
-      {
-        "isTrue": true,
-        "statement": "Kur'an-ı Kerim, Müslümanlara işleri hakkında istişare etmeyi (danışmayı) emretmiştir."
-      },
-      {
-        "isTrue": true,
-        "statement": "Hz. Peygamber, gençlerin yeteneklerini keşfetmelerine yardımcı olmuş ve onları doğru bir şekilde yönlendirmiştir."
-      },
-      {
-        "isTrue": false,
-        "statement": "Ebu Zer (ra) ve Bilal Habeşi (ra) arasındaki olayda, Ebu Zer (ra) yaptığı hatadan pişman olmamış ve Bilal Habeşi'den özür dilememiştir."
+        "keywords": [
+          "Telafi Bilinci",
+          "Vicdan Gelişimi",
+          "Toplumsal Barış"
+        ],
+        "id": "open-q-1795452807295-3",
+        "difficulty": "zor",
+        "hint": "Pişmanlığın eyleme dönüşmesinin bireyin iç dünyasına ve kırılan insan ilişkilerine olan tamir edici etkisini düşününüz.",
+        "question": "Hz. Muhammed (s.a.v.), Muaz b. Cebel'e (r.a.) verdiği bir öğütte 'Yaptığın bir kötülüğün ardından hemen bir iyilik yap ki onu yok etsin!' buyurmuştur. Bir Müslümanın hatasının ardından hemen güzel bir amel işlemesinin bireysel vicdan ve toplumsal barış üzerindeki etkisini açıklayınız.",
+        "modelAnswer": "Hatanın ardından yapılan iyilik bireyin suçluluk duygusunu giderip vicdanını rahatlatır; toplumsal hayatta ise kırılan gönülleri onararak dostluk ve barışı yeniden tesis eder."
       }
     ],
-    "title": "Doğru/Yanlış Alıştırması",
-    "type": "trueFalseList"
-  },
-  {
-    "type": "sentenceScramble",
-    "correctSentence": "Merhametli ve şefkatli bir liderdi.",
-    "title": "Cümle Düzeltme (Veri Bankası)",
-    "scrambledSentence": "ve bir Merhametli şefkatli liderdi."
-  },
-  {
-    "title": "Cümle Düzeltme (Veri Bankası)",
-    "scrambledSentence": "doğru iletişim kurdu. Gençlerle",
-    "type": "sentenceScramble",
-    "correctSentence": "Gençlerle doğru iletişim kurdu."
-  },
-  {
-    "scrambledSentence": "önem Hataları gösterirdi. affeder, yol İstişareye verirdi.",
-    "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "İstişareye önem verirdi. Hataları affeder, yol gösterirdi."
-  },
-  {
-    "type": "sentenceScramble",
-    "scrambledSentence": "keşfedip yönlendirdi. sorumluluk Yeteneklerini Onlara güvenip verdi.",
-    "correctSentence": "Onlara güvenip sorumluluk verdi. Yeteneklerini keşfedip yönlendirdi.",
-    "title": "Cümle Düzeltme (Veri Bankası)"
-  },
-  {
-    "scrambledSentence": "Peygamberimiz değer gençlere verirdi.",
-    "correctSentence": "Peygamberimiz gençlere değer verirdi.",
-    "title": "Cümle Düzeltme (Veri Bankası)",
-    "type": "sentenceScramble"
-  },
-  {
-    "correctAnswer": "saygı",
-    "options": [
-      "sevgi",
-      "saygı",
-      "korku",
-      "hayranlık"
-    ],
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Hz. Peygamber’in çevresindeki genç sahabiler, ona her zaman derin bir ___ duymuşlardır.",
-    "type": "fitb"
-  },
-  {
-    "options": [
-      "neşeli",
-      "hızlı",
-      "sessiz",
-      "telaşlı"
-    ],
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Üsame bin Şerîk (ra) şöyle anlatmıştır: “Resulullah konuştuğunda sahabileri, başlarının üzerinde kuş varmış gibi ___ ve dikkatli bir şekilde onu dinlerlerdi.”",
-    "type": "fitb",
-    "correctAnswer": "sessiz"
-  },
-  {
-    "title": "Boşluk Doldurma",
-    "options": [
-      "endişe",
-      "güven",
-      "şüphe",
-      "korku"
-    ],
-    "type": "fitb",
-    "correctAnswer": "güven",
-    "sentenceWithBlank": "Hz. Muhammed (sav), kısa zamanda çalışkanlığı, dürüstlüğü ile tanınan ve insanlara ___ veren bir genç hâline gelmiştir."
-  },
-  {
-    "correctAnswer": "rahmet",
-    "sentenceWithBlank": "Allah (cc) “Ve seni ancak alemlere ___ olarak gönderdik.” buyurmuştur.",
-    "type": "fitb",
-    "options": [
-      "önder",
-      "rehber",
-      "rahmet",
-      "haberci"
-    ],
-    "title": "Boşluk Doldurma"
-  },
-  {
-    "title": "Boşluk Doldurma",
-    "type": "fitb",
-    "options": [
-      "tartışma",
-      "yarışma",
-      "eğlence",
-      "istişare"
-    ],
-    "sentenceWithBlank": "Hz. Peygamber’in gençlerle kurduğu iletişimde önemli unsurlardan biri de onlarla ___ etmesiydi.",
-    "correctAnswer": "istişare"
-  },
-  {
-    "options": [
-      "komutan",
-      "vali",
-      "kadı",
-      "öğretmen"
-    ],
-    "correctAnswer": "kadı",
-    "type": "fitb",
-    "sentenceWithBlank": "Hz. Peygamber, yetkinliğine güvendiği Muaz bin Cebel’i (ra) Yemen’e ___ olarak göndermiştir.",
-    "title": "Boşluk Doldurma"
-  },
-  {
-    "title": "Boşluk Doldurma",
-    "options": [
-      "insanlık",
-      "modernizm",
-      "cahiliye",
-      "medeniyet"
-    ],
-    "correctAnswer": "cahiliye",
-    "type": "fitb",
-    "sentenceWithBlank": "Ebu Zer (ra), Bilal Habeşi’yi (ra) aşağıladığında Hz. Peygamber onu, “Demek ki sen, kendisinde hâlâ ___ izler bulunan bir kimsesin.” diyerek uyarmıştır."
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "options": [
-      "Başlarının üzerinde kuş varmış gibi sessiz ve dikkatli dinlerlerdi.",
-      "Arada sorular sorarak konuyu pekiştirirlerdi.",
-      "Sesli bir şekilde not alırlardı.",
-      "Kendi aralarında istişare ederek dinlerlerdi."
-    ],
-    "question": "Hz. Peygamber'in konuşmalarını dinlerken genç sahabelerin tavrı hakkında Üsame bin Şerîk (ra) ne demiştir?",
-    "correctAnswer": "Başlarının üzerinde kuş varmış gibi sessiz ve dikkatli dinlerlerdi."
-  },
-  {
-    "type": "mcq",
-    "options": [
-      "Sadece Müslümanlara karşı merhametli olması.",
-      "İnsanlara yol göstermesi, şefkat ve merhametle yaklaşması.",
-      "Sadece kendi kavmine merhamet göstermesi.",
-      "Dünya işleriyle ilgilenmeden sadece ibadet etmesi."
-    ],
-    "question": "Yüce Allah'ın Hz. Muhammed'i (sav) 'alemlere rahmet olarak göndermesi' ne anlama gelir?",
-    "correctAnswer": "İnsanlara yol göstermesi, şefkat ve merhametle yaklaşması.",
-    "title": "Çoktan Seçmeli"
-  },
-  {
-    "title": "Çoktan Seçmeli",
-    "question": "Uhud Savaşı'nda Hz. Peygamber'in yüzünden yaralanmasına rağmen düşmanlarına karşı gösterdiği tavır neydi?",
-    "correctAnswer": "Onları affetmesini ve Allah'ın onlara gazap etmemesini diledi.",
-    "type": "mcq",
-    "options": [
-      "Savaşın hemen durdurulmasını emretti.",
-      "Onlara lanet okudu ve intikam istedi.",
-      "Onları affetmesini ve Allah'ın onlara gazap etmemesini diledi.",
-      "Allah'tan onları helak etmesini diledi."
-    ]
-  },
-  {
-    "title": "Çoktan Seçmeli",
-    "question": "Enes bin Malik (ra), Resulullah ile on yıl geçirmesine rağmen onun hakkında ne söylemiştir?",
-    "type": "mcq",
-    "correctAnswer": "Ona bir kez olsun 'Öf!' bile demediğini.",
-    "options": [
-      "Ona bir kez olsun 'Öf!' bile demediğini.",
-      "Sürekli kendisine öğütler verdiğini.",
-      "Ona her zaman kızdığını.",
-      "Zorba bir öğretmen olduğunu."
-    ]
-  },
-  {
-    "correctAnswer": "Sesleri güzel olduğu için onları yanına çağırtıp Ebu Mahzure'ye ezanı öğretmiştir.",
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Ebu Mahzure kıssasında, Hz. Peygamber'in müşrik gençlerin alaylı ezan taklidine karşı tavrı ne olmuştur?",
-    "options": [
-      "Onları Mekke'den sürmüştür.",
-      "Hiçbir tepki göstermemiştir.",
-      "Onları hemen cezalandırmıştır.",
-      "Sesleri güzel olduğu için onları yanına çağırtıp Ebu Mahzure'ye ezanı öğretmiştir."
-    ]
-  },
-  {
-    "title": "Çoktan Seçmeli",
-    "options": [
-      "Önemli kararlar alırken çevresindeki insanların akıl ve tecrübelerine değer vererek danışması.",
-      "Sadece yaşlı ve deneyimli sahabelerle fikir alışverişinde bulunması.",
-      "Gençlerin yanlış kararlar almasını engellemek için sadece kendisinin görüşünü belirtmesi.",
-      "İstişarenin sadece savaş zamanlarında gerekli olması."
-    ],
-    "type": "mcq",
-    "correctAnswer": "Önemli kararlar alırken çevresindeki insanların akıl ve tecrübelerine değer vererek danışması.",
-    "question": "Hz. Peygamber'in gençlerle iletişiminde 'istişare' kavramının önemi nedir?"
-  },
-  {
-    "question": "Kab bin Malik (ra)'in Tebük Seferi'ne katılamama hatasından sonra Hz. Peygamber ona nasıl bir tavsiyede bulunmuştur?",
-    "correctAnswer": "Tüm malını değil, sadece bir kısmını sadaka olarak dağıtmasını emretti.",
-    "options": [
-      "Onu ağır bir şekilde cezalandırdı.",
-      "Tüm malını değil, sadece bir kısmını sadaka olarak dağıtmasını emretti.",
-      "Bütün malını Allah yolunda feda etmesini emretti.",
-      "Bir daha hiçbir sefere katılmamasını söyledi."
-    ],
-    "type": "mcq",
-    "title": "Çoktan Seçmeli"
-  },
-  {
-    "question": "Ebu Zer (ra) ve Bilal Habeşi (ra) arasındaki olayda, Hz. Peygamber'in Ebu Zer'e uyarısı hangi cahiliye adetine işaret ediyordu?",
-    "type": "mcq",
-    "options": [
-      "Hırsızlık.",
-      "Yalancılık.",
-      "Ten renginden dolayı aşağılama.",
-      "Haksız kazanç."
-    ],
-    "correctAnswer": "Ten renginden dolayı aşağılama.",
-    "title": "Çoktan Seçmeli"
-  },
-  {
-    "question": "Hz. Peygamber'in genç sahabelerin yeteneklerini keşfetme ve yönlendirme yaklaşımı hakkında aşağıdakilerden hangisi doğrudur?",
-    "title": "Çoktan Seçmeli",
-    "correctAnswer": "Onların güçlü yönlerini ön plana çıkararak ilmî, askerî veya idari görevlere atamıştır.",
-    "type": "mcq",
-    "options": [
-      "Sadece kendi belirlediği alanlarda görevlendirmiştir.",
-      "Tüm gençleri aynı alanda yetiştirmiştir.",
-      "Gençlerin yeteneklerini keşfetmelerine izin vermemiştir.",
-      "Onların güçlü yönlerini ön plana çıkararak ilmî, askerî veya idari görevlere atamıştır."
-    ]
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "options": [
-      "Sadece ailesine karşı sorumluluklarını yerine getirmesini.",
-      "Sahabiler gibi savaşlara katılmasını.",
-      "Hemen büyük sorumluluklar almasını.",
-      "Öncelikle Allah'a karşı inanç ve ibadet sorumluluklarını yerine getirmesini."
-    ],
-    "question": "Zehra'nın hikayesinde, öğretmeninin sorumluluk alma konusunda Zehra'ya verdiği ilk tavsiye ne olmuştur?",
-    "correctAnswer": "Öncelikle Allah'a karşı inanç ve ibadet sorumluluklarını yerine getirmesini."
+    "type": "openEndedQuestions"
   }
 ]

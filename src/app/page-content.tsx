@@ -24,6 +24,7 @@ import {
     DiyanetSection, 
     ElifbaStage 
 } from '@/lib/elifba-curriculum';
+import { ElifbaStepPracticeDialog } from '@/components/elifba-step-practice-dialog';
 
 // --- UTILS ---
 import { cn } from '@/lib/utils';
@@ -326,17 +327,24 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
     const [activeTab, setActiveTab] = useState<string>(classGroups && classGroups.length > 0 ? classGroups[0].name : "");
     const [activeCourseId, setActiveCourseId] = useState<string>("");
     const [elifbaSectionId, setElifbaSectionId] = useState<'section1' | 'section2' | 'section3' | 'section4'>('section1');
+    const [isPracticeDialogOpen, setIsPracticeDialogOpen] = useState<boolean>(false);
+    const [selectedPracticeStageId, setSelectedPracticeStageId] = useState<string>('cuz1');
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const params = new URLSearchParams(window.location.search);
             const tabParam = params.get('tab');
             const secParam = params.get('section');
-            if (tabParam === 'elifba') {
+            const practiceParam = params.get('practice');
+            if (tabParam === 'elifba' || practiceParam) {
                 setActiveTab('elifba');
             }
             if (secParam && ['section1', 'section2', 'section3', 'section4'].includes(secParam)) {
                 setElifbaSectionId(secParam as any);
+            }
+            if (practiceParam) {
+                setSelectedPracticeStageId(practiceParam);
+                setIsPracticeDialogOpen(true);
             }
         }
     }, []);
@@ -703,12 +711,24 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                             </div>
                                         </div>
 
-                                        <div className="flex items-center gap-3 shrink-0 w-full sm:w-auto justify-end">
+                                        <div className="flex flex-wrap items-center gap-2.5 shrink-0 w-full md:w-auto justify-end">
+                                            <button 
+                                                type="button"
+                                                onClick={() => {
+                                                    setSelectedPracticeStageId(elifbaStages[0]?.id || 'cuz1');
+                                                    setIsPracticeDialogOpen(true);
+                                                }}
+                                                className="w-full sm:w-auto px-5 py-3 rounded-xl bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 text-slate-950 font-black text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2 hover:shadow-lg active:scale-95 cursor-pointer"
+                                            >
+                                                <Gamepad2 className="w-4 h-4 text-slate-950" />
+                                                <span>🎮 Oyunla Çalış &amp; Sınıfa Hazırlan</span>
+                                            </button>
+
                                             <Link 
                                                 href="/elifba" 
-                                                className="w-full sm:w-auto px-5 py-3 rounded-xl bg-white text-emerald-800 hover:bg-emerald-50 font-bold text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2 hover:shadow-lg active:scale-95"
+                                                className="w-full sm:w-auto px-4 py-3 rounded-xl bg-white/15 hover:bg-white/25 text-white font-bold text-xs sm:text-sm backdrop-blur-sm border border-white/20 transition-all flex items-center justify-center gap-2 active:scale-95"
                                             >
-                                                <Volume2 className="w-4 h-4 text-emerald-600" />
+                                                <Volume2 className="w-4 h-4 text-emerald-200" />
                                                 <span>Tüm Elifba Portalı</span>
                                             </Link>
                                         </div>
@@ -753,6 +773,31 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                                             {stage.description}
                                                         </p>
                                                     </div>
+
+                                                    {/* 🎮 OYUNLA ÇALIŞ & PEKİŞTİR (EGZERSİZ + SORU ARENASI) */}
+                                                    {!isQuran && (
+                                                        <div className="px-4 pt-2 pb-1 relative z-10">
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    setSelectedPracticeStageId(stage.id);
+                                                                    setIsPracticeDialogOpen(true);
+                                                                }}
+                                                                className="w-full py-2.5 px-4 rounded-xl font-black text-xs sm:text-sm bg-gradient-to-r from-amber-500 via-orange-500 to-rose-600 hover:from-amber-400 hover:to-rose-500 text-white shadow-md shadow-amber-900/20 flex items-center justify-between transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 cursor-pointer active:scale-95 group/btn"
+                                                            >
+                                                                <div className="flex items-center gap-2.5">
+                                                                    <div className="p-1.5 rounded-lg bg-white/20 text-white transition-transform group-hover/btn:scale-110">
+                                                                        <Gamepad2 className="w-4 h-4 text-amber-100" />
+                                                                    </div>
+                                                                    <div className="flex flex-col text-left">
+                                                                        <span className="font-extrabold text-white leading-tight">Oyunla Çalış &amp; Pekiştir</span>
+                                                                        <span className="text-[10px] text-amber-100/90 font-medium leading-tight">Önce sesli egzersiz, sonra test 🌟</span>
+                                                                    </div>
+                                                                </div>
+                                                                <Sparkles className="w-4 h-4 text-amber-200 transition-transform group-hover/btn:rotate-12" />
+                                                            </button>
+                                                        </div>
+                                                    )}
 
                                                     {/* Sesli Çalış Butonu */}
                                                     <div className="px-4 pt-2 pb-1 relative z-10">
@@ -901,6 +946,14 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                 </div>
 
              </main>
+
+            {/* ══ ELİFBA İNTERAKTİF ADIM ÇALIŞMA & OYUN MODALI ══ */}
+            <ElifbaStepPracticeDialog 
+                open={isPracticeDialogOpen}
+                onOpenChange={setIsPracticeDialogOpen}
+                initialStageId={selectedPracticeStageId}
+                onSelectNextStage={(nextId) => setSelectedPracticeStageId(nextId)}
+            />
 
             <SiteFooter />
         </div>
