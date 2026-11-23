@@ -815,26 +815,65 @@ export function TopicEditor({
                     distractors: ['sadaka', 'vacip']
                 };
                 break;
-            case 'categorySort':
-                newStep = {
-                    type: 'categorySort',
-                    title: defaultTitle || '📁 Kategorilere Yerleştirme Oyunu',
-                    description: 'Maddeleri ait oldukları kategorilere sürükleyiniz veya dokunarak yerleştiriniz:',
-                    categories: [
-                        { id: 'cat-1', name: 'Farz Namazlar', badge: 'Kesin Emir', description: 'Kılınması farz olan namazlar', color: 'emerald' },
-                        { id: 'cat-2', name: 'Vacip Namazlar', badge: 'Gerekli', description: 'Yerine getirilmesi vacip olanlar', color: 'amber' },
-                        { id: 'cat-3', name: 'Sünnet Namazlar', badge: 'Örnek İbadet', description: 'Peygamberimizin sünnetleri', color: 'indigo' },
-                    ],
-                    items: [
-                        { id: 'item-1', text: 'Sabah Namazının Farzı', categoryId: 'cat-1', hint: 'Günde 5 vakit olan temel namazlardandır.' },
-                        { id: 'item-2', text: 'Vitir Namazı', categoryId: 'cat-2', hint: 'Yatsıdan sonra 3 rekat kılınan vaciptir.' },
-                        { id: 'item-3', text: 'Teravih Namazı', categoryId: 'cat-3', hint: 'Ramazan gecelerinde kılınan sünnettir.' },
-                        { id: 'item-4', text: 'Cuma Namazının Farzı', categoryId: 'cat-1', hint: 'Haftada bir gün cemaatle kılınması farzdır.' },
-                        { id: 'item-5', text: 'Bayram Namazı', categoryId: 'cat-2', hint: 'Yılda iki kez kılınan vacip namazdır.' },
-                        { id: 'item-6', text: 'Kuşluk (Duha) Namazı', categoryId: 'cat-3', hint: 'Gündüz kılınan nafile bir sünnettir.' }
-                    ]
-                };
+            case 'categorySort': {
+                const foundCategoryTable = steps.find(s => s.type === 'categoryTable' && Array.isArray((s as any).categories) && (s as any).categories.length >= 2) as any;
+                let dynamicCategories: any[] = [];
+                let dynamicItems: any[] = [];
+
+                if (foundCategoryTable && Array.isArray(foundCategoryTable.categories)) {
+                    dynamicCategories = foundCategoryTable.categories.slice(0, 3).map((c: any, cIdx: number) => ({
+                        id: `cat-${cIdx + 1}`,
+                        name: c.name || `Kategori ${cIdx + 1}`,
+                        badge: c.badge || 'Grup',
+                        description: c.description || '',
+                        color: c.color || (cIdx === 0 ? 'emerald' : cIdx === 1 ? 'amber' : 'indigo')
+                    }));
+
+                    foundCategoryTable.categories.slice(0, 3).forEach((c: any, cIdx: number) => {
+                        (c.items || []).slice(0, 4).forEach((it: any, itIdx: number) => {
+                            const raw = String(it || '').trim();
+                            const colonIdx = raw.indexOf(':');
+                            const itemText = colonIdx > 0 ? raw.slice(0, colonIdx).trim() : raw;
+                            const hintText = colonIdx > 0 ? raw.slice(colonIdx + 1).trim() : '';
+                            if (itemText && itemText.length <= 40) {
+                                dynamicItems.push({
+                                    id: `item-${cIdx}-${itIdx}`,
+                                    text: itemText,
+                                    categoryId: `cat-${cIdx + 1}`,
+                                    hint: hintText
+                                });
+                            }
+                        });
+                    });
+                }
+
+                if (dynamicCategories.length >= 2 && dynamicItems.length >= 4) {
+                    newStep = {
+                        type: 'categorySort',
+                        title: defaultTitle || `📁 ${title || 'Ünite'} Kategorilere Yerleştirme Oyunu`,
+                        description: 'Maddeleri ait oldukları kategorilere sürükleyiniz veya dokunarak yerleştiriniz:',
+                        categories: dynamicCategories,
+                        items: dynamicItems
+                    };
+                } else {
+                    newStep = {
+                        type: 'categorySort',
+                        title: defaultTitle || '📁 Kategorilere Yerleştirme Oyunu',
+                        description: 'Maddeleri ait oldukları kategorilere sürükleyiniz veya dokunarak yerleştiriniz:',
+                        categories: [
+                            { id: 'cat-1', name: '1. Grup / Kategori', badge: '1. Bölüm', description: 'İlk gruba ait kavramlar', color: 'emerald' },
+                            { id: 'cat-2', name: '2. Grup / Kategori', badge: '2. Bölüm', description: 'İkinci gruba ait kavramlar', color: 'amber' },
+                        ],
+                        items: [
+                            { id: 'item-1', text: '1. Temel Kavram', categoryId: 'cat-1', hint: '1. kategoriye aittir.' },
+                            { id: 'item-2', text: '2. Temel Kavram', categoryId: 'cat-2', hint: '2. kategoriye aittir.' },
+                            { id: 'item-3', text: '3. Temel Kavram', categoryId: 'cat-1', hint: '1. kategoriye aittir.' },
+                            { id: 'item-4', text: '4. Temel Kavram', categoryId: 'cat-2', hint: '2. kategoriye aittir.' }
+                        ]
+                    };
+                }
                 break;
+            }
             case 'notebookNote':
                 newStep = {
                     type: 'notebookNote',
@@ -925,13 +964,55 @@ export function TopicEditor({
                 };
                 break;
             case 'accordion': newStep = { type: 'accordion', title: 'Akordiyon Özet', items: [{ id: `item-${Date.now()}`, title: 'Başlık 1', content: 'İçerik 1'}] }; break;
-            case 'miniGame':
+            case 'miniGame': {
+                const mcqSteps = steps.filter(s => (s.type === 'mcq' || (s.type as string) === 'Çoktan Seçmeli') && (s as any).question);
+                let initialGameQuestions: any[] = [];
+                if (mcqSteps.length >= 2) {
+                    initialGameQuestions = mcqSteps.slice(0, 10).map((s: any, idx: number) => ({
+                        id: s.id || `q-${idx + 1}`,
+                        question: s.question,
+                        options: s.options || ['A', 'B', 'C', 'D'],
+                        correctAnswerIndex: s.correctAnswerIndex ?? 0
+                    }));
+                } else {
+                    const foundTable = steps.find(s => s.type === 'categoryTable' && Array.isArray((s as any).categories)) as any;
+                    if (foundTable) {
+                        const pairs: { term: string; def: string }[] = [];
+                        foundTable.categories.forEach((cat: any) => {
+                            (cat.items || []).forEach((it: any) => {
+                                const text = String(it || '').trim();
+                                const colonIdx = text.indexOf(':');
+                                if (colonIdx > 0) {
+                                    const term = text.slice(0, colonIdx).trim();
+                                    const def = text.slice(colonIdx + 1).trim();
+                                    if (term.length >= 2 && term.length <= 35 && def.length >= 5) {
+                                        pairs.push({ term, def });
+                                    }
+                                }
+                            });
+                        });
+                        if (pairs.length >= 2) {
+                            const terms = pairs.map(p => p.term);
+                            initialGameQuestions = pairs.slice(0, 8).map((p, idx) => {
+                                const dist = terms.filter(t => t !== p.term).slice(0, 3);
+                                const opts = [p.term, ...dist].sort(() => 0.5 - Math.random());
+                                return {
+                                    id: `q-${idx + 1}`,
+                                    question: `"${p.def}" açıklaması hangi kavrama aittir?`,
+                                    options: opts,
+                                    correctAnswerIndex: opts.indexOf(p.term)
+                                };
+                            });
+                        }
+                    }
+                }
+
                 newStep = {
                     type: 'miniGame',
                     title: defaultTitle || '🎮 İnteraktif Oyun (Çarkıfelek)',
                     gameTemplate: 'carkifelek',
                     timeLimit: 30,
-                    questions: [
+                    questions: initialGameQuestions.length >= 2 ? initialGameQuestions : [
                         {
                             id: `q-1`,
                             question: 'Bu konuyla ilgili 1. soru metni?',
@@ -946,25 +1027,14 @@ export function TopicEditor({
                         },
                         {
                             id: `q-3`,
-                            question: 'Konuyla ilgili önemli bir tanımda "..." yerine ___ getirilmelidir. Cümlesinde boşluğa hangisi yazılmalıdır?',
-                            options: ['Doğru Kavram', 'Çeldirici A', 'Çeldirici B', 'Çeldirici C'],
-                            correctAnswerIndex: 0
-                        },
-                        {
-                            id: `q-4`,
-                            question: 'Bu konuyla ilgili 4. kavrama sorusu?',
-                            options: ['Doğru Seçenek', 'Çeldirici A', 'Çeldirici B', 'Çeldirici C'],
-                            correctAnswerIndex: 0
-                        },
-                        {
-                            id: `q-5`,
-                            question: 'Cümledeki "..." ibaresine ___ denir ifadesinde boş bırakılan yere ne getirilmelidir?',
+                            question: 'Konuyla ilgili önemli bir tanımda "..." yerine ___ getirilmelidir.',
                             options: ['Doğru Kavram', 'Çeldirici A', 'Çeldirici B', 'Çeldirici C'],
                             correctAnswerIndex: 0
                         }
                     ]
                 };
                 break;
+            }
             default: return;
         }
 
@@ -1572,6 +1642,9 @@ export function TopicEditor({
                                 topicTitle={title}
                                 courseTitle={context?.topicTitle || 'Ders'}
                                 unitTitle=""
+                                courseId={courseId}
+                                unitId={unitId}
+                                topicId={topicId}
                                 onOpenFullscreenPreview={() => setIsPreviewOpen(true)}
                                 onOpenAi={() => onOpenAi?.(selectedStepIndex)}
                             />
@@ -1934,6 +2007,8 @@ export function TopicEditor({
                     onOpenChange={setIsPreviewOpen}
                     steps={steps}
                     topicTitle={title}
+                    courseId={courseId}
+                    unitId={unitId}
                 />
             </div>
         </div>

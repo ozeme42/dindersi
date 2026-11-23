@@ -20,6 +20,9 @@ export type SlideCanvasProps = {
     topicTitle: string;
     courseTitle?: string;
     unitTitle?: string;
+    courseId?: string;
+    unitId?: string;
+    topicId?: string;
     onOpenFullscreenPreview: () => void;
     onOpenAi?: () => void;
     isLeftCollapsed?: boolean;
@@ -35,6 +38,9 @@ export function SlideCanvas({
     topicTitle,
     courseTitle = 'Ders',
     unitTitle = 'Ünite',
+    courseId,
+    unitId,
+    topicId,
     onOpenFullscreenPreview,
     onOpenAi,
     isLeftCollapsed = false,
@@ -178,8 +184,8 @@ export function SlideCanvas({
                                 <LessonContentViewer
                                     key={`slide-viewer-${currentStep.id || selectedIndex}-${previewTheme}`}
                                     topic={singleSlideTopic}
-                                    courseId="preview-course"
-                                    unitId="preview-unit"
+                                    courseId={courseId || 'preview-course'}
+                                    unitId={unitId || 'preview-unit'}
                                     courseTitle={courseTitle}
                                     unitTitle={unitTitle}
                                     onTopicComplete={() => {}}

@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { playSound } from '@/lib/audio-service';
 import type { CategorySortStep, CategorySortCategory, CategorySortItem } from '@/lib/types';
+import { getStaticGameData } from '@/lib/quiz-actions';
 
 // 🕌 Varsayılan 4 Kategori (Namaz Çeşitleri)
 const DEFAULT_CATEGORIES: CategorySortCategory[] = [
@@ -219,11 +220,17 @@ interface GameCard {
 export function CategorySortingPlayer({
     step,
     isFullscreen: propIsFullscreen,
+    courseId,
+    unitId,
+    topicId,
 }: {
     step: CategorySortStep;
     isFullscreen?: boolean;
     fontSizeScale?: string;
     presentationTheme?: string;
+    courseId?: string;
+    unitId?: string;
+    topicId?: string;
 }) {
     const containerRef = useRef<HTMLDivElement>(null);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -232,23 +239,79 @@ export function CategorySortingPlayer({
     // Tam Ekran Durumu
     const [isFullscreen, setIsFullscreen] = useState(Boolean(propIsFullscreen));
 
+    // Kategorilerin varsayılan şablon (Namaz) olup olmadığını kontrol et
+    const isMockCategories = useMemo(() => {
+        const cats = step.categories || [];
+        if (cats.length === 0) return true;
+        return cats.some(c => /farz namazlar|vacip namazlar|sünnet namazlar/i.test(c.name || ''));
+    }, [step.categories]);
+
+    const [dynamicData, setDynamicData] = useState<{ categories: CategorySortCategory[]; items: CategorySortItem[] } | null>(null);
+
+    // Eğer kategoriler taslak namaz kategorileriyse ve ünite/konu bilgisi varsa ünitenin gerçek kavramlarını çek
+    useEffect(() => {
+        let isCancelled = false;
+        if (isMockCategories && (unitId || topicId || courseId)) {
+            getStaticGameData({ courseId, unitId, topicId })
+                .then(allItems => {
+                    if (isCancelled) return;
+                    const pairs: { term: string; def: string }[] = [];
+                    allItems.forEach(it => {
+                        if ('type' in it && (it.type === 'definition' || it.type === 'concept')) {
+                            const term = String((it as any).content?.term || (it as any).term || '').trim();
+                            const def = String((it as any).content?.definition || (it as any).definition || '').trim();
+                            if (term && term.length >= 2 && term.length <= 40 && !/^(doğru|kavram \d|farz|vacip)/i.test(term)) {
+                                if (!pairs.some(p => p.term.toLowerCase() === term.toLowerCase())) {
+                                    pairs.push({ term, def });
+                                }
+                            }
+                        }
+                    });
+
+                    if (pairs.length >= 4) {
+                        const half = Math.ceil(pairs.length / 2);
+                        const group1 = pairs.slice(0, half);
+                        const group2 = pairs.slice(half, half * 2);
+
+                        const newCats: CategorySortCategory[] = [
+                            { id: 'cat-1', name: '1. Temel İlkeler', badge: '1. Grup', description: 'Bu konudaki ilk kavram grubu', color: 'blue' },
+                            { id: 'cat-2', name: '2. İnanç & Ahlak', badge: '2. Grup', description: 'Bu konudaki ikinci kavram grubu', color: 'orange' },
+                        ];
+                        const newItems: CategorySortItem[] = [
+                            ...group1.map((p, idx) => ({ id: `dyn-1-${idx}`, text: p.term, hint: p.def, categoryId: 'cat-1' })),
+                            ...group2.map((p, idx) => ({ id: `dyn-2-${idx}`, text: p.term, hint: p.def, categoryId: 'cat-2' })),
+                        ];
+                        setDynamicData({ categories: newCats, items: newItems });
+                    }
+                })
+                .catch(err => console.warn('Kategori oyunu dinamik veri çekme uyarısı:', err));
+        }
+        return () => { isCancelled = true; };
+    }, [isMockCategories, unitId, topicId, courseId]);
+
     // Kategoriler ve Maddeler (Adımdan dinamik alınır)
     const categories: CategorySortCategory[] = useMemo(() => {
-        if (Array.isArray(step.categories) && step.categories.length > 0) {
+        if (dynamicData && dynamicData.categories.length > 0) {
+            return dynamicData.categories;
+        }
+        if (Array.isArray(step.categories) && step.categories.length > 0 && !isMockCategories) {
             return step.categories;
         }
         return DEFAULT_CATEGORIES;
-    }, [step.categories]);
+    }, [step.categories, isMockCategories, dynamicData]);
 
     const rawItems: CategorySortItem[] = useMemo(() => {
-        if (Array.isArray(step.items) && step.items.length > 0) {
+        if (dynamicData && dynamicData.items.length > 0) {
+            return dynamicData.items;
+        }
+        if (Array.isArray(step.items) && step.items.length > 0 && !isMockCategories) {
             return step.items;
         }
         return DEFAULT_ITEMS;
-    }, [step.items]);
+    }, [step.items, isMockCategories, dynamicData]);
 
     // Başlık ve Açıklama (Dinamik ve Temiz)
-    const titleText = step.title || 'Namaz Çeşitlerini Sınıflandıralım';
+    const titleText = step.title && !isMockCategories ? step.title : (dynamicData ? 'Kavramları Ait Oldukları Kategorilere Yerleştirelim' : (step.title || 'Kavram Sınıflandırma Oyunu'));
     const descriptionText = step.description || 'Aşağıdaki kavramları ait oldukları hüküm kategorilerine sürükleyiniz veya dokunarak yerleştiriniz.';
 
     // Oyun Durumları

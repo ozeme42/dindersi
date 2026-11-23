@@ -140,7 +140,17 @@ export function StepContent({
             case 'clozeParagraph':
                 return <ClozeParagraphPlayer step={step as ClozeParagraphStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} presentationTheme={presentationTheme} />;
             case 'categorySort':
-                return <CategorySortingPlayer step={step as CategorySortStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} presentationTheme={presentationTheme} />;
+                return (
+                    <CategorySortingPlayer 
+                        step={step as CategorySortStep} 
+                        isFullscreen={isFullscreen} 
+                        fontSizeScale={fontSizeScale} 
+                        presentationTheme={presentationTheme} 
+                        courseId={courseId}
+                        unitId={unitId}
+                        topicId={topic?.id}
+                    />
+                );
             case 'notebookNote':
                 return <NotebookNotePlayer step={step as NotebookNoteStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} presentationTheme={presentationTheme} presentationFont={presentationFont} />;
             case 'processFlow':
@@ -737,6 +747,9 @@ export function StepContent({
                     <MiniGamePlayer 
                         step={step as MiniGameStep} 
                         isSmartboard={isFullscreen} 
+                        courseId={courseId}
+                        unitId={unitId}
+                        topicId={topic?.id}
                     />
                 );
             

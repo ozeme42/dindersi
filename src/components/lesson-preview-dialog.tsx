@@ -14,6 +14,8 @@ type LessonPreviewDialogProps = {
     topicTitle?: string;
     courseTitle?: string;
     unitTitle?: string;
+    courseId?: string;
+    unitId?: string;
 };
 
 export function LessonPreviewDialog({ 
@@ -22,7 +24,9 @@ export function LessonPreviewDialog({
     steps,
     topicTitle = 'Ders Önizlemesi',
     courseTitle = 'Ders',
-    unitTitle = 'Ünite'
+    unitTitle = 'Ünite',
+    courseId,
+    unitId
 }: LessonPreviewDialogProps) {
     const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -104,8 +108,8 @@ export function LessonPreviewDialog({
                     {steps.length > 0 ? (
                         <LessonContentViewer
                             topic={previewTopic}
-                            courseId="preview-course"
-                            unitId="preview-unit"
+                            courseId={courseId || 'preview-course'}
+                            unitId={unitId || 'preview-unit'}
                             courseTitle={courseTitle}
                             unitTitle={unitTitle}
                             onTopicComplete={() => {}}

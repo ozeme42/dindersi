@@ -22,12 +22,16 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
+import { getUnitOrTopicGameQuestionsAction } from '@/lib/quiz-actions';
 
 interface MiniGamePlayerProps {
   step: MiniGameStep;
   isSmartboard?: boolean;
   isStandalone?: boolean;
   className?: string;
+  courseId?: string;
+  unitId?: string;
+  topicId?: string;
 }
 
 const TEMPLATE_INFO: Record<string, { name: string; icon: string; desc: string; color: string; category?: 'soru' | 'kavram' }> = {
@@ -157,7 +161,15 @@ const TEMPLATE_INFO: Record<string, { name: string; icon: string; desc: string; 
 
 const KELIME_SABLONLARI = ['eslesen-ciftler', 'eslestir', 'adam-asmaca', 'anagram', 'kelime-avi', 'bulmaca'];
 
-export const MiniGamePlayer: React.FC<MiniGamePlayerProps> = ({ step, isSmartboard = false, isStandalone = false, className = '' }) => {
+export const MiniGamePlayer: React.FC<MiniGamePlayerProps> = ({ 
+  step, 
+  isSmartboard = false, 
+  isStandalone = false, 
+  className = '',
+  courseId,
+  unitId,
+  topicId
+}) => {
   const { user } = useAuth();
   const isStudent = user?.role === 'student' || (typeof window !== 'undefined' && window.location.pathname.startsWith('/student'));
 
@@ -166,6 +178,49 @@ export const MiniGamePlayer: React.FC<MiniGamePlayerProps> = ({ step, isSmartboa
   const [gameKey, setGameKey] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  // Soruların taslak / placeholder olup olmadığını kontrol et
+  const isMockQuestions = useMemo(() => {
+    const raw = step.questions || [];
+    if (raw.length === 0) return true;
+    return raw.some(q => 
+      /bu konuyla ilgili \d/i.test(q.question || '') || 
+      (q.options && q.options.some(o => /doğru seçenek/i.test(String(o))))
+    );
+  }, [step.questions]);
+
+  const [autoQuestions, setAutoQuestions] = useState<any[] | null>(null);
+
+  // Eğer sorular taslak/placeholder ise ve ünite/konu bilgisi varsa ünitenin gerçek kavram ve sorularını otomatik yükle
+  useEffect(() => {
+    let isCancelled = false;
+    if (isMockQuestions && (unitId || topicId || courseId)) {
+      getUnitOrTopicGameQuestionsAction({ courseId, unitId, topicId, sablon: activeTemplate })
+        .then(res => {
+          if (isCancelled) return;
+          const isKelime = KELIME_SABLONLARI.includes(activeTemplate);
+          if (isKelime && res.conceptPairs && res.conceptPairs.length > 0) {
+            setAutoQuestions(res.conceptPairs.map((cp, idx) => ({
+              id: `cp-${idx + 1}`,
+              question: cp.definition,
+              options: [cp.term],
+              correctAnswerIndex: 0
+            })));
+          } else if (res.questions && res.questions.length > 0) {
+            setAutoQuestions(res.questions);
+          } else if (res.conceptPairs && res.conceptPairs.length > 0) {
+            setAutoQuestions(res.conceptPairs.map((cp, idx) => ({
+              id: `cp-${idx + 1}`,
+              question: cp.definition,
+              options: [cp.term],
+              correctAnswerIndex: 0
+            })));
+          }
+        })
+        .catch(err => console.warn('Otomatik ünite soru çekme uyarısı:', err));
+    }
+    return () => { isCancelled = true; };
+  }, [isMockQuestions, unitId, topicId, courseId, activeTemplate]);
 
   // Template değiştiğinde veya adım değiştiğinde güncelle
   useEffect(() => {
@@ -197,7 +252,9 @@ export const MiniGamePlayer: React.FC<MiniGamePlayerProps> = ({ step, isSmartboa
 
   // Oyun Atölyesi motorunun beklediği veri formatı
   const gameData = useMemo(() => {
-    const rawQuestions = step.questions || [];
+    const rawQuestions = (!isMockQuestions && step.questions && step.questions.length > 0)
+      ? step.questions
+      : (autoQuestions || step.questions || []);
     const isKelime = KELIME_SABLONLARI.includes(activeTemplate);
     const isDy = activeTemplate === 'dogru-yanlis';
 
@@ -236,7 +293,7 @@ export const MiniGamePlayer: React.FC<MiniGamePlayerProps> = ({ step, isSmartboa
       // 🎯 Çoktan Seçmeli Test Formatı: { id, q, opts: [{t: '...'}], dogru: index }
       formattedQuestions = rawQuestions.map((q, idx) => {
         const opts = (q.options && q.options.length > 0)
-          ? q.options.map(opt => ({ t: String(opt || '') }))
+          ? q.options.map((opt: any) => ({ t: String(opt || '') }))
           : [{ t: 'Doğru' }, { t: 'Yanlış' }];
 
         return {
@@ -274,7 +331,7 @@ export const MiniGamePlayer: React.FC<MiniGamePlayerProps> = ({ step, isSmartboa
       },
       sorular: formattedQuestions
     };
-  }, [step, activeTemplate, gameMode, isStudent, user?.role]);
+  }, [step, activeTemplate, gameMode, isStudent, user?.role, isMockQuestions, autoQuestions]);
 
   // Iframe URL'si hash verisiyle
   const iframeSrc = useMemo(() => {
