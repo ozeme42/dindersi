@@ -168,8 +168,8 @@ const getInitialFormData = (item: Partial<LessonStep> | null): LessonStep | null
             {
                 id: '1',
                 question: 'Bu konuyla ilgili örnek soru metni...',
-                options: ['A) Doğru Seçenek', 'B) Çeldirici 1', 'C) Çeldirici 2', 'D) Çeldirici 3'],
-                correctAnswerIndex: 0
+                options: ['Çeldirici 1', 'Doğru Seçenek', 'Çeldirici 2', 'Çeldirici 3'],
+                correctAnswerIndex: 1
             }
         ];
         normalized.timeLimit = normalized.timeLimit || 30;
@@ -2692,7 +2692,21 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                             return;
                         }
 
-                        handleValueChange('questions', result.questions);
+                        const finalizedQuestions = (result.questions || []).map(q => {
+                            if (mode === 'questions' && Array.isArray(q.options) && q.options.length >= 2) {
+                                const correctText = q.options[q.correctAnswerIndex ?? 0] || q.options[0];
+                                const shuffledOpts = [...q.options].sort(() => 0.5 - Math.random());
+                                const correctIdx = shuffledOpts.indexOf(correctText);
+                                return {
+                                    ...q,
+                                    options: shuffledOpts,
+                                    correctAnswerIndex: correctIdx >= 0 ? correctIdx : 0
+                                };
+                            }
+                            return q;
+                        });
+
+                        handleValueChange('questions', finalizedQuestions);
 
                         // Eğer kavram modu seçildiyse ve şablon soru şablonuysa otomatik Eşleşen Çiftler'e ayarla
                         if (mode === 'concepts' && !isConceptTemplate) {
@@ -2703,7 +2717,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                             title: mode === 'concepts' ? "Anahtar Kavramlar Çıkarıldı! 🧠🎉" : `${result.questions.length} Test Sorusu Başarıyla Çıkarıldı! 🎯🎉`,
                             description: mode === 'concepts' 
                                 ? `Metinden ${result.questions.length} adet anahtar kavram ve tanımı oyuna aktarıldı (Eşleşen Çiftler, Eşleştirme, Adam Asmaca vb.).`
-                                : `Metinden ${result.questions.length} adet soru oyuna eklendi.`
+                                : `Metinden ${result.questions.length} adet soru oyuna eklendi (Şıklar rastgele dağıtıldı).`
                         });
                         setShowCustomTextInput(false);
                     } catch (err: any) {
@@ -2718,13 +2732,39 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                 };
 
                 const addQuestion = () => {
+                    const randomCorrectIdx = Math.floor(Math.random() * 4);
+                    const defaultDistractors = ['Çeldirici 1', 'Çeldirici 2', 'Çeldirici 3'];
+                    const testOptions = [
+                        ...defaultDistractors.slice(0, randomCorrectIdx),
+                        'Doğru Cevap',
+                        ...defaultDistractors.slice(randomCorrectIdx)
+                    ];
                     const newQ: MiniGameQuestion = {
                         id: `q-${Date.now()}`,
                         question: isConceptTemplate ? 'Kavramın tanımı veya açıklamasını buraya yazın...' : 'Yeni soru metnini buraya yazın...',
-                        options: isConceptTemplate ? ['Anahtar Kavram', 'Çeldirici 1', 'Çeldirici 2', 'Çeldirici 3'] : ['Doğru Cevap', 'Çeldirici 1', 'Çeldirici 2', 'Çeldirici 3'],
-                        correctAnswerIndex: 0
+                        options: isConceptTemplate ? ['Anahtar Kavram', 'Çeldirici 1', 'Çeldirici 2', 'Çeldirici 3'] : testOptions,
+                        correctAnswerIndex: isConceptTemplate ? 0 : randomCorrectIdx
                     };
                     handleValueChange('questions', [...questions, newQ]);
+                };
+
+                const shuffleAllQuestionOptions = () => {
+                    const updated = questions.map(q => {
+                        if (!Array.isArray(q.options) || q.options.length < 2) return q;
+                        const correctText = q.options[q.correctAnswerIndex ?? 0] || q.options[0];
+                        const shuffledOpts = [...q.options].sort(() => 0.5 - Math.random());
+                        const correctIdx = shuffledOpts.indexOf(correctText);
+                        return {
+                            ...q,
+                            options: shuffledOpts,
+                            correctAnswerIndex: correctIdx >= 0 ? correctIdx : 0
+                        };
+                    });
+                    handleValueChange('questions', updated);
+                    toast({
+                        title: "Şıklar Karıştırıldı! 🔀",
+                        description: "Tüm soruların şıkları ve doğru cevap yerleri başarıyla rastgele dağıtıldı."
+                    });
                 };
 
                 const updateQuestion = (index: number, updatedFields: Partial<MiniGameQuestion>) => {
@@ -3074,18 +3114,32 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                         {isConceptTemplate ? 'Önerilen: 4 - 8 kavram' : 'Önerilen: 3 - 6 soru'}
                                     </span>
                                 </div>
-                                <Button 
-                                    size="sm" 
-                                    onClick={addQuestion} 
-                                    className={cn(
-                                        "text-white font-bold text-xs rounded-xl shadow-md gap-1.5",
-                                        isConceptTemplate 
-                                            ? "bg-gradient-to-r from-fuchsia-600 to-pink-600 hover:from-fuchsia-500 hover:to-pink-500" 
-                                            : "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950"
+                                <div className="flex items-center gap-2">
+                                    {!isConceptTemplate && questions.length > 0 && (
+                                        <Button
+                                            type="button"
+                                            size="sm"
+                                            variant="outline"
+                                            onClick={shuffleAllQuestionOptions}
+                                            className="text-xs font-semibold rounded-xl border-amber-500/30 text-amber-300 hover:bg-amber-500/10 gap-1.5 h-8"
+                                            title="Tüm soruların şıklarını ve doğru cevap yerlerini rastgele dağıtır"
+                                        >
+                                            <Shuffle className="h-3.5 w-3.5" /> Şıkları Karıştır
+                                        </Button>
                                     )}
-                                >
-                                    <PlusCircle className="h-3.5 w-3.5" /> {isConceptTemplate ? 'Kavram Ekle' : 'Soru Ekle'}
-                                </Button>
+                                    <Button 
+                                        size="sm" 
+                                        onClick={addQuestion} 
+                                        className={cn(
+                                            "text-white font-bold text-xs rounded-xl shadow-md gap-1.5",
+                                            isConceptTemplate 
+                                                ? "bg-gradient-to-r from-fuchsia-600 to-pink-600 hover:from-fuchsia-500 hover:to-pink-500" 
+                                                : "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950"
+                                        )}
+                                    >
+                                        <PlusCircle className="h-3.5 w-3.5" /> {isConceptTemplate ? 'Kavram Ekle' : 'Soru Ekle'}
+                                    </Button>
+                                </div>
                             </div>
 
                             {questions.map((q, qIdx) => (

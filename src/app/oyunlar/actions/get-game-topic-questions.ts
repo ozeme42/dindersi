@@ -173,11 +173,13 @@ export async function getGameTopicQuestions(
                     distractors.push(`Kavram ${distractors.length + 1}`);
                 }
 
+                const allOpts = [pair.term, ...distractors].sort(() => 0.5 - Math.random());
+                const correctIdx = allOpts.indexOf(pair.term);
                 formattedQuestions.push({
                     id: `concept-q-${idx + 1}`,
                     question: pair.definition,
-                    options: [pair.term, ...distractors],
-                    correctAnswerIndex: 0
+                    options: allOpts,
+                    correctAnswerIndex: correctIdx >= 0 ? correctIdx : 0
                 });
             });
         }
@@ -185,7 +187,15 @@ export async function getGameTopicQuestions(
         // Test sorularını da ekle
         mcqQuestions.forEach((mq) => {
             if (!formattedQuestions.some(fq => fq.question === mq.question)) {
-                formattedQuestions.push(mq);
+                // Şıkları karıştır ve doğru cevabı takip et
+                const correctText = mq.options[mq.correctAnswerIndex] || mq.options[0];
+                const shuffledOpts = [...mq.options].sort(() => 0.5 - Math.random());
+                const correctIdx = shuffledOpts.indexOf(correctText);
+                formattedQuestions.push({
+                    ...mq,
+                    options: shuffledOpts,
+                    correctAnswerIndex: correctIdx >= 0 ? correctIdx : 0
+                });
             }
         });
 
@@ -202,15 +212,18 @@ export async function getGameTopicQuestions(
                 const mcqs = (quizResult.questions || []) as Question[];
                 mcqs.forEach((q, idx) => {
                     if (q.question && Array.isArray(q.options) && q.options.length >= 2) {
-                        const correctIdx = typeof q.correctAnswer === 'string'
-                            ? Math.max(0, q.options.indexOf(q.correctAnswer))
-                            : (typeof q.correctAnswerIndex === 'number' ? q.correctAnswerIndex : 0);
+                        const correctText = typeof q.correctAnswer === 'string'
+                            ? q.correctAnswer
+                            : (typeof q.correctAnswerIndex === 'number' && q.options[q.correctAnswerIndex] ? q.options[q.correctAnswerIndex] : q.options[0]);
+                        const slicedOpts = q.options.slice(0, 4);
+                        const shuffledOpts = [...slicedOpts].sort(() => 0.5 - Math.random());
+                        const correctIdx = shuffledOpts.indexOf(correctText);
 
                         formattedQuestions.push({
                             id: `bank-mcq-q-${idx + 1}`,
                             question: q.question,
-                            options: q.options.slice(0, 4),
-                            correctAnswerIndex: correctIdx
+                            options: shuffledOpts,
+                            correctAnswerIndex: correctIdx >= 0 ? correctIdx : 0
                         });
                     }
                 });
@@ -230,11 +243,13 @@ export async function getGameTopicQuestions(
             const allTerms = DEMO_PAIRS.map(p => p.term);
             DEMO_PAIRS.forEach((pair, idx) => {
                 const distractors = allTerms.filter(t => t !== pair.term).sort(() => 0.5 - Math.random()).slice(0, 3);
+                const allOpts = [pair.term, ...distractors].sort(() => 0.5 - Math.random());
+                const correctIdx = allOpts.indexOf(pair.term);
                 formattedQuestions.push({
                     id: `demo-q-${idx + 1}`,
                     question: pair.definition,
-                    options: [pair.term, ...distractors],
-                    correctAnswerIndex: 0
+                    options: allOpts,
+                    correctAnswerIndex: correctIdx >= 0 ? correctIdx : 0
                 });
             });
         }

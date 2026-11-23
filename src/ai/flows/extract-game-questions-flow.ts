@@ -116,11 +116,12 @@ SADECE aşağıdaki JSON formatında yanıt ver:
   "questions": [
     {
       "question": "Soru metni...",
-      "options": ["Doğru Seçenek", "Çeldirici 1", "Çeldirici 2", "Çeldirici 3"],
-      "correctAnswerIndex": 0
+      "options": ["Seçenek 1", "Seçenek 2", "Seçenek 3", "Seçenek 4"],
+      "correctAnswerIndex": 1
     }
   ]
 }
+🔴 ÇOK ÖNEMLİ KURAL: Doğru seçeneğin yerini (correctAnswerIndex) her soruda rastgele ve dengeli olarak değiştir (A=0, B=1, C=2, D=3). Asla tüm sorularda doğru cevabı aynı şıkka (örneğin hep A seçeneğine) koyma!
 `;
 
     const rawResponse = await runGeminiWithFallback({
@@ -129,7 +130,7 @@ SADECE aşağıdaki JSON formatında yanıt ver:
       prompt,
       generationConfig: {
         responseMimeType: 'application/json',
-        temperature: 0.2, // Düşük sıcaklık -> Metne maksimum sadakat
+        temperature: 0.3, // Hafif çeşitlilik -> Şık dağılımı ve soru zenginliği
       },
     });
 
@@ -149,20 +150,31 @@ SADECE aşağıdaki JSON formatında yanıt ver:
         return String(opt || '').replace(/^[A-Da-d][\)\.\-]\s*/, '').trim();
       });
 
-      // En az 2 şık olsun
+      // En az 4 şık olsun
       while (cleanedOptions.length < 4) {
         cleanedOptions.push(`Seçenek ${cleanedOptions.length + 1}`);
       }
 
-      const correctIdx = typeof q.correctAnswerIndex === 'number' && q.correctAnswerIndex >= 0 && q.correctAnswerIndex < cleanedOptions.length
+      const rawCorrectIdx = typeof q.correctAnswerIndex === 'number' && q.correctAnswerIndex >= 0 && q.correctAnswerIndex < cleanedOptions.length
         ? q.correctAnswerIndex
         : 0;
+      const correctOption = cleanedOptions[rawCorrectIdx] || cleanedOptions[0];
+
+      // 🔴 DOĞRU CEVAP DAĞILIMI: Test sorularında şıkları rastgele karıştır ki doğru cevap asla sürekli A'da kalmasın!
+      let finalOptions = cleanedOptions.slice(0, 4);
+      let finalCorrectIdx = rawCorrectIdx;
+
+      if (!isConceptMode) {
+        finalOptions = [...finalOptions].sort(() => 0.5 - Math.random());
+        const foundIdx = finalOptions.indexOf(correctOption);
+        finalCorrectIdx = foundIdx >= 0 ? foundIdx : Math.floor(Math.random() * 4);
+      }
 
       return {
         id: `gen-q-${Date.now()}-${idx + 1}`,
         question: cleanQuestionText(String(q.question || `Konuyla ilgili soru ${idx + 1}`)),
-        options: cleanedOptions.slice(0, 4),
-        correctAnswerIndex: correctIdx,
+        options: finalOptions,
+        correctAnswerIndex: finalCorrectIdx,
       };
     });
 

@@ -885,14 +885,22 @@ export function AiLessonStepGenerationDialog({
                 gameTemplate: 'carkifelek',
                 timeLimit: 30,
                 isPublished: true,
-                questions: output.multipleChoiceQuestions.map((q, idx) => ({
-                    id: `game-q-${idx + 1}`,
-                    question: cleanQuestionText(q.question),
-                    options: q.options || ['A', 'B', 'C', 'D'],
-                    correctAnswerIndex: typeof q.correctAnswer === 'string' 
-                        ? Math.max(0, (q.options || []).indexOf(q.correctAnswer))
-                        : 0
-                }))
+                questions: output.multipleChoiceQuestions.map((q, idx) => {
+                    const rawOpts = q.options && q.options.length >= 2 ? [...q.options] : ['A', 'B', 'C', 'D'];
+                    const correctText = typeof q.correctAnswer === 'string' && q.correctAnswer
+                        ? q.correctAnswer
+                        : (typeof (q as any).correctAnswerIndex === 'number' && rawOpts[(q as any).correctAnswerIndex]
+                            ? rawOpts[(q as any).correctAnswerIndex]
+                            : rawOpts[0]);
+                    const shuffledOpts = [...rawOpts].sort(() => 0.5 - Math.random());
+                    const correctIdx = shuffledOpts.indexOf(correctText);
+                    return {
+                        id: `game-q-${idx + 1}`,
+                        question: cleanQuestionText(q.question),
+                        options: shuffledOpts,
+                        correctAnswerIndex: correctIdx >= 0 ? correctIdx : 0
+                    };
+                })
             });
         }
 
@@ -936,14 +944,22 @@ export function AiLessonStepGenerationDialog({
                     gameTemplate: 'carkifelek',
                     timeLimit: 30,
                     isPublished: true,
-                    questions: mcqs.map((q, idx) => ({
-                        id: `game-q-${idx + 1}`,
-                        question: cleanQuestionText(q.question),
-                        options: q.options || ['A', 'B', 'C', 'D'],
-                        correctAnswerIndex: typeof q.correctAnswer === 'string' 
-                            ? Math.max(0, (q.options || []).indexOf(q.correctAnswer))
-                            : 0
-                    }))
+                    questions: mcqs.map((q, idx) => {
+                        const rawOpts = q.options && q.options.length >= 2 ? [...q.options] : ['A', 'B', 'C', 'D'];
+                        const correctText = typeof q.correctAnswer === 'string' && q.correctAnswer
+                            ? q.correctAnswer
+                            : (typeof (q as any).correctAnswerIndex === 'number' && rawOpts[(q as any).correctAnswerIndex]
+                                ? rawOpts[(q as any).correctAnswerIndex]
+                                : rawOpts[0]);
+                        const shuffledOpts = [...rawOpts].sort(() => 0.5 - Math.random());
+                        const correctIdx = shuffledOpts.indexOf(correctText);
+                        return {
+                            id: `game-q-${idx + 1}`,
+                            question: cleanQuestionText(q.question),
+                            options: shuffledOpts,
+                            correctAnswerIndex: correctIdx >= 0 ? correctIdx : 0
+                        };
+                    })
                 });
             }
         }
