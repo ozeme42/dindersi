@@ -206,13 +206,19 @@ export const MiniGamePlayer: React.FC<MiniGamePlayerProps> = ({ step, isSmartboa
     if (isKelime) {
       // 🧠 Anahtar Kavram Oyunları Formatı: { id, cevap: 'Kavram', ipucu: 'Tanım' }
       formattedQuestions = rawQuestions.map((q, idx) => {
-        const correctOpt = (q.options && q.options[q.correctAnswerIndex ?? 0]) || 'Kavram';
+        let correctOpt = (q.options && q.options[q.correctAnswerIndex ?? 0]) || 'Kavram';
+        // Başındaki harf/madde işaretlerini temizle (örn: "A) Tevhid" -> "Tevhid")
+        correctOpt = String(correctOpt).replace(/^[A-Da-d][\)\.\-]\s*/, '').trim();
         return {
           id: q.id || `q-${idx + 1}`,
-          cevap: String(correctOpt).trim(),
+          cevap: correctOpt,
           ipucu: String(q.question || '').trim(),
           sure: step.timeLimit || 30
         };
+      }).filter(q => {
+        // Dummy/taslak seçenekleri filtrele
+        const isDummy = /^(doğru seçenek|çeldirici|seçenek \d+|a seçeneği)$/i.test(q.cevap.trim());
+        return !isDummy || rawQuestions.length <= 1;
       });
     } else if (isDy) {
       // ⚡ Doğru / Yanlış Formatı: { id, q: 'İfade', dy: boolean }

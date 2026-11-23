@@ -59,19 +59,17 @@ export function RegisteredAssetsDrawer({
 
     const { toast } = useToast();
 
-    // Fetch registered assets for the current topic
+    // Fetch registered assets for the current topic or unit
     useEffect(() => {
-        if (!isOpen || !context.topicId) return;
+        if (!isOpen || (!context.topicId && !context.unitId)) return;
 
         async function fetchAssets() {
             setIsLoading(true);
             try {
                 // 1. Fetch Activity Items (concepts & sentences)
-                const actQuery = query(
-                    collection(db, 'activityItems'),
-                    where('topicId', '==', context.topicId),
-                    limit(100)
-                );
+                const actQuery = context.topicId
+                    ? query(collection(db, 'activityItems'), where('topicId', '==', context.topicId), limit(100))
+                    : query(collection(db, 'activityItems'), where('unitId', '==', context.unitId), limit(100));
                 const actSnap = await getDocs(actQuery);
                 const loadedConcepts: { id: string; concept: string; definition: string }[] = [];
                 const loadedSentences: { id: string; correctSentence: string; scrambledSentence: string }[] = [];
@@ -216,11 +214,9 @@ export function RegisteredAssetsDrawer({
                 setSentences(loadedSentences);
 
                 // 2. Fetch Questions (MCQ, TF, FITB)
-                const qQuery = query(
-                    collection(db, 'questions'),
-                    where('topicId', '==', context.topicId),
-                    limit(100)
-                );
+                const qQuery = context.topicId
+                    ? query(collection(db, 'questions'), where('topicId', '==', context.topicId), limit(100))
+                    : query(collection(db, 'questions'), where('unitId', '==', context.unitId), limit(100));
                 const qSnap = await getDocs(qQuery);
                 const loadedQuestions = qSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Question));
                 setQuestions(loadedQuestions);

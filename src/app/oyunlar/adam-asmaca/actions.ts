@@ -78,6 +78,12 @@ export async function getAdamAsmacaAction(
                 } else if (itemType === 'concept' && ((item as any).content?.term || (item as any).content?.text) && ((item as any).content?.definition || (item as any).content?.meaning)) {
                     rawTerm = String((item as any).content?.term || (item as any).content?.text).trim();
                     rawHint = String((item as any).content?.definition || (item as any).content?.meaning).trim();
+                } else if (itemType === 'conceptExplanation' && (item as any).concept && (item as any).definition) {
+                    rawTerm = String((item as any).concept).trim();
+                    rawHint = String((item as any).definition).trim();
+                } else if (itemType === 'flashcard' && (item as any).term && (item as any).definition) {
+                    rawTerm = String((item as any).term).trim();
+                    rawHint = String((item as any).definition).trim();
                 }
 
                 if (rawTerm && rawHint) {

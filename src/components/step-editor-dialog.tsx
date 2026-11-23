@@ -261,6 +261,7 @@ type StepEditorDialogProps = {
         sourceText?: string;
         previousStepText?: string;
         currentStepText?: string;
+        isUnitFlow?: boolean;
     };
 };
 
@@ -284,6 +285,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
     const [showCustomTextInput, setShowCustomTextInput] = useState(false);
     const [templateCategoryTab, setTemplateCategoryTab] = useState<'all' | 'kavram' | 'soru'>('all');
     const [miniGameQuestionCount, setMiniGameQuestionCount] = useState<number>(5);
+    const [miniGameConceptCount, setMiniGameConceptCount] = useState<number>(8);
 
     const handlePdfFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -2676,7 +2678,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                     try {
                         const result = await extractGameQuestions({
                             text: textToUse,
-                            count: mode === 'concepts' ? 4 : miniGameQuestionCount,
+                            count: mode === 'concepts' ? miniGameConceptCount : miniGameQuestionCount,
                             mode: mode,
                             topicTitle: context?.topicTitle
                         });
@@ -2794,11 +2796,32 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                 {/* 🧠 Mod 1: Anahtar Kavramlar & Tanımlar */}
                                 <div className="p-3 bg-fuchsia-950/40 border border-fuchsia-500/30 rounded-xl space-y-2 flex flex-col justify-between">
                                     <div>
-                                        <div className="flex items-center gap-1.5 text-xs font-black text-fuchsia-300">
-                                            <span>🧠</span> Anahtar Kavram Oyunları İçin
+                                        <div className="flex flex-wrap items-center justify-between gap-1.5 text-xs font-black text-fuchsia-300">
+                                            <span className="flex items-center gap-1.5">
+                                                <span>🧠</span> Anahtar Kavram Oyunları
+                                            </span>
+                                            {/* Kavram Sayısı Belirleme Butonları */}
+                                            <div className="flex items-center gap-1 bg-fuchsia-950/80 px-1.5 py-0.5 rounded-lg border border-fuchsia-500/40">
+                                                <span className="text-[10px] text-fuchsia-300 font-bold">Kavram:</span>
+                                                {[4, 8, 12, 16].map(cnt => (
+                                                    <button
+                                                        key={cnt}
+                                                        type="button"
+                                                        onClick={() => setMiniGameConceptCount(cnt)}
+                                                        className={cn(
+                                                            "px-1.5 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer",
+                                                            miniGameConceptCount === cnt
+                                                                ? "bg-fuchsia-500 text-white font-black shadow-sm"
+                                                                : "text-fuchsia-200/70 hover:bg-fuchsia-500/20 hover:text-white"
+                                                        )}
+                                                    >
+                                                        {cnt}
+                                                    </button>
+                                                ))}
+                                            </div>
                                         </div>
                                         <p className="text-[10px] text-fuchsia-200/70 leading-tight mt-0.5">
-                                            Eşleşen Çiftler (Hafıza Kartları), Kavram Eşleştirme, Adam Asmaca, Karışık Harfler ve Bulmaca için terim-tanım çıkarır.
+                                            Eşleşen Çiftler (Hafıza), Eşleştirme, Adam Asmaca, Karışık Harfler ve Bulmaca için {miniGameConceptCount} adet kavram ve tanım çıkarır.
                                         </p>
                                     </div>
                                     <div className="flex flex-wrap items-center gap-1.5 pt-1">
@@ -2808,11 +2831,11 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                                 size="sm"
                                                 disabled={isExtractingQuestions}
                                                 onClick={() => handleExtractQuestionsFromText('previousStep', 'concepts')}
-                                                className="bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-bold text-xs rounded-lg h-7 px-2.5 gap-1 shadow-md"
-                                                title="Bir önceki slayttaki anahtar kavramları çıkar"
+                                                className="bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-bold text-xs rounded-lg h-7 px-2.5 gap-1 shadow-md cursor-pointer"
+                                                title={`Bir önceki slayttan ${miniGameConceptCount} anahtar kavram çıkar`}
                                             >
                                                 {isExtractingQuestions ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
-                                                <span>Önceki Adımdan Kavramları Çıkar</span>
+                                                <span>Önceki Adımdan ({miniGameConceptCount} Kavram)</span>
                                             </Button>
                                         )}
                                         {context?.sourceText && (
@@ -2822,9 +2845,9 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                                 variant="outline"
                                                 disabled={isExtractingQuestions}
                                                 onClick={() => handleExtractQuestionsFromText('sourceText', 'concepts')}
-                                                className="border-fuchsia-500/40 text-fuchsia-300 hover:bg-fuchsia-600/20 text-xs font-bold rounded-lg h-7 px-2"
+                                                className="border-fuchsia-500/40 text-fuchsia-300 hover:bg-fuchsia-600/20 text-xs font-bold rounded-lg h-7 px-2 cursor-pointer"
                                             >
-                                                Kaynak Metinden
+                                                {context?.isUnitFlow ? `Üniteden (${miniGameConceptCount} Kavram)` : `Kaynak Metinden (${miniGameConceptCount} Kavram)`}
                                             </Button>
                                         )}
                                     </div>
@@ -2921,7 +2944,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                                 onClick={() => handleExtractQuestionsFromText('custom', 'concepts')}
                                                 className="bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-bold text-xs h-7 px-3 rounded-lg gap-1 cursor-pointer"
                                             >
-                                                <span>🧠 Kavramları Çıkar</span>
+                                                <span>🧠 {miniGameConceptCount} Kavram Çıkar</span>
                                             </Button>
                                             <Button
                                                 type="button"

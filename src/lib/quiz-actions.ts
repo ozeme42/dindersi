@@ -7,7 +7,7 @@ export type { GetQuizOutput };
 import path from 'path';
 import fs from 'fs/promises';
 import { db } from "@/lib/firebase"; 
-import { collection, query, where, getDocs, limit as firestoreLimit, Query, and, collectionGroup } from "firebase/firestore";
+import { collection, doc, getDoc, query, where, getDocs, limit as firestoreLimit, Query, and, collectionGroup } from "firebase/firestore";
 import { normalizeTr, isDefinitionValidAndClean } from "./quiz-validation";
 
 // This is a type guard to check if an object is a valid Question.
@@ -311,11 +311,17 @@ const readDataForTopic = async (topicIdToFetch: string): Promise<(ActivityItem |
                 step.items.forEach((it: any, iIdx: number) => {
                     const term = String(it.concept || it.term || '').trim();
                     const definition = String(it.definition || '').trim();
-                    if (term && definition && definition.length >= 15 && !/ipucu|sıralayarak|harflerini/i.test(definition)) {
+                    if (term && definition && definition.length >= 3 && !/ipucu|sıralayarak|harflerini/i.test(definition)) {
                         flowItems.push({
                             id: `flow-ce-${topicIdToFetch}-${sIdx}-${iIdx}`,
                             type: 'definition',
                             content: { term, definition },
+                            topicId: topicIdToFetch
+                        } as any);
+                        flowItems.push({
+                            id: `flow-c-${topicIdToFetch}-${sIdx}-${iIdx}`,
+                            type: 'concept',
+                            content: { term, text: term },
                             topicId: topicIdToFetch
                         } as any);
                     }
@@ -325,11 +331,17 @@ const readDataForTopic = async (topicIdToFetch: string): Promise<(ActivityItem |
                 step.cards.forEach((cd: any, cIdx: number) => {
                     const term = String(cd.term || cd.correctAnswer || '').trim();
                     const definition = String(cd.definition || '').trim();
-                    if (term && definition && definition.length >= 15 && !/ipucu|sıralayarak|harflerini/i.test(definition)) {
+                    if (term && definition && definition.length >= 3 && !/ipucu|sıralayarak|harflerini/i.test(definition)) {
                         flowItems.push({
                             id: `flow-fc-${topicIdToFetch}-${sIdx}-${cIdx}`,
                             type: 'definition',
                             content: { term, definition },
+                            topicId: topicIdToFetch
+                        } as any);
+                        flowItems.push({
+                            id: `flow-fcc-${topicIdToFetch}-${sIdx}-${cIdx}`,
+                            type: 'concept',
+                            content: { term, text: term },
                             topicId: topicIdToFetch
                         } as any);
                     }
@@ -386,7 +398,7 @@ export async function getStaticGameData(params: {
   unitId?: string;
   topicId?: string;
 }): Promise<(ActivityItem | Question)[]> {
-    const { unitId, topicId } = params;
+    const { unitId, topicId, courseId } = params;
 
     if (topicId && topicId !== 'all') {
         return readDataForTopic(topicId);
@@ -398,6 +410,100 @@ export async function getStaticGameData(params: {
 
         let allUnitItems: (ActivityItem | Question)[] = [];
         try {
+            // 1. Önce bu ünitenin doğrudan bir ders akışı (flow) dosyası var mı kontrol et: public/curriculum/flows/${unitId}.json
+            const unitFlowPath = path.join(process.cwd(), 'public', 'curriculum', 'flows', `${unitId}.json`);
+            try {
+                const flowContent = await fs.readFile(unitFlowPath, 'utf-8');
+                const flowSteps = JSON.parse(flowContent);
+                if (Array.isArray(flowSteps)) {
+                    flowSteps.forEach((step: any, sIdx: number) => {
+                        if (step.isPublished === false) return;
+                        if (step.type === 'conceptExplanation' && Array.isArray(step.items)) {
+                            step.items.forEach((it: any, iIdx: number) => {
+                                const term = String(it.concept || it.term || '').trim();
+                                const definition = String(it.definition || '').trim();
+                                if (term) {
+                                    allUnitItems.push({
+                                        id: `unit-flow-ce-${unitId}-${sIdx}-${iIdx}`,
+                                        type: 'definition',
+                                        content: { term, definition },
+                                        unitId
+                                    } as any);
+                                    allUnitItems.push({
+                                        id: `unit-flow-c-${unitId}-${sIdx}-${iIdx}`,
+                                        type: 'concept',
+                                        content: { term, text: term },
+                                        unitId
+                                    } as any);
+                                }
+                            });
+                        }
+                        if (step.type === 'flashcard' && Array.isArray(step.cards)) {
+                            step.cards.forEach((cd: any, cIdx: number) => {
+                                const term = String(cd.term || cd.correctAnswer || '').trim();
+                                const definition = String(cd.definition || '').trim();
+                                if (term) {
+                                    allUnitItems.push({
+                                        id: `unit-flow-fc-${unitId}-${sIdx}-${cIdx}`,
+                                        type: 'definition',
+                                        content: { term, definition },
+                                        unitId
+                                    } as any);
+                                    allUnitItems.push({
+                                        id: `unit-flow-fcc-${unitId}-${sIdx}-${cIdx}`,
+                                        type: 'concept',
+                                        content: { term, text: term },
+                                        unitId
+                                    } as any);
+                                }
+                            });
+                        }
+                        if ((step.type === 'matching' || step.type === 'conceptMatching') && Array.isArray(step.pairs)) {
+                            step.pairs.forEach((p: any, pIdx: number) => {
+                                const term = String(p.concept || p.term || '').trim();
+                                const definition = String(p.definition || '').trim();
+                                if (term) {
+                                    allUnitItems.push({
+                                        id: `unit-flow-m-${unitId}-${sIdx}-${pIdx}`,
+                                        type: 'definition',
+                                        content: { term, definition },
+                                        unitId
+                                    } as any);
+                                }
+                            });
+                        }
+                        if (step.type === 'categorySort' && Array.isArray(step.items)) {
+                            step.items.forEach((it: any, itIdx: number) => {
+                                const term = String(it.text || '').trim();
+                                if (term) {
+                                    allUnitItems.push({
+                                        id: `unit-flow-cs-${unitId}-${sIdx}-${itIdx}`,
+                                        type: 'concept',
+                                        content: { term, text: term },
+                                        unitId
+                                    } as any);
+                                }
+                            });
+                        }
+                        if (step.type === 'miniGame' && Array.isArray(step.questions)) {
+                            step.questions.forEach((q: any, qIdx: number) => {
+                                allUnitItems.push({
+                                    id: q.id || `unit-flow-mg-${unitId}-${sIdx}-${qIdx}`,
+                                    type: 'Çoktan Seçmeli',
+                                    text: q.question,
+                                    options: q.options,
+                                    correctAnswer: q.options?.[q.correctAnswerIndex ?? 0] || '',
+                                    unitId
+                                } as any);
+                            });
+                        }
+                    });
+                }
+            } catch (flowErr) {
+                // flow dosyası henüz oluşturulmamış olabilir
+            }
+
+            // 2. Manifest'ten bu üniteye ait TÜM konuların verilerini topla
             if (!CACHED_MANIFEST) {
                 const manifestPath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
                 const manifestContent = await fs.readFile(manifestPath, 'utf-8');
@@ -405,10 +511,10 @@ export async function getStaticGameData(params: {
             }
             const manifest = CACHED_MANIFEST;
             
-            let targetUnit;
-            for (const group of manifest.classGroups) {
-                for (const course of group.courses) {
-                    const foundUnit = course.units.find((u: any) => u.id === unitId);
+            let targetUnit: any;
+            for (const group of manifest.classGroups || []) {
+                for (const course of group.courses || []) {
+                    const foundUnit = course.units?.find((u: any) => u.id === unitId);
                     if (foundUnit) {
                         targetUnit = foundUnit;
                         break;
@@ -417,17 +523,136 @@ export async function getStaticGameData(params: {
                 if (targetUnit) break;
             }
 
-            if (targetUnit && targetUnit.topics) {
+            if (targetUnit && targetUnit.topics && targetUnit.topics.length > 0) {
                 const topicDataPromises = targetUnit.topics.map((topic: any) => readDataForTopic(topic.id));
                 const allTopicsData = await Promise.all(topicDataPromises);
-                allUnitItems = allTopicsData.flat();
+                allUnitItems.push(...allTopicsData.flat());
+            }
+
+            // 3. Eğer yerel dosyalardan yeterli kavram/veri çıkmadıysa Firestore'dan tüm ünite konularını tara
+            if (allUnitItems.length < 5) {
+                try {
+                    // A) Firestore unit belgesini oku
+                    if (courseId && unitId) {
+                        try {
+                            const uSnap = await getDoc(doc(db, 'courses', courseId, 'units', unitId));
+                            if (uSnap.exists()) {
+                                const uData = uSnap.data();
+                                if (Array.isArray(uData.steps)) {
+                                    uData.steps.forEach((step: any, sIdx: number) => {
+                                        if (step.type === 'conceptExplanation' && Array.isArray(step.items)) {
+                                            step.items.forEach((it: any, iIdx: number) => {
+                                                const term = String(it.concept || it.term || '').trim();
+                                                const definition = String(it.definition || '').trim();
+                                                if (term) {
+                                                    allUnitItems.push({
+                                                        id: `fs-unit-ce-${unitId}-${sIdx}-${iIdx}`,
+                                                        type: 'definition',
+                                                        content: { term, definition },
+                                                        unitId
+                                                    } as any);
+                                                    allUnitItems.push({
+                                                        id: `fs-unit-c-${unitId}-${sIdx}-${iIdx}`,
+                                                        type: 'concept',
+                                                        content: { term, text: term },
+                                                        unitId
+                                                    } as any);
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            }
+                        } catch {}
+                    }
+
+                    // B) Firestore subcollection'dan konuları çek
+                    if (courseId && unitId) {
+                        const topicsSnap = await getDocs(collection(db, `courses/${courseId}/units/${unitId}/topics`));
+                        topicsSnap.docs.forEach((tDoc) => {
+                            const tData = tDoc.data();
+                            // writingContent.conceptDefinitions
+                            if (Array.isArray(tData?.writingContent?.conceptDefinitions)) {
+                                tData.writingContent.conceptDefinitions.forEach((cd: any, cdIdx: number) => {
+                                    const term = String(cd.concept || cd.term || '').trim();
+                                    const definition = String(cd.definition || '').trim();
+                                    if (term) {
+                                        allUnitItems.push({
+                                            id: `fs-top-cd-${tDoc.id}-${cdIdx}`,
+                                            type: 'definition',
+                                            content: { term, definition },
+                                            unitId,
+                                            topicId: tDoc.id
+                                        } as any);
+                                        allUnitItems.push({
+                                            id: `fs-top-c-${tDoc.id}-${cdIdx}`,
+                                            type: 'concept',
+                                            content: { term, text: term },
+                                            unitId,
+                                            topicId: tDoc.id
+                                        } as any);
+                                    }
+                                });
+                            }
+                            // steps
+                            if (Array.isArray(tData?.steps)) {
+                                tData.steps.forEach((step: any, sIdx: number) => {
+                                    if (step.type === 'conceptExplanation' && Array.isArray(step.items)) {
+                                        step.items.forEach((it: any, iIdx: number) => {
+                                            const term = String(it.concept || it.term || '').trim();
+                                            const definition = String(it.definition || '').trim();
+                                            if (term) {
+                                                allUnitItems.push({
+                                                    id: `fs-top-ce-${tDoc.id}-${sIdx}-${iIdx}`,
+                                                    type: 'definition',
+                                                    content: { term, definition },
+                                                    unitId,
+                                                    topicId: tDoc.id
+                                                } as any);
+                                                allUnitItems.push({
+                                                    id: `fs-top-c-${tDoc.id}-${sIdx}-${iIdx}`,
+                                                    type: 'concept',
+                                                    content: { term, text: term },
+                                                    unitId,
+                                                    topicId: tDoc.id
+                                                } as any);
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+
+                    // C) Firestore activityItems where unitId == unitId
+                    if (unitId) {
+                        const actSnap = await getDocs(query(collection(db, 'activityItems'), where('unitId', '==', unitId)));
+                        actSnap.docs.forEach(d => {
+                            allUnitItems.push({ id: d.id, ...d.data() } as any);
+                        });
+                    }
+                } catch (fsErr) {
+                    console.warn("Firestore unit fallback warning in getStaticGameData:", fsErr);
+                }
             }
         } catch(e) {
-            console.error("Error reading manifest to get topics for unit:", e);
+            console.error("Error reading data for unit:", e);
         }
 
-        STATIC_TOPIC_CACHE.set(unitCacheKey, allUnitItems);
-        return allUnitItems;
+        // Tekilleştirme (aynı kavram veya soru tekrar etmesin)
+        const seenKeys = new Set<string>();
+        const deduplicatedUnitItems: (ActivityItem | Question)[] = [];
+        for (const item of allUnitItems) {
+            const term = (item as any).content?.term || (item as any).content?.concept || (item as any).term || (item as any).text;
+            const itemKey = `${item.type}_${String(term || (item as any).id).toLocaleLowerCase('tr-TR').trim()}`;
+            if (!seenKeys.has(itemKey)) {
+                seenKeys.add(itemKey);
+                deduplicatedUnitItems.push(item);
+            }
+        }
+
+        STATIC_TOPIC_CACHE.set(unitCacheKey, deduplicatedUnitItems);
+        return deduplicatedUnitItems;
     }
 
     return [];

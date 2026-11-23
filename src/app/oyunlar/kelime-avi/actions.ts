@@ -52,6 +52,10 @@ export async function getKelimeAviAction(
                     term = String((item as any).content.text).trim();
                 } else if (item.type === 'concept' && (item as any).text) {
                     term = String((item as any).text).trim();
+                } else if (item.type === 'conceptExplanation' && (item as any).concept) {
+                    term = String((item as any).concept).trim();
+                } else if (item.type === 'flashcard' && (item as any).term) {
+                    term = String((item as any).term).trim();
                 }
 
                 if (term) {
@@ -69,14 +73,14 @@ export async function getKelimeAviAction(
 
         // ASLA konu/ders bazlı oyunda alakasız yedek kavramları enjekte etme!
         if (uniqueConcepts.length < 3) {
-            if (!topicId && !courseId) {
+            if (!topicId && !courseId && !unitId) {
                 for (const fb of fallbackTerms) {
                     if (!uniqueConcepts.includes(fb)) uniqueConcepts.push(fb);
                     if (uniqueConcepts.length >= 8) break;
                 }
             } else {
                 return { 
-                    error: "Bu konuya ait Kelime Avı için yeterli kavram bulunamadı. Lütfen Etkinlik Veri Stüdyosu'ndan kavramları ekleyin veya üretin.", 
+                    error: "Bu ünite/konuya ait Kelime Avı için yeterli kavram bulunamadı. Lütfen kavramları ekleyin veya üretin.", 
                     concepts: null 
                 };
             }

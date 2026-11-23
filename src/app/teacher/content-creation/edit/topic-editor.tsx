@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense, useState, useEffect, useCallback, useMemo } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams, useRouter, useParams } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import type { LessonStep, Topic, AccordionStep, ActivityLinkStep, ActivityItem, Question, ImageAsset, NotebookNoteStep, CategoryTableStep } from '@/lib/types';
@@ -625,7 +625,8 @@ function InsertStepDivider({
 // ══ ANA KONU DÜZENLEYİCİ BİLEŞENİ ══
 export function TopicEditor({ 
     title, setTitle, steps, setSteps, sourceText, setSourceText, htmlContent, setHtmlContent,
-    onSave, isSaving, isUnitFlow = false, onOpenAi, onOpenAIGeneration, children
+    onSave, isSaving, isUnitFlow = false, onOpenAi, onOpenAIGeneration, children,
+    courseId: propCourseId, unitId: propUnitId, topicId: propTopicId
 }: { 
     title: string, setTitle: (t: string) => void,
     steps: DraggableLessonStep[], setSteps: (s: DraggableLessonStep[] | ((prev: DraggableLessonStep[]) => DraggableLessonStep[])) => void,
@@ -637,6 +638,9 @@ export function TopicEditor({
     onOpenAi?: (targetIndex?: number) => void;
     onOpenAIGeneration?: (type?: any) => void;
     children?: React.ReactNode;
+    courseId?: string;
+    unitId?: string;
+    topicId?: string;
 }) {
     const [viewMode, setViewMode] = useState<'studio' | 'list'>('studio');
     const [selectedStepIndex, setSelectedStepIndex] = useState<number>(0);
@@ -654,17 +658,24 @@ export function TopicEditor({
 
     const { toast } = useToast();
     const searchParams = useSearchParams();
-    const courseId = searchParams.get('courseId');
-    const unitId = searchParams.get('unitId');
-    const topicId = searchParams.get('topicId');
+    const params = useParams();
+    const routeUnitId = (params?.unitId as string) || undefined;
+    const resolvedUnitId = propUnitId || routeUnitId || searchParams.get('unitId') || undefined;
+    const resolvedCourseId = propCourseId || searchParams.get('courseId') || undefined;
+    const resolvedTopicId = propTopicId || searchParams.get('topicId') || undefined;
+
+    const courseId = resolvedCourseId;
+    const unitId = resolvedUnitId;
+    const topicId = resolvedTopicId;
     
     const context = useMemo(() => ({
-        courseId: courseId || undefined,
-        unitId: unitId || undefined,
-        topicId: topicId || undefined,
+        courseId: resolvedCourseId,
+        unitId: resolvedUnitId,
+        topicId: resolvedTopicId,
         topicTitle: title || undefined,
         sourceText: sourceText || undefined,
-    }), [courseId, unitId, topicId, title, sourceText]);
+        isUnitFlow: isUnitFlow,
+    }), [resolvedCourseId, resolvedUnitId, resolvedTopicId, title, sourceText, isUnitFlow]);
 
     useEffect(() => {
         if (steps.length > 0 && selectedStepIndex >= steps.length) {
@@ -1048,6 +1059,9 @@ export function TopicEditor({
     const handleGameSelected = (gameStep: ActivityLinkStep) => {
         const stepWithId: DraggableLessonStep = {
             ...gameStep,
+            courseId: gameStep.courseId || context.courseId,
+            unitId: gameStep.unitId || context.unitId,
+            topicId: gameStep.topicId || context.topicId,
             id: `step-${Date.now()}-${Math.random()}`
         };
 

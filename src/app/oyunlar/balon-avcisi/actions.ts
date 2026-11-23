@@ -64,20 +64,26 @@ export async function getBalloonHunterDataAction(
         }
 
         if (pairs.length < 2) {
-            pairs.push(...DEFAULT_PAIRS);
+            if (!topicId && !unitId && !courseId) {
+                pairs.push(...DEFAULT_PAIRS);
+            } else {
+                return { error: "Bu ünite/konu için en az 2 adet kavram tanımı bulunmalıdır.", questions: [] };
+            }
         }
 
-        const termsPool = [...new Set([...pairs.map(p => p.term), ...FALLBACK_TERMS])];
+        const unitTerms = pairs.map(p => p.term);
 
         const gameQuestions: BalloonHunterQuestion[] = pairs.map(item => {
             const correctAnswer = item.term;
             const normCorrect = correctAnswer.toLocaleLowerCase('tr-TR');
 
-            const distractors = termsPool
+            // Çeldiricileri ÖNCELİKLE bu konunun/ünitenin kendi kavramlarından seç
+            const distractors = unitTerms
                 .filter(term => term.toLocaleLowerCase('tr-TR') !== normCorrect)
                 .sort(() => 0.5 - Math.random())
                 .slice(0, 4);
 
+            // Sadece ünitede 3'ten az kavram varsa eksik kalan kadar genel kavram ekle
             let fbIdx = 0;
             while (distractors.length < 3 && fbIdx < FALLBACK_TERMS.length) {
                 const candidate = FALLBACK_TERMS[fbIdx++];

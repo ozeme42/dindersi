@@ -13,7 +13,8 @@ import {
   doc, 
   serverTimestamp, 
   increment,
-  getDocs
+  getDocs,
+  getDoc
 } from 'firebase/firestore';
 import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
 import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
@@ -102,6 +103,30 @@ export async function getConceptHuntAction({
                 }
             } catch (e) {
                 console.warn("Firestore fallback warning in getConceptHuntAction:", e);
+            }
+        } else if (rawItems.length < 2 && unitId && unitId !== 'all') {
+            try {
+                if (courseId) {
+                    const unitSnap = await getDoc(doc(db, 'courses', courseId, 'units', unitId));
+                    if (unitSnap.exists()) {
+                        const unitData = unitSnap.data();
+                        if (Array.isArray(unitData.steps)) {
+                            for (const step of unitData.steps) {
+                                if (step.type === 'conceptExplanation' && Array.isArray(step.items)) {
+                                    for (const it of step.items) {
+                                        const term = String(it.concept || it.term || '').trim();
+                                        const definition = String(it.definition || '').trim();
+                                        if (isValidEducationalDefinition(term, definition)) {
+                                            rawItems.push({ term, definition });
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (e) {
+                console.warn("Firestore unit fallback warning in getConceptHuntAction:", e);
             }
         }
 

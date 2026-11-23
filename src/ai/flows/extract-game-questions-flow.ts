@@ -33,8 +33,8 @@ export async function extractGameQuestions(
     }
 
     const isConceptMode = input.mode === 'concepts';
-    const defaultCount = isConceptMode ? 4 : 5;
-    const count = Math.max(1, Math.min(input.count || defaultCount, 15));
+    const defaultCount = isConceptMode ? 8 : 5;
+    const count = Math.max(1, Math.min(input.count || defaultCount, 25));
     const testCount = Math.max(1, Math.round(count * 0.6));
     const fillBlankCount = Math.max(0, count - testCount);
 
@@ -46,13 +46,14 @@ export async function extractGameQuestions(
     const prompt = isConceptMode
       ? `
 Sen MEB Din Kültürü ve Ahlak Bilgisi dersi için akıllı tahta kavram oyunları (Eşleşen Çiftler / Hafıza Kartları, Eşleştirme, Adam Asmaca, Karışık Harfler, Kelime Avı, Çapraz Bulmaca) hazırlayan uzman bir eğitimcisin.
-Aşağıda verilen slayt metnini incele ve metinde geçen EN ÖNEMLİ ${count} ADET ANAHTAR KAVRAMI ve bu kavramların METİNDEKİ TANIMINI / İPUCUNU çıkar.
+Aşağıda verilen metni incele ve metinde geçen EN ÖNEMLİ ${count} ADET ANAHTAR KAVRAMI ve bu kavramların METİNDEKİ TANIMINI / İPUCUNU çıkar.
 
 🔴 EN KATI KURALLAR:
-1. KAVRAM (options[0]): Sadece metinde doğrudan geçen 1 veya 2 kelimelik net terim olmalıdır (Örnek: "Tevhid", "İhlas", "Zekât", "Nisap", "Kaza", "Kader", "Sadaka-i Cariye", "Farz", "Sünnet", "Vahiy", "Nübüvvet").
+1. KAVRAM (options[0]): Sadece metinde doğrudan geçen 1 veya 2 kelimelik net terim olmalıdır (Örnek: "Tevhid", "İhlas", "Zekât", "Nisap", "Kaza", "Kader", "Sadaka-i Cariye", "Farz", "Sünnet", "Vahiy", "Nübüvvet"). Asla uzun cümle veya soru şıkkı yazma.
 2. TANIM / İPUCU (question): Bu kavramın anlamını veya açıklamasını veren 1 kısa, net ve anlaşılır cümle olmalıdır (Asla "Metne göre..." gibi kalıplar KULLANMA!).
-3. ÇELDIRICILER (options 1, 2, 3): Konuyla ve din kültürü dersiyle ilişkili diğer kavram isimleri olmalıdır.
-4. Bu format hem hafıza eşleştirme kartlarında hem de çoktan seçmeli test oyunlarında kusursuz çalışacaktır.
+3. ÇELDIRICILER (options 1, 2, 3): 🔴 KESİNLİKLE VE SADECE verilen kaynak metinde geçen diğer kavram veya terimlerden seçilmelidir! Metin dışından veya başka ünitelerden alakasız kavramlar KESİNLİKLE UYDURULMAMALIDIR. Metin içi kavram havuzuna sadık kal.
+4. METİNDEKİ TÜM ANAHTAR KAVRAMLARI KAPSAMA: Metindeki tüm ana ve alt başlıkları tara, önemli hiçbir anahtar kavramı atlamadan tam ${count} adet çıkar.
+5. Bu format hem hafıza eşleştirme kartlarında hem de çoktan seçmeli test oyunlarında kusursuz çalışacaktır.
 
 === DERS / KONU BAŞLIĞI ===
 "${input.topicTitle || 'Din Kültürü ve Ahlak Bilgisi'}"

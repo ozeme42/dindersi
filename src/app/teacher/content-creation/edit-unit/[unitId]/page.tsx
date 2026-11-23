@@ -182,6 +182,8 @@ function UnitFlowEditor() {
     return (
         <>
             <TopicEditor
+                courseId={courseId || undefined}
+                unitId={unitId || undefined}
                 title={title}
                 setTitle={setTitle}
                 steps={steps}

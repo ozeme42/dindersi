@@ -90,6 +90,30 @@ export async function getHafizaKartlariAction(
             } catch (e) {
                 console.warn("Firestore topic doc read warning in getHafizaKartlariAction:", e);
             }
+        } else if (rawTerms.length < 2 && unitId && unitId !== 'all') {
+            try {
+                if (courseId) {
+                    const unitSnap = await getDoc(doc(db, 'courses', courseId, 'units', unitId));
+                    if (unitSnap.exists()) {
+                        const unitData = unitSnap.data();
+                        if (Array.isArray(unitData.steps)) {
+                            for (const step of unitData.steps) {
+                                if (step.type === 'conceptExplanation' && Array.isArray(step.items)) {
+                                    for (const it of step.items) {
+                                        if (it.concept) rawTerms.push(String(it.concept).trim());
+                                    }
+                                } else if (step.type === 'flashcard' && Array.isArray(step.cards)) {
+                                    for (const cd of step.cards) {
+                                        if (cd.term) rawTerms.push(String(cd.term).trim());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (e) {
+                console.warn("Firestore unit doc read warning in getHafizaKartlariAction:", e);
+            }
         }
 
         // Tekilleştir ve temizle

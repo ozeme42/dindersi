@@ -66,7 +66,9 @@ export async function getAnagramWallWords(
         let uniqueWords = [...new Set(validWords)];
 
         if (uniqueWords.length < 5) {
-            uniqueWords = [...new Set([...uniqueWords, ...DEFAULT_ANAGRAM_WORDS])];
+            if (!topicId && !unitId && !courseId) {
+                uniqueWords = [...new Set([...uniqueWords, ...DEFAULT_ANAGRAM_WORDS])];
+            }
         }
 
         const shuffled = [...uniqueWords].sort(() => 0.5 - Math.random());

@@ -139,6 +139,32 @@ export async function getEslestirmeAction(
             } catch (e) {
                 console.warn("Firestore fallback warning in getEslestirmeAction:", e);
             }
+        } else if (unitId && unitId !== 'all') {
+            try {
+                if (courseId) {
+                    const unitSnap = await getDoc(doc(db, 'courses', courseId, 'units', unitId));
+                    if (unitSnap.exists()) {
+                        const unitData = unitSnap.data();
+                        if (Array.isArray(unitData.steps)) {
+                            for (const step of unitData.steps) {
+                                if (step.type === 'conceptExplanation' && Array.isArray(step.items)) {
+                                    for (const it of step.items) {
+                                        const term = String(it.concept || it.term || '').trim();
+                                        const definition = String(it.definition || '').trim();
+                                        const key = term.toLocaleLowerCase('tr-TR');
+                                        if (isValidEducationalDefinition(term, definition) && !seenTerms.has(key)) {
+                                            seenTerms.add(key);
+                                            uniquePairs.push({ term, definition });
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (e) {
+                console.warn("Firestore unit fallback warning in getEslestirmeAction:", e);
+            }
         }
 
         if (uniquePairs.length < 2) {
