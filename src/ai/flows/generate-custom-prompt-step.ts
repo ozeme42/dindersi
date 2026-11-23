@@ -400,19 +400,25 @@ SADECE aşağıdaki JSON formatında yanıt ver:
         } else {
           enhanced.questions = enhanced.questions.map((q: any) => ({
             ...q,
-            question: cleanQuestionText(q.question),
+            question: cleanQuestionText(q.question, input.topicTitle),
           }));
         }
       }
 
-      // 5. MCQ & TrueFalse question cleaning
+      // 5. MCQ, TrueFalse & OpenEnded question cleaning
       if (enhanced.type === 'mcq' && enhanced.question) {
-        enhanced.question = cleanQuestionText(enhanced.question);
+        enhanced.question = cleanQuestionText(enhanced.question, input.topicTitle);
       }
       if (enhanced.type === 'trueFalseList' && Array.isArray(enhanced.questions)) {
         enhanced.questions = enhanced.questions.map((q: any) => ({
           ...q,
-          statement: cleanQuestionText(q.statement),
+          statement: cleanQuestionText(q.statement, input.topicTitle),
+        }));
+      }
+      if (enhanced.type === 'openEndedQuestions' && Array.isArray((enhanced as any).questions)) {
+        (enhanced as any).questions = (enhanced as any).questions.map((q: any) => ({
+          ...q,
+          question: cleanQuestionText(q.question, input.topicTitle),
         }));
       }
 

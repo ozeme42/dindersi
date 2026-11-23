@@ -153,29 +153,40 @@ export function isGoogleDriveUrl(url: string | null | undefined): boolean {
 }
 
 /**
- * Sorulardaki "Metne göre", "Yukarıdaki metne göre", "Parçaya göre", "Metinden hareketle" gibi
- * metin bağımlılığı bildiren kalıpları temizler.
- * Soruyu akıllı tahta oyunlarında tek başına ekrana geldiğinde tam, bağımsız ve dilbilgisel
+ * Sorulardaki "Metne göre", "Yukarıdaki metne göre", "Parçaya göre", "Metinden hareketle",
+ * "Bu konuda...", "Bu konuya göre...", "Bu konudan hareketle..." gibi metin bağımlılığı
+ * veya muğlaklık bildiren kalıpları temizler.
+ * Soruyu akıllı tahtada tek başına ekrana geldiğinde tam, bağımsız ve dilbilgisel
  * olarak doğru bir soru cümlesine dönüştürür.
  */
-export function cleanQuestionText(text: string | null | undefined): string {
+export function cleanQuestionText(text: string | null | undefined, topicTitle?: string): string {
   if (!text || typeof text !== 'string') return '';
   let cleaned = text.trim();
 
-  // 1. Cümle başındaki kalıpları temizle
-  const prefixRegex = /^(?:(?:Yukarıdaki|Aşağıdaki|Verilen|Bu|Okuduğunuz|İlgili)\s+)?(?:metne|parçaya|paragrafa|metindeki\s+bilgilere|metne\s+ve\s+bilgilere|bilgilere|(?:metinde|parçada)\s+(?:anlatılanlara|geçen\s+bilgilere))\s+göre[,:\s-]*/i;
+  // 1. Cümle başındaki "metne göre / konuya göre" kalıplarını temizle
+  const prefixRegex = /^(?:(?:Yukarıdaki|Aşağıdaki|Verilen|Bu|Okuduğunuz|İlgili)\s+)?(?:metne|parçaya|paragrafa|metindeki\s+bilgilere|metne\s+ve\s+bilgilere|bilgilere|konuya|derse|(?:metinde|parçada|konuda|derste)\s+(?:anlatılanlara|geçen\s+bilgilere|öğrendiklerimize))\s+göre[,:\s-]*/i;
   cleaned = cleaned.replace(prefixRegex, '');
 
-  const fromTextPrefixRegex = /^(?:(?:Yukarıdaki|Aşağıdaki|Verilen|Bu|Okuduğunuz)\s+)?(?:metinden|parçadan|metindeki\s+ifadelerden|bilgilerden|(?:metinde|parçada)\s+anlatılanlardan)\s+(?:hareketle|yola\s+çıkarak|anlaşıldığı\s+üzere|çıkarılabileceği\s+üzere)[,:\s-]*/i;
+  const fromTextPrefixRegex = /^(?:(?:Yukarıdaki|Aşağıdaki|Verilen|Bu|Okuduğunuz|İlgili)\s+)?(?:metinden|parçadan|metindeki\s+ifadelerden|bilgilerden|konudan|dersten|(?:metinde|parçada|konuda)\s+anlatılanlardan)\s+(?:hareketle|yola\s+çıkarak|anlaşıldığı\s+üzere|çıkarılabileceği\s+üzere)[,:\s-]*/i;
   cleaned = cleaned.replace(fromTextPrefixRegex, '');
 
-  const basedOnTextPrefixRegex = /^(?:(?:Yukarıdaki|Aşağıdaki|Verilen|Bu)\s+)?(?:metne|parçaya)\s+dayanarak[,:\s-]*/i;
+  const basedOnTextPrefixRegex = /^(?:(?:Yukarıdaki|Aşağıdaki|Verilen|Bu)\s+)?(?:metne|parçaya|konuya)\s+dayanarak[,:\s-]*/i;
   cleaned = cleaned.replace(basedOnTextPrefixRegex, '');
 
-  // 2. Cümlenin içindeki "metne göre" kalıplarını temizle
-  cleaned = cleaned.replace(/\s+(?:(?:yukarıdaki|verilen|bu)\s+)?(?:metne|parçaya|paragrafa)\s+göre\s+/gi, ' ');
-  cleaned = cleaned.replace(/\s+(?:metne|parçaya|paragrafa)\s+göre\b/gi, '');
-  cleaned = cleaned.replace(/\s+(?:metinden|parçadan)\s+hareketle\s+/gi, ' ');
+  const topicScopePrefixRegex = /^(?:(?:Bu|İlgili)\s+)?konu\s+kapsamında[,:\s-]*/i;
+  cleaned = cleaned.replace(topicScopePrefixRegex, '');
+
+  const topicAlsoPrefixRegex = /^(?:(?:Bu|İlgili)\s+)?konu\s+da\s+(?:bize\s+)?/i;
+  cleaned = cleaned.replace(topicAlsoPrefixRegex, '');
+
+  const topicPrefix = topicTitle ? `${topicTitle} konusunda ` : '';
+  cleaned = cleaned.replace(/^(?:Bu|İlgili)\s+konuda\s+(?:geçen|anlatılan)\s+/i, topicPrefix);
+  cleaned = cleaned.replace(/^(?:Bu|İlgili)\s+konuda\s+öğrendiğiniz\s+/i, 'Öğrendiğiniz ');
+
+  // 2. Cümlenin içindeki kalıpları temizle
+  cleaned = cleaned.replace(/\s+(?:(?:yukarıdaki|verilen|bu)\s+)?(?:metne|parçaya|paragrafa|konuya)\s+göre\s+/gi, ' ');
+  cleaned = cleaned.replace(/\s+(?:metne|parçaya|paragrafa|konuya)\s+göre\b/gi, '');
+  cleaned = cleaned.replace(/\s+(?:metinden|parçadan|konudan)\s+hareketle\s+/gi, ' ');
   cleaned = cleaned.replace(/\s+(?:metne|parçaya)\s+dayanarak\s+/gi, ' ');
 
   // Fazla boşlukları toparla

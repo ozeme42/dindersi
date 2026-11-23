@@ -61,7 +61,8 @@ Sen MEB Din Kültürü ve Ahlak Bilgisi dersi için çalışan uzman bir pedagoj
    - Eğer 'type' = 'content' ise 'content' alanını <ul><li>...</li></ul> HTML etiketleriyle yapılandır.
 
 5. **SORULAR TAM VE BAĞIMSIZ OLMALIDIR:**
-   - Adım soru veya oyun adımı ise (mcq, miniGame, trueFalseList, openEndedQuestions, fitb, hookQuestion) sorularda ASLA "Metne göre...", "Yukarıdaki metne göre...", "Parçaya göre...", "Metinden hareketle..." gibi kalıplar KULLANILMAYACAKTIR. Soru tek başına tam ve net anlaşılır olmalıdır.
+   - Adım soru veya oyun adımı ise (mcq, miniGame, trueFalseList, openEndedQuestions, fitb, hookQuestion) sorularda ASLA "Metne göre...", "Yukarıdaki metne göre...", "Parçaya göre...", "Metinden hareketle..." veya "Bu konuda...", "Bu konuya göre...", "Bu konudan hareketle..." gibi kalıplar KULLANILMAYACAKTIR.
+   - Açık uçlu sorularda (openEndedQuestions) sorular havada bırakılmayacak; "Bu konuda..." demek yerine gerekirse sorunun girişinde konuyu/kavramı özetleyen 1 cümlelik ön açıklama/bağlam verilip ardından soru sorulacaktır. Soru tek başına tam ve net anlaşılır olmalıdır.
 
 === DERS / KONU BAŞLIĞI ===
 "${input.topicTitle || 'Din Kültürü ve Ahlak Bilgisi'}"
@@ -155,17 +156,17 @@ SADECE aşağıdaki JSON formatında yanıt ver:
     } else if (finalizedStep.type === 'miniGame' && Array.isArray((finalizedStep as any).questions)) {
       (finalizedStep as any).questions = (finalizedStep as any).questions.map((q: any) => ({
         ...q,
-        question: cleanQuestionText(q.question),
+        question: cleanQuestionText(q.question, input.topicTitle),
       }));
     } else if (finalizedStep.type === 'openEndedQuestions' && Array.isArray((finalizedStep as any).questions)) {
       (finalizedStep as any).questions = (finalizedStep as any).questions.map((q: any) => ({
         ...q,
-        question: cleanQuestionText(q.question),
+        question: cleanQuestionText(q.question, input.topicTitle),
       }));
     } else if (finalizedStep.type === 'trueFalseList' && Array.isArray((finalizedStep as any).questions)) {
       (finalizedStep as any).questions = (finalizedStep as any).questions.map((q: any) => ({
         ...q,
-        statement: cleanQuestionText(q.statement),
+        statement: cleanQuestionText(q.statement, input.topicTitle),
       }));
     }
 

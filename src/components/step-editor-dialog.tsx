@@ -183,26 +183,26 @@ const getInitialFormData = (item: Partial<LessonStep> | null): LessonStep | null
             {
                 id: '1',
                 difficulty: 'kolay',
-                question: 'Bu konuda geçen en temel bilgi veya kural nedir?',
-                hint: 'Metindeki ana kavrama odaklanın.',
-                modelAnswer: 'Konunun temel esası sorumluluk ve adalet bilincidir.',
-                keywords: ['Sorumluluk', 'Adalet']
+                question: 'İslam ahlakında adalet ve dürüstlük, bireysel ve toplumsal huzurun temelini oluşturur. Bu ilkenin insan ilişkilerindeki önemini açıklayınız.',
+                hint: 'Adaletli olmanın insanlar arasındaki güven ortamına katkısını düşünün.',
+                modelAnswer: 'Adalet ve dürüstlük; insanlar arasındaki sevgi, saygı ve karşılıklı güven bağını güçlendirir.',
+                keywords: ['Adalet', 'Dürüstlük', 'Güven']
             },
             {
                 id: '2',
                 difficulty: 'orta',
-                question: 'Bu öğrendiğiniz ilkeyi okulda veya ailenizde nasıl uygularsınız?',
-                hint: 'Günlük hayatınızdan bir örnek düşünün.',
-                modelAnswer: 'Söz verdiğimizde tutarak ve arkadaşlarımıza dürüst davranarak uygularız.',
-                keywords: ['Dürüstlük', 'Güven']
+                question: 'Peygamberimiz Hz. Muhammed (s.a.v.) her zaman güvenilirliğiyle örnek olmuştur. Bir öğrencinin okul ve arkadaş çevresinde bu güveni nasıl sağlayabileceğini bir örnekle açıklayınız.',
+                hint: 'Verilen sözleri tutma ve emanetleri koruma durumlarını düşünün.',
+                modelAnswer: 'Söz verdiğinde tutarak, emanete hıyanet etmeyerek ve her durumda doğruyu söyleyerek sağlar.',
+                keywords: ['Güvenilirlik', 'Emanet', 'Doğruluk']
             },
             {
                 id: '3',
                 difficulty: 'zor',
-                question: 'Bu kurala veya ahlaki ilkeye uyulmazsa toplumda ne gibi olumsuzluklar yaşanır?',
-                hint: 'Güven ve huzur ortamının bozulmasını düşünün.',
-                modelAnswer: 'Toplumsal güven zedelenir, haksızlıklar artar ve dayanışma zayıflar.',
-                keywords: ['Güvensizlik', 'Haksızlık']
+                question: 'Bir toplumda fertler temel ahlaki ve manevi sorumluluklarını yerine getirmediğinde toplum düzeninde ne gibi sorunlar ortaya çıkabilir? Değerlendiriniz.',
+                hint: 'Toplumsal barış, kardeşlik ve dayanışma açısından değerlendirin.',
+                modelAnswer: 'Bencillik yayılır, yardımlaşma ve dayanışma zayıflar, adalet duygusu zedelenir ve toplumsal huzur bozulur.',
+                keywords: ['Toplumsal Huzur', 'Dayanışma', 'Bencillik']
             }
         ];
     }
@@ -3296,7 +3296,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                 const addQuestion = () => {
                     const newQ: OpenEndedQuestionItem = {
                         id: `open-q-${Date.now()}`,
-                        question: 'Yeni düşündürücü soru metnini buraya yazın...',
+                        question: 'Konuyla ilgili kısa bir ön açıklama ve ardından düşündürücü soru metnini buraya yazın...',
                         hint: 'Düşünmeye yönlendirecek ipucu...',
                         modelAnswer: 'Beklenen model cevap açıklaması...',
                         keywords: ['Kavram 1', 'Kavram 2']

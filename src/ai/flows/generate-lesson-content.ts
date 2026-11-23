@@ -335,9 +335,9 @@ ${requestedExamples}
     - "multipleChoiceQuestions" dizisinde KESİNLİKLE TAM ${targetMcqCount} ADET SORU üretilecektir.
     - Bu ${targetMcqCount} sorunun ${testCount} TANESİ standart çoktan seçmeli kazanım sorusu olmalıdır.
     ${fillBlankCount > 0 ? `- Bu ${targetMcqCount} sorunun ${fillBlankCount} TANESİ ise cümle içinde '___' bırakılarak 4 seçenekli çoktan seçmeli teste dönüştürülmüş boşluk doldurma sorusu olmalıdır! (Örn: "... eylemine ___ denir. Cümlesinde boş bırakılan yere aşağıdakilerden hangisi getirilmelidir?")` : ''}
-    - Sorularda ("multipleChoiceQuestions", "trueFalseQuestions", "fillInTheBlankQuestions", "hookQuestion") ASLA "Metne göre...", "Yukarıdaki metne göre...", "Parçaya göre...", "Verilen metinden hareketle...", "Metne dayanarak..." gibi ifadeler KULLANMA!
+    - Sorularda ("multipleChoiceQuestions", "trueFalseQuestions", "fillInTheBlankQuestions", "hookQuestion") ASLA "Metne göre...", "Yukarıdaki metne göre...", "Parçaya göre...", "Verilen metinden hareketle...", "Metne dayanarak..." VEYA "Bu konuda...", "Bu konuya göre...", "Bu konudan hareketle..." gibi ifadeler KULLANMA!
     - Çünkü sorular akıllı tahtada oyun modüllerinde (Çarkıfelek, Kutuyu Aç, Oyun Arenası vb.) ve değerlendirmede kaynak metin OLMADAN bağımsız olarak ekrana gelecektir.
-    - Soru kökü öznesiyle, konusuyla ve nesnesiyle TAM BİR SORU olmalıdır (Örnek: "Tahiyyat duasının İslam dinindeki önemi nedir?", "Aşağıdakilerden hangisi İslam'ın beş temel şartından biridir?").
+    - Soru kökü gerekirse 1 cümlelik ön açıklama/bağlam içermeli; öznesiyle, konusuyla ve nesnesiyle TAM BİR SORU olmalıdır (Örnek: "İslam'da zekât, varlıklı kimselerin ihtiyaç sahiplerine yılda bir kez malından pay vermesidir. Buna göre zekât ibadetinin toplumdaki zengin ile yoksul arasındaki sevgi bağına katkısı nedir?").
     - Sorularda çeldiriciler mantıklı olmalı, \`correctAnswer\` tam olarak \`options\` dizisindeki seçeneklerden biriyle BİREBİR AYNI olmalıdır.
 11. Anagram sorularında \`scrambledWord\` harfleri karışık olmalı, \`correctAnswer\` doğru kelime olmalıdır.
 12. SADECE saf JSON nesnesi döndür.

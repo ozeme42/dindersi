@@ -39,24 +39,35 @@ export async function extractOpenEndedQuestions(
     });
 
     const prompt = `
-Sen MEB Din Kültürü ve Ahlak Bilgisi dersi için akıllı tahtada öğrencilerin dikkatini toplayan, onları düşündüren uzman bir eğitim tasarımcısısın.
-Aşağıda verilen metinden tam 3 ADET KISA, ETKİLİ VE ZORLUK DERECESİ AŞAMALI (KOLAY → ORTA → BİRAZ ZOR) AÇIK UÇLU SORU üret.
+Sen MEB Din Kültürü ve Ahlak Bilgisi dersi için akıllı tahtada öğrencilerin dikkatini toplayan, onları derinlemesine düşündüren uzman bir eğitim tasarımcısısın.
+Aşağıda verilen metinden tam 3 ADET KISA, ETKİLİ VE ZORLUK DERECESİ AŞAMALI (KOLAY → ORTA → BİRAZ ZOR) AÇIK UÇLU DÜŞÜNME SORUSU üret.
 
 🔴 EN KATI KURALLAR:
-1. SORULAR TAM VE BAĞIMSIZ OLMALIDIR (ASLA "METNE GÖRE" DİYE BAŞLAMA!):
-   - Sorularda ASLA "Metne göre...", "Yukarıdaki metne göre...", "Parçaya göre...", "Verilen metinden hareketle..." gibi ifadeler KULLANILMAYACAKTIR.
-   - Sorular akıllı tahtada spiralli defter üzerinde ekranda kaynak metin OLMADAN gösterilecektir.
-   - Soru konunun öznesini doğrudan içermeli, bağımsız ve tam bir soru olmalıdır (Örnek: "Tahiyyat duasının tüm evrene selam gönderme mesajı bize ne kazandırır?").
+1. 🚫 ASLA "BU KONUDA", "BU METİNDE", "METNE GÖRE" GİBİ KALIPLAR KULLANMA (KESİNLİKLE YASAKTIR!):
+   - Sorularda ASLA "Bu konuda...", "Bu konuya göre...", "Bu konudan hareketle...", "Bu konu da bize...", "Bu derste...", "Metne göre...", "Yukarıdaki metne göre...", "Parçaya göre...", "Verilen metinden hareketle...", "Bu metinde..." gibi kalıplar KULLANILMAYACAKTIR!
+   - Akıllı tahtada spiralli defter sayfası açıldığında ekranda kaynak metin OLMAYACAKTIR. Soru tek başına tam, bağımsız ve öznesiyle net anlaşılır olmalıdır.
 
-2. ZORLUK DERECELERİ (TAM 3 ADET SIRALI):
-   - 1. Soru (kolay): Konunun temel kavramını anlama ve kavrama sorusu. Soru KISA ve doğrudan olsun (Asla 'Metne göre...' deme!).
-   - 2. Soru (orta): Bu bilgiyi yorumlama veya günlük hayatla ilişkilendirme sorusu. Soru KISA olsun.
-   - 3. Soru (zor): Neden-sonuç, ahlaki çıkarım veya derin düşünme gerektiren "biraz zor" soru. Soru KISA olsun.
+2. 💡 GEREKİRSE KISA BİR ÖN AÇIKLAMA / BAĞLAM (1 CÜMLELİK ÖN BİLGİ) YAP VE ARDINDAN SOR:
+   - Soruyu havada bırakmak veya "Bu konuda..." demek yerine; sorunun girişinde 1 kısa cümleyle konunun/kavramın temel bağlamını, tanımını veya ön bilgisini ver; ardından soruyu sor!
+   - Bahsedilen ibadetin, kavramın, ahlaki ilkenin, surenin veya peygamberin ADINI doğrudan soru cümlesinde zikret.
 
-3. SORULAR KISA VE NET OLMALIDIR:
-   - Sorular asla uzun ve karmaşık paragraflar OLMASIN. 1 veya en fazla 2 kısa cümleyle net ve anlaşılır olsun.
+   ✅ DOĞRU ÖRNEKLER (BÖYLE YAZ):
+   * "İslam dininde zekât; maddi durumu iyi olan Müslümanların yılda bir kez ihtiyaç sahiplerine vermesi farz olan bir ibadettir. Zekât ibadetinin toplumdaki kardeşlik ve yardımlaşma bilincine katkısını açıklayınız."
+   * "Peygamberimiz Hz. Muhammed (s.a.v.) gençliğinden itibaren doğruluğuyla tanınmış ve 'el-Emin' (güvenilir) lakabıyla anılmıştır. Bir gencin okul ortamında bu dürüstlük ilkesini nasıl sergileyebileceğini bir örnekle açıklayınız."
+   * "Tahiyyat duası, namazların oturuşlarında okunur ve Miraç gecesindeki kutlu hitaplaşmayı hatırlatır. Bu duanın Müslümana kazandırdığı kulluk ve teslimiyet bilincini açıklayınız."
 
-4. MODEL CEVAPLAR KISA OLMALIDIR (UZUN CEVAPLARA KESİNLİKLE GEREK YOK!):
+   ❌ YANLIŞ ÖRNEKLER (ASLA BÖYLE ÜRETME):
+   * "Bu konuda geçen en önemli bilgi nedir?" (YANLIŞ: 'Bu konuda' ifadesi yasaktır!)
+   * "Bu konudan hareketle günlük hayatımızda ne yapmalıyız?" (YANLIŞ: Hangi konu olduğu belirtilmemiş!)
+   * "Bu konu da bize ne anlatmaktadır?" (YANLIŞ: Muğlak ve öznesiz!)
+   * "Bu konuya göre zekatın şartları nelerdir?" (YANLIŞ: 'Bu konuya göre' yasaktır!)
+
+3. ZORLUK DERECELERİ (TAM 3 ADET SIRALI):
+   - 1. Soru (kolay): Konunun temel kavramını anlama ve kavrama sorusu. Gerekirse 1 cümlelik ön tanım/açıklama yapıp soruyu sor (Asla 'Bu konuda...' deme!).
+   - 2. Soru (orta): Bu bilgiyi yorumlama veya günlük hayatla ilişkilendirme sorusu. 1 cümlelik bağlam ve hayatla ilişkili düşündürücü soru.
+   - 3. Soru (zor): Neden-sonuç, ahlaki çıkarım veya derin düşünme gerektiren "biraz zor" soru. Ön açıklama veya somut durum içeren kaliteli soru.
+
+4. MODEL CEVAPLAR (HAP VE ÖĞRETİCİ):
    - Model cevaplar asla uzun paragraflar olmasın! 1 veya en çok 2 kısa, net ve hap cümlelik ideal MEB cevabı olsun.
 
 5. DÜŞÜNME İPUCU (hint):
@@ -82,21 +93,21 @@ SADECE aşağıdaki JSON formatında yanıt ver:
   "questions": [
     {
       "difficulty": "kolay",
-      "question": "1. Kolay ve kısa soru...",
+      "question": "1. Ön açıklamalı kolay ve düşündürücü soru...",
       "hint": "Kısa düşünme ipucu...",
       "modelAnswer": "1-2 kısa cümlelik net ve hap model cevap.",
       "keywords": ["Kavram1", "Kavram2"]
     },
     {
       "difficulty": "orta",
-      "question": "2. Orta seviye günlük hayat/yorum sorusu...",
+      "question": "2. Ön açıklamalı orta seviye günlük hayat/yorum sorusu...",
       "hint": "Kısa düşünme ipucu...",
       "modelAnswer": "1-2 kısa cümlelik net ve hap model cevap.",
       "keywords": ["Kavram1", "Kavram2"]
     },
     {
       "difficulty": "zor",
-      "question": "3. Biraz zor çıkarım/analiz sorusu...",
+      "question": "3. Ön açıklamalı biraz zor çıkarım/analiz sorusu...",
       "hint": "Kısa düşünme ipucu...",
       "modelAnswer": "1-2 kısa cümlelik net ve hap model cevap.",
       "keywords": ["Kavram1", "Kavram2"]
@@ -136,10 +147,12 @@ SADECE aşağıdaki JSON formatında yanıt ver:
         ? q.difficulty 
         : defaultDiffs[idx] || 'orta';
 
+      const cleanedQuestion = cleanQuestionText(String(q.question || '').trim(), input.topicTitle);
+
       return {
         id: `open-q-${Date.now()}-${idx + 1}`,
         difficulty: diff,
-        question: cleanQuestionText(String(q.question || `Konuyla ilgili düşündürücü soru ${idx + 1}`).trim()),
+        question: cleanedQuestion || (input.topicTitle ? `${input.topicTitle} ile ilgili düşündürücü soru ${idx + 1}` : `Düşündürücü soru ${idx + 1}`),
         hint: q.hint ? String(q.hint).trim() : undefined,
         modelAnswer: q.modelAnswer ? String(q.modelAnswer).trim() : undefined,
         keywords: cleanedKeywords.length > 0 ? cleanedKeywords : undefined,
