@@ -355,7 +355,14 @@ export function CategorySortingPlayer({
             placed: false,
         }));
 
-        setCards(initialCards);
+        // 🎲 Kategorilere yerleşecek kartları altta rastgele/karışık sıraya diz (Fisher-Yates)
+        const shuffled = [...initialCards];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+
+        setCards(shuffled);
     }, [rawItems]);
 
     useEffect(() => {
@@ -615,8 +622,8 @@ export function CategorySortingPlayer({
             </div>
 
             {/* 👑 2. ÜST HUD: 3D AHŞAP TABELA, ASILI ZİNCİRLER, PUAN, SEVİYE, KRONOMETRE & BUTONLAR */}
-            <header className="relative z-20 w-full px-4 pt-2.5 pb-1 flex flex-col items-center">
-                <div className="w-full max-w-7xl flex items-center justify-between gap-3">
+            <header className="relative z-20 w-full px-3 sm:px-6 pt-2 pb-1 flex flex-col items-center">
+                <div className="w-full flex items-center justify-between gap-3">
                     {/* Sol Bölüm: 3D Yıldız Puan Kapsülü ve Seviye Madalyası */}
                     <div className="flex items-center gap-2.5 flex-shrink-0">
                         {/* 3D Puan Kapsülü */}
@@ -754,11 +761,11 @@ export function CategorySortingPlayer({
                 </div>
             </header>
 
-            {/* 🕌 3. ORTA ALAN: KATEGORİ SAYISI KADAR DİNAMİK 3D KABİNLER (PORTALLAR) */}
-            <main className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-4 py-2 flex items-stretch min-h-[360px]">
+            {/* 🕌 3. ORTA ALAN: KATEGORİ SAYISI KADAR DİNAMİK 3D KABİNLER (PORTALLAR - EKRANA YAYILAN) */}
+            <main className="relative z-10 flex-1 w-full px-3 sm:px-6 py-2 flex items-stretch min-h-[360px]">
                 {/* KATEGORİ SAYISI KADAR DİNAMİK 3D KABİNLER (PORTALLAR) */}
                 <div
-                    className="w-full grid gap-4 md:gap-6 items-stretch h-full min-h-[360px]"
+                    className="w-full grid gap-3 sm:gap-4 md:gap-6 items-stretch h-full min-h-[360px]"
                     style={{
                         gridTemplateColumns: `repeat(${categories.length}, minmax(0, 1fr))`,
                     }}
@@ -795,7 +802,7 @@ export function CategorySortingPlayer({
                             >
                                 {/* 3D Kemerli Tepe Kubbe Tacı */}
                                 <div
-                                    className="pt-2.5 pb-2.5 px-3 flex flex-col items-center justify-center relative border-b-3"
+                                    className="pt-2.5 pb-2.5 px-2 sm:px-3 flex flex-col items-center justify-center relative border-b-3"
                                     style={{
                                         background: theme.headerBg,
                                         borderColor: `${theme.accent}66`,
@@ -813,16 +820,17 @@ export function CategorySortingPlayer({
                                     </div>
 
                                     {/* Kategori Başlığı & Rozet */}
-                                    <div className="w-full flex items-center justify-between gap-1.5 px-1">
+                                    <div className="w-full flex items-center justify-between gap-1 px-1">
                                         <div className="flex-1 min-w-0 text-center">
                                             <h2
-                                                className="text-lg md:text-xl lg:text-2xl xl:text-3xl font-black truncate leading-tight tracking-wider text-white filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
+                                                className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-black leading-snug tracking-wide text-white filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] break-words line-clamp-2 px-1"
+                                                title={cat.name}
                                             >
                                                 {cat.name.toUpperCase()}
                                             </h2>
                                             {cat.badge && (
                                                 <span
-                                                    className="inline-block mt-1 text-xs md:text-sm font-black px-3.5 py-0.5 rounded-full border leading-none shadow-sm"
+                                                    className="inline-block mt-1 text-xs md:text-sm font-black px-3.5 py-0.5 rounded-full border leading-none shadow-sm break-words"
                                                     style={{
                                                         background: theme.badgeBg,
                                                         color: theme.badgeText,
@@ -879,11 +887,11 @@ export function CategorySortingPlayer({
                                             >
                                                 <span className="text-2xl md:text-3xl flex-shrink-0">{card.icon}</span>
                                                 <div className="min-w-0 flex-1">
-                                                    <div className="text-base md:text-lg lg:text-xl font-black text-amber-950 truncate">
+                                                    <div className="text-sm sm:text-base md:text-lg lg:text-xl font-black text-amber-950 break-words leading-tight">
                                                         {card.text}
                                                     </div>
                                                     {card.subtitle && (
-                                                        <div className="text-xs md:text-sm lg:text-base text-amber-900 truncate font-extrabold mt-0.5">
+                                                        <div className="text-xs sm:text-sm md:text-base text-amber-900 font-extrabold mt-0.5 break-words">
                                                             {card.subtitle}
                                                         </div>
                                                     )}
@@ -918,8 +926,8 @@ export function CategorySortingPlayer({
             </main>
 
             {/* 🎴 4. ALT HUD: 3D YENİDEN BAŞLA BUTONU, 3D AHŞAP KART TEPSİSİ & HAZİNE SANDIĞI */}
-            <footer className="relative z-20 w-full px-4 pb-3 pt-1">
-                <div className="w-full max-w-7xl mx-auto flex items-center gap-3">
+            <footer className="relative z-20 w-full px-3 sm:px-6 pb-3 pt-1">
+                <div className="w-full flex items-center gap-3">
                     {/* SOL: 3D Mor Yeniden Başla Butonu */}
                     <button
                         onClick={startGame}
@@ -978,11 +986,11 @@ export function CategorySortingPlayer({
                                             <div className="text-3xl md:text-4xl mb-1 filter drop-shadow">
                                                 {card.icon}
                                             </div>
-                                            <div className="w-full text-lg sm:text-xl md:text-2xl font-black text-amber-950 leading-snug line-clamp-2">
+                                            <div className="w-full text-lg sm:text-xl md:text-2xl font-black text-amber-950 leading-snug line-clamp-2 break-words">
                                                 {card.text}
                                             </div>
                                             {card.subtitle && (
-                                                <div className="w-full text-xs sm:text-sm md:text-base font-extrabold text-amber-900 mt-1.5 px-3.5 py-1 rounded-full bg-amber-200/80 truncate shadow-xs">
+                                                <div className="w-full text-xs sm:text-sm md:text-base font-extrabold text-amber-900 mt-1.5 px-3.5 py-1 rounded-full bg-amber-200/80 break-words shadow-xs">
                                                     {card.subtitle}
                                                 </div>
                                             )}

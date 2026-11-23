@@ -333,7 +333,7 @@ export function LessonContentViewer({
     // --- KONTROL MANTIĞI ---
     const isActivityStep = currentStep?.type === 'activityLink';
     
-    const isFullWidthStep = isActivityStep || isHtmlSlideStep || currentStep?.type === 'pdfSlide' || (currentStep?.type === 'visual' && isVisualMaximized) || currentStep?.type === 'notebookNote' || currentStep?.type === 'categoryTable' || currentStep?.type === 'topicOutline' || (currentStep?.type as string) === 'summaryOverview' || currentStep?.type === 'hookQuestion' || currentStep?.type === 'openEndedQuestions' || currentStep?.type === 'clozeParagraph' || currentStep?.type === 'categorySort';
+    const isFullWidthStep = isActivityStep || isHtmlSlideStep || currentStep?.type === 'pdfSlide' || (currentStep?.type === 'visual' && isVisualMaximized) || currentStep?.type === 'notebookNote' || currentStep?.type === 'categoryTable' || currentStep?.type === 'topicOutline' || (currentStep?.type as string) === 'summaryOverview' || currentStep?.type === 'hookQuestion' || currentStep?.type === 'openEndedQuestions' || currentStep?.type === 'clozeParagraph' || currentStep?.type === 'categorySort' || currentStep?.type === 'miniGame';
       
     const isStepCompleted = internalProgress.answers[currentStepIndex]?.completed;
 
