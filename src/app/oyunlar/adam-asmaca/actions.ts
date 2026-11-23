@@ -48,8 +48,12 @@ export async function getAdamAsmacaAction(
 ): Promise<{ data: HangmanData[] | null; error?: string }> {
     noStore();
     try {
+        const effectiveTopicId = (topicId && topicId !== unitId && topicId !== 'preview-topic' && topicId !== 'unit-flow' && topicId !== 'all') 
+            ? topicId 
+            : undefined;
+
         // Sadece aktiviteler (kavram ve tanım kartları) çekiliyor
-        let allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'activities' });
+        let allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId: effectiveTopicId, dataType: 'activities' });
         
         // Eğer seçilen konuda 2'den az tanım varsa, aynı ünitedeki diğer konulardan da kavramları al
         if ((!allItems || allItems.length < 2) && unitId) {

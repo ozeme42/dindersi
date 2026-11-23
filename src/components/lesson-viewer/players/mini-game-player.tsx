@@ -194,8 +194,12 @@ export const MiniGamePlayer: React.FC<MiniGamePlayerProps> = ({
   // Eğer sorular taslak/placeholder ise ve ünite/konu bilgisi varsa ünitenin gerçek kavram ve sorularını otomatik yükle
   useEffect(() => {
     let isCancelled = false;
-    if (isMockQuestions && (unitId || topicId || courseId)) {
-      getUnitOrTopicGameQuestionsAction({ courseId, unitId, topicId, sablon: activeTemplate })
+    const effectiveTopicId = (topicId && topicId !== unitId && topicId !== 'preview-topic' && topicId !== 'unit-flow' && topicId !== 'all') 
+      ? topicId 
+      : undefined;
+
+    if (isMockQuestions && (unitId || effectiveTopicId || courseId)) {
+      getUnitOrTopicGameQuestionsAction({ courseId, unitId, topicId: effectiveTopicId, sablon: activeTemplate })
         .then(res => {
           if (isCancelled) return;
           const isKelime = KELIME_SABLONLARI.includes(activeTemplate);

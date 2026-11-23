@@ -36,7 +36,11 @@ export async function getKavramDuellosuQuestions(
 ): Promise<{ questions: KavramDuellosuQuestion[]; error?: string }> {
     noStore();
     try {
-        const allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'activities' });
+        const effectiveTopicId = (topicId && topicId !== unitId && topicId !== 'preview-topic' && topicId !== 'unit-flow' && topicId !== 'all') 
+            ? topicId 
+            : undefined;
+
+        const allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId: effectiveTopicId, dataType: 'activities' });
         
         const pairs: { term: string; definition: string }[] = [];
 
@@ -63,7 +67,11 @@ export async function getKavramDuellosuQuestions(
         }
 
         if (pairs.length < 1) {
-            pairs.push(...DEFAULT_PAIRS);
+            if (!unitId && !topicId && !courseId) {
+                pairs.push(...DEFAULT_PAIRS);
+            } else {
+                return { error: "Bu ünite/konu için oynanabilir kavram tanımı bulunamadı.", questions: [] };
+            }
         }
 
         // Tekilleştir
@@ -78,7 +86,7 @@ export async function getKavramDuellosuQuestions(
             }
         }
 
-        const allTerms = [...new Set([...uniquePairs.map(p => p.term), ...FALLBACK_POOL])];
+        const allTerms = [...new Set([...uniquePairs.map(p => p.term), ...(uniquePairs.length < 4 && !unitId && !topicId ? FALLBACK_POOL : [])])];
         
         const gameQuestions: KavramDuellosuQuestion[] = uniquePairs.map(item => {
             const correctAnswer = item.term;

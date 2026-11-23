@@ -18,9 +18,13 @@ export async function getAnagramWallWords(
 ): Promise<{ words: AnagramWallWord[]; error?: string }> {
     noStore();
     try {
+        const effectiveTopicId = (topicId && topicId !== unitId && topicId !== 'preview-topic' && topicId !== 'unit-flow' && topicId !== 'all') 
+            ? topicId 
+            : undefined;
+
         let allItems: any[] = [];
         try {
-            allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'all' }) || [];
+            allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId: effectiveTopicId, dataType: 'all' }) || [];
         } catch (e) {
             console.warn("Static questions fetch warning in anagram:", e);
         }
@@ -48,6 +52,10 @@ export async function getAnagramWallWords(
                     term = String((item as any).content.term).trim();
                 } else if ((item.type === 'concept' || item.type === 'definition') && (item as any).content?.text) {
                     term = String((item as any).content.text).trim();
+                } else if ((item as any).term) {
+                    term = String((item as any).term).trim();
+                } else if ((item as any).concept) {
+                    term = String((item as any).concept).trim();
                 }
 
                 if (term) {
@@ -71,8 +79,8 @@ export async function getAnagramWallWords(
 
         let uniqueWords = [...new Set(validWords)];
 
-        // Yetersiz kelime varsa genel müfredat kelimeleri ile zenginleştir
-        if (uniqueWords.length < 5) {
+        // Sadece ve sadece parametresiz saf sayfada açıldıysa genel müfredat kelimeleri ekle
+        if (uniqueWords.length < 5 && !unitId && !topicId && !courseId) {
             uniqueWords = [...new Set([...uniqueWords, ...DEFAULT_ANAGRAM_WORDS])];
         }
 

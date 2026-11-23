@@ -35,10 +35,12 @@ export async function getHitTheTargetAction(
 ): Promise<{ data: HitTheTargetRound[] | null; error?: string }> {
     noStore();
     try {
+        const effectiveTopicId = (topicId && topicId !== unitId && topicId !== 'preview-topic' && topicId !== 'unit-flow' && topicId !== 'all') ? topicId : undefined;
+
         const allItems = await getStaticQuestionsForGame({
             courseId,
             unitId,
-            topicId,
+            topicId: effectiveTopicId,
             dataType: 'all'
         });
 

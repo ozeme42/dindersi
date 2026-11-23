@@ -33,7 +33,11 @@ export async function getBalloonHunterDataAction(
 ): Promise<{ questions: BalloonHunterQuestion[]; error?: string }> {
     noStore();
     try {
-        let allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'activities' });
+        const effectiveTopicId = (topicId && topicId !== unitId && topicId !== 'preview-topic' && topicId !== 'unit-flow' && topicId !== 'all')
+            ? topicId
+            : undefined;
+
+        let allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId: effectiveTopicId, dataType: 'activities' });
 
         const pairs: { term: string; definition: string }[] = [];
         const seenAnswers = new Set<string>();

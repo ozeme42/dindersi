@@ -23,10 +23,14 @@ export async function getKelimeAviAction(
 ): Promise<{ concepts: string[] | null; error?: string }> {
     noStore();
     try {
+        const effectiveTopicId = (topicId && topicId !== unitId && topicId !== 'preview-topic' && topicId !== 'unit-flow' && topicId !== 'all') 
+            ? topicId 
+            : undefined;
+
         let allItems = await getStaticQuestionsForGame({ 
             courseId, 
             unitId, 
-            topicId, 
+            topicId: effectiveTopicId, 
             dataType: 'activities' 
         });
         

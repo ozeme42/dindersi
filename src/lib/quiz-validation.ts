@@ -66,8 +66,8 @@ export function isDefinitionValidAndClean(term: string, definition: string): boo
     const cleanTerm = term.trim();
     const cleanDef = definition.trim();
 
-    // 1. Definition must be at least 15 characters long
-    if (cleanDef.length < 15) return false;
+    // 1. Definition must be at least 5 characters long
+    if (cleanDef.length < 5) return false;
 
     // 2. Reject metadata / instruction texts like "ipucu kelime şu", "harflerini sırala", etc.
     for (const pattern of BANNED_PATTERNS) {
@@ -79,39 +79,23 @@ export function isDefinitionValidAndClean(term: string, definition: string): boo
 
     if (!normTerm || !normDef) return false;
 
-    // 3. Reject tautology: if definition is the term itself or contains the entire term
-    if (normTerm === normDef || normDef.includes(normTerm)) return false;
-
-    // 4. Check for distinct root tokens in term (e.g. "Ebu", "Talib" in "Ebu Talib")
-    const tokens = normTerm
-        .split(' ')
-        .filter(w => w.length >= 3 && !STOP_WORDS.has(w));
-
-    if (tokens.length === 0) return false;
-
-    const isMultiWord = tokens.length > 1;
-
-    for (const token of tokens) {
-        // If it's a multi-word concept and this word is a generic category word (e.g. "namaz", "savaşı"),
-        // allow the generic word to appear in definition without penalizing (e.g., "Sabah Namazı: Güneş doğmadan kılınan namaz")
-        if (isMultiWord && GENERIC_CATEGORY_WORDS.has(token)) {
-            continue;
-        }
-
-        // For key identifying root word (e.g., "Ebrehe", "Talib", "Zemzem", "Fatiha"):
-        // It must NOT appear directly as a whole word or common stem in the definition!
-        if (token.length <= 4) {
-            const defWords = normDef.split(' ');
-            if (defWords.includes(token)) return false;
-            // Also reject if word has simple grammatical suffix
-            const hasStemWithSuffix = defWords.some(dw => dw.startsWith(token) && dw.length <= token.length + 4);
-            if (hasStemWithSuffix) return false;
-        } else {
-            // For longer words (5+ chars), check 5-letter stem match to avoid "Ebrehe'nin" giving away "Ebrehe"
-            const stem = token.substring(0, Math.min(token.length, 5));
-            if (normDef.includes(stem)) return false;
-        }
-    }
+    // 3. Reject tautology: only reject if the definition is literally identical to the term
+    if (normTerm === normDef) return false;
 
     return true;
+}
+
+/**
+ * Clue cleaner for game prompts (e.g. riddles, multiple-choice, hangman hints).
+ * If the definition begins with "Kavram: ...", "Kavram - ...", or "Kavram, ..."
+ * it strips the redundant term prefix so the answer is not given away in the first word.
+ */
+export function cleanClueForTerm(term: string, definition: string): string {
+    if (!definition) return '';
+    let text = definition.trim();
+    if (!term) return text;
+    const escaped = term.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const prefixRegex = new RegExp(`^${escaped}\\s*[:;–—\\-,]\\s*`, 'i');
+    text = text.replace(prefixRegex, '');
+    return text.trim() || definition.trim();
 }

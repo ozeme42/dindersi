@@ -4,7 +4,7 @@
 import { db } from "@/lib/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import type { Question, GetQuizInput } from "@/lib/types";
-import { getQuestionsFromBank, getStaticGameData } from "@/lib/quiz-actions";
+import { getQuestionsFromBank, getStaticGameData, getUnitOrTopicGameQuestionsAction } from "@/lib/quiz-actions";
 import { unstable_noStore as noStore } from 'next/cache';
 
 export type CarkifelekQuestions = {
@@ -15,10 +15,39 @@ export type CarkifelekQuestions = {
 export async function getCarkifelekQuestions(params: GetQuizInput): Promise<{ questions: CarkifelekQuestions | null; error?: string }> {
     noStore();
     try {
-        const allResult = (await getQuestionsFromBank({ ...params, questionTypes: ['mcq', 'tf'], questionCount: 50 })).questions as Question[];
+        const effectiveTopicId = (params.topicId && params.topicId !== params.unitId && params.topicId !== 'preview-topic' && params.topicId !== 'unit-flow' && params.topicId !== 'all')
+            ? params.topicId
+            : undefined;
+
+        let allResult = (await getQuestionsFromBank({ ...params, topicId: effectiveTopicId, questionTypes: ['mcq', 'tf'], questionCount: 50 })).questions as Question[];
 
         if (!allResult || allResult.length < 2) {
-            return { questions: null, error: "Bu konu için yeterli sayıda soru bulunamadı (En az 2 soru gereklidir)." };
+            // Soru bankasından yetersiz geldiyse ünitenin veya konunun kavramlarından otomatik soru türet
+            try {
+                const derivedRes = await getUnitOrTopicGameQuestionsAction({
+                    courseId: params.courseId,
+                    unitId: params.unitId,
+                    topicId: effectiveTopicId,
+                    sablon: 'carkifelek'
+                });
+                if (derivedRes.questions && derivedRes.questions.length >= 2) {
+                    allResult = derivedRes.questions.map((dq, idx) => ({
+                        id: dq.id || `carki-derived-${idx}`,
+                        question: dq.question,
+                        options: dq.options,
+                        correctAnswer: dq.options[dq.correctAnswerIndex ?? 0],
+                        correctAnswerIndex: dq.correctAnswerIndex ?? 0,
+                        difficulty: idx % 2 === 0 ? 'Kolay' : 'Zor',
+                        type: 'Çoktan Seçmeli'
+                    } as Question));
+                }
+            } catch (dErr) {
+                console.warn("Çarkıfelek derived questions warning:", dErr);
+            }
+        }
+
+        if (!allResult || allResult.length < 2) {
+            return { questions: null, error: "Bu ünite/konu için yeterli sayıda soru bulunamadı (En az 2 soru gereklidir)." };
         }
 
         let easy = allResult.filter(q => q.difficulty === 'Kolay');

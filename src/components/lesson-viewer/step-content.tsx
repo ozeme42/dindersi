@@ -233,10 +233,16 @@ export function StepContent({
             
             case 'activityLink':
                 const activityStep = step as ActivityLinkStep;
+                const effectiveUnitId = activityStep.unitId || unitId || '';
+                const rawTopicId = activityStep.topicId || topic?.id || '';
+                const cleanTopicId = (rawTopicId && rawTopicId !== effectiveUnitId && rawTopicId !== 'preview-topic' && rawTopicId !== 'unit-flow')
+                    ? rawTopicId 
+                    : '';
+
                 const params = new URLSearchParams({
                     courseId: activityStep.courseId || courseId || '',
-                    unitId: activityStep.unitId || unitId || '',
-                    topicId: activityStep.topicId || topic?.id || '',
+                    unitId: effectiveUnitId,
+                    topicId: cleanTopicId,
                     courseName: courseTitle || '',
                     unitName: unitTitle || '',
                     topicName: topic?.title || '',

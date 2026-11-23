@@ -305,64 +305,7 @@ const readDataForTopic = async (topicIdToFetch: string): Promise<(ActivityItem |
 
     const flowItems: (ActivityItem | Question)[] = [];
     if (Array.isArray(flowData)) {
-        flowData.forEach((step: any, sIdx: number) => {
-            if (step.isPublished === false) return;
-            if (step.type === 'conceptExplanation' && Array.isArray(step.items)) {
-                step.items.forEach((it: any, iIdx: number) => {
-                    const term = String(it.concept || it.term || '').trim();
-                    const definition = String(it.definition || '').trim();
-                    if (term && definition && definition.length >= 3 && !/ipucu|sıralayarak|harflerini/i.test(definition)) {
-                        flowItems.push({
-                            id: `flow-ce-${topicIdToFetch}-${sIdx}-${iIdx}`,
-                            type: 'definition',
-                            content: { term, definition },
-                            topicId: topicIdToFetch
-                        } as any);
-                        flowItems.push({
-                            id: `flow-c-${topicIdToFetch}-${sIdx}-${iIdx}`,
-                            type: 'concept',
-                            content: { term, text: term },
-                            topicId: topicIdToFetch
-                        } as any);
-                    }
-                });
-            }
-            if (step.type === 'flashcard' && Array.isArray(step.cards)) {
-                step.cards.forEach((cd: any, cIdx: number) => {
-                    const term = String(cd.term || cd.correctAnswer || '').trim();
-                    const definition = String(cd.definition || '').trim();
-                    if (term && definition && definition.length >= 3 && !/ipucu|sıralayarak|harflerini/i.test(definition)) {
-                        flowItems.push({
-                            id: `flow-fc-${topicIdToFetch}-${sIdx}-${cIdx}`,
-                            type: 'definition',
-                            content: { term, definition },
-                            topicId: topicIdToFetch
-                        } as any);
-                        flowItems.push({
-                            id: `flow-fcc-${topicIdToFetch}-${sIdx}-${cIdx}`,
-                            type: 'concept',
-                            content: { term, text: term },
-                            topicId: topicIdToFetch
-                        } as any);
-                    }
-                });
-            }
-            if (step.type === 'trueFalseList' && Array.isArray(step.questions)) {
-                step.questions.forEach((q: any, qIdx: number) => {
-                    if (q.statement) {
-                        flowItems.push({
-                            id: `flow-tf-${topicIdToFetch}-${sIdx}-${qIdx}`,
-                            type: 'Doğru/Yanlış',
-                            text: String(q.statement).trim(),
-                            correctAnswer: q.isCorrect ? 'Doğru' : 'Yanlış',
-                            options: ['Doğru', 'Yanlış'],
-                            difficulty: 'Orta',
-                            topicId: topicIdToFetch
-                        } as any);
-                    }
-                });
-            }
-        });
+        flowItems.push(...extractAllItemsFromSteps(flowData, undefined, topicIdToFetch));
     }
 
     const allCombined = [
@@ -390,7 +333,7 @@ const readDataForTopic = async (topicIdToFetch: string): Promise<(ActivityItem |
 };
 
 // Helper: Slayt adımlarından tüm kavram, tanım ve soruları eksiksiz çıkaran fonksiyon
-export function extractAllItemsFromSteps(
+function extractAllItemsFromSteps(
     steps: any[], 
     unitId?: string, 
     topicId?: string
@@ -679,6 +622,38 @@ export function extractAllItemsFromSteps(
     return out;
 }
 
+// Helper: Kaynak metinden kavram ve tanım satırlarını çıkaran yardımcı fonksiyon
+function extractConceptsFromText(text: string, unitId?: string, topicId?: string): (ActivityItem | Question)[] {
+    const items: (ActivityItem | Question)[] = [];
+    if (!text || typeof text !== 'string') return items;
+    const lines = text.split('\n');
+    lines.forEach((line, lIdx) => {
+        const trimmed = line.trim();
+        const match = trimmed.match(/^([^:;–—\-]{2,35})[:;–—\-]\s*(.+)$/);
+        if (match) {
+            const term = match[1].replace(/^\d+[\.\)]\s*/, '').trim();
+            const definition = match[2].trim();
+            if (term.length >= 2 && term.length <= 40 && definition.length >= 5) {
+                items.push({
+                    id: `st-def-${unitId || topicId || 'u'}-${lIdx}`,
+                    type: 'definition',
+                    content: { term, definition },
+                    unitId,
+                    topicId
+                } as any);
+                items.push({
+                    id: `st-c-${unitId || topicId || 'u'}-${lIdx}`,
+                    type: 'concept',
+                    content: { term, text: term },
+                    unitId,
+                    topicId
+                } as any);
+            }
+        }
+    });
+    return items;
+}
+
 // Helper: Unit ID'nin ait olduğu dersi bulan yardımcı
 async function resolveCourseIdForUnit(unitId: string): Promise<string | null> {
     if (!unitId || unitId === 'preview-unit') return null;
@@ -722,8 +697,10 @@ export async function getStaticGameData(params: {
     const { unitId, topicId } = params;
     let courseId = params.courseId;
 
-    if (topicId && topicId !== 'all') {
-        return readDataForTopic(topicId);
+    const isEffectiveTopic = topicId && topicId !== 'all' && topicId !== 'unit-flow' && topicId !== 'preview-topic' && topicId !== unitId;
+
+    if (isEffectiveTopic) {
+        return readDataForTopic(topicId!);
     } else if (unitId && unitId !== 'all') {
         const unitCacheKey = `unit_${unitId}`;
         if (STATIC_TOPIC_CACHE.has(unitCacheKey)) {
@@ -792,6 +769,9 @@ export async function getStaticGameData(params: {
                         if (Array.isArray(uData.steps)) {
                             allUnitItems.push(...extractAllItemsFromSteps(uData.steps, unitId));
                         }
+                        if (uData.sourceText && typeof uData.sourceText === 'string') {
+                            allUnitItems.push(...extractConceptsFromText(uData.sourceText, unitId));
+                        }
                     }
                 } catch (uErr) {
                     console.warn("Firestore unit doc fetch warning:", uErr);
@@ -809,6 +789,9 @@ export async function getStaticGameData(params: {
                         // 2) Firestore'daki topic slaytlarını da tara
                         if (Array.isArray(tData.steps)) {
                             allUnitItems.push(...extractAllItemsFromSteps(tData.steps, unitId, tDoc.id));
+                        }
+                        if (tData.sourceText && typeof tData.sourceText === 'string') {
+                            allUnitItems.push(...extractConceptsFromText(tData.sourceText, unitId, tDoc.id));
                         }
 
                         // 3) writingContent.conceptDefinitions
@@ -922,10 +905,14 @@ export async function getUnitOrTopicGameQuestionsAction(params: {
     error?: string;
 }> {
     try {
+        const effectiveTopicId = (params.topicId && params.topicId !== params.unitId && params.topicId !== 'preview-topic' && params.topicId !== 'unit-flow' && params.topicId !== 'all')
+            ? params.topicId
+            : undefined;
+
         const allItems = await getStaticGameData({
             courseId: params.courseId,
             unitId: params.unitId,
-            topicId: params.topicId
+            topicId: effectiveTopicId
         });
 
         // 1. Çoktan seçmeli soruları topla
@@ -966,12 +953,18 @@ export async function getUnitOrTopicGameQuestionsAction(params: {
                 } else if (it.type === 'concept') {
                     term = String((it as any).content?.term || (it as any).content?.text || (it as any).term || '').trim();
                     def = String((it as any).content?.definition || (it as any).content?.meaning || (it as any).definition || '').trim();
+                } else if (it.type === 'conceptExplanation') {
+                    term = String((it as any).concept || (it as any).term || '').trim();
+                    def = String((it as any).definition || '').trim();
+                } else if (it.type === 'flashcard') {
+                    term = String((it as any).term || (it as any).correctAnswer || '').trim();
+                    def = String((it as any).definition || '').trim();
                 }
                 if (term && term.length >= 2 && term.length <= 40 && !/^(doğru|kavram \d)$/i.test(term)) {
                     if (def && def.length >= 4 && !conceptMap.has(term)) {
                         conceptMap.set(term, def);
                     } else if (!conceptMap.has(term)) {
-                        conceptMap.set(term, `${term} kavramı ile ilgili açıklama`);
+                        conceptMap.set(term, `${term} kavramı`);
                     }
                 }
             }

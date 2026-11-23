@@ -3,7 +3,7 @@
 import { unstable_noStore as noStore } from 'next/cache';
 import type { MiniGameQuestion, Question } from '@/lib/types';
 import { getStaticQuestionsForGame, getQuestionsFromBank } from '@/lib/quiz-actions';
-import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
+import { isDefinitionValidAndClean, cleanClueForTerm } from '@/lib/quiz-validation';
 import { db } from "@/lib/firebase";
 import { doc, getDoc } from 'firebase/firestore';
 
@@ -40,14 +40,18 @@ export async function getGameTopicQuestions(
 ): Promise<GetGameTopicQuestionsOutput> {
     noStore();
     const { courseId, unitId, topicId } = input;
+    const effectiveTopicId = (topicId && topicId !== 'all' && topicId !== 'unit-flow' && topicId !== 'preview-topic' && topicId !== unitId) 
+        ? topicId 
+        : undefined;
 
     try {
         let topicTitle = 'Din Kültürü ve Ahlak Bilgisi';
         const rawPairs: { term: string; definition: string }[] = [];
+        const mcqQuestions: MiniGameQuestion[] = [];
 
-        // 1. Statik dosyalardan veri çek
+        // 1. Statik dosyalardan ve üniteden veri çek
         try {
-            const allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'all' });
+            const allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId: effectiveTopicId, dataType: 'all' });
             for (const item of allItems || []) {
                 if (!item) continue;
                 if ('type' in item) {
@@ -67,8 +71,25 @@ export async function getGameTopicQuestions(
 
                     if (term && definition) {
                         const cleaned = cleanTerm(term);
-                        if (cleaned.length >= 2 && cleaned.length <= 40 && isDefinitionValidAndClean(cleaned, definition)) {
-                            rawPairs.push({ term: cleaned, definition });
+                        const cleanClue = cleanClueForTerm(cleaned, definition);
+                        if (cleaned.length >= 2 && cleaned.length <= 40 && isDefinitionValidAndClean(cleaned, cleanClue)) {
+                            rawPairs.push({ term: cleaned, definition: cleanClue });
+                        }
+                    }
+
+                    // Ünitedeki çoktan seçmeli soruları da doğrudan oyuna aktar
+                    if ((item.type === 'mcq' || item.type === 'Çoktan Seçmeli') && Array.isArray((item as any).options) && (item as any).options.length >= 2) {
+                        const qText = String((item as any).text || (item as any).question || '').trim();
+                        if (qText && !/bu konuyla ilgili \d/i.test(qText)) {
+                            const correct = String((item as any).correctAnswer || (item as any).options[0]).trim();
+                            let correctIdx = (item as any).options.findIndex((o: any) => String(o).trim() === correct);
+                            if (correctIdx < 0) correctIdx = typeof (item as any).correctAnswerIndex === 'number' ? (item as any).correctAnswerIndex : 0;
+                            mcqQuestions.push({
+                                id: item.id || `mcq-${mcqQuestions.length + 1}`,
+                                question: qText,
+                                options: ((item as any).options as any[]).map(o => String(o).trim()).slice(0, 4),
+                                correctAnswerIndex: correctIdx
+                            });
                         }
                     }
                 }
@@ -77,15 +98,15 @@ export async function getGameTopicQuestions(
             console.warn("Static items read warning:", e);
         }
 
-        // 2. Firestore'dan konu başlığını ve ek kavramları çek
-        if (topicId && topicId !== 'all') {
+        // 2. Firestore'dan konu veya ünite başlığını ve ek kavramları çek
+        if (effectiveTopicId) {
             try {
                 let topicSnap = null;
                 if (courseId && unitId) {
-                    topicSnap = await getDoc(doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId));
+                    topicSnap = await getDoc(doc(db, 'courses', courseId, 'units', unitId, 'topics', effectiveTopicId));
                 }
                 if (!topicSnap || !topicSnap.exists()) {
-                    topicSnap = await getDoc(doc(db, 'topics', topicId));
+                    topicSnap = await getDoc(doc(db, 'topics', effectiveTopicId));
                 }
                 if (topicSnap && topicSnap.exists()) {
                     const topicData = topicSnap.data();
@@ -97,7 +118,7 @@ export async function getGameTopicQuestions(
                             if (step.type === 'conceptExplanation' && Array.isArray(step.items)) {
                                 for (const it of step.items) {
                                     const term = cleanTerm(it.concept || it.term || '');
-                                    const definition = String(it.definition || '').trim();
+                                    const definition = cleanClueForTerm(term, String(it.definition || ''));
                                     if (term && definition && isDefinitionValidAndClean(term, definition)) {
                                         rawPairs.push({ term, definition });
                                     }
@@ -105,7 +126,7 @@ export async function getGameTopicQuestions(
                             } else if (step.type === 'flashcard' && Array.isArray(step.cards)) {
                                 for (const cd of step.cards) {
                                     const term = cleanTerm(cd.term || cd.front || '');
-                                    const definition = String(cd.definition || cd.back || '').trim();
+                                    const definition = cleanClueForTerm(term, String(cd.definition || cd.back || ''));
                                     if (term && definition && isDefinitionValidAndClean(term, definition)) {
                                         rawPairs.push({ term, definition });
                                     }
@@ -117,6 +138,14 @@ export async function getGameTopicQuestions(
             } catch (e) {
                 console.warn("Firestore topic doc read warning:", e);
             }
+        } else if (unitId && courseId) {
+            try {
+                const uSnap = await getDoc(doc(db, 'courses', courseId, 'units', unitId));
+                if (uSnap.exists()) {
+                    const uData = uSnap.data();
+                    if (uData.title) topicTitle = uData.title;
+                }
+            } catch {}
         }
 
         // Tekilleştir
@@ -132,12 +161,12 @@ export async function getGameTopicQuestions(
 
         const formattedQuestions: MiniGameQuestion[] = [];
 
-        // Eğer en az 2 kavram-tanım çifti varsa bunları oyun formatına çevir
+        // Eğer kavram-tanım çifti varsa bunları oyun formatına çevir
         if (uniquePairs.length >= 2) {
             const allTerms = uniquePairs.map(p => p.term);
             uniquePairs.forEach((pair, idx) => {
-                // Diğer kavramlardan 3 çeldirici seç
-                const otherTerms = allTerms.filter(t => t !== pair.term);
+                // Diğer kavramlardan 3 çeldirici seç (asla harici kavram enjekte etme)
+                const otherTerms = allTerms.filter(t => t.toLocaleLowerCase('tr-TR') !== pair.term.toLocaleLowerCase('tr-TR'));
                 const shuffledOthers = [...otherTerms].sort(() => 0.5 - Math.random());
                 const distractors = shuffledOthers.slice(0, 3);
                 while (distractors.length < 3) {
@@ -153,13 +182,20 @@ export async function getGameTopicQuestions(
             });
         }
 
-        // Eğer kavram azsa veya test soruları da eklemek istenirse soru bankasından çek
+        // Test sorularını da ekle
+        mcqQuestions.forEach((mq) => {
+            if (!formattedQuestions.some(fq => fq.question === mq.question)) {
+                formattedQuestions.push(mq);
+            }
+        });
+
+        // Eğer soru sayısı azsa soru bankasından çek
         if (formattedQuestions.length < 4) {
             try {
                 const quizResult = await getQuestionsFromBank({
                     courseId,
                     unitId,
-                    topicId,
+                    topicId: effectiveTopicId,
                     questionTypes: ['mcq', 'tf'],
                     questionCount: 20
                 });
@@ -171,7 +207,7 @@ export async function getGameTopicQuestions(
                             : (typeof q.correctAnswerIndex === 'number' ? q.correctAnswerIndex : 0);
 
                         formattedQuestions.push({
-                            id: `mcq-q-${idx + 1}`,
+                            id: `bank-mcq-q-${idx + 1}`,
                             question: q.question,
                             options: q.options.slice(0, 4),
                             correctAnswerIndex: correctIdx
@@ -183,26 +219,19 @@ export async function getGameTopicQuestions(
             }
         }
 
-        // Eğer hiçbir veri bulunamadıysa Din Kültürü temel kavramlarından zenginleştirilmiş yedek set oluştur
-        if (formattedQuestions.length === 0) {
-            const FALLBACK_PAIRS = [
-                { term: 'Tevhid', definition: 'Allah’ın bir ve tek olduğuna, eşi ve benzeri bulunmadığına inanmak.' },
-                { term: 'İhsan', definition: 'Allah’ı görüyormuş gibi ibadet etmek; O’nu görmesek de O’nun bizi gördüğünün bilincinde olmak.' },
-                { term: 'Zekat', definition: 'Dinen zengin sayılan Müslümanların yılda bir kez mallarının belirli bir kısmını ihtiyaç sahiplerine vermesi.' },
-                { term: 'Sadaka', definition: 'Allah rızası için yapılan her türlü maddi ve manevi iyilik ve yardım.' },
-                { term: 'Ahlak', definition: 'İnsanın iyi ve güzel davranışlar sergilemesini sağlayan manevi ve ruhi özelliklerin bütünü.' },
-                { term: 'Siyer', definition: 'Hz. Muhammed’in (s.a.v.) hayatını, ahlakını ve mücadelesini inceleyen ilim dalı.' },
-                { term: 'Tefsir', definition: 'Kur’an-ı Kerim ayetlerini açıklayan, yorumlayan ve anlamını derinlemesine inceleyen ilim.' },
-                { term: 'Hadis', definition: 'Peygamber Efendimizin (s.a.v.) sözleri, fiilleri ve takrirleri (onayları).' },
-                { term: 'Takva', definition: 'Allah’ın emir ve yasaklarına titizlikle uyarak O’nun sevgisini kaybetmekten sakınmak.' },
-                { term: 'Adalet', definition: 'Her hak sahibine hakkını vermek, hak ve hukuka uygun davranmak.' }
+        // SADECE HİÇBİR parametre (courseId, unitId, topicId) verilmemişse demo set sun
+        if (formattedQuestions.length === 0 && !courseId && !unitId && !effectiveTopicId) {
+            const DEMO_PAIRS = [
+                { term: 'Tevhid', definition: 'Allah’ın bir ve tek olduğuna kalpten inanmak.' },
+                { term: 'Ahlak', definition: 'İnsanın iyi ve güzel davranışlar sergilemesini sağlayan manevi özellikler.' },
+                { term: 'İbadet', definition: 'Allah rızası için yapılan her türlü güzel amel ve kulluk vazifesi.' },
+                { term: 'Merhamet', definition: 'Bir canlının karşılaştığı kötü durumdan dolayı duyulan acıma ve yardım etme duygusu.' }
             ];
-
-            const allTerms = FALLBACK_PAIRS.map(p => p.term);
-            FALLBACK_PAIRS.forEach((pair, idx) => {
+            const allTerms = DEMO_PAIRS.map(p => p.term);
+            DEMO_PAIRS.forEach((pair, idx) => {
                 const distractors = allTerms.filter(t => t !== pair.term).sort(() => 0.5 - Math.random()).slice(0, 3);
                 formattedQuestions.push({
-                    id: `fallback-q-${idx + 1}`,
+                    id: `demo-q-${idx + 1}`,
                     question: pair.definition,
                     options: [pair.term, ...distractors],
                     correctAnswerIndex: 0
@@ -210,8 +239,11 @@ export async function getGameTopicQuestions(
             });
         }
 
+        // Karıştır ve döndür
+        const shuffled = [...formattedQuestions].sort(() => 0.5 - Math.random());
+
         return {
-            questions: formattedQuestions.slice(0, 25),
+            questions: shuffled.slice(0, 30),
             topicTitle: topicTitle || 'Din Kültürü ve Ahlak Bilgisi'
         };
 

@@ -48,7 +48,11 @@ export async function getConceptQuizAction(
 ): Promise<{ questions: ConceptQuizQuestion[] | null; error?: string }> {
     noStore();
     try {
-        const itemsForTopic = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'activities' });
+        const effectiveTopicId = (topicId && topicId !== unitId && topicId !== 'preview-topic' && topicId !== 'unit-flow' && topicId !== 'all')
+            ? topicId
+            : undefined;
+
+        const itemsForTopic = await getStaticQuestionsForGame({ courseId, unitId, topicId: effectiveTopicId, dataType: 'activities' });
 
         const pairs: { term: string; definition: string }[] = [];
 
@@ -74,9 +78,13 @@ export async function getConceptQuizAction(
             }
         }
 
-        // Eğer konuya ait geçerli tanım bulunamadıysa temel müfredat kavramlarıyla oyunu başlat
+        // Eğer konuya ait geçerli tanım bulunamadıysa ve ders/ünite belirtilmemişse demo kavramları kullan
         if (pairs.length < 1) {
-            pairs.push(...DEFAULT_CURRICULUM_PAIRS);
+            if (!unitId && !topicId && !courseId) {
+                pairs.push(...DEFAULT_CURRICULUM_PAIRS);
+            } else {
+                return { error: "Bu ünite/konu için oynanabilir kavram tanımı bulunamadı.", questions: null };
+            }
         }
 
         // Terim bazında tekilleştirme
@@ -91,7 +99,7 @@ export async function getConceptQuizAction(
             }
         }
 
-        const allTermsPool = [...new Set([...uniquePairs.map(p => p.term), ...FALLBACK_POOL])];
+        const allTermsPool = [...new Set([...uniquePairs.map(p => p.term), ...(uniquePairs.length < 4 && !unitId && !topicId ? FALLBACK_POOL : [])])];
         const gameQuestions: ConceptQuizQuestion[] = [];
 
         for (const item of uniquePairs) {
