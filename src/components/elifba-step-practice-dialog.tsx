@@ -497,65 +497,68 @@ export function ElifbaStepPracticeDialog({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="w-[96vw] max-w-4xl max-h-[92vh] p-0 rounded-3xl bg-slate-950 text-slate-100 border border-white/15 shadow-2xl overflow-hidden flex flex-col">
+            <DialogContent className="w-[98vw] sm:w-[96vw] max-w-4xl h-[95dvh] max-h-[95dvh] p-0 rounded-3xl bg-slate-950 text-slate-100 border border-white/15 shadow-2xl overflow-hidden flex flex-col touch-manipulation">
                 
                 {/* ══ 1. ÜST HEADER (Aşama Başlığı, Sekmeler ve Ses Aç/Kapa) ══ */}
-                <DialogHeader className="p-4 sm:p-5 border-b border-white/10 bg-slate-900/90 backdrop-blur-md flex flex-row items-center justify-between gap-3 space-y-0 shrink-0">
-                    <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-amber-500 via-orange-500 to-rose-600 flex items-center justify-center text-white shadow-md shadow-amber-900/40 shrink-0">
-                            <Sparkles className="w-5 h-5 text-amber-100" />
+                <DialogHeader className="p-3 sm:p-5 border-b border-white/10 bg-slate-900/90 backdrop-blur-md flex flex-row items-center justify-between gap-2 sm:gap-3 space-y-0 shrink-0">
+                    <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                        <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-amber-500 via-orange-500 to-rose-600 flex items-center justify-center text-white shadow-md shadow-amber-900/40 shrink-0">
+                            <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-amber-100" />
                         </div>
                         <div className="min-w-0">
-                            <div className="flex items-center gap-2">
-                                <Badge className="bg-amber-500/20 text-amber-300 border-amber-500/30 text-[10px] font-black uppercase tracking-wider">
-                                    Adım {currentStage.stepNumber} / 30
+                            <div className="flex items-center gap-1.5 sm:gap-2">
+                                <Badge className="bg-amber-500/20 text-amber-300 border-amber-500/30 text-[9px] sm:text-[10px] font-black uppercase tracking-wider px-1.5 py-0">
+                                    Adım {currentStage.stepNumber}
                                 </Badge>
-                                <span className="text-[11px] text-slate-400 font-medium hidden sm:inline">
-                                    {currentStage.sectionTitle}
+                                <span className="text-[10px] sm:text-[11px] text-slate-400 font-medium truncate hidden xs:inline">
+                                    {currentStage.shortTitle || currentStage.sectionTitle}
                                 </span>
                             </div>
-                            <DialogTitle className="text-sm sm:text-base md:text-lg font-black text-white truncate drop-shadow-sm mt-0.5">
+                            <DialogTitle className="text-xs sm:text-base md:text-lg font-black text-white truncate drop-shadow-sm mt-0.5">
                                 {currentStage.title}
                             </DialogTitle>
                         </div>
                     </div>
 
                     {/* Mod Değiştirici Hap Sekmeler */}
-                    <div className="flex items-center gap-2">
-                        <div className="hidden sm:flex items-center p-1 rounded-2xl bg-slate-950 border border-white/10 text-xs">
+                    <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                        <div className="flex items-center p-0.5 sm:p-1 rounded-2xl bg-slate-950 border border-white/10 text-xs">
                             <button
                                 type="button"
                                 onClick={() => setActiveTab('exercise')}
                                 className={cn(
-                                    "px-3 py-1.5 rounded-xl font-bold transition-all cursor-pointer flex items-center gap-1.5",
+                                    "px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl font-bold transition-all cursor-pointer flex items-center gap-1 text-[11px] sm:text-xs",
                                     activeTab === 'exercise'
                                         ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-sm"
                                         : "text-slate-400 hover:text-white"
                                 )}
                             >
-                                <BookOpen className="w-3.5 h-3.5" />
-                                <span>1. Egzersiz</span>
+                                <BookOpen className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                                <span className="hidden sm:inline">1. Egzersiz</span>
+                                <span className="sm:hidden">Egzersiz</span>
                             </button>
                             <button
                                 type="button"
                                 onClick={handleStartQuiz}
                                 className={cn(
-                                    "px-3 py-1.5 rounded-xl font-bold transition-all cursor-pointer flex items-center gap-1.5",
+                                    "px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl font-bold transition-all cursor-pointer flex items-center gap-1 text-[11px] sm:text-xs",
                                     activeTab === 'quiz'
                                         ? "bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-sm"
                                         : "text-slate-400 hover:text-white"
                                 )}
                             >
-                                <Gamepad2 className="w-3.5 h-3.5" />
-                                <span>2. Oyun &amp; Test</span>
+                                <Gamepad2 className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                                <span className="hidden sm:inline">2. Oyun &amp; Test</span>
+                                <span className="sm:hidden">Oyun</span>
                             </button>
                             {activeTab === 'result' && (
                                 <button
                                     type="button"
-                                    className="px-3 py-1.5 rounded-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-sm flex items-center gap-1.5"
+                                    className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-sm flex items-center gap-1 text-[11px] sm:text-xs"
                                 >
-                                    <Trophy className="w-3.5 h-3.5" />
-                                    <span>3. Başarı</span>
+                                    <Trophy className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                                    <span className="hidden sm:inline">3. Başarı</span>
+                                    <span className="sm:hidden">Başarı</span>
                                 </button>
                             )}
                         </div>
@@ -566,14 +569,14 @@ export function ElifbaStepPracticeDialog({
                             variant="ghost"
                             onClick={() => setSoundEnabled(prev => !prev)}
                             className={cn(
-                                "w-9 h-9 rounded-xl border transition-all cursor-pointer",
+                                "w-8 h-8 sm:w-9 sm:h-9 rounded-xl border transition-all cursor-pointer shrink-0",
                                 soundEnabled 
                                     ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/20" 
                                     : "bg-rose-500/10 border-rose-500/30 text-rose-300 hover:bg-rose-500/20"
                             )}
                             title={soundEnabled ? "Sesi Kapat" : "Sesi Aç"}
                         >
-                            {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+                            {soundEnabled ? <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
                         </Button>
                     </div>
                 </DialogHeader>
@@ -700,31 +703,33 @@ export function ElifbaStepPracticeDialog({
                             </div>
 
                             {/* İlerleme & Navigasyon Butonları */}
-                            <div className="w-full flex items-center justify-between gap-3 pt-1">
+                            <div className="w-full flex items-center justify-between gap-2 sm:gap-3 pt-1">
                                 <Button
                                     variant="outline"
                                     disabled={exerciseIndex <= 1}
                                     onClick={() => setExerciseIndex(prev => Math.max(1, prev - 1))}
-                                    className="rounded-2xl border-white/15 text-slate-300 hover:bg-white/10 h-10 px-3 sm:px-4 text-xs font-bold gap-1.5 cursor-pointer"
+                                    className="rounded-2xl border-white/15 text-slate-300 hover:bg-white/10 h-10 px-2.5 sm:px-4 text-xs font-bold gap-1 cursor-pointer shrink-0"
                                 >
-                                    <ChevronLeft className="w-4 h-4" /> Önceki
+                                    <ChevronLeft className="w-4 h-4" />
+                                    <span className="hidden sm:inline">Önceki</span>
                                 </Button>
 
                                 <Button
                                     onClick={handleMarkItemDone}
-                                    className="flex-1 max-w-xs h-10 rounded-2xl font-black text-xs sm:text-sm bg-gradient-to-r from-emerald-600 via-teal-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white shadow-lg shadow-emerald-900/40 gap-2 cursor-pointer active:scale-95"
+                                    className="flex-1 max-w-xs h-10 rounded-2xl font-black text-xs sm:text-sm bg-gradient-to-r from-emerald-600 via-teal-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white shadow-lg shadow-emerald-900/40 gap-1.5 sm:gap-2 cursor-pointer active:scale-95 px-2"
                                 >
-                                    <CheckCircle2 className="w-4 h-4" />
-                                    <span>Okudum &amp; Tekrar Ettim</span>
+                                    <CheckCircle2 className="w-4 h-4 shrink-0" />
+                                    <span className="truncate">Okudum &amp; Tekrar Ettim</span>
                                 </Button>
 
                                 <Button
                                     variant="outline"
                                     disabled={exerciseIndex >= currentStage.itemCount}
                                     onClick={() => setExerciseIndex(prev => Math.min(currentStage.itemCount, prev + 1))}
-                                    className="rounded-2xl border-white/15 text-slate-300 hover:bg-white/10 h-10 px-3 sm:px-4 text-xs font-bold gap-1.5 cursor-pointer"
+                                    className="rounded-2xl border-white/15 text-slate-300 hover:bg-white/10 h-10 px-2.5 sm:px-4 text-xs font-bold gap-1 cursor-pointer shrink-0"
                                 >
-                                    Sonraki <ChevronRight className="w-4 h-4" />
+                                    <span className="hidden sm:inline">Sonraki</span>
+                                    <ChevronRight className="w-4 h-4" />
                                 </Button>
                             </div>
 
@@ -901,7 +906,7 @@ export function ElifbaStepPracticeDialog({
 
                                 {/* Çoktan Seçmeli Seçenekler (Tip 1 & Tip 2) */}
                                 {(currentQuestion.type === 'audio_to_card' || currentQuestion.type === 'card_to_name') && (
-                                    <div className="grid grid-cols-2 gap-3 w-full max-w-lg">
+                                    <div className="grid grid-cols-2 gap-2 sm:gap-3 w-full max-w-lg">
                                         {currentQuestion.options.map((opt) => {
                                             const isSelected = selectedOptionIndex === opt.index;
                                             const isCorrect = opt.isCorrect;
@@ -914,17 +919,17 @@ export function ElifbaStepPracticeDialog({
                                                     disabled={selectedOptionIndex !== null}
                                                     onClick={() => handleSelectOption(opt.index)}
                                                     className={cn(
-                                                        "p-4 rounded-2xl border-2 transition-all flex flex-col items-center justify-center min-h-[90px] cursor-pointer shadow-md",
+                                                        "p-2.5 sm:p-4 rounded-2xl border-2 transition-all flex flex-col items-center justify-center min-h-[80px] sm:min-h-[92px] cursor-pointer shadow-md touch-manipulation",
                                                         showStatus && isCorrect
-                                                            ? "bg-emerald-600/30 border-emerald-400 text-white font-black shadow-emerald-500/20 scale-102 ring-2 ring-emerald-400"
+                                                            ? "bg-emerald-600/30 border-emerald-400 text-white font-black shadow-emerald-500/20 scale-[1.02] ring-2 ring-emerald-400"
                                                             : showStatus && isSelected && !isCorrect
                                                             ? "bg-rose-600/30 border-rose-500 text-white shadow-rose-500/20 ring-2 ring-rose-400"
-                                                            : "bg-slate-900 border-white/15 text-slate-200 hover:border-amber-400/60 hover:bg-slate-850 hover:scale-[1.02]"
+                                                            : "bg-slate-900 border-white/15 text-slate-200 hover:border-amber-400/60 hover:bg-slate-850 hover:scale-[1.01]"
                                                     )}
                                                 >
                                                     {currentQuestion.type === 'audio_to_card' ? (
                                                         opt.img ? (
-                                                            <div className="relative w-28 h-16">
+                                                            <div className="relative w-full max-w-[110px] sm:max-w-[130px] h-13 sm:h-16 flex items-center justify-center">
                                                                 <Image 
                                                                     src={opt.img}
                                                                     alt={opt.name}
@@ -933,10 +938,10 @@ export function ElifbaStepPracticeDialog({
                                                                 />
                                                             </div>
                                                         ) : (
-                                                            <span className="text-2xl font-bold font-arabic">{opt.name}</span>
+                                                            <span className="text-xl sm:text-2xl font-bold font-arabic">{opt.name}</span>
                                                         )
                                                     ) : (
-                                                        <span className="text-base sm:text-lg font-black tracking-wide">
+                                                        <span className="text-sm sm:text-base md:text-lg font-black tracking-wide text-center">
                                                             {opt.name}
                                                         </span>
                                                     )}
@@ -948,13 +953,13 @@ export function ElifbaStepPracticeDialog({
 
                                 {/* Doğru / Yanlış Butonları (Tip 3) */}
                                 {currentQuestion.type === 'true_false' && (
-                                    <div className="grid grid-cols-2 gap-4 w-full max-w-md pt-2">
+                                    <div className="grid grid-cols-2 gap-3 sm:gap-4 w-full max-w-md pt-2">
                                         <button
                                             type="button"
                                             disabled={selectedOptionIndex !== null}
                                             onClick={() => handleSelectTF(true)}
                                             className={cn(
-                                                "p-4 rounded-2xl border-2 font-black text-sm sm:text-base flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md",
+                                                "p-3 sm:p-4 rounded-2xl border-2 font-black text-xs sm:text-base flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md touch-manipulation",
                                                 selectedOptionIndex !== null && currentQuestion.tfData?.isMatch
                                                     ? "bg-emerald-600 text-white border-emerald-400 ring-2 ring-emerald-400"
                                                     : selectedOptionIndex === 1 && !currentQuestion.tfData?.isMatch
@@ -962,14 +967,14 @@ export function ElifbaStepPracticeDialog({
                                                     : "bg-emerald-950/40 border-emerald-500/40 text-emerald-300 hover:bg-emerald-600 hover:text-white"
                                             )}
                                         >
-                                            <Check className="w-5 h-5" /> DOĞRU
+                                            <Check className="w-4 h-4 sm:w-5 sm:h-5" /> DOĞRU
                                         </button>
                                         <button
                                             type="button"
                                             disabled={selectedOptionIndex !== null}
                                             onClick={() => handleSelectTF(false)}
                                             className={cn(
-                                                "p-4 rounded-2xl border-2 font-black text-sm sm:text-base flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md",
+                                                "p-3 sm:p-4 rounded-2xl border-2 font-black text-xs sm:text-base flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md touch-manipulation",
                                                 selectedOptionIndex !== null && !currentQuestion.tfData?.isMatch
                                                     ? "bg-emerald-600 text-white border-emerald-400 ring-2 ring-emerald-400"
                                                     : selectedOptionIndex === 0 && currentQuestion.tfData?.isMatch
@@ -977,7 +982,7 @@ export function ElifbaStepPracticeDialog({
                                                     : "bg-rose-950/40 border-rose-500/40 text-rose-300 hover:bg-rose-600 hover:text-white"
                                             )}
                                         >
-                                            <XCircle className="w-5 h-5" /> YANLIŞ
+                                            <XCircle className="w-4 h-4 sm:w-5 sm:h-5" /> YANLIŞ
                                         </button>
                                     </div>
                                 )}
