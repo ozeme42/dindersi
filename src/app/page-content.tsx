@@ -712,16 +712,23 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                         </div>
 
                                         <div className="flex flex-wrap items-center gap-2.5 shrink-0 w-full md:w-auto justify-end">
+                                            <Link 
+                                                href="/elifba/macera" 
+                                                className="w-full sm:w-auto px-4 py-3 rounded-xl bg-gradient-to-r from-sky-400 via-sky-300 to-blue-400 hover:from-sky-300 hover:to-blue-300 text-slate-950 font-black text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2 hover:shadow-lg active:scale-95"
+                                            >
+                                                <span>🗺️ Büyük Elifba Macerası</span>
+                                            </Link>
+
                                             <button 
                                                 type="button"
                                                 onClick={() => {
                                                     setSelectedPracticeStageId(elifbaStages[0]?.id || 'cuz1');
                                                     setIsPracticeDialogOpen(true);
                                                 }}
-                                                className="w-full sm:w-auto px-5 py-3 rounded-xl bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 text-slate-950 font-black text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2 hover:shadow-lg active:scale-95 cursor-pointer"
+                                                className="w-full sm:w-auto px-4 py-3 rounded-xl bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 text-slate-950 font-black text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2 hover:shadow-lg active:scale-95 cursor-pointer"
                                             >
                                                 <Gamepad2 className="w-4 h-4 text-slate-950" />
-                                                <span>🎮 Oyunla Çalış &amp; Sınıfa Hazırlan</span>
+                                                <span>🎮 Adım Çalışması</span>
                                             </button>
 
                                             <Link 

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import Link from 'next/link';
 import Image from 'next/image';
 import confetti from 'canvas-confetti';
 import { 
@@ -563,6 +564,16 @@ export function ElifbaStepPracticeDialog({
                             )}
                         </div>
 
+                        {/* 🗺️ Büyük Macera Haritası */}
+                        <Link 
+                            href="/elifba/macera"
+                            onClick={() => onOpenChange(false)}
+                            className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-black text-xs shadow-sm transition-all active:scale-95"
+                            title="Büyük Elifba Macerası: 19 Aşamalı Harita ve Rozetler"
+                        >
+                            <span>🗺️ Macera</span>
+                        </Link>
+
                         {/* Ses Aç / Kapat */}
                         <Button
                             size="icon"
@@ -1122,7 +1133,15 @@ export function ElifbaStepPracticeDialog({
                             )}
 
                             {/* Aksiyon Butonları */}
-                            <div className="flex flex-col sm:flex-row items-center gap-3 w-full pt-2">
+                            <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full pt-2">
+                                <Link 
+                                    href="/elifba/macera"
+                                    onClick={() => onOpenChange(false)}
+                                    className="w-full sm:w-auto h-11 px-4 rounded-2xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-black text-xs sm:text-sm shadow-md flex items-center justify-center gap-1.5 cursor-pointer"
+                                >
+                                    <span>🗺️ Macera Haritası</span>
+                                </Link>
+
                                 <Button
                                     variant="outline"
                                     onClick={handleRetryQuiz}

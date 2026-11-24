@@ -667,6 +667,17 @@ export default function ElifbaPortalPage() {
                             {ambianceTheme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
                         </Button>
 
+                        {/* 🗺️ Büyük Elifba Macerası - Aşamalı Yolculuk */}
+                        <Link href="/elifba/macera">
+                            <Button 
+                                size="sm" 
+                                className="bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 hover:from-amber-300 hover:to-orange-300 text-slate-950 font-black h-9 px-3.5 rounded-xl text-xs shadow-md shadow-orange-950/20 flex items-center gap-1.5 cursor-pointer transition-all hover:scale-105 active:scale-95"
+                                title="Büyük Elifba Macerası: 19 Aşamalı Harita Yolculuğu ve Rozetler"
+                            >
+                                <span>🗺️ Büyük Elifba Macerası</span>
+                            </Button>
+                        </Link>
+
                         {/* 🎮 Oyunla Çalış & Pekiştir Butonu */}
                         <Button 
                             size="sm" 
