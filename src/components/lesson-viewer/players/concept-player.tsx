@@ -1213,13 +1213,13 @@ export function ConceptExplanationPlayer({
             )}
 
             {isSketchnote ? (
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mb-6 p-4 sm:p-5 rounded-3xl border-[2.5px] border-[#1e293b] bg-white shadow-[4px_4px_0_#1e293b] relative overflow-hidden">
-                    <div className="flex flex-wrap items-center gap-3 justify-center sm:justify-start">
-                        <span className="text-3xl">⭐</span>
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-2.5 mb-3 py-2.5 px-4 sm:py-3 sm:px-5 rounded-2xl border-[2.5px] border-[#1e293b] bg-white shadow-[4px_4px_0_#1e293b] relative overflow-hidden">
+                    <div className="flex flex-wrap items-center gap-2.5 justify-center sm:justify-start">
+                        <span className="text-2xl sm:text-3xl">⭐</span>
                         <h2 className="font-['Caveat',cursive] text-2xl sm:text-3xl md:text-4xl font-bold text-[#a16207]">
                             {title || 'KAVRAMLAR KUTUSU'}
                         </h2>
-                        <span className="font-['Patrick_Hand',cursive] text-xs sm:text-sm font-bold px-3.5 py-1 rounded-full bg-[#ef4444] text-white shadow-[1.5px_1.5px_0_#991b1b]">
+                        <span className="font-['Patrick_Hand',cursive] text-xs sm:text-sm font-bold px-3 py-0.5 rounded-full bg-[#ef4444] text-white shadow-[1.5px_1.5px_0_#991b1b]">
                             Önemli Kavram! 🎯
                         </span>
                     </div>
@@ -1232,7 +1232,7 @@ export function ConceptExplanationPlayer({
                                     setRevealedDefs({});
                                 }}
                                 className={cn(
-                                    "font-['Patrick_Hand',cursive] text-xs sm:text-sm font-bold px-3.5 py-1.5 rounded-full border-[2px] flex items-center gap-1.5 transition-all cursor-pointer",
+                                    "font-['Patrick_Hand',cursive] text-xs sm:text-sm font-bold px-3.5 py-1 rounded-full border-[2px] flex items-center gap-1.5 transition-all cursor-pointer",
                                     hideDefinitions
                                         ? "bg-[#fef08a] text-[#854d0e] border-[#ca8a04] shadow-[2px_2px_0_#ca8a04]"
                                         : "bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-400"
@@ -1250,20 +1250,20 @@ export function ConceptExplanationPlayer({
                 </div>
             ) : !isGame3D ? (
                 <div className={cn(
-                    "flex flex-col sm:flex-row items-center justify-between gap-3 mb-6 p-4 sm:p-5 rounded-3xl border shadow-2xl relative overflow-hidden backdrop-blur-xl transition-colors",
+                    "flex flex-col sm:flex-row items-center justify-between gap-2.5 mb-3 py-2.5 px-4 sm:py-3 sm:px-5 rounded-2xl border relative overflow-hidden backdrop-blur-xl transition-colors",
                     presentationTheme === 'clean-light'
-                        ? "bg-white/95 border-2 border-indigo-200/90 text-slate-900 shadow-xl shadow-indigo-100/60"
-                        : "bg-slate-900/90 border-white/10 text-white shadow-2xl"
+                        ? "bg-white border-slate-200/90 text-slate-900 shadow-md"
+                        : "bg-slate-900/90 border-white/10 text-white shadow-xl"
                 )}>
                     <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" />
-                    <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 text-center sm:text-left">
-                        <div className="w-10 h-10 md:w-11 md:h-11 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 text-white flex items-center justify-center font-black shadow-lg shadow-indigo-950/80 border border-white/20 shrink-0">
-                            <Sparkles className="w-5 h-5 text-amber-300" />
+                    <div className="flex flex-col sm:flex-row items-center gap-2.5 sm:gap-3 text-center sm:text-left">
+                        <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 text-white flex items-center justify-center font-black shadow-md border border-white/20 shrink-0">
+                            <Sparkles className="w-4 h-4 text-amber-300" />
                         </div>
                         <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
                             <h2 className={cn(
-                                "font-black text-lg md:text-2xl drop-shadow-sm tracking-tight",
-                                presentationTheme === 'clean-light' ? "text-slate-950" : "text-white"
+                                "font-black text-lg md:text-2xl tracking-tight",
+                                presentationTheme === 'clean-light' ? "text-slate-900" : "text-white"
                             )}>{title || 'Anahtar Kavramlar'}</h2>
                             <p className={cn("text-xs font-medium", presentationTheme === 'clean-light' ? "text-slate-500" : "text-slate-400")}>
                                 Büyütmek için herhangi bir kavram kartına tıklayabilirsiniz.

@@ -1349,11 +1349,11 @@ export function ProcessFlowPlayer({
 
     return (
         <div className={cn(
-            "w-full h-full flex flex-col items-center justify-start p-3 md:p-6 pb-20 select-none max-w-5xl mx-auto overflow-y-auto",
-            isFullscreen ? "py-6 pb-20" : "py-3 pb-20"
+            "w-full h-full flex flex-col items-center justify-start p-3 md:p-5 pb-20 select-none max-w-5xl mx-auto overflow-y-auto",
+            isFullscreen ? "py-4 pb-20" : "py-2.5 pb-20"
         )}>
             {/* ══ BAŞLIK ROZETİ VE SIRALI TAHMİN KONTROLÜ ══ */}
-            <div className="flex flex-wrap items-center justify-center gap-3 mb-4 md:mb-6">
+            <div className="flex flex-wrap items-center justify-center gap-2.5 mb-3 md:mb-4">
                 {isSketchnote ? (
                     <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-[#fefce8] border-[2.5px] border-[#1e293b] text-[#1e293b] text-base md:text-lg font-['Caveat',cursive] font-bold shadow-[3px_3px_0_#1e293b]">
                         <Compass className="w-5 h-5 text-amber-600" />

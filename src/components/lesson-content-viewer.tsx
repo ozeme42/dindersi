@@ -81,6 +81,44 @@ const useTeacherMode = () => {
 export * from './lesson-viewer';
 import { StepContent, DrawingCanvas } from './lesson-viewer';
 import { PresentationWoodenTray } from './presentation-wooden-tray';
+
+function getStepTypeBadge(type?: string): string {
+    switch (type) {
+        case 'topicOutline': return '📑 Konu Başlıkları';
+        case 'hookQuestion': return '💭 Merak Sorusu';
+        case 'content': return '📖 Anlatım';
+        case 'objectiveList': return '🎯 Hedefler';
+        case 'accordion': return '📚 Açılır Liste';
+        case 'conceptExplanation': return '💡 Kavramlar';
+        case 'notebookNote': return '✏️ Defter Notu';
+        case 'processFlow': return '🪜 Süreç';
+        case 'conceptMatrix': return '🔲 Konu Matrisi';
+        case 'categoryTable': return '📊 Tablo';
+        case 'conceptMap': return '🗺️ Kavram Haritası';
+        case 'flashcard': return '🃏 Kavram Kartları';
+        case 'anagramFlashcard': return '🔤 Anagram Kart';
+        case 'mcq': return '❓ Çoktan Seçmeli';
+        case 'tf': return '⚖️ Doğru / Yanlış';
+        case 'trueFalseList': return '✅ D/Y Listesi';
+        case 'fitb': return '🧩 Boşluk Doldurma';
+        case 'clozeParagraph': return '📝 Paragraf';
+        case 'sentenceScramble': return '🔀 Cümle Kur';
+        case 'anagram':
+        case 'anagramGame':
+        case 'kelimeDahasi': return '🔠 Anagram';
+        case 'matching':
+        case 'conceptMatching': return '🔗 Eşleştirme';
+        case 'categorySort': return '🗂️ Sınıflandırma';
+        case 'openEndedQuestions': return '🗣️ Açık Uçlu';
+        case 'miniGame':
+        case 'activityLink': return '🎮 Etkinlik';
+        case 'video': return '🎬 Video';
+        case 'visual': return '🖼️ Görsel';
+        case 'htmlSlide':
+        case 'pdfSlide': return '📄 Sunu';
+        default: return '📌 Slayt';
+    }
+}
 // --- ANA EKRAN: LessonContentViewer ---
 
 export function LessonContentViewer({
@@ -729,7 +767,7 @@ export function LessonContentViewer({
                         </div>
                     </div>
                     {/* Ünite Tamamlama Ödülü */}
-                    <div className="relative overflow-hidden border-2 border-emerald-500/40 bg-emerald-950/30 backdrop-blur-xl rounded-2xl px-6 py-3 shadow-md flex items-center justify-center gap-2 w-full animate-bounce">
+                    <div className="relative overflow-hidden border-2 border-emerald-500/40 bg-emerald-950/30 backdrop-blur-xl rounded-2xl px-6 py-3 shadow-md flex items-center justify-center gap-2 w-full">
                         <Sparkles className="w-5 h-5 text-emerald-400" />
                         <span className="text-emerald-300 font-black text-xs sm:text-sm tracking-widest uppercase">Ünite Tamamlama Ödülü: +10.000 XP</span>
                     </div>
@@ -785,7 +823,7 @@ export function LessonContentViewer({
           (isPerfMode || animationSpeed === 'off') && "perf-mode"
       )}>
         
-        {isTeacher && <DrawingCanvas stepIndex={currentStepIndex} />}
+        {isTeacher && <DrawingCanvas stepIndex={currentStepIndex} presentationTheme={presentationTheme} />}
 
         {/* ══ ÖĞRENCİ MODU ÜST BARI (MODERN MOBİL İLERLEME BARI) ══ */}
         {!isTeacher && (
@@ -1028,8 +1066,10 @@ export function LessonContentViewer({
                 </div>
             );
         })() : isTeacher ? (() => {
-            const dockBtnBaseClass = isLightBoard
-                ? "bg-slate-100 hover:bg-slate-200 text-slate-950 font-black border-2 border-slate-300 shadow-xs"
+            const dockBtnBaseClass = isSketchnote
+                ? "bg-white hover:bg-[#fefce8] text-[#1e293b] font-black border-2 border-[#1e293b]/35 shadow-[1.5px_1.5px_0_rgba(30,41,59,0.2)]"
+                : isLightBoard
+                ? "bg-slate-100 hover:bg-slate-200 text-slate-950 font-black border border-slate-300 shadow-xs"
                 : isVibrantStudio
                     ? "bg-[#131635] hover:bg-[#1f2452] text-white font-black border border-purple-400/40 shadow-xs"
                     : "bg-slate-900/90 hover:bg-slate-800 text-white font-black border border-white/20 shadow-xs";
@@ -1054,8 +1094,8 @@ export function LessonContentViewer({
                                 }}
                                 className={cn(
                                     "h-5 px-3 rounded-t-xl text-xs font-black border-t border-x shadow-md backdrop-blur-md transition-all flex items-center justify-center cursor-pointer",
-                                    isGame3D
-                                        ? "bg-[#0b0e22] hover:bg-[#141836] text-amber-300 border-amber-500/40 shadow-black/80"
+                                    isSketchnote
+                                        ? "bg-[#fffdf7] hover:bg-[#fefce8] text-[#1e293b] border-[#1e293b]/40"
                                         : isLightBoard
                                         ? "bg-white hover:bg-slate-100 text-slate-950 border-slate-300 shadow-slate-200/50"
                                         : isVibrantStudio
@@ -1069,23 +1109,23 @@ export function LessonContentViewer({
                         </div>
                     )}
                     <div className={cn(
-                        "presentation-dock w-full max-w-5xl mx-auto rounded-3xl backdrop-blur-2xl flex items-center justify-between gap-2 px-3 py-1.5 pointer-events-auto transition-all duration-300",
-                        isGame3D
-                            ? "bg-gradient-to-b from-[#1e1b4b]/95 via-[#0f172a]/98 to-[#020617]/98 border-3 border-amber-400 shadow-[0_-8px_35px_rgba(0,0,0,0.85)] text-white ring-2 ring-amber-400/40"
+                        "presentation-dock w-full max-w-5xl mx-auto rounded-2xl sm:rounded-3xl backdrop-blur-2xl flex items-center justify-between gap-2 px-3 py-1.5 pointer-events-auto transition-all duration-300",
+                        isSketchnote
+                            ? "bg-[#fffdf7]/98 border-[2.5px] border-[#1e293b] shadow-[4px_4px_0_#1e293b] text-[#1e293b]"
                             : isLightBoard
-                            ? "bg-white/98 border-2 border-slate-300 shadow-[0_12px_35px_rgba(15,23,42,0.12)] text-slate-950 ring-1 ring-slate-400/20"
+                            ? "bg-white/95 border border-slate-300 shadow-[0_10px_30px_rgba(15,23,42,0.1)] text-slate-950"
                             : isVibrantStudio
-                                ? "bg-[#090b1c]/95 border-2 border-purple-500/40 shadow-[0_14px_45px_rgba(168,85,247,0.35)] text-white ring-1 ring-purple-500/30"
-                                : "bg-slate-950/90 border-2 border-white/20 shadow-[0_14px_45px_rgba(0,0,0,0.9)] text-white ring-1 ring-white/10"
+                                ? "bg-[#090b1c]/95 border-2 border-purple-500/40 shadow-[0_14px_45px_rgba(168,85,247,0.35)] text-white"
+                                : "bg-slate-950/92 border border-white/15 shadow-[0_14px_45px_rgba(0,0,0,0.9)] text-white"
                     )}>
 
-                        {/* SOL: Geri + Tam Ekran / Küçült + Yenile */}
-                        <div className="flex items-center gap-1.5">
+                        {/* SOL: Geri + Araçlar + Çark + Tam Ekran */}
+                        <div className="flex items-center gap-1.5 shrink-0">
                             <button
                                 onClick={handlePrev}
                                 disabled={currentStepIndex === 0}
                                 className={cn(
-                                    "w-8 h-8 rounded-xl disabled:opacity-25 disabled:cursor-not-allowed flex items-center justify-center transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer",
+                                    "w-8 h-8 rounded-xl disabled:opacity-25 disabled:cursor-not-allowed flex items-center justify-center transition-all active:scale-95 cursor-pointer",
                                     dockBtnBaseClass
                                 )}
                                 title="Önceki Sayfa"
@@ -1098,20 +1138,20 @@ export function LessonContentViewer({
                                 <button
                                     onClick={onOpenTools}
                                     className={cn(
-                                        "h-8 px-3 rounded-xl flex items-center gap-1.5 text-xs font-black transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer",
-                                        isGame3D
-                                            ? "border-2 border-amber-300 bg-gradient-to-b from-amber-500 to-amber-700 text-amber-950 font-black border-b-[4px] border-b-amber-900 shadow-lg active:border-b-2 active:translate-y-0.5"
+                                        "h-8 px-3 rounded-xl flex items-center gap-1.5 text-xs font-black transition-all active:scale-95 cursor-pointer",
+                                        isSketchnote
+                                            ? "border-2 border-[#1e293b] bg-[#fef08a] hover:bg-[#fde047] text-[#1e293b] shadow-[2px_2px_0_#1e293b]"
                                             : isLightBoard
-                                            ? "border-2 border-indigo-400 bg-indigo-100 hover:bg-indigo-200 text-indigo-950 shadow-sm"
+                                            ? "border border-indigo-300 bg-indigo-50 hover:bg-indigo-100 text-indigo-900"
                                             : isVibrantStudio
-                                                ? "border border-purple-300 bg-purple-900/80 hover:bg-purple-800 text-white shadow-[0_0_15px_rgba(168,85,247,0.4)]"
-                                                : "border border-indigo-400/60 bg-indigo-950/80 hover:bg-indigo-900 text-white shadow-indigo-950/50"
+                                                ? "border border-purple-300 bg-purple-900/80 hover:bg-purple-800 text-white"
+                                                : "border border-indigo-400/50 bg-indigo-950/80 hover:bg-indigo-900 text-white"
                                     )}
                                     title="Sunum Araçları ve Ayarlar"
                                 >
                                     <Sparkles className={cn(
-                                        "w-3.5 h-3.5 animate-pulse", 
-                                        isGame3D ? "text-amber-200" : isLightBoard ? "text-indigo-700" : isVibrantStudio ? "text-cyan-300" : "text-indigo-300"
+                                        "w-3.5 h-3.5", 
+                                        isSketchnote ? "text-[#854d0e]" : isLightBoard ? "text-indigo-700" : isVibrantStudio ? "text-cyan-300" : "text-indigo-300"
                                     )} />
                                     <span>Araçlar</span>
                                 </button>
@@ -1123,19 +1163,17 @@ export function LessonContentViewer({
                                     <button
                                         onClick={onOpenWheel}
                                         className={cn(
-                                            "h-8 px-3 rounded-xl flex items-center gap-1.5 text-xs font-black transition-all active:scale-95 backdrop-blur-sm cursor-pointer animate-in zoom-in-95 duration-150",
-                                            isGame3D
-                                                ? "border-2 border-yellow-300 bg-gradient-to-b from-yellow-400 via-amber-400 to-amber-500 text-amber-950 font-black border-b-[4px] border-b-amber-800 shadow-[0_0_15px_rgba(245,158,11,0.6)] active:border-b-2 active:translate-y-0.5"
+                                            "h-8 px-3 rounded-xl flex items-center gap-1.5 text-xs font-black transition-all active:scale-95 cursor-pointer",
+                                            isSketchnote
+                                                ? "border-2 border-[#1e293b] bg-[#fbcfe8] hover:bg-[#f9a8d4] text-[#831843] shadow-[2px_2px_0_#1e293b]"
                                                 : isLightBoard
-                                                ? "border-2 border-amber-400 bg-amber-200 hover:bg-amber-300 text-amber-950 shadow-sm"
-                                                : isVibrantStudio
-                                                    ? "border-2 border-amber-300 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-300 hover:from-amber-300 hover:to-yellow-300 text-slate-950 shadow-[0_0_15px_rgba(245,158,11,0.5)]"
-                                                    : "border-2 border-amber-300 bg-amber-400 hover:bg-amber-300 text-slate-950 shadow-[0_0_15px_rgba(245,158,11,0.4)]"
+                                                ? "border border-amber-400 bg-amber-100 hover:bg-amber-200 text-amber-950"
+                                                : "border border-amber-300 bg-amber-400 hover:bg-amber-300 text-slate-950"
                                         )}
                                         title="Öğrenci Kura Çarkı (R)"
                                     >
                                         <span className="text-sm">🎡</span>
-                                        <span>Çark (R)</span>
+                                        <span className="hidden md:inline">Çark</span>
                                     </button>
                                     {onCloseWheelButton && (
                                         <button
@@ -1146,7 +1184,7 @@ export function LessonContentViewer({
                                             }}
                                             className={cn(
                                                 "opacity-0 group-hover/wheel:opacity-100 -ml-2 -mt-3.5 z-10 w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold transition-opacity cursor-pointer shadow-sm",
-                                                isGame3D ? "bg-amber-800 text-amber-200" : isLightBoard ? "bg-slate-300 text-slate-950" : "bg-slate-800 text-white"
+                                                isLightBoard ? "bg-slate-300 text-slate-950" : "bg-slate-800 text-white"
                                             )}
                                             title="Kısayolu kaldır"
                                         >
@@ -1156,44 +1194,28 @@ export function LessonContentViewer({
                                 </div>
                             )}
 
-                            {/* Sayfayı Yenile Butonu */}
-                            <button
-                                onClick={() => window.location.reload()}
-                                className={cn(
-                                    "h-8 px-2.5 rounded-xl flex items-center gap-1 text-xs font-black transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer",
-                                    dockBtnBaseClass
-                                )}
-                                title="Sayfayı Yenile"
-                            >
-                                <Repeat className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Yenile</span>
-                            </button>
-
                             {/* Tam Ekran / Küçült Butonu */}
                             <button
                                 onClick={toggleDocFullscreen}
                                 className={cn(
-                                    "h-8 px-2.5 rounded-xl border flex items-center gap-1 text-xs font-black transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer",
+                                    "h-8 px-2.5 rounded-xl flex items-center gap-1 text-xs font-black transition-all active:scale-95 cursor-pointer",
                                     isDocFullscreen
                                         ? (isLightBoard 
-                                            ? "bg-rose-100 border-2 border-rose-400 text-rose-950 hover:bg-rose-200" 
-                                            : isVibrantStudio 
-                                                ? "bg-rose-600/40 border border-rose-400 text-white hover:bg-rose-600/60 shadow-[0_0_12px_rgba(244,63,94,0.4)]" 
-                                                : "bg-rose-600/35 border border-rose-400 text-white hover:bg-rose-600/50")
-                                        : isGame3D
-                                            ? "bg-gradient-to-b from-slate-700 via-slate-800 to-slate-900 hover:brightness-110 text-amber-300 font-black border-2 border-amber-400/60 border-b-[4px] border-b-slate-950 shadow-md active:border-b-2 active:translate-y-0.5"
-                                            : dockBtnBaseClass
+                                            ? "bg-rose-100 border border-rose-400 text-rose-900 hover:bg-rose-200" 
+                                            : "bg-rose-600/35 border border-rose-400 text-white hover:bg-rose-600/50")
+                                        : dockBtnBaseClass
                                 )}
                                 title={isDocFullscreen ? "Tam Ekrandan Çık (F)" : "Tam Ekran Yap (F)"}
                             >
                                 {isDocFullscreen ? (
                                     <>
-                                        <Minimize className={cn("w-3.5 h-3.5", isLightBoard ? "text-rose-950" : "text-white")} />
-                                        <span className="hidden sm:inline">Küçült</span>
+                                        <Minimize className="w-3.5 h-3.5" />
+                                        <span className="hidden lg:inline">Küçült</span>
                                     </>
                                 ) : (
                                     <>
-                                        <Maximize className={cn("w-3.5 h-3.5", isLightBoard ? "text-indigo-900" : isVibrantStudio ? "text-cyan-300" : "text-indigo-300")} />
-                                        <span className="hidden sm:inline">Tam Ekran</span>
+                                        <Maximize className="w-3.5 h-3.5" />
+                                        <span className="hidden lg:inline">Tam Ekran</span>
                                     </>
                                 )}
                             </button>
@@ -1202,126 +1224,109 @@ export function LessonContentViewer({
                             <button
                                 onClick={() => setHideUI(true)}
                                 className={cn(
-                                    "h-8 px-2 rounded-xl flex items-center gap-1 text-xs font-black transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer",
+                                    "h-8 w-8 rounded-xl flex items-center justify-center text-xs font-black transition-all active:scale-95 cursor-pointer",
                                     dockBtnBaseClass
                                 )}
                                 title="Alt Menüyü Gizle"
                             >
-                                <EyeOff className={cn("w-3.5 h-3.5", isLightBoard ? "text-slate-950" : isVibrantStudio ? "text-purple-200" : "text-slate-200")} />
-                                <span className="hidden sm:inline">Gizle</span>
+                                <EyeOff className="w-3.5 h-3.5" />
                             </button>
                         </div>
 
-                        {/* ORTA: İlerleme noktaları + sayfa seçici */}
-                        <div className="flex-1 flex flex-col items-center gap-1 max-w-xs">
-                            {/* Nokta barı */}
-                            <div className="flex items-center gap-1 max-w-[180px] overflow-hidden py-0.5">
-                                {steps.map((_, idx) => (
-                                    <div
-                                        key={idx}
-                                        className={cn(
-                                            "rounded-full transition-all duration-300",
-                                            idx === currentStepIndex
-                                                ? (isGame3D
-                                                    ? "h-2 w-5 bg-gradient-to-r from-amber-400 to-yellow-300 shadow-[0_0_12px_rgba(245,158,11,0.9)]"
-                                                    : isLightBoard 
-                                                    ? "h-1.5 w-4 bg-indigo-600 shadow-[0_0_8px_rgba(79,70,229,0.6)]" 
-                                                    : isVibrantStudio 
-                                                        ? "h-1.5 w-4 bg-gradient-to-r from-fuchsia-500 to-cyan-400 shadow-[0_0_12px_rgba(217,70,239,0.8)]" 
-                                                        : "h-1.5 w-4 bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.8)]")
-                                                : internalProgress.answers[idx]?.completed
-                                                    ? "h-1 w-1 bg-emerald-500"
-                                                    : isGame3D
-                                                        ? "h-1 w-1 bg-amber-400/40"
-                                                        : isLightBoard 
-                                                        ? "h-1 w-1 bg-slate-300" 
-                                                        : isVibrantStudio 
-                                                            ? "h-1 w-1 bg-purple-400/30" 
-                                                            : "h-1 w-1 bg-white/20"
-                                        )}
-                                    />
-                                ))}
+                        {/* ORTA: Tıklanabilir Segmentli İlerleme Çubuğu + Başlıklı Sayfa Seçici */}
+                        <div className="flex-1 flex flex-col items-center gap-1 max-w-md min-w-0 px-1">
+                            {/* Segmentli Çubuk (Tıklanabilir) */}
+                            <div className="w-full flex items-center gap-1 h-2 px-1">
+                                {steps.length <= 24 ? (
+                                    steps.map((s, idx) => (
+                                        <button
+                                            key={idx}
+                                            type="button"
+                                            onClick={() => setCurrentStepIndex(idx)}
+                                            title={`${idx + 1}. ${s.title || getStepTypeBadge(s.type)}`}
+                                            className={cn(
+                                                "h-1.5 flex-1 rounded-full transition-all duration-200 cursor-pointer hover:h-2",
+                                                idx === currentStepIndex
+                                                    ? (isSketchnote ? "bg-[#ca8a04] h-2" : isLightBoard ? "bg-indigo-600 h-2" : isVibrantStudio ? "bg-fuchsia-400 h-2" : "bg-indigo-400 h-2")
+                                                    : idx < currentStepIndex
+                                                        ? (isSketchnote ? "bg-[#1e293b]/50" : isLightBoard ? "bg-indigo-300" : "bg-indigo-400/50")
+                                                        : (isSketchnote ? "bg-slate-300" : isLightBoard ? "bg-slate-200" : "bg-white/15")
+                                            )}
+                                        />
+                                    ))
+                                ) : (
+                                    <div className={cn("w-full h-1.5 rounded-full overflow-hidden", isLightBoard ? "bg-slate-200" : "bg-white/15")}>
+                                        <div
+                                            className={cn("h-full rounded-full transition-all duration-300", isSketchnote ? "bg-[#ca8a04]" : "bg-indigo-500")}
+                                            style={{ width: `${((currentStepIndex + 1) / Math.max(steps.length, 1)) * 100}%` }}
+                                        />
+                                    </div>
+                                )}
                             </div>
-                            {/* Sayfa seçici */}
+                            {/* Başlıklı Sayfa Seçici */}
                             <Select value={currentStepIndex.toString()} onValueChange={(val) => {
                                 const targetIndex = parseInt(val, 10);
                                 if (!isNaN(targetIndex)) setCurrentStepIndex(targetIndex);
                             }}>
                                 <SelectTrigger className={cn(
-                                    "h-5 px-2 py-0 rounded-md border text-xs font-black tracking-wide focus:ring-0 focus:ring-offset-0 w-auto gap-1 cursor-pointer transition-all",
-                                    isLightBoard 
-                                        ? "bg-slate-100 hover:bg-slate-200 text-slate-950 border-slate-300" 
+                                    "h-6 px-2.5 py-0 rounded-lg border text-[11px] font-black tracking-wide focus:ring-0 focus:ring-offset-0 w-auto max-w-full gap-1.5 cursor-pointer transition-all",
+                                    isSketchnote
+                                        ? "bg-[#fefce8] hover:bg-[#fef08a] text-[#1e293b] border-[#1e293b]/30"
+                                        : isLightBoard 
+                                        ? "bg-slate-100 hover:bg-slate-200 text-slate-900 border-slate-300" 
                                         : isVibrantStudio 
-                                            ? "bg-[#131635] hover:bg-[#1e2350] text-white border-purple-400/50 shadow-xs" 
-                                            : "bg-slate-900/90 hover:bg-slate-800 text-white border-white/20 shadow-xs"
+                                            ? "bg-[#131635] hover:bg-[#1e2350] text-white border-purple-400/50" 
+                                            : "bg-slate-900/90 hover:bg-slate-800 text-white border-white/20"
                                 )}>
-                                    <SelectValue placeholder={`Sayfa ${currentStepIndex + 1} / ${steps.length}`} />
+                                    <span className="truncate max-w-[200px] sm:max-w-[260px]">
+                                        {currentStepIndex + 1}/{steps.length} • {currentStep?.title || getStepTypeBadge(currentStep?.type)}
+                                    </span>
                                 </SelectTrigger>
                                 <SelectContent className={cn(
-                                    "backdrop-blur-xl border-2 shadow-2xl",
+                                    "backdrop-blur-xl border-2 shadow-2xl max-h-72",
                                     isLightBoard 
-                                        ? "bg-white border-indigo-200 text-slate-950 shadow-indigo-100/60" 
+                                        ? "bg-white border-indigo-200 text-slate-950" 
                                         : isVibrantStudio 
-                                            ? "bg-[#0b0d22] border-purple-500/50 text-white shadow-purple-950/80" 
-                                            : "bg-slate-950 border-white/20 text-white shadow-black/80"
+                                            ? "bg-[#0b0d22] border-purple-500/50 text-white" 
+                                            : "bg-slate-950 border-white/20 text-white"
                                 )}>
                                     {steps.map((s, i) => (
                                         <SelectItem 
                                             key={i} 
                                             value={i.toString()} 
                                             className={cn(
-                                                "text-xs font-black cursor-pointer py-1.5",
+                                                "text-xs font-bold cursor-pointer py-1.5",
                                                 isLightBoard 
-                                                    ? "text-slate-950 focus:bg-indigo-100 focus:text-indigo-950" 
+                                                    ? "text-slate-900 focus:bg-indigo-50 focus:text-indigo-950" 
                                                     : isVibrantStudio 
                                                         ? "text-white focus:bg-purple-600 focus:text-white" 
                                                         : "text-white focus:bg-slate-800 focus:text-white"
                                             )}
                                         >
-                                            Sayfa {i + 1} / {steps.length}
+                                            {i + 1}. {getStepTypeBadge(s.type)}{s.title ? ` — ${s.title}` : ''}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>
                         </div>
 
-                        {/* SAĞ: Puan + Atla + Devam */}
-                        <div className="flex items-center gap-1.5">
-                            {/* Puan rozeti */}
-                            <div className={cn(
-                                "flex items-center gap-1 px-2.5 py-1 rounded-xl shadow-xs backdrop-blur-sm border",
-                                isGame3D
-                                    ? "bg-gradient-to-b from-amber-400 via-amber-500 to-amber-600 border-2 border-amber-300 border-b-[3px] border-b-amber-800 text-amber-950 font-black shadow-lg"
+                        {/* SAĞ: Bölüm Türü Rozeti + Atla + Devam */}
+                        <div className="flex items-center gap-1.5 shrink-0">
+                            <span className={cn(
+                                "hidden lg:inline-flex items-center px-2.5 py-1 rounded-xl text-[11px] font-bold border",
+                                isSketchnote
+                                    ? "bg-[#f0f9ff] border-[#0284c7]/40 text-[#0369a1]"
                                     : isLightBoard
-                                    ? "bg-amber-100 border-2 border-amber-400 text-amber-950"
-                                    : isVibrantStudio
-                                        ? "bg-amber-400 border border-amber-300 text-slate-950 shadow-[0_0_12px_rgba(251,191,36,0.4)]"
-                                        : "bg-amber-400 border border-amber-300 text-slate-950 shadow-[0_0_12px_rgba(251,191,36,0.3)]"
+                                        ? "bg-slate-100 border-slate-300 text-slate-700"
+                                        : "bg-white/5 border-white/15 text-slate-300"
                             )}>
-                                {isGame3D ? <span className="text-sm">🪙</span> : <Trophy className={cn("w-3.5 h-3.5", isLightBoard ? "text-amber-950" : "text-slate-950")} />}
-                                <div className="relative h-3.5 min-w-[22px] overflow-hidden">
-                                    <AnimatePresence mode="popLayout">
-                                        <motion.span
-                                            key={internalProgress.score}
-                                            initial={{ y: 12, opacity: 0 }}
-                                            animate={{ y: 0, opacity: 1 }}
-                                            exit={{ y: -12, opacity: 0 }}
-                                            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                                            className={cn(
-                                                "absolute inset-0 text-xs font-black text-center leading-none flex items-center justify-center",
-                                                isGame3D ? "text-amber-950" : isLightBoard ? "text-amber-950" : "text-slate-950"
-                                            )}
-                                        >
-                                            {internalProgress.score}
-                                        </motion.span>
-                                    </AnimatePresence>
-                                </div>
-                            </div>
+                                {getStepTypeBadge(currentStep?.type)}
+                            </span>
 
                             <button
                                 onClick={handleNext}
                                 className={cn(
-                                    "h-8 px-2.5 rounded-xl text-xs font-black transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer",
+                                    "h-8 px-2.5 rounded-xl text-xs font-black transition-all active:scale-95 cursor-pointer",
                                     dockBtnBaseClass
                                 )}
                             >
@@ -1337,41 +1342,28 @@ export function LessonContentViewer({
                                         onClick={handleContinueOrNext}
                                         disabled={!isNextButtonEnabled || (isLastStep && isFinished)}
                                         className={cn(
-                                            "h-8 px-3.5 rounded-xl text-xs font-black transition-all duration-200 active:scale-95 relative overflow-hidden flex items-center gap-1.5 shadow-sm",
+                                            "h-8 px-3.5 rounded-xl text-xs font-black transition-all duration-200 active:scale-95 relative overflow-hidden flex items-center gap-1.5 shadow-sm cursor-pointer",
                                             !isNextButtonEnabled
                                                 ? (isLightBoard 
-                                                    ? "bg-slate-200 text-slate-700 border-2 border-slate-300 cursor-not-allowed font-extrabold" 
+                                                    ? "bg-slate-200 text-slate-700 border border-slate-300 cursor-not-allowed font-extrabold" 
                                                     : "bg-white/10 text-slate-300 border border-white/15 cursor-not-allowed font-extrabold")
-                                                : isGame3D
-                                                    ? (hasUnrevealedItems
-                                                        ? "bg-gradient-to-b from-amber-300 via-amber-400 to-amber-500 text-amber-950 border-2 border-amber-200 border-b-[5px] border-b-amber-700 font-black shadow-[0_8px_25px_rgba(245,158,11,0.6)] active:border-b-2 active:translate-y-1 hover:brightness-105"
-                                                        : isLastStep
-                                                            ? "bg-gradient-to-b from-emerald-400 via-emerald-500 to-emerald-600 text-white border-2 border-emerald-200 border-b-[5px] border-b-emerald-800 font-black shadow-[0_8px_25px_rgba(16,185,129,0.6)] active:border-b-2 active:translate-y-1 hover:brightness-105"
-                                                            : "bg-gradient-to-b from-amber-300 via-amber-400 to-amber-500 text-amber-950 border-2 border-amber-200 border-b-[5px] border-b-amber-700 font-black shadow-[0_8px_25px_rgba(245,158,11,0.6)] active:border-b-2 active:translate-y-1 hover:brightness-105")
+                                                : isSketchnote
+                                                    ? (isLastStep
+                                                        ? "bg-[#22c55e] hover:bg-[#16a34a] text-white border-2 border-[#1e293b] shadow-[2px_2px_0_#1e293b]"
+                                                        : "bg-[#38bdf8] hover:bg-[#0ea5e9] text-[#0f172a] border-2 border-[#1e293b] shadow-[2px_2px_0_#1e293b]")
                                                     : hasUnrevealedItems
                                                     ? (isLightBoard
-                                                        ? "bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white border border-indigo-400/50 shadow-md shadow-indigo-300/40 hover:shadow-lg"
+                                                        ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white border border-indigo-400/50 shadow-sm"
                                                         : isVibrantStudio
-                                                            ? "bg-gradient-to-r from-fuchsia-600 via-purple-600 to-cyan-500 text-white border border-fuchsia-400/50 shadow-[0_0_20px_rgba(217,70,239,0.45)] hover:shadow-[0_0_25px_rgba(217,70,239,0.65)]"
-                                                            : "bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 text-white border border-purple-400/40 shadow-sm shadow-purple-500/25 hover:shadow-md hover:shadow-purple-500/40")
+                                                            ? "bg-gradient-to-r from-fuchsia-600 via-purple-600 to-cyan-500 text-white border border-fuchsia-400/50"
+                                                            : "bg-gradient-to-r from-indigo-600 to-purple-600 text-white border border-indigo-400/40")
                                                     : isLastStep
-                                                        ? (isLightBoard
-                                                            ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white border border-emerald-400/50 shadow-md shadow-emerald-200/50"
-                                                            : isVibrantStudio
-                                                                ? "bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-white border border-emerald-400/50 shadow-[0_0_20px_rgba(16,185,129,0.45)]"
-                                                                : "bg-gradient-to-r from-emerald-500 to-green-600 text-white border border-emerald-400/40 shadow-sm shadow-emerald-500/25 hover:shadow-md hover:shadow-emerald-500/40")
-                                                        : (isLightBoard
-                                                            ? "bg-gradient-to-r from-indigo-600 to-blue-600 text-white border border-indigo-400/50 shadow-md shadow-indigo-200/50"
-                                                            : isVibrantStudio
-                                                                ? "bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 text-white border border-purple-400/50 shadow-[0_0_20px_rgba(168,85,247,0.45)]"
-                                                                : "bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 text-white border border-indigo-400/40 shadow-sm shadow-indigo-500/25 hover:shadow-md hover:shadow-indigo-500/40")
+                                                        ? "bg-gradient-to-r from-emerald-500 to-teal-600 text-white border border-emerald-400/40 shadow-sm"
+                                                        : "bg-gradient-to-r from-indigo-600 to-blue-600 text-white border border-indigo-400/40 shadow-sm"
                                         )}
                                         title={!isNextButtonEnabled ? "Bu sayfadaki içeriği tamamlamadan sonraki adıma geçemezsin." : (hasUnrevealedItems ? "Sayfadaki sonraki içeriği göster" : (isLastStep ? "Dersi Bitir" : "Sonraki Sayfaya Geç"))}
                                     >
-                                        {isNextButtonEnabled && (
-                                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.25),transparent_60%)]" />
-                                        )}
-                                        <span className="relative flex items-center gap-1.5 drop-shadow-xs">
+                                        <span className="relative flex items-center gap-1.5">
                                             {!isNextButtonEnabled ? (
                                                 <>
                                                     <span>Kilitli</span>
@@ -1380,7 +1372,7 @@ export function LessonContentViewer({
                                             ) : hasUnrevealedItems ? (
                                                 <>
                                                     <span>{totalItems > 1 ? `Devam Et (${currentCount}/${totalItems})` : "Devam Et"}</span>
-                                                    <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
+                                                    <Sparkles className="w-3.5 h-3.5" />
                                                 </>
                                             ) : isLastStep ? (
                                                 <>
@@ -1496,7 +1488,7 @@ export function LessonContentViewer({
                                 }
                             } else if (hasUnrevealedItems) {
                                 buttonLabel = totalItems > 1 ? `Devam Et (${currentCount}/${totalItems})` : "Devam Et";
-                                buttonIcon = <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />;
+                                buttonIcon = <Sparkles className="w-4 h-4 text-amber-300" />;
                             } else if (isLastStep) {
                                 buttonLabel = completeButtonText || "Dersi Tamamla";
                                 buttonIcon = <PartyPopper className="w-4 h-4" />;
@@ -1525,7 +1517,7 @@ export function LessonContentViewer({
                                                         ? "bg-gradient-to-r from-fuchsia-600 via-purple-600 to-cyan-500 text-white border border-fuchsia-400/50 shadow-purple-500/35 hover:shadow-purple-500/50"
                                                         : "bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 text-white border border-purple-400/40 shadow-purple-500/25 hover:shadow-purple-500/40")
                                                 : isLastStep
-                                                    ? "bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-white border border-emerald-400/50 shadow-emerald-500/30 hover:shadow-emerald-500/50 animate-pulse"
+                                                    ? "bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-white border border-emerald-400/50 shadow-emerald-500/30 hover:shadow-emerald-500/50"
                                                     : (isLightBoard
                                                         ? "bg-gradient-to-r from-indigo-600 to-blue-600 text-white border border-indigo-400/50 shadow-indigo-300/40 hover:shadow-indigo-400/50"
                                                         : isVibrantStudio

@@ -90,9 +90,17 @@ export function PresentationDrawingBoard({
 
     // Çizim Ayarları
     const [tool, setTool] = useState<DrawingTool>('pen');
-    const [color, setColor] = useState('#06b6d4'); // Parlak Cyan
+    const [color, setColor] = useState(isDarkMode ? '#06b6d4' : '#0f172a'); // Temaya göre varsayılan mürekkep
     const [strokeWidth, setStrokeWidth] = useState(4);
     const [surface, setSurface] = useState<BoardSurface>('transparent');
+
+    useEffect(() => {
+        setColor(prev => {
+            if (!isDarkMode && prev === '#06b6d4') return '#0f172a';
+            if (isDarkMode && prev === '#0f172a') return '#06b6d4';
+            return prev;
+        });
+    }, [isDarkMode]);
     const [isDrawing, setIsDrawing] = useState(false);
     const [isLayerVisible, setIsLayerVisible] = useState(true);
 
@@ -595,9 +603,9 @@ export function PresentationDrawingBoard({
                 "fixed inset-0 z-50 overflow-hidden select-none transition-colors duration-300 pointer-events-auto",
                 surface === 'white' && "bg-white",
                 surface === 'dark' && "bg-[#020617]",
-                surface === 'grid' && "bg-[#020617] bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:24px_24px]",
-                surface === 'lined' && "bg-[#020617] bg-[linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] [background-size:100%_36px]",
-                surface === 'transparent' && "bg-black/5"
+                surface === 'grid' && (isDarkMode ? "bg-[#020617] bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:24px_24px]" : "bg-[#faf8f3] bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:24px_24px]"),
+                surface === 'lined' && (isDarkMode ? "bg-[#020617] bg-[linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] [background-size:100%_36px]" : "bg-[#faf8f3] bg-[linear-gradient(to_bottom,#cbd5e1_1px,transparent_1px)] [background-size:100%_36px]"),
+                surface === 'transparent' && (isDarkMode ? "bg-black/5" : "bg-slate-900/[0.03]")
             )}
         >
             {/* ══ ÇİZİM KATMANLARI (CANVAS) ══ */}
@@ -630,7 +638,10 @@ export function PresentationDrawingBoard({
             {/* Metin Giriş Alanı */}
             {activeTextInput && (
                 <div 
-                    className="absolute z-40 flex items-center gap-1.5 p-1 rounded-xl bg-slate-900/90 border border-white/20 shadow-2xl backdrop-blur-xl"
+                    className={cn(
+                        "absolute z-40 flex items-center gap-1.5 p-1 rounded-xl border shadow-2xl backdrop-blur-xl",
+                        isDarkMode ? "bg-slate-900/90 border-white/20" : "bg-white/95 border-slate-300"
+                    )}
                     style={{ left: activeTextInput.x, top: activeTextInput.y }}
                 >
                     <input
@@ -643,12 +654,15 @@ export function PresentationDrawingBoard({
                             if (e.key === 'Escape') setActiveTextInput(null);
                         }}
                         placeholder="Notunuzu yazın ve Enter'a basın..."
-                        className="h-9 px-3 text-sm bg-transparent border-0 text-white font-bold placeholder:text-slate-500 focus:outline-none min-w-[240px]"
+                        className={cn(
+                            "h-9 px-3 text-sm bg-transparent border-0 font-bold focus:outline-none min-w-[240px]",
+                            isDarkMode ? "text-white placeholder:text-slate-500" : "text-slate-900 placeholder:text-slate-400"
+                        )}
                     />
                     <Button size="sm" onClick={handleAddText} className="h-7 px-2.5 text-xs bg-indigo-600 hover:bg-indigo-500 text-white">
                         Ekle
                     </Button>
-                    <Button size="sm" variant="ghost" onClick={() => setActiveTextInput(null)} className="h-7 w-7 p-0 text-slate-400 hover:text-white">
+                    <Button size="sm" variant="ghost" onClick={() => setActiveTextInput(null)} className={cn("h-7 w-7 p-0", isDarkMode ? "text-slate-400 hover:text-white" : "text-slate-500 hover:text-slate-900")}>
                         <X className="w-3.5 h-3.5" />
                     </Button>
                 </div>
@@ -665,25 +679,33 @@ export function PresentationDrawingBoard({
                 className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center touch-none"
             >
                 {/* Ana Kompakt Kapsayıcı */}
-                <div className="flex items-center gap-1 p-1.5 rounded-2xl bg-slate-900/95 dark:bg-slate-900/95 backdrop-blur-3xl border border-white/20 shadow-[0_0_40px_rgba(0,0,0,0.8)] text-white select-none">
+                <div className={cn(
+                    "flex items-center gap-1 p-1.5 rounded-2xl backdrop-blur-3xl border select-none transition-colors",
+                    isDarkMode
+                        ? "bg-slate-900/95 border-white/20 shadow-[0_0_40px_rgba(0,0,0,0.8)] text-white"
+                        : "bg-white/95 border-slate-300 shadow-[0_12px_36px_rgba(15,23,42,0.18)] text-slate-800"
+                )}>
                     
                     {/* Sürükleme Tutamacı */}
                     <div 
-                        className="flex items-center justify-center px-1 py-1.5 cursor-grab active:cursor-grabbing text-slate-400 hover:text-white border-r border-white/15"
+                        className={cn(
+                            "flex items-center justify-center px-1 py-1.5 cursor-grab active:cursor-grabbing border-r",
+                            isDarkMode ? "text-slate-400 hover:text-white border-white/15" : "text-slate-400 hover:text-slate-700 border-slate-200"
+                        )}
                         title="Sürüklemek için basılı tutun"
                     >
                         <GripVertical className="w-4 h-4" />
                     </div>
 
                     {/* 1. Ana Araçlar (Kalem, Fosforlu, Lazer, Şekiller, Silgi) */}
-                    <div className="flex items-center gap-0.5 pr-1 border-r border-white/15">
+                    <div className={cn("flex items-center gap-0.5 pr-1 border-r", isDarkMode ? "border-white/15" : "border-slate-200")}>
                         <Button
                             variant="ghost"
                             size="icon"
                             onClick={() => setTool('pen')}
                             className={cn(
                                 "h-9 w-9 rounded-xl transition-all",
-                                tool === 'pen' ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/40" : "text-slate-300 hover:bg-white/10"
+                                tool === 'pen' ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/40" : (isDarkMode ? "text-slate-300 hover:bg-white/10" : "text-slate-600 hover:bg-slate-100")
                             )}
                             title="Kalem (P)"
                         >
@@ -696,7 +718,7 @@ export function PresentationDrawingBoard({
                             onClick={() => setTool('highlighter')}
                             className={cn(
                                 "h-9 w-9 rounded-xl transition-all",
-                                tool === 'highlighter' ? "bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/40" : "text-slate-300 hover:bg-white/10"
+                                tool === 'highlighter' ? "bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/40" : (isDarkMode ? "text-slate-300 hover:bg-white/10" : "text-slate-600 hover:bg-slate-100")
                             )}
                             title="Fosforlu Vurgulayıcı (H)"
                         >
@@ -709,11 +731,11 @@ export function PresentationDrawingBoard({
                             onClick={() => setTool('laser')}
                             className={cn(
                                 "h-9 w-9 rounded-xl transition-all",
-                                tool === 'laser' ? "bg-rose-600 text-white shadow-md shadow-rose-500/40 animate-pulse" : "text-slate-300 hover:bg-white/10"
+                                tool === 'laser' ? "bg-rose-600 text-white shadow-md shadow-rose-500/40" : (isDarkMode ? "text-slate-300 hover:bg-white/10" : "text-slate-600 hover:bg-slate-100")
                             )}
                             title="Lazer İşaretçi (L)"
                         >
-                            <Wand2 className="w-4 h-4 text-rose-300" />
+                            <Wand2 className={cn("w-4 h-4", tool === 'laser' ? "text-white" : "text-rose-500")} />
                         </Button>
 
                         {/* Şekiller & Metin Açılır Menüsü */}
@@ -724,7 +746,7 @@ export function PresentationDrawingBoard({
                                     size="icon"
                                     className={cn(
                                         "h-9 w-9 rounded-xl transition-all",
-                                        ['arrow', 'rect', 'circle', 'line', 'text'].includes(tool) ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/40" : "text-slate-300 hover:bg-white/10"
+                                        ['arrow', 'rect', 'circle', 'line', 'text'].includes(tool) ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/40" : (isDarkMode ? "text-slate-300 hover:bg-white/10" : "text-slate-600 hover:bg-slate-100")
                                     )}
                                     title="Şekiller & Metin"
                                 >
@@ -735,14 +757,14 @@ export function PresentationDrawingBoard({
                                      <Shapes className="w-4 h-4" />}
                                 </Button>
                             </PopoverTrigger>
-                            <PopoverContent side="top" align="center" className="w-48 p-2 rounded-2xl border-white/20 bg-slate-950/95 backdrop-blur-3xl shadow-2xl text-white mb-2">
-                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block px-2 py-1">Şekiller & Metin</span>
+                            <PopoverContent side="top" align="center" className={cn("w-48 p-2 rounded-2xl backdrop-blur-3xl shadow-2xl mb-2", isDarkMode ? "border-white/20 bg-slate-950/95 text-white" : "border-slate-200 bg-white text-slate-900")}>
+                                <span className={cn("text-[10px] font-bold uppercase tracking-wider block px-2 py-1", isDarkMode ? "text-slate-400" : "text-slate-500")}>Şekiller & Metin</span>
                                 <div className="space-y-1">
                                     <button
                                         onClick={() => setTool('arrow')}
                                         className={cn(
                                             "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all",
-                                            tool === 'arrow' ? "bg-indigo-600 text-white" : "hover:bg-white/10 text-slate-300"
+                                            tool === 'arrow' ? "bg-indigo-600 text-white" : (isDarkMode ? "hover:bg-white/10 text-slate-300" : "hover:bg-slate-100 text-slate-700")
                                         )}
                                     >
                                         <MoveRight className="w-4 h-4" /> <span>Ok Çiz (A)</span>
@@ -751,7 +773,7 @@ export function PresentationDrawingBoard({
                                         onClick={() => setTool('rect')}
                                         className={cn(
                                             "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all",
-                                            tool === 'rect' ? "bg-indigo-600 text-white" : "hover:bg-white/10 text-slate-300"
+                                            tool === 'rect' ? "bg-indigo-600 text-white" : (isDarkMode ? "hover:bg-white/10 text-slate-300" : "hover:bg-slate-100 text-slate-700")
                                         )}
                                     >
                                         <Square className="w-4 h-4" /> <span>Dikdörtgen (R)</span>
@@ -760,7 +782,7 @@ export function PresentationDrawingBoard({
                                         onClick={() => setTool('circle')}
                                         className={cn(
                                             "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all",
-                                            tool === 'circle' ? "bg-indigo-600 text-white" : "hover:bg-white/10 text-slate-300"
+                                            tool === 'circle' ? "bg-indigo-600 text-white" : (isDarkMode ? "hover:bg-white/10 text-slate-300" : "hover:bg-slate-100 text-slate-700")
                                         )}
                                     >
                                         <Circle className="w-4 h-4" /> <span>Çember (C)</span>
@@ -769,7 +791,7 @@ export function PresentationDrawingBoard({
                                         onClick={() => setTool('line')}
                                         className={cn(
                                             "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all",
-                                            tool === 'line' ? "bg-indigo-600 text-white" : "hover:bg-white/10 text-slate-300"
+                                            tool === 'line' ? "bg-indigo-600 text-white" : (isDarkMode ? "hover:bg-white/10 text-slate-300" : "hover:bg-slate-100 text-slate-700")
                                         )}
                                     >
                                         <Minus className="w-4 h-4" /> <span>Düz Çizgi</span>
@@ -778,7 +800,7 @@ export function PresentationDrawingBoard({
                                         onClick={() => setTool('text')}
                                         className={cn(
                                             "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all",
-                                            tool === 'text' ? "bg-indigo-600 text-white" : "hover:bg-white/10 text-slate-300"
+                                            tool === 'text' ? "bg-indigo-600 text-white" : (isDarkMode ? "hover:bg-white/10 text-slate-300" : "hover:bg-slate-100 text-slate-700")
                                         )}
                                     >
                                         <Type className="w-4 h-4" /> <span>Metin Ekle (T)</span>
@@ -793,7 +815,7 @@ export function PresentationDrawingBoard({
                             onClick={() => setTool('eraser')}
                             className={cn(
                                 "h-9 w-9 rounded-xl transition-all",
-                                tool === 'eraser' ? "bg-slate-700 text-white border border-white/30" : "text-slate-300 hover:bg-white/10"
+                                tool === 'eraser' ? "bg-slate-700 text-white border border-white/30" : (isDarkMode ? "text-slate-300 hover:bg-white/10" : "text-slate-600 hover:bg-slate-100")
                             )}
                             title="Silgi (E)"
                         >
@@ -802,22 +824,25 @@ export function PresentationDrawingBoard({
                     </div>
 
                     {/* 2. Renk ve Kalınlık Birleşik Butonu */}
-                    <div className="flex items-center px-1 border-r border-white/15">
+                    <div className={cn("flex items-center px-1 border-r", isDarkMode ? "border-white/15" : "border-slate-200")}>
                         <Popover>
                             <PopoverTrigger asChild>
                                 <button
-                                    className="h-9 px-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1.5 border border-white/10 transition-all"
+                                    className={cn(
+                                        "h-9 px-2 rounded-xl font-bold text-xs flex items-center gap-1.5 border transition-all",
+                                        isDarkMode ? "bg-white/10 hover:bg-white/20 text-white border-white/10" : "bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-200"
+                                    )}
                                     title="Renk & Kalınlık Seç"
                                 >
                                     <div 
-                                        className="w-4 h-4 rounded-full border border-white/60 shadow-sm"
+                                        className={cn("w-4 h-4 rounded-full shadow-sm border", isDarkMode ? "border-white/60" : "border-slate-400")}
                                         style={{ backgroundColor: color }}
                                     />
                                     <span className="text-[11px] font-mono">{strokeWidth}px</span>
                                 </button>
                             </PopoverTrigger>
-                            <PopoverContent side="top" align="center" className="w-64 p-3 rounded-2xl border-white/20 bg-slate-950/95 backdrop-blur-3xl shadow-2xl text-white mb-2">
-                                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Renk Paleti</span>
+                            <PopoverContent side="top" align="center" className={cn("w-64 p-3 rounded-2xl backdrop-blur-3xl shadow-2xl mb-2", isDarkMode ? "border-white/20 bg-slate-950/95 text-white" : "border-slate-200 bg-white text-slate-900")}>
+                                <span className={cn("text-[11px] font-bold uppercase tracking-wider block mb-2", isDarkMode ? "text-slate-400" : "text-slate-500")}>Renk Paleti</span>
                                 <div className="grid grid-cols-5 gap-1.5 mb-3">
                                     {PRESET_COLORS.map((c) => (
                                         <button
@@ -825,15 +850,15 @@ export function PresentationDrawingBoard({
                                             onClick={() => setColor(c.value)}
                                             className={cn(
                                                 "w-9 h-9 rounded-xl border-2 transition-transform hover:scale-110 active:scale-90 flex items-center justify-center",
-                                                color === c.value ? "border-white shadow-lg scale-105" : "border-transparent"
+                                                color === c.value ? (isDarkMode ? "border-white shadow-lg scale-105" : "border-slate-900 shadow-lg scale-105") : "border-slate-300/60"
                                             )}
                                             style={{ backgroundColor: c.value }}
                                             title={c.label}
                                         />
                                     ))}
                                 </div>
-                                <div className="flex items-center gap-2 pt-2 pb-3 border-t border-white/10">
-                                    <span className="text-xs text-slate-400">Özel:</span>
+                                <div className={cn("flex items-center gap-2 pt-2 pb-3 border-t", isDarkMode ? "border-white/10" : "border-slate-200")}>
+                                    <span className={cn("text-xs", isDarkMode ? "text-slate-400" : "text-slate-500")}>Özel:</span>
                                     <input 
                                         type="color" 
                                         value={color} 
@@ -841,10 +866,10 @@ export function PresentationDrawingBoard({
                                         className="w-full h-7 bg-transparent border-0 cursor-pointer rounded-lg"
                                     />
                                 </div>
-                                <div className="pt-2 border-t border-white/10">
+                                <div className={cn("pt-2 border-t", isDarkMode ? "border-white/10" : "border-slate-200")}>
                                     <div className="flex justify-between items-center mb-1.5">
-                                        <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Kalınlık</span>
-                                        <span className="text-xs font-bold text-cyan-400">{strokeWidth} px</span>
+                                        <span className={cn("text-[11px] font-bold uppercase tracking-wider", isDarkMode ? "text-slate-400" : "text-slate-500")}>Kalınlık</span>
+                                        <span className={cn("text-xs font-bold", isDarkMode ? "text-cyan-400" : "text-indigo-600")}>{strokeWidth} px</span>
                                     </div>
                                     <div className="grid grid-cols-5 gap-1 mb-2">
                                         {PRESET_STROKES.map((s) => (
@@ -853,7 +878,7 @@ export function PresentationDrawingBoard({
                                                 onClick={() => setStrokeWidth(s.value)}
                                                 className={cn(
                                                     "py-1 rounded-lg text-xs font-bold transition-all border",
-                                                    strokeWidth === s.value ? "bg-indigo-600 border-indigo-400 text-white" : "border-white/10 hover:bg-white/10 text-slate-300"
+                                                    strokeWidth === s.value ? "bg-indigo-600 border-indigo-400 text-white" : (isDarkMode ? "border-white/10 hover:bg-white/10 text-slate-300" : "border-slate-200 hover:bg-slate-100 text-slate-700")
                                                 )}
                                             >
                                                 {s.value}
@@ -874,21 +899,21 @@ export function PresentationDrawingBoard({
                     </div>
 
                     {/* 3. Tahta Arka Plan Türü */}
-                    <div className="flex items-center px-0.5 border-r border-white/15">
+                    <div className={cn("flex items-center px-0.5 border-r", isDarkMode ? "border-white/15" : "border-slate-200")}>
                         <Popover>
                             <PopoverTrigger asChild>
-                                <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl text-slate-300 hover:bg-white/10" title="Tahta Arka Planı">
+                                <Button variant="ghost" size="icon" className={cn("h-9 w-9 rounded-xl", isDarkMode ? "text-slate-300 hover:bg-white/10" : "text-slate-600 hover:bg-slate-100")} title="Tahta Arka Planı">
                                     <Palette className="w-4 h-4" />
                                 </Button>
                             </PopoverTrigger>
-                            <PopoverContent side="top" align="center" className="w-56 p-2 rounded-2xl border-white/20 bg-slate-950/95 backdrop-blur-3xl shadow-2xl text-white mb-2">
-                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block px-2 py-1">Tahta Modu</span>
+                            <PopoverContent side="top" align="center" className={cn("w-56 p-2 rounded-2xl backdrop-blur-3xl shadow-2xl mb-2", isDarkMode ? "border-white/20 bg-slate-950/95 text-white" : "border-slate-200 bg-white text-slate-900")}>
+                                <span className={cn("text-[10px] font-bold uppercase tracking-wider block px-2 py-1", isDarkMode ? "text-slate-400" : "text-slate-500")}>Tahta Modu</span>
                                 <div className="space-y-1">
                                     <button
                                         onClick={() => setSurface('transparent')}
                                         className={cn(
                                             "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-all",
-                                            surface === 'transparent' ? "bg-indigo-600 border-indigo-400 text-white" : "border-white/10 hover:bg-white/10 text-slate-300"
+                                            surface === 'transparent' ? "bg-indigo-600 border-indigo-400 text-white" : (isDarkMode ? "border-white/10 hover:bg-white/10 text-slate-300" : "border-slate-200 hover:bg-slate-100 text-slate-700")
                                         )}
                                     >
                                         <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
@@ -898,7 +923,7 @@ export function PresentationDrawingBoard({
                                         onClick={() => setSurface('dark')}
                                         className={cn(
                                             "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-all",
-                                            surface === 'dark' ? "bg-indigo-600 border-indigo-400 text-white" : "border-white/10 hover:bg-white/10 text-slate-300"
+                                            surface === 'dark' ? "bg-indigo-600 border-indigo-400 text-white" : (isDarkMode ? "border-white/10 hover:bg-white/10 text-slate-300" : "border-slate-200 hover:bg-slate-100 text-slate-700")
                                         )}
                                     >
                                         <div className="w-3.5 h-3.5 rounded bg-slate-950 border border-slate-700" />
@@ -908,17 +933,17 @@ export function PresentationDrawingBoard({
                                         onClick={() => setSurface('white')}
                                         className={cn(
                                             "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-all",
-                                            surface === 'white' ? "bg-indigo-600 border-indigo-400 text-white" : "border-white/10 hover:bg-white/10 text-slate-300"
+                                            surface === 'white' ? "bg-indigo-600 border-indigo-400 text-white" : (isDarkMode ? "border-white/10 hover:bg-white/10 text-slate-300" : "border-slate-200 hover:bg-slate-100 text-slate-700")
                                         )}
                                     >
-                                        <div className="w-3.5 h-3.5 rounded bg-white" />
+                                        <div className="w-3.5 h-3.5 rounded bg-white border border-slate-300" />
                                         <span>Beyaz Tahta</span>
                                     </button>
                                     <button
                                         onClick={() => setSurface('grid')}
                                         className={cn(
                                             "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-all",
-                                            surface === 'grid' ? "bg-indigo-600 border-indigo-400 text-white" : "border-white/10 hover:bg-white/10 text-slate-300"
+                                            surface === 'grid' ? "bg-indigo-600 border-indigo-400 text-white" : (isDarkMode ? "border-white/10 hover:bg-white/10 text-slate-300" : "border-slate-200 hover:bg-slate-100 text-slate-700")
                                         )}
                                     >
                                         <Grid className="w-3.5 h-3.5 text-slate-400" />
@@ -928,7 +953,7 @@ export function PresentationDrawingBoard({
                                         onClick={() => setSurface('lined')}
                                         className={cn(
                                             "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-all",
-                                            surface === 'lined' ? "bg-indigo-600 border-indigo-400 text-white" : "border-white/10 hover:bg-white/10 text-slate-300"
+                                            surface === 'lined' ? "bg-indigo-600 border-indigo-400 text-white" : (isDarkMode ? "border-white/10 hover:bg-white/10 text-slate-300" : "border-slate-200 hover:bg-slate-100 text-slate-700")
                                         )}
                                     >
                                         <AlignJustify className="w-3.5 h-3.5 text-slate-400" />
@@ -940,13 +965,13 @@ export function PresentationDrawingBoard({
                     </div>
 
                     {/* 4. Geri Al & Temizle & Diğer */}
-                    <div className="flex items-center gap-0.5 px-0.5 border-r border-white/15">
+                    <div className={cn("flex items-center gap-0.5 px-0.5 border-r", isDarkMode ? "border-white/15" : "border-slate-200")}>
                         <Button
                             variant="ghost"
                             size="icon"
                             onClick={undo}
                             disabled={historyStep <= 0}
-                            className="h-9 w-9 rounded-xl text-slate-300 hover:bg-white/10 disabled:opacity-20"
+                            className={cn("h-9 w-9 rounded-xl disabled:opacity-20", isDarkMode ? "text-slate-300 hover:bg-white/10" : "text-slate-600 hover:bg-slate-100")}
                             title="Geri Al (Ctrl+Z)"
                         >
                             <Undo2 className="w-4 h-4" />
@@ -956,7 +981,7 @@ export function PresentationDrawingBoard({
                             variant="ghost"
                             size="icon"
                             onClick={clearCanvas}
-                            className="h-9 w-9 rounded-xl text-rose-400 hover:bg-rose-500/20"
+                            className="h-9 w-9 rounded-xl text-rose-500 hover:bg-rose-500/15"
                             title="Tümünü Temizle"
                         >
                             <Trash2 className="w-4 h-4" />
@@ -964,29 +989,29 @@ export function PresentationDrawingBoard({
 
                         <Popover>
                             <PopoverTrigger asChild>
-                                <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl text-slate-400 hover:bg-white/10" title="Daha Fazla">
+                                <Button variant="ghost" size="icon" className={cn("h-9 w-9 rounded-xl", isDarkMode ? "text-slate-400 hover:bg-white/10" : "text-slate-500 hover:bg-slate-100")} title="Daha Fazla">
                                     <MoreHorizontal className="w-4 h-4" />
                                 </Button>
                             </PopoverTrigger>
-                            <PopoverContent side="top" align="center" className="w-48 p-2 rounded-2xl border-white/20 bg-slate-950/95 backdrop-blur-3xl shadow-2xl text-white mb-2">
+                            <PopoverContent side="top" align="center" className={cn("w-48 p-2 rounded-2xl backdrop-blur-3xl shadow-2xl mb-2", isDarkMode ? "border-white/20 bg-slate-950/95 text-white" : "border-slate-200 bg-white text-slate-900")}>
                                 <div className="space-y-1">
                                     <button
                                         onClick={redo}
                                         disabled={historyStep >= history.length - 1}
-                                        className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold hover:bg-white/10 disabled:opacity-30 transition-all text-slate-300"
+                                        className={cn("w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold disabled:opacity-30 transition-all", isDarkMode ? "hover:bg-white/10 text-slate-300" : "hover:bg-slate-100 text-slate-700")}
                                     >
                                         <Redo2 className="w-4 h-4" /> <span>İleri Al (Ctrl+Y)</span>
                                     </button>
                                     <button
                                         onClick={() => setIsLayerVisible(prev => !prev)}
-                                        className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold hover:bg-white/10 transition-all text-slate-300"
+                                        className={cn("w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all", isDarkMode ? "hover:bg-white/10 text-slate-300" : "hover:bg-slate-100 text-slate-700")}
                                     >
                                         {isLayerVisible ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                         <span>{isLayerVisible ? 'Çizimleri Gizle' : 'Çizimleri Göster'}</span>
                                     </button>
                                     <button
                                         onClick={exportDrawing}
-                                        className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold hover:bg-white/10 transition-all text-emerald-400"
+                                        className={cn("w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all", isDarkMode ? "hover:bg-white/10 text-emerald-400" : "hover:bg-emerald-50 text-emerald-700")}
                                     >
                                         <Download className="w-4 h-4" /> <span>PNG Olarak İndir</span>
                                     </button>

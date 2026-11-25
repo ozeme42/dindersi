@@ -246,14 +246,18 @@ export function InteractiveTrueFalseList({
     return (
         <div className={cn("w-full flex flex-col items-center justify-start p-1 sm:p-2", isTeacher ? "h-full max-w-[96%] mx-auto" : "max-w-3xl mx-auto pb-8")}>
              <div className={cn(
-                "relative rounded-2xl border backdrop-blur-xl flex-shrink-0 w-full overflow-hidden shadow-md",
+                "relative rounded-2xl border backdrop-blur-xl flex-shrink-0 w-full overflow-hidden transition-colors",
                 isTeacher 
                     ? (isSketchnote 
-                        ? "border-[3.5px] border-[#1e293b] bg-[#fefce8] py-3 px-6 mb-4 mt-0 shadow-[5px_5px_0_#1e293b]" 
+                        ? "border-[2.5px] border-[#1e293b] bg-[#fefce8] py-2.5 px-5 mb-3 mt-0 shadow-[4px_4px_0_#1e293b]" 
                         : isDarkTheme
-                            ? "border-2 border-white/15 bg-slate-900/90 py-3 px-6 mb-4 mt-0 text-white"
-                            : "border-2 border-indigo-200 bg-white/95 py-3 px-6 mb-4 mt-0 shadow-indigo-100/50") 
-                    : "border-white/10 bg-slate-900/80 py-2.5 px-4 mb-3"
+                            ? "border border-white/15 bg-slate-900/90 py-2.5 px-5 mb-3 mt-0 text-white shadow-lg"
+                            : "border border-slate-200/90 bg-white py-2.5 px-5 mb-3 mt-0 shadow-md") 
+                    : (isSketchnote
+                        ? "border-2 border-[#1e293b] bg-[#fefce8] py-2.5 px-4 mb-2.5 shadow-[3px_3px_0_#1e293b]"
+                        : isDarkTheme
+                            ? "border-white/10 bg-slate-900/85 py-2.5 px-4 mb-2.5 text-white"
+                            : "border-slate-200/90 bg-white py-2.5 px-4 mb-2.5 shadow-sm")
             )}>
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
@@ -995,7 +999,7 @@ export function HtmlSlidePlayer({ step, onSlideScrolledToEnd, presentationTheme 
     }, [step, onSlideScrolledToEnd]);
 
     return (
-        <div className="w-full h-full bg-slate-950 overflow-hidden">
+        <div className={cn("w-full h-full overflow-hidden transition-colors", isLightSlide ? "bg-[#fffdf9]" : "bg-slate-950")}>
             <iframe 
                 ref={iframeRef} 
                 srcDoc={fullDocument} 
@@ -1009,7 +1013,7 @@ export function HtmlSlidePlayer({ step, onSlideScrolledToEnd, presentationTheme 
 }
 
 // 10. DrawingCanvas (YENİ NESİL ÇİZİM & AKILLI TAHTA ARACI)
-export function DrawingCanvas({ stepIndex }: { stepIndex?: number }) {
+export function DrawingCanvas({ stepIndex, presentationTheme = 'sketchnote' }: { stepIndex?: number; presentationTheme?: string }) {
     const isTeacher = useTeacherMode();
     const [isOpen, setIsOpen] = useState(false);
 
@@ -1028,11 +1032,16 @@ export function DrawingCanvas({ stepIndex }: { stepIndex?: number }) {
 
     if (!isTeacher) return null;
 
+    const isLightBoard = presentationTheme === 'clean-light';
+    const isSketchnote = presentationTheme === 'sketchnote';
+    const isGame3D = presentationTheme === 'game-3d';
+
     return (
         <>
             <PresentationDrawingBoard
                 isOpen={isOpen}
                 onClose={() => setIsOpen(false)}
+                isDarkMode={!isSketchnote && !isLightBoard}
             />
 
             {/* Sağ Altta Şık Hızlı Çizim Butonu */}
@@ -1040,7 +1049,16 @@ export function DrawingCanvas({ stepIndex }: { stepIndex?: number }) {
                 <div className="fixed bottom-20 right-4 z-40">
                     <button
                         onClick={() => setIsOpen(true)}
-                        className="w-12 h-12 rounded-full bg-slate-900/90 hover:bg-slate-800 text-cyan-400 border-2 border-cyan-500/40 shadow-[0_0_25px_rgba(6,182,212,0.4)] flex items-center justify-center transition-all hover:scale-110 active:scale-95 group backdrop-blur-xl"
+                        className={cn(
+                            "w-12 h-12 rounded-full flex items-center justify-center transition-all hover:scale-105 active:scale-95 group backdrop-blur-xl",
+                            isSketchnote
+                                ? "bg-[#fefce8] hover:bg-[#fef08a] text-[#1e293b] border-2 border-[#1e293b] shadow-[3px_3px_0_#1e293b]"
+                                : isLightBoard
+                                ? "bg-white hover:bg-indigo-50 text-indigo-700 border border-slate-200 shadow-lg shadow-slate-900/10"
+                                : isGame3D
+                                ? "bg-slate-900/95 hover:bg-slate-800 text-amber-300 border-2 border-amber-400/60 border-b-4 border-b-amber-600 shadow-xl"
+                                : "bg-slate-900/90 hover:bg-slate-800 text-cyan-400 border-2 border-cyan-500/40 shadow-[0_0_25px_rgba(6,182,212,0.4)]"
+                        )}
                         title="Canlı Çizim & Tahta (D)"
                     >
                         <Pencil className="w-5 h-5 group-hover:rotate-12 transition-transform" />
@@ -1052,18 +1070,25 @@ export function DrawingCanvas({ stepIndex }: { stepIndex?: number }) {
 }
 
 // --- 11. ConceptMapPlayer (Dallanmış Ağaç) ---
-export function ConceptMapPlayer({ step, isFullscreen }: { step: ConceptMapStep, isFullscreen: boolean }) {
+export function ConceptMapPlayer({ step, isFullscreen, presentationTheme = 'sketchnote' }: { step: ConceptMapStep, isFullscreen: boolean, presentationTheme?: string }) {
     const isTeacher = useTeacherMode();
     const { nodes, edges } = step.mapData || { nodes: [], edges: [] };
     const containerRef = useRef<HTMLDivElement>(null);
 
     const [positions, setPositions] = useState<Record<string, { x: number, y: number }>>({});
+    const [focusedNodeId, setFocusedNodeId] = useState<string | null>(null);
+
+    const isSketchnote = presentationTheme === 'sketchnote';
+    const isLightTheme = presentationTheme === 'clean-light';
+    const isGame3D = presentationTheme === 'game-3d';
+    const isLightCanvas = isSketchnote || isLightTheme;
     
     // Ağacı oluştururken merkeze alacağımız düğümü bul
     const rootNode = nodes.find(n => n.isCentral) || nodes[0];
 
     useEffect(() => {
         if (!rootNode) return;
+        setFocusedNodeId(null);
         
         const newPos: Record<string, { x: number, y: number }> = {};
         const W = 800; 
@@ -1074,7 +1099,7 @@ export function ConceptMapPlayer({ step, isFullscreen }: { step: ConceptMapStep,
         const l1Edges = edges.filter(e => e.from === rootNode.id || e.to === rootNode.id);
         const l1Ids = l1Edges.map(e => e.from === rootNode.id ? e.to : e.from);
         
-        const R1 = 180; 
+        const R1 = 175; 
         l1Ids.forEach((id, i) => {
             const angle = i * ((2 * Math.PI) / l1Ids.length);
             newPos[id] = { 
@@ -1085,7 +1110,7 @@ export function ConceptMapPlayer({ step, isFullscreen }: { step: ConceptMapStep,
             const l2Edges = edges.filter(e => (e.from === id || e.to === id) && !newPos[e.from] && !newPos[e.to]);
             const l2Ids = l2Edges.map(e => e.from === id ? e.to : e.from);
             
-            const R2 = 140; 
+            const R2 = 135; 
             l2Ids.forEach((l2Id, j) => {
                 const spread = Math.PI / 1.5; 
                 const startAngle = angle - (spread / 2);
@@ -1093,18 +1118,18 @@ export function ConceptMapPlayer({ step, isFullscreen }: { step: ConceptMapStep,
                 const finalAngle = startAngle + (j * stepAngle);
                 
                 newPos[l2Id] = {
-                    x: newPos[id].x + Math.cos(finalAngle) * R2,
-                    y: newPos[id].y + Math.sin(finalAngle) * R2
+                    x: Math.max(75, Math.min(W - 75, newPos[id].x + Math.cos(finalAngle) * R2)),
+                    y: Math.max(55, Math.min(H - 55, newPos[id].y + Math.sin(finalAngle) * R2))
                 };
             });
         });
         
-        nodes.forEach(n => {
+        nodes.forEach((n, idx) => {
             if (!newPos[n.id]) {
-                const angle = Math.random() * 2 * Math.PI;
+                const angle = (idx / Math.max(1, nodes.length)) * 2 * Math.PI;
                 newPos[n.id] = { 
-                    x: (W / 2) + Math.cos(angle) * 280, 
-                    y: (H / 2) + Math.sin(angle) * 280 
+                    x: (W / 2) + Math.cos(angle) * 260, 
+                    y: (H / 2) + Math.sin(angle) * 220 
                 };
             }
         });
@@ -1114,21 +1139,76 @@ export function ConceptMapPlayer({ step, isFullscreen }: { step: ConceptMapStep,
 
     if (!rootNode || Object.keys(positions).length === 0) return null;
 
+    const connectedToFocused = new Set<string>();
+    if (focusedNodeId) {
+        connectedToFocused.add(focusedNodeId);
+        edges.forEach(e => {
+            if (e.from === focusedNodeId) connectedToFocused.add(e.to);
+            if (e.to === focusedNodeId) connectedToFocused.add(e.from);
+        });
+    }
+
     return (
         <div className={cn("w-full h-full flex flex-col items-center justify-start p-2", isTeacher ? "max-w-full" : "max-w-6xl mx-auto")}>
             <div className={cn(
-                "relative z-20 p-6 rounded-[2rem] shadow-lg bg-white border border-slate-100 flex-shrink-0 w-full text-center mb-6", 
-                isTeacher ? "py-6 mt-2" : "p-4 md:p-8"
+                "relative z-20 px-4 py-2.5 sm:px-6 sm:py-3 rounded-2xl flex-shrink-0 w-full flex flex-wrap items-center justify-between gap-2 mb-3 transition-colors",
+                isSketchnote
+                    ? "bg-[#fefce8] border-[2.5px] border-[#1e293b] shadow-[4px_4px_0_#1e293b]"
+                    : isLightTheme
+                    ? "bg-white border border-slate-200/90 shadow-md"
+                    : isGame3D
+                    ? "bg-slate-900/90 border-2 border-indigo-400/50 border-b-4 border-b-indigo-700 shadow-lg"
+                    : "bg-slate-900/80 border border-white/15 backdrop-blur-xl shadow-lg"
             )}>
-                 <h2 className={cn("font-black tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 drop-shadow-sm", isTeacher ? "text-4xl" : (isFullscreen ? "text-2xl md:text-4xl" : "text-xl md:text-2xl"))}>
-                     {step.title}
-                 </h2>
+                <h2 className={cn(
+                    "font-black tracking-tight",
+                    isSketchnote
+                        ? "font-['Caveat',cursive] text-slate-900 text-2xl sm:text-3xl"
+                        : isLightTheme
+                        ? "text-slate-900 text-lg sm:text-2xl"
+                        : "text-white text-lg sm:text-2xl"
+                )}>
+                    {step.title}
+                </h2>
+                <span className={cn(
+                    "text-[11px] font-bold px-2.5 py-1 rounded-full border",
+                    isSketchnote
+                        ? "bg-white border-[#1e293b]/30 text-slate-700 font-['Patrick_Hand',cursive] text-xs"
+                        : isLightCanvas
+                        ? "bg-slate-100 border-slate-200 text-slate-600"
+                        : "bg-white/10 border-white/15 text-slate-300"
+                )}>
+                    {focusedNodeId ? "Vurgulanan dal (temizlemek için boşluğa tıkla)" : "Düğüme tıkla vurgula • Sürükle düzenle"}
+                </span>
             </div>
 
-            <div className="w-full overflow-x-auto pb-6 px-4 custom-scrollbar flex justify-center">
-                <div ref={containerRef} className="relative min-w-[800px] w-[800px] h-[600px] bg-slate-50/80 backdrop-blur-md rounded-[3rem] border-4 border-white shadow-[0_10px_40px_rgba(0,0,0,0.08)] overflow-hidden">
+            <div className="w-full flex-1 flex items-center justify-center pb-2 px-1 sm:px-3 min-h-0">
+                <div
+                    ref={containerRef}
+                    onClick={() => setFocusedNodeId(null)}
+                    className={cn(
+                        "relative w-full max-w-5xl aspect-[4/3] max-h-[68vh] min-h-[360px] rounded-3xl overflow-hidden transition-colors",
+                        isSketchnote
+                            ? "bg-[#fffdf9] bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:20px_20px] border-[3px] border-[#1e293b] shadow-[6px_6px_0_#1e293b]"
+                            : isLightTheme
+                            ? "bg-white border border-slate-200 shadow-xl"
+                            : isGame3D
+                            ? "bg-slate-900/85 border-2 border-indigo-400/50 border-b-[6px] border-b-indigo-800 shadow-2xl"
+                            : "bg-slate-900/75 backdrop-blur-xl border border-white/15 shadow-2xl"
+                    )}
+                >
                     {/* SVG Çizgiler */}
-                    <svg className="absolute inset-0 w-full h-full pointer-events-none z-0" viewBox="0 0 800 600">
+                    <svg className="absolute inset-0 w-full h-full pointer-events-none z-0" viewBox="0 0 800 600" preserveAspectRatio="none">
+                        <defs>
+                            <linearGradient id="edgeGradientLight" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stopColor="#4f46e5" />
+                                <stop offset="100%" stopColor="#9333ea" />
+                            </linearGradient>
+                            <linearGradient id="edgeGradientDark" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stopColor="#38bdf8" />
+                                <stop offset="100%" stopColor="#a78bfa" />
+                            </linearGradient>
+                        </defs>
                         {edges.map((edge, idx) => {
                             const fromPos = positions[edge.from];
                             const toPos = positions[edge.to];
@@ -1136,23 +1216,40 @@ export function ConceptMapPlayer({ step, isFullscreen }: { step: ConceptMapStep,
                             
                             const dx = toPos.x - fromPos.x;
                             const dy = toPos.y - fromPos.y;
-                            const cx = fromPos.x + dx/2 - dy/4; 
-                            const cy = fromPos.y + dy/2 + dx/4;
+                            const cx = fromPos.x + dx/2 - dy/5; 
+                            const cy = fromPos.y + dy/2 + dx/5;
+                            const isEdgeFocused = !focusedNodeId || edge.from === focusedNodeId || edge.to === focusedNodeId;
 
                             return (
-                                <g key={idx}>
+                                <g key={idx} className="transition-opacity duration-200" style={{ opacity: isEdgeFocused ? 1 : 0.18 }}>
                                     <path 
                                         d={`M ${fromPos.x} ${fromPos.y} Q ${cx} ${cy} ${toPos.x} ${toPos.y}`}
                                         fill="none"
-                                        stroke="url(#edgeGradient)"
-                                        strokeWidth="4"
-                                        strokeDasharray="8,6"
-                                        className="opacity-60 drop-shadow-sm"
+                                        stroke={isSketchnote ? "#1e293b" : isLightTheme ? "url(#edgeGradientLight)" : "url(#edgeGradientDark)"}
+                                        strokeWidth={isEdgeFocused && focusedNodeId ? "4" : "3"}
+                                        strokeDasharray={isSketchnote ? "6,5" : "7,5"}
+                                        strokeLinecap="round"
+                                        className="opacity-75"
                                     />
                                     {edge.label && (
-                                        <g transform={`translate(${fromPos.x + dx/2}, ${fromPos.y + dy/2 - 15})`}>
-                                            <rect x="-40" y="-10" width="80" height="20" rx="10" fill="white" className="drop-shadow-sm" />
-                                            <text x="0" y="4" textAnchor="middle" className="fill-indigo-600 text-[10px] font-black uppercase tracking-widest">
+                                        <g transform={`translate(${fromPos.x + dx/2}, ${fromPos.y + dy/2 - 12})`}>
+                                            <rect
+                                                x="-46"
+                                                y="-10"
+                                                width="92"
+                                                height="20"
+                                                rx="10"
+                                                fill={isSketchnote ? "#fefce8" : isLightTheme ? "#ffffff" : "#0f172a"}
+                                                stroke={isSketchnote ? "#1e293b" : isLightTheme ? "#cbd5e1" : "rgba(255,255,255,0.25)"}
+                                                strokeWidth="1.2"
+                                            />
+                                            <text
+                                                x="0"
+                                                y="3.5"
+                                                textAnchor="middle"
+                                                fill={isSketchnote ? "#0f172a" : isLightTheme ? "#4338ca" : "#e2e8f0"}
+                                                className="text-[10px] font-black uppercase tracking-wider"
+                                            >
                                                 {edge.label}
                                             </text>
                                         </g>
@@ -1160,62 +1257,77 @@ export function ConceptMapPlayer({ step, isFullscreen }: { step: ConceptMapStep,
                                 </g>
                             );
                         })}
-                        <defs>
-                            <linearGradient id="edgeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stopColor="#a5b4fc" />
-                                <stop offset="100%" stopColor="#c084fc" />
-                            </linearGradient>
-                        </defs>
                     </svg>
 
-                    {/* Sürüklenebilir Düğümler */}
-                    {nodes.map((node, idx) => {
+                    {/* Sürüklenebilir & Odaklanabilir Düğümler */}
+                    {nodes.map((node) => {
                         const pos = positions[node.id];
                         if (!pos) return null;
                         const isCenter = node.id === rootNode.id;
+                        const isDimmed = !!focusedNodeId && !connectedToFocused.has(node.id);
+                        const isSelected = focusedNodeId === node.id;
                         
                         return (
                             <motion.div
                                 key={node.id}
                                 drag
                                 dragConstraints={containerRef}
-                                dragElastic={0.1}
+                                dragElastic={0.05}
                                 dragMomentum={false}
-                                onDrag={(e, info) => {
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setFocusedNodeId(prev => prev === node.id ? null : node.id);
+                                }}
+                                onDrag={(_, info) => {
+                                    const rectWidth = containerRef.current?.clientWidth || 800;
+                                    const rectHeight = containerRef.current?.clientHeight || 600;
+                                    const dx = (info.delta.x / rectWidth) * 800;
+                                    const dy = (info.delta.y / rectHeight) * 600;
                                     setPositions(prev => ({ 
                                         ...prev, 
-                                        [node.id]: { x: prev[node.id].x + info.delta.x, y: prev[node.id].y + info.delta.y } 
+                                        [node.id]: {
+                                            x: Math.max(60, Math.min(740, prev[node.id].x + dx)),
+                                            y: Math.max(45, Math.min(555, prev[node.id].y + dy))
+                                        }
                                     }));
                                 }}
-                                whileDrag={{ scale: 1.1, zIndex: 50, cursor: 'grabbing', boxShadow: '0 25px 50px rgba(0,0,0,0.2)' }}
-                                initial={{ opacity: 0, scale: 0 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ 
-                                    opacity: { duration: 0.5, delay: idx * 0.1 },
-                                    scale: { duration: 0.5, delay: idx * 0.1, type: "spring", bounce: 0.4 },
-                                }}
+                                whileDrag={{ scale: 1.07, zIndex: 50, cursor: 'grabbing' }}
+                                initial={{ opacity: 0, scale: 0.85 }}
+                                animate={{ opacity: isDimmed ? 0.3 : 1, scale: isSelected ? 1.05 : 1 }}
+                                transition={{ opacity: { duration: 0.2 }, scale: { duration: 0.25 } }}
                                 style={{
                                     position: 'absolute',
-                                    left: pos.x,
-                                    top: pos.y,
+                                    left: `${(pos.x / 800) * 100}%`,
+                                    top: `${(pos.y / 600) * 100}%`,
                                     x: '-50%',
                                     y: '-50%',
                                 }}
                                 className={cn(
-                                    "pointer-events-auto cursor-grab flex items-center justify-center text-center p-4 md:p-5 rounded-[2rem] border-2 backdrop-blur-xl transition-all select-none",
-                                    isCenter 
-                                        ? "bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 border-purple-300 text-white shadow-xl shadow-purple-500/30 min-w-[150px] min-h-[70px] z-20 border-b-[8px]" 
-                                        : "bg-white/95 border-2 border-sky-400 text-sky-950 shadow-md shadow-sky-100/60 min-w-[120px] min-h-[60px] hover:border-indigo-500 hover:shadow-xl z-10 border-b-[6px]"
+                                    "pointer-events-auto cursor-grab flex items-center justify-center text-center px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-2xl transition-colors select-none max-w-[210px]",
+                                    isCenter
+                                        ? isSketchnote
+                                            ? "bg-[#fef08a] border-[2.5px] border-[#1e293b] text-slate-900 shadow-[4px_4px_0_#1e293b] min-w-[140px] z-20"
+                                            : isLightTheme
+                                            ? "bg-gradient-to-br from-indigo-600 to-violet-600 border-2 border-indigo-300 text-white shadow-xl shadow-indigo-500/25 min-w-[140px] z-20"
+                                            : "bg-gradient-to-br from-indigo-600 via-purple-600 to-fuchsia-600 border-2 border-indigo-300/60 border-b-4 border-b-indigo-900 text-white shadow-xl min-w-[140px] z-20"
+                                        : isSketchnote
+                                        ? "bg-white border-2 border-[#1e293b] text-slate-900 shadow-[3px_3px_0_#1e293b] hover:bg-sky-50 min-w-[110px] z-10"
+                                        : isLightTheme
+                                        ? "bg-slate-50 border border-slate-300 text-slate-800 shadow-md hover:border-indigo-400 hover:bg-white min-w-[110px] z-10"
+                                        : "bg-slate-800/95 border-2 border-sky-400/50 border-b-4 border-b-sky-700 text-white shadow-lg hover:border-cyan-300 min-w-[110px] z-10",
+                                    isSelected && "ring-2 ring-amber-400 ring-offset-2"
                                 )}
                             >
-                                <motion.div
-                                    animate={{ y: [0, -5, 0] }}
-                                    transition={{ duration: 4 + Math.random() * 2, repeat: Infinity, ease: "easeInOut" }}
+                                <span
+                                    className={cn(
+                                        "tracking-wide break-words leading-snug",
+                                        isSketchnote
+                                            ? (isCenter ? "font-['Caveat',cursive] font-black text-xl sm:text-2xl text-slate-900" : "font-['Patrick_Hand',cursive] font-bold text-base sm:text-lg text-slate-800")
+                                            : (isCenter ? "font-black text-sm sm:text-lg" : "font-bold text-xs sm:text-sm")
+                                    )}
                                 >
-                                    <span className={cn("font-black tracking-wider break-words", isCenter ? "text-xl drop-shadow-md text-white" : "text-sm md:text-base text-sky-950")}>
-                                        {node.label}
-                                    </span>
-                                </motion.div>
+                                    {node.label}
+                                </span>
                             </motion.div>
                         );
                     })}

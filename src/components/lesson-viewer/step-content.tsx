@@ -977,7 +977,7 @@ export function StepContent({
                  return <div className="h-full p-4"><iframe src={(step as IframeStep).url} title={step.title} className={cn("w-full border-0 rounded-3xl shadow-xl bg-white border border-slate-200", "h-full")} allowFullScreen></iframe></div>
             
             case 'htmlSlide':
-                 return <HtmlSlidePlayer step={step} onSlideScrolledToEnd={onSlideScrolledToEnd} />
+                 return <HtmlSlidePlayer step={step} onSlideScrolledToEnd={onSlideScrolledToEnd} presentationTheme={presentationTheme} />
 
             case 'pdfSlide':
                  return <PdfSlidePlayer 
@@ -1052,7 +1052,7 @@ export function StepContent({
             case 'trueFalseList':
                  return <InteractiveTrueFalseList step={step as TrueFalseListStep} isFullscreen={isFullscreen || false} answers={stepAnswers || {}} onAnswer={onMultiAnswer} onAllAnswered={onAllTfAnswered} fontSizeScale={fontSizeScale} isTeacher={isTeacher} presentationTheme={presentationTheme} presentationFont={presentationFont} />;
             case 'conceptMap':
-                 return <ConceptMapPlayer step={step as ConceptMapStep} isFullscreen={isFullscreen} />; 
+                 return <ConceptMapPlayer step={step as ConceptMapStep} isFullscreen={isFullscreen} presentationTheme={presentationTheme} />; 
             case 'video': {
                 const videoStep = step as VideoStep;
                 const embedUrl = getEmbedUrl(videoStep.url);
@@ -1125,7 +1125,7 @@ export function StepContent({
                  );
 
             case 'sentenceScramble': 
-                return <SentenceScrambleGame step={step as SentenceScrambleStep} onAnswer={onAnswer} onCorrectAndNext={onCorrectAndNext} answer={answer} isAnswerRevealed={!!answer} fontSizeScale={fontSizeScale} isFullscreen={isFullscreen} />;
+                return <SentenceScrambleGame step={step as SentenceScrambleStep} onAnswer={onAnswer} onCorrectAndNext={onCorrectAndNext} answer={answer} isAnswerRevealed={!!answer} fontSizeScale={fontSizeScale} isFullscreen={isFullscreen} presentationTheme={presentationTheme} />;
             
             case 'matching':
             case 'conceptMatching':
@@ -1153,6 +1153,7 @@ export function StepContent({
                         courseId={courseId}
                         unitId={unitId}
                         topicId={topic?.id}
+                        presentationTheme={presentationTheme}
                     />
                 );
             

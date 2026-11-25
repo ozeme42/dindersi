@@ -788,12 +788,12 @@ export function ContentListPlayer({
             {!isGame3D && (() => {
                 return (
                     <div className={cn(
-                        "relative z-20 rounded-2xl md:rounded-3xl border flex-shrink-0 w-full max-w-full overflow-hidden shadow-xl mb-3 sm:mb-4 transition-all duration-300",
+                        "relative z-20 rounded-2xl border flex-shrink-0 w-full max-w-full overflow-hidden mb-2.5 sm:mb-3 transition-all duration-300",
                         isSketchnote
-                            ? "border-[2.5px] border-[#1e293b] bg-white py-3.5 px-5 sm:px-6 shadow-[4px_4px_0_#1e293b]"
+                            ? "border-[2.5px] border-[#1e293b] bg-white py-2.5 px-4 sm:px-5 shadow-[4px_4px_0_#1e293b]"
                             : isLightBoard 
-                                ? "border-2 border-indigo-200/90 bg-white/95 py-3 px-5 sm:px-6 shadow-indigo-100/60 backdrop-blur-xl" 
-                                : "border-white/15 bg-slate-900/90 py-3.5 px-5 sm:px-6 shadow-2xl backdrop-blur-xl"
+                                ? "border-slate-200/90 bg-white py-2.5 px-4 sm:px-5 shadow-md" 
+                                : "border-white/15 bg-slate-900/90 py-2.5 px-4 sm:px-5 shadow-xl backdrop-blur-xl"
                     )}>
                         {!isSketchnote && (
                             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-cyan-400 via-indigo-500 to-pink-500" />

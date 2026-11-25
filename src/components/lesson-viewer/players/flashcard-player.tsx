@@ -445,6 +445,7 @@ export function FlashcardPlayer({
     const authIsTeacher = useTeacherMode();
     const isTeacher = typeof propIsTeacher === 'boolean' ? propIsTeacher : authIsTeacher;
     const isSketchnote = presentationTheme === 'sketchnote';
+    const isLightTheme = presentationTheme === 'clean-light';
 
     const cardScale: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 
         (fontSizeScale === 'huge' || fontSizeScale === 'xl') ? 'xl' :
@@ -458,10 +459,17 @@ export function FlashcardPlayer({
 
     if (totalCards === 0) {
         return (
-            <div className="w-full max-w-md mx-auto p-8 rounded-3xl bg-slate-900/60 border border-white/10 text-center text-slate-300">
-                <Layers className="w-12 h-12 text-indigo-400 mx-auto mb-3" />
-                <h3 className="text-lg font-black text-white mb-2">{step.title || 'Bilgi Kartları'}</h3>
-                <p className="text-xs text-slate-400">Bu adımda henüz gösterilecek kart bulunmuyor.</p>
+            <div className={cn(
+                "w-full max-w-md mx-auto p-8 rounded-3xl border text-center",
+                isSketchnote
+                    ? "bg-[#fefce8] border-[2.5px] border-[#1e293b] shadow-[4px_4px_0_#1e293b] text-slate-700"
+                    : isLightTheme
+                    ? "bg-white border-slate-200 shadow-lg text-slate-600"
+                    : "bg-slate-900/70 border-white/15 text-slate-300 backdrop-blur-xl"
+            )}>
+                <Layers className={cn("w-12 h-12 mx-auto mb-3", isLightTheme || isSketchnote ? "text-indigo-600" : "text-indigo-400")} />
+                <h3 className={cn("text-lg font-black mb-2", isLightTheme || isSketchnote ? "text-slate-900" : "text-white")}>{step.title || 'Bilgi Kartları'}</h3>
+                <p className={cn("text-xs", isLightTheme || isSketchnote ? "text-slate-500" : "text-slate-400")}>Bu adımda henüz gösterilecek kart bulunmuyor.</p>
             </div>
         );
     }
@@ -514,26 +522,28 @@ export function FlashcardPlayer({
     return (
         <div className={cn("w-full p-1.5 sm:p-3 md:p-4 flex flex-col justify-start mx-auto", isTeacher ? "max-w-full" : "max-w-7xl")}>
             <div className={cn(
-                "relative flex items-center justify-between gap-2 sm:gap-3 mb-3 sm:mb-5 p-3 sm:p-4 rounded-2xl sm:rounded-3xl backdrop-blur-xl border-2 shadow-sm",
+                "relative flex items-center justify-between gap-2 sm:gap-3 mb-2.5 sm:mb-3.5 py-2 px-3 sm:py-2.5 sm:px-4 rounded-2xl border shadow-sm transition-colors",
                 isSketchnote 
-                    ? "bg-[#fefce8] border-[3px] border-[#1e293b] shadow-[4px_4px_0_#1e293b]" 
-                    : "bg-white/80 dark:bg-slate-900/80 border-indigo-100 dark:border-white/10"
+                    ? "bg-[#fefce8] border-[2.5px] border-[#1e293b] shadow-[4px_4px_0_#1e293b]" 
+                    : isLightTheme
+                    ? "bg-white border-slate-200/90 shadow-md"
+                    : "bg-slate-900/80 border-white/15 backdrop-blur-xl shadow-lg"
             )}>
                 <div className="flex-1 flex items-center justify-center gap-2 sm:gap-3 text-center min-w-0">
                     <div className={cn(
-                        "w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl flex items-center justify-center font-black shadow-md shrink-0",
-                        isSketchnote ? "bg-[#fde047] text-slate-900 border-2 border-[#1e293b]" : "bg-indigo-500 text-white shadow-indigo-200"
+                        "w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center font-black shadow-sm shrink-0",
+                        isSketchnote ? "bg-[#fde047] text-slate-900 border-2 border-[#1e293b]" : "bg-indigo-600 text-white"
                     )}>
                         <Layers className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
-                    <div className="flex items-center gap-2 text-center">
+                    <div className="flex items-center gap-2 text-center min-w-0">
                         <h2 className={cn(
-                            "text-sm sm:text-lg md:text-2xl drop-shadow-sm tracking-tight text-center",
-                            isSketchnote ? "font-['Caveat',cursive] font-black text-slate-900 text-xl sm:text-2xl md:text-3xl" : "font-black text-slate-800 dark:text-white"
+                            "text-sm sm:text-lg md:text-2xl tracking-tight text-center truncate",
+                            isSketchnote ? "font-['Caveat',cursive] font-black text-slate-900 text-xl sm:text-2xl md:text-3xl" : isLightTheme ? "font-black text-slate-900" : "font-black text-white"
                         )}>{step.title}</h2>
-                        <div className="hidden sm:flex items-center gap-1.5 text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400">
+                        <div className={cn("hidden sm:flex items-center gap-1.5 text-[10px] sm:text-xs font-bold shrink-0", isSketchnote || isLightTheme ? "text-slate-500" : "text-slate-400")}>
                             <span>•</span>
-                            <span className={cn(flippedCount > 0 ? "text-emerald-600 dark:text-emerald-400 font-extrabold" : "")}>{flippedCount} / {totalCards} Çevrildi</span>
+                            <span className={cn(flippedCount > 0 ? (isSketchnote || isLightTheme ? "text-emerald-600 font-extrabold" : "text-emerald-400 font-extrabold") : "")}>{flippedCount} / {totalCards} Çevrildi</span>
                         </div>
                     </div>
                 </div>
@@ -547,7 +557,9 @@ export function FlashcardPlayer({
                             "h-8 sm:h-9 px-2.5 sm:px-3.5 rounded-xl border-2 font-bold text-[11px] sm:text-xs flex items-center gap-1 sm:gap-1.5 shadow-sm transition-all active:scale-95 shrink-0 cursor-pointer",
                             isSketchnote 
                                 ? "bg-white hover:bg-slate-50 text-slate-800 border-2 border-[#1e293b] shadow-[2px_2px_0_#1e293b] font-['Patrick_Hand',cursive] text-sm" 
-                                : "border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-900"
+                                : isLightTheme
+                                ? "border-indigo-200 bg-indigo-50/80 hover:bg-indigo-100 text-indigo-900"
+                                : "border-white/20 bg-white/10 hover:bg-white/20 text-white"
                         )}
                     >
                         <RotateCw className={cn("w-3 h-3 sm:w-3.5 sm:h-3.5", allFlipped && "rotate-180")} />
@@ -555,16 +567,16 @@ export function FlashcardPlayer({
                     </Button>
                 ) : (
                     <div className="flex flex-col items-end gap-1 shrink-0">
-                        <div className="flex items-center gap-1.5 text-[11px] sm:text-xs font-bold text-slate-600 dark:text-slate-300">
+                        <div className={cn("flex items-center gap-1.5 text-[11px] sm:text-xs font-bold", isSketchnote || isLightTheme ? "text-slate-600" : "text-slate-300")}>
                             <span>Kart İlerlemesi:</span>
-                            <span className="font-extrabold text-indigo-600 dark:text-indigo-400">{flippedCount} / {totalCards}</span>
+                            <span className={cn("font-extrabold", isSketchnote || isLightTheme ? "text-indigo-600" : "text-indigo-300")}>{flippedCount} / {totalCards}</span>
                             {allFlipped && (
-                                <span className="flex items-center gap-1 text-[10px] font-black text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full ml-1">
+                                <span className={cn("flex items-center gap-1 text-[10px] font-black border px-2 py-0.5 rounded-full ml-1", isSketchnote || isLightTheme ? "text-emerald-700 bg-emerald-50 border-emerald-200" : "text-emerald-300 bg-emerald-500/15 border-emerald-400/30")}>
                                     <CheckCircle2 className="w-3 h-3 text-emerald-500" /> Tamamlandı
                                 </span>
                             )}
                         </div>
-                        <div className="w-28 sm:w-36 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                        <div className={cn("w-28 sm:w-36 h-1.5 rounded-full overflow-hidden", isSketchnote || isLightTheme ? "bg-slate-200" : "bg-white/15")}>
                             <div 
                                 className="h-full bg-gradient-to-r from-indigo-500 to-emerald-500 transition-all duration-300 rounded-full"
                                 style={{ width: `${totalCards > 0 ? (flippedCount / totalCards) * 100 : 0}%` }}
@@ -620,6 +632,7 @@ export function AnagramFlashcardPlayer({
 }) {
     const isTeacher = useTeacherMode();
     const isSketchnote = presentationTheme === 'sketchnote';
+    const isLightTheme = presentationTheme === 'clean-light';
 
     const cardScale: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 
         (fontSizeScale === 'huge' || fontSizeScale === 'xl') ? 'xl' :
@@ -633,10 +646,17 @@ export function AnagramFlashcardPlayer({
 
     if (totalCards === 0) {
         return (
-            <div className="w-full max-w-md mx-auto p-8 rounded-3xl bg-slate-900/60 border border-white/10 text-center text-slate-300">
-                <Puzzle className="w-12 h-12 text-indigo-400 mx-auto mb-3" />
-                <h3 className="text-lg font-black text-white mb-2">{step.title || 'Kelime Avı'}</h3>
-                <p className="text-xs text-slate-400">Bu adımda henüz gösterilecek kart bulunmuyor.</p>
+            <div className={cn(
+                "w-full max-w-md mx-auto p-8 rounded-3xl border text-center",
+                isSketchnote
+                    ? "bg-[#fefce8] border-[2.5px] border-[#1e293b] shadow-[4px_4px_0_#1e293b] text-slate-700"
+                    : isLightTheme
+                    ? "bg-white border-slate-200 shadow-lg text-slate-600"
+                    : "bg-slate-900/70 border-white/15 text-slate-300 backdrop-blur-xl"
+            )}>
+                <Puzzle className={cn("w-12 h-12 mx-auto mb-3", isLightTheme || isSketchnote ? "text-indigo-600" : "text-indigo-400")} />
+                <h3 className={cn("text-lg font-black mb-2", isLightTheme || isSketchnote ? "text-slate-900" : "text-white")}>{step.title || 'Kelime Avı'}</h3>
+                <p className={cn("text-xs", isLightTheme || isSketchnote ? "text-slate-500" : "text-slate-400")}>Bu adımda henüz gösterilecek kart bulunmuyor.</p>
             </div>
         );
     }
@@ -759,26 +779,28 @@ export function AnagramFlashcardPlayer({
     return (
         <div className={cn("w-full p-1.5 sm:p-3 md:p-4 flex flex-col justify-start mx-auto", isTeacher ? "max-w-full" : "max-w-7xl")}>
             <div className={cn(
-                "relative flex items-center justify-between gap-2 sm:gap-3 mb-3 sm:mb-5 p-3 sm:p-4 rounded-2xl sm:rounded-3xl backdrop-blur-xl border-2 shadow-sm",
+                "relative flex items-center justify-between gap-2 sm:gap-3 mb-2.5 sm:mb-3.5 py-2 px-3 sm:py-2.5 sm:px-4 rounded-2xl border shadow-sm transition-colors",
                 isSketchnote
-                    ? "bg-[#fefce8] border-[3px] border-[#1e293b] shadow-[4px_4px_0_#1e293b]"
-                    : "bg-white/80 dark:bg-slate-900/80 border-indigo-100 dark:border-white/10"
+                    ? "bg-[#fefce8] border-[2.5px] border-[#1e293b] shadow-[4px_4px_0_#1e293b]"
+                    : isLightTheme
+                    ? "bg-white border-slate-200/90 shadow-md"
+                    : "bg-slate-900/80 border-white/15 backdrop-blur-xl shadow-lg"
             )}>
                 <div className="flex-1 flex items-center justify-center gap-2 sm:gap-3 text-center min-w-0">
                     <div className={cn(
-                        "w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl flex items-center justify-center font-black shadow-md shrink-0",
-                        isSketchnote ? "bg-[#fde047] text-slate-900 border-2 border-[#1e293b]" : "bg-indigo-500 text-white shadow-indigo-200"
+                        "w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center font-black shadow-sm shrink-0",
+                        isSketchnote ? "bg-[#fde047] text-slate-900 border-2 border-[#1e293b]" : "bg-indigo-600 text-white"
                     )}>
                         <Puzzle className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
-                    <div className="flex items-center gap-2 text-center">
+                    <div className="flex items-center gap-2 text-center min-w-0">
                         <h2 className={cn(
-                            "text-sm sm:text-lg md:text-2xl drop-shadow-sm tracking-tight text-center",
-                            isSketchnote ? "font-['Caveat',cursive] font-black text-slate-900 text-xl sm:text-2xl md:text-3xl" : "font-black text-slate-800 dark:text-white"
+                            "text-sm sm:text-lg md:text-2xl tracking-tight text-center truncate",
+                            isSketchnote ? "font-['Caveat',cursive] font-black text-slate-900 text-xl sm:text-2xl md:text-3xl" : isLightTheme ? "font-black text-slate-900" : "font-black text-white"
                         )}>{step.title}</h2>
-                        <div className="hidden sm:flex items-center gap-1.5 text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400">
+                        <div className={cn("hidden sm:flex items-center gap-1.5 text-[10px] sm:text-xs font-bold shrink-0", isSketchnote || isLightTheme ? "text-slate-500" : "text-slate-400")}>
                             <span>•</span>
-                            <span className={cn(flippedCount > 0 ? "text-emerald-600 dark:text-emerald-400 font-extrabold" : "")}>{flippedCount} / {totalCards} Çözüldü</span>
+                            <span className={cn(flippedCount > 0 ? (isSketchnote || isLightTheme ? "text-emerald-600 font-extrabold" : "text-emerald-400 font-extrabold") : "")}>{flippedCount} / {totalCards} Çözüldü</span>
                         </div>
                     </div>
                 </div>
@@ -792,7 +814,9 @@ export function AnagramFlashcardPlayer({
                             "h-8 sm:h-9 px-2.5 sm:px-3.5 rounded-xl border-2 font-bold text-[11px] sm:text-xs flex items-center gap-1 sm:gap-1.5 shadow-sm transition-all active:scale-95 shrink-0 cursor-pointer",
                             isSketchnote 
                                 ? "bg-white hover:bg-slate-50 text-slate-800 border-2 border-[#1e293b] shadow-[2px_2px_0_#1e293b] font-['Patrick_Hand',cursive] text-sm" 
-                                : "border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-900"
+                                : isLightTheme
+                                ? "border-indigo-200 bg-indigo-50/80 hover:bg-indigo-100 text-indigo-900"
+                                : "border-white/20 bg-white/10 hover:bg-white/20 text-white"
                         )}
                     >
                         <RotateCw className={cn("w-3 h-3 sm:w-3.5 sm:h-3.5", allFlipped && "rotate-180")} />
@@ -800,16 +824,16 @@ export function AnagramFlashcardPlayer({
                     </Button>
                 ) : (
                     <div className="flex flex-col items-end gap-1 shrink-0">
-                        <div className="flex items-center gap-1.5 text-[11px] sm:text-xs font-bold text-slate-600 dark:text-slate-300">
+                        <div className={cn("flex items-center gap-1.5 text-[11px] sm:text-xs font-bold", isSketchnote || isLightTheme ? "text-slate-600" : "text-slate-300")}>
                             <span>Kart İlerlemesi:</span>
-                            <span className="font-extrabold text-indigo-600 dark:text-indigo-400">{flippedCount} / {totalCards}</span>
+                            <span className={cn("font-extrabold", isSketchnote || isLightTheme ? "text-indigo-600" : "text-indigo-300")}>{flippedCount} / {totalCards}</span>
                             {allFlipped && (
-                                <span className="flex items-center gap-1 text-[10px] font-black text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full ml-1">
+                                <span className={cn("flex items-center gap-1 text-[10px] font-black border px-2 py-0.5 rounded-full ml-1", isSketchnote || isLightTheme ? "text-emerald-700 bg-emerald-50 border-emerald-200" : "text-emerald-300 bg-emerald-500/15 border-emerald-400/30")}>
                                     <CheckCircle2 className="w-3 h-3 text-emerald-500" /> Tamamlandı
                                 </span>
                             )}
                         </div>
-                        <div className="w-28 sm:w-36 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                        <div className={cn("w-28 sm:w-36 h-1.5 rounded-full overflow-hidden", isSketchnote || isLightTheme ? "bg-slate-200" : "bg-white/15")}>
                             <div 
                                 className="h-full bg-gradient-to-r from-indigo-500 to-emerald-500 transition-all duration-300 rounded-full"
                                 style={{ width: `${totalCards > 0 ? (flippedCount / totalCards) * 100 : 0}%` }}
