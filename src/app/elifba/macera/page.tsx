@@ -760,22 +760,15 @@ export default function ElifbaMaceraPage() {
                         {currentStage.items[practiceIndex] && (
                             <div className="bg-gradient-to-b from-sky-50 to-white rounded-3xl border-3 border-sky-200 p-6 sm:p-8 my-4 shadow-inner flex flex-col items-center justify-center min-h-[220px]">
                                 
-                                {/* Resim veya Arapça Metin */}
+                                {/* Harf Kartı Görseli (Görsel varsa sadece görsel, yüklenemezse Arapça font yedeği) */}
                                 <div className="h-32 sm:h-40 flex items-center justify-center mb-3">
-                                    <img 
+                                    <StageItemImage 
                                         src={currentStage.items[practiceIndex].imgSrc}
                                         alt={currentStage.items[practiceIndex].name}
-                                        className="max-h-full max-w-[200px] object-contain drop-shadow-md select-none pointer-events-none"
-                                        onError={(e) => {
-                                            // Resim bulunamazsa büyük Arapça font fallback'i
-                                            (e.target as HTMLElement).style.display = 'none';
-                                        }}
+                                        fallbackText={currentStage.items[practiceIndex].arabic || currentStage.items[practiceIndex].name}
+                                        className="max-h-full max-w-[200px] object-contain drop-shadow-md select-none pointer-events-none rounded-xl"
+                                        textClassName="text-6xl sm:text-7xl font-bold font-serif text-sky-800 drop-shadow-sm select-none"
                                     />
-                                    {currentStage.items[practiceIndex].arabic && (
-                                        <div className="text-6xl sm:text-7xl font-bold font-serif text-slate-900 drop-shadow-sm select-none" dir="rtl">
-                                            {currentStage.items[practiceIndex].arabic}
-                                        </div>
-                                    )}
                                 </div>
 
                                 {/* Okunuş Adı */}
@@ -951,21 +944,15 @@ export default function ElifbaMaceraPage() {
                                                 cardStyle
                                             )}
                                         >
-                                            {/* Resim veya Arapça Metin */}
+                                            {/* Seçenek Kartı Görseli (Görsel varsa sadece görsel, yüklenemezse Arapça font yedeği) */}
                                             <div className="h-16 sm:h-20 flex items-center justify-center mb-1">
-                                                <img 
+                                                <StageItemImage 
                                                     src={opt.imgSrc} 
                                                     alt={opt.name} 
-                                                    className="max-h-full max-w-[90px] object-contain drop-shadow select-none pointer-events-none"
-                                                    onError={(e) => {
-                                                        (e.target as HTMLElement).style.display = 'none';
-                                                    }}
+                                                    fallbackText={opt.arabic || opt.name}
+                                                    className="max-h-full max-w-[90px] object-contain drop-shadow select-none pointer-events-none rounded-lg"
+                                                    textClassName="text-4xl sm:text-5xl font-bold font-serif text-sky-800 select-none"
                                                 />
-                                                {opt.arabic && (
-                                                    <div className="text-4xl sm:text-5xl font-bold font-serif text-slate-900 select-none" dir="rtl">
-                                                        {opt.arabic}
-                                                    </div>
-                                                )}
                                             </div>
 
                                             {/* İsim Etiketi */}
@@ -1345,5 +1332,42 @@ function GraduationCapIcon(props: React.SVGProps<SVGSVGElement>) {
             <path d="M22 10v6" />
             <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" />
         </svg>
+    );
+}
+
+function StageItemImage({ 
+    src, 
+    alt, 
+    fallbackText, 
+    className, 
+    textClassName 
+}: { 
+    src?: string; 
+    alt: string; 
+    fallbackText?: string; 
+    className?: string; 
+    textClassName?: string; 
+}) {
+    const [hasError, setHasError] = useState(false);
+
+    useEffect(() => {
+        setHasError(false);
+    }, [src]);
+
+    if (!src || hasError) {
+        return (
+            <div className={cn("font-bold font-serif select-none flex items-center justify-center", textClassName)} dir="rtl">
+                {fallbackText || alt}
+            </div>
+        );
+    }
+
+    return (
+        <img 
+            src={src} 
+            alt={alt} 
+            onError={() => setHasError(true)}
+            className={className}
+        />
     );
 }
