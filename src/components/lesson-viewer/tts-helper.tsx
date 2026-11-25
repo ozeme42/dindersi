@@ -235,20 +235,23 @@ export const getTurkishVoices = (): TurkishVoiceOption[] => {
         const isDilara = nameLower.includes('dilara');
         const isTolga = nameLower.includes('tolga');
         const isGoogle = nameLower.includes('google');
-        const isApple = nameLower.includes('yelda') || nameLower.includes('cem');
+        const isYelda = nameLower.includes('yelda');
+        const isCem = nameLower.includes('cem');
+        const isApple = isYelda || isCem;
         const isNatural = (isEmel || isAhmet || isDilara || nameLower.includes('natural') || nameLower.includes('doğal') || nameLower.includes('neural') || isGoogle || isApple) && !nameLower.includes('desktop');
 
         let gender: 'female' | 'male' | 'unknown' = 'unknown';
-        if (isEmel || isDilara || nameLower.includes('yelda') || nameLower.includes('female')) gender = 'female';
-        else if (isAhmet || isTolga || nameLower.includes('cem') || nameLower.includes('male')) gender = 'male';
+        if (isEmel || isDilara || isYelda || isGoogle || nameLower.includes('female') || nameLower.includes('kadın')) gender = 'female';
+        else if (isAhmet || isTolga || isCem || nameLower.includes('male') || nameLower.includes('erkek')) gender = 'male';
 
         let displayName = v.name;
         if (isEmel) displayName = 'Microsoft Emel (Doğal İnsan Sesi - Kadın) ✨';
         else if (isAhmet) displayName = 'Microsoft Ahmet (Doğal İnsan Sesi - Erkek) ✨';
-        else if (isDilara) displayName = 'Microsoft Dilara (Doğal İnsan Sesi) ✨';
-        else if (isGoogle) displayName = 'Google Türkçe (Doğal Ses) ✨';
-        else if (isApple) displayName = `${v.name} (Apple Gelişmiş Ses) ✨`;
-        else if (isTolga) displayName = 'Microsoft Tolga (Windows Mekanik Ses) ⚠️';
+        else if (isDilara) displayName = 'Microsoft Dilara (Doğal İnsan Sesi - Kadın) ✨';
+        else if (isGoogle) displayName = 'Google Türkçe (Kadın) ✨';
+        else if (isCem) displayName = `${v.name} (Erkek) ✨`;
+        else if (isYelda) displayName = `${v.name} (Kadın) ✨`;
+        else if (isTolga) displayName = 'Microsoft Tolga (Erkek · Klasik) ⚠️';
 
         return {
             name: v.name,
@@ -259,8 +262,23 @@ export const getTurkishVoices = (): TurkishVoiceOption[] => {
     });
 };
 
-// En doğal insan sesini seçen yardımcı (Edge/Windows Natural Neural, Google ve Apple sesleri)
-export const getBestTurkishVoice = (preferredVoiceName?: string | null): SpeechSynthesisVoice | null => {
+export const inferBrowserVoiceGender = (voice: SpeechSynthesisVoice | null): 'female' | 'male' | 'unknown' => {
+    if (!voice) return 'unknown';
+    const name = voice.name.toLowerCase();
+    if (name.includes('emel') || name.includes('dilara') || name.includes('yelda') || name.includes('female') || name.includes('kadın') || name.includes('google türkçe') || name.includes('google turkish')) {
+        return 'female';
+    }
+    if (name.includes('ahmet') || name.includes('tolga') || name.includes('cem') || name.includes('mehmet') || name.includes('male') || name.includes('erkek')) {
+        return 'male';
+    }
+    return 'unknown';
+};
+
+// En doğal insan sesini seçen yardımcı (cinsiyet tercihine saygılı: Edge Ahmet/Emel, Apple Cem/Yelda, Google, Tolga)
+export const getBestTurkishVoice = (
+    preferredVoiceName?: string | null,
+    preferredGender?: 'female' | 'male' | null
+): SpeechSynthesisVoice | null => {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return null;
     const voices = window.speechSynthesis.getVoices();
     if (!voices || voices.length === 0) return null;
@@ -272,11 +290,35 @@ export const getBestTurkishVoice = (preferredVoiceName?: string | null): SpeechS
 
     if (trVoices.length === 0) return null;
 
-    // 0. Tercih edilen ses (Parametre veya localStorage'dan)
+    // 0. Tercih edilen yerel tarayıcı sesi (AI ses kimlikleri hariç birebir eşleşme)
     const pref = preferredVoiceName || (typeof window !== 'undefined' ? localStorage.getItem('preferred_turkish_voice') : null);
-    if (pref && pref !== 'auto') {
+    if (pref && pref !== 'auto' && pref !== 'browser:auto' && !pref.startsWith('ai:')) {
         const matched = trVoices.find(v => v.name.toLowerCase() === pref.toLowerCase() || v.name.toLowerCase().includes(pref.toLowerCase()));
         if (matched) return matched;
+    }
+
+    const effectiveGender = preferredGender || (
+        pref && pref.startsWith('ai:')
+            ? (AI_TURKISH_VOICES.find(v => v.id === pref || v.voiceName === pref.slice(3))?.gender ?? null)
+            : null
+    );
+
+    // 0.5. Kullanıcı erkek ses seçtiyse yedek motor da önce ERKEK sesleri seçsin
+    if (effectiveGender === 'male') {
+        const ahmetNatural = trVoices.find(v => {
+            const n = v.name.toLowerCase();
+            return n.includes('ahmet') && !n.includes('desktop');
+        });
+        if (ahmetNatural) return ahmetNatural;
+
+        const appleCemEnhanced = trVoices.find(v => v.name.toLowerCase().includes('cem') && v.name.toLowerCase().includes('enhanced'));
+        if (appleCemEnhanced) return appleCemEnhanced;
+
+        const otherMaleNatural = trVoices.find(v => inferBrowserVoiceGender(v) === 'male' && !v.name.toLowerCase().includes('desktop'));
+        if (otherMaleNatural) return otherMaleNatural;
+
+        const tolgaOrMaleDesktop = trVoices.find(v => inferBrowserVoiceGender(v) === 'male');
+        if (tolgaOrMaleDesktop) return tolgaOrMaleDesktop;
     }
 
     // 1. Doğal İnsan Sesi (Natural / Neural) - Microsoft Emel / Ahmet (Edge veya Windows 11 Doğal)
@@ -357,6 +399,8 @@ export interface TtsEngineStatus {
     mode: 'ai' | 'browser';
     voiceLabel: string;
     fallbackReason?: 'NO_API_KEY' | 'QUOTA' | 'NETWORK' | 'LOCAL_SELECTED';
+    desiredGender?: 'female' | 'male';
+    actualVoiceGender?: 'female' | 'male' | 'unknown';
 }
 
 interface WavSpeechWindow {
@@ -371,6 +415,7 @@ interface CachedTtsAudio {
 }
 
 const TTS_CACHE_NAME = 'eduai-tts-v1';
+const TTS_QUOTA_SESSION_KEY = 'eduai_tts_quota_until';
 const memoryAudioCache = new Map<string, CachedTtsAudio>();
 const inflightTtsRequests = new Map<string, Promise<Blob>>();
 let activeSpeechGenId = 0;
@@ -381,7 +426,42 @@ let activeFallbackTimer: ReturnType<typeof setInterval> | null = null;
 let activeUtteranceRef: SpeechSynthesisUtterance | null = null;
 let cloudCooldownUntil = 0;
 let lastCloudFallbackReason: TtsEngineStatus['fallbackReason'] | undefined;
-let lastTtsStatus: TtsEngineStatus = { mode: 'ai', voiceLabel: 'Elif — Doğal İnsan Sesi (Kadın) ✨' };
+let lastTtsStatus: TtsEngineStatus = { mode: 'ai', voiceLabel: 'Elif — Doğal İnsan Sesi (Kadın) ✨', desiredGender: 'female', actualVoiceGender: 'female' };
+
+function getEffectiveCloudCooldownUntil(): number {
+    if (typeof window !== 'undefined') {
+        try {
+            const stored = Number(sessionStorage.getItem(TTS_QUOTA_SESSION_KEY) || '0');
+            if (stored > cloudCooldownUntil) cloudCooldownUntil = stored;
+        } catch {}
+    }
+    return cloudCooldownUntil;
+}
+
+function setCloudQuotaCooldown(ms: number) {
+    cloudCooldownUntil = Date.now() + ms;
+    lastCloudFallbackReason = 'QUOTA';
+    if (typeof window !== 'undefined') {
+        try {
+            sessionStorage.setItem(TTS_QUOTA_SESSION_KEY, String(cloudCooldownUntil));
+        } catch {}
+    }
+}
+
+export function isCloudTtsInCooldown(): boolean {
+    return Date.now() < getEffectiveCloudCooldownUntil();
+}
+
+export function getCloudCooldownReason(): TtsEngineStatus['fallbackReason'] | undefined {
+    return isCloudTtsInCooldown() ? lastCloudFallbackReason : undefined;
+}
+
+function publishTtsStatus(status: TtsEngineStatus) {
+    lastTtsStatus = status;
+    if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('eduai-tts-status', { detail: status }));
+    }
+}
 
 export function getLastTtsStatus(): TtsEngineStatus {
     return lastTtsStatus;
@@ -391,6 +471,7 @@ export function resolveActiveTtsVoiceSelection(preferredVoiceName?: string | nul
     isLocal: boolean;
     aiVoice?: AiTurkishVoiceOption;
     localVoicePref?: string | null;
+    desiredGender?: 'female' | 'male';
 } {
     const rawPref = preferredVoiceName !== undefined
         ? preferredVoiceName
@@ -399,21 +480,36 @@ export function resolveActiveTtsVoiceSelection(preferredVoiceName?: string | nul
     if (rawPref && rawPref !== 'auto') {
         if (rawPref.startsWith('ai:')) {
             const matched = AI_TURKISH_VOICES.find(v => v.id === rawPref || v.voiceName === rawPref.slice(3));
-            return { isLocal: false, aiVoice: matched || AI_TURKISH_VOICES[0] };
+            const chosen = matched || AI_TURKISH_VOICES[0];
+            return { isLocal: false, aiVoice: chosen, desiredGender: chosen.gender };
         }
         if (rawPref === 'browser:auto') {
             return { isLocal: true, localVoicePref: null };
         }
-        return { isLocal: true, localVoicePref: rawPref };
+        const lower = rawPref.toLowerCase();
+        const inferred = (lower.includes('ahmet') || lower.includes('tolga') || lower.includes('cem') || lower.includes('male'))
+            ? 'male'
+            : (lower.includes('emel') || lower.includes('dilara') || lower.includes('yelda') || lower.includes('google'))
+                ? 'female'
+                : undefined;
+        return { isLocal: true, localVoicePref: rawPref, desiredGender: inferred };
     }
 
     // Varsayılan ('auto'): tüm tarayıcılarda aynı gerçek yapay zeka insan sesi
-    return { isLocal: false, aiVoice: AI_TURKISH_VOICES[0] };
+    return { isLocal: false, aiVoice: AI_TURKISH_VOICES[0], desiredGender: AI_TURKISH_VOICES[0].gender };
 }
 
-export function resetCloudTtsCooldown() {
+export function resetCloudTtsCooldown(forceClearQuota = false) {
+    if (!forceClearQuota && lastCloudFallbackReason === 'QUOTA' && Date.now() < getEffectiveCloudCooldownUntil()) {
+        return;
+    }
     cloudCooldownUntil = 0;
     lastCloudFallbackReason = undefined;
+    if (typeof window !== 'undefined') {
+        try {
+            sessionStorage.removeItem(TTS_QUOTA_SESSION_KEY);
+        } catch {}
+    }
 }
 
 function getCacheStorageKey(cacheKey: string): string {
@@ -574,10 +670,9 @@ async function resolveCachedTtsAudio(spokenText: string, voiceName: string, sign
     return entry;
 }
 
-/** Görünür bir sonraki cümlenin insan sesini sessizce önbelleğe alır (anında başlatma için) */
+/** Yalnızca tarayıcıda daha önce üretilmiş ses önbelleği varsa ağa çıkmadan belleğe alır */
 export function prefetchTurkishSpeech(rawTextOrHtml: string, preferredVoiceName?: string | null) {
-    if (typeof window === 'undefined' || !rawTextOrHtml?.trim()) return;
-    if (Date.now() < cloudCooldownUntil) return;
+    if (typeof window === 'undefined' || !rawTextOrHtml?.trim() || !('caches' in window)) return;
 
     const selection = resolveActiveTtsVoiceSelection(preferredVoiceName);
     if (selection.isLocal || !selection.aiVoice) return;
@@ -585,12 +680,20 @@ export function prefetchTurkishSpeech(rawTextOrHtml: string, preferredVoiceName?
     const { spokenText } = prepareTurkishSpeech(rawTextOrHtml);
     if (!spokenText.trim()) return;
 
-    const key = `${selection.aiVoice.voiceName}::${spokenText}`;
-    if (memoryAudioCache.has(key) || inflightTtsRequests.has(key)) return;
+    const cacheKey = `${selection.aiVoice.voiceName}::${spokenText}`;
+    if (memoryAudioCache.has(cacheKey)) return;
 
-    resolveCachedTtsAudio(spokenText, selection.aiVoice.voiceName).catch(() => {
-        // Arka plan önbellekleme hatalarını sessizce yoksay
-    });
+    void window.caches.open(TTS_CACHE_NAME).then(async (cache) => {
+        const cachedResp = await cache.match(getCacheStorageKey(cacheKey));
+        if (!cachedResp) return;
+        const blob = await cachedResp.blob();
+        if (blob.size <= 44 || memoryAudioCache.has(cacheKey)) return;
+        const [url, speechWindow] = await Promise.all([
+            Promise.resolve(URL.createObjectURL(blob)),
+            detectWavSpeechWindow(blob),
+        ]);
+        memoryAudioCache.set(cacheKey, { url, speechWindow });
+    }).catch(() => {});
 }
 
 export function stopAllTurkishSpeech() {
@@ -707,7 +810,7 @@ export async function speakTurkishText(options: SpeakTurkishOptions): Promise<vo
     const weightedTimeline = buildWeightedCharTimeline(spokenText);
 
     const selection = resolveActiveTtsVoiceSelection(options.preferredVoice);
-    const shouldTryCloud = !selection.isLocal && Date.now() >= cloudCooldownUntil;
+    const shouldTryCloud = !selection.isLocal && !isCloudTtsInCooldown();
 
     const playViaBrowserFallback = (reason?: TtsEngineStatus['fallbackReason']) => {
         if (genId !== activeSpeechGenId) return;
@@ -716,13 +819,16 @@ export async function speakTurkishText(options: SpeakTurkishOptions): Promise<vo
             return;
         }
 
-        const bestVoice = getBestTurkishVoice(selection.localVoicePref);
+        const bestVoice = getBestTurkishVoice(selection.localVoicePref, selection.desiredGender);
+        const actualGender = inferBrowserVoiceGender(bestVoice);
         const status: TtsEngineStatus = {
             mode: 'browser',
             voiceLabel: bestVoice ? bestVoice.name : 'Tarayıcı Varsayılan Sesi',
             fallbackReason: reason,
+            desiredGender: selection.desiredGender,
+            actualVoiceGender: actualGender,
         };
-        lastTtsStatus = status;
+        publishTtsStatus(status);
 
         const utterance = new SpeechSynthesisUtterance(spokenText);
         activeUtteranceRef = utterance;
@@ -839,11 +945,16 @@ export async function speakTurkishText(options: SpeakTurkishOptions): Promise<vo
     const ctrl = new AbortController();
     activeAbortCtrl = ctrl;
 
-    const status: TtsEngineStatus = { mode: 'ai', voiceLabel: aiVoice.displayName };
+    const status: TtsEngineStatus = {
+        mode: 'ai',
+        voiceLabel: aiVoice.displayName,
+        desiredGender: aiVoice.gender,
+        actualVoiceGender: aiVoice.gender,
+    };
     options.onLoading?.();
 
     try {
-        const timeoutId = setTimeout(() => ctrl.abort(), 8500);
+        const timeoutId = setTimeout(() => ctrl.abort(), 12000);
         const cachedAudio = await resolveCachedTtsAudio(spokenText, aiVoice.voiceName, ctrl.signal);
         clearTimeout(timeoutId);
 
@@ -851,7 +962,7 @@ export async function speakTurkishText(options: SpeakTurkishOptions): Promise<vo
 
         const audio = new Audio(cachedAudio.url);
         activeAudioEl = audio;
-        lastTtsStatus = status;
+        publishTtsStatus(status);
 
         const resolveVisualProgress = (currentSec: number, durationSec: number) => {
             const win = cachedAudio.speechWindow;
@@ -957,8 +1068,7 @@ export async function speakTurkishText(options: SpeakTurkishOptions): Promise<vo
             cloudCooldownUntil = Date.now() + 60000;
             lastCloudFallbackReason = 'NO_API_KEY';
         } else if (code === 'QUOTA') {
-            cloudCooldownUntil = Date.now() + 20000;
-            lastCloudFallbackReason = 'QUOTA';
+            setCloudQuotaCooldown(10 * 60 * 1000);
         } else {
             lastCloudFallbackReason = 'NETWORK';
         }
@@ -1062,12 +1172,12 @@ export const HighlightedSentence = ({
         }
     }, [htmlContent, shouldBuildAst]);
 
-    // Senkron daktilo modunda ses henüz başlamadan tüm metni flaşlama; imleçle bekle
+    // Senkron daktilo modunda ses henüz başlamadan tüm metni flaşlama; boş alanla bekle
     if (isTypewriterSynced && !isHighlightingActive) {
         if (isPreparing) {
             return (
-                <div className={cn("highlight-text inline-flex items-center min-h-[1.2em]", className)}>
-                    <span className="inline-block w-[3px] h-[0.95em] rounded-full bg-amber-400 animate-pulse" />
+                <div className={cn("highlight-text min-h-[1.2em]", className)} aria-hidden="true">
+                    &nbsp;
                 </div>
             );
         }
@@ -1114,24 +1224,20 @@ export const HighlightedSentence = ({
                         : token.text;
 
                     renderedTokens.push(
-                        <React.Fragment key={`${key}-${idx}`}>
-                            <mark
-                                className={cn(
-                                    "inline font-black rounded-lg transition-colors duration-100 select-none",
-                                    isModal 
-                                        ? "px-1.5 sm:px-3 py-0.5 sm:py-1 mx-0.5 sm:mx-1 rounded-xl sm:rounded-2xl ring-4 ring-amber-300 shadow-2xl" 
-                                        : "px-1 py-0.5 mx-0.5",
-                                    isLightBoard
-                                        ? "bg-amber-300 text-slate-950 ring-2 ring-amber-500/80 shadow-md shadow-amber-400/40"
-                                        : "bg-amber-400 text-slate-950 ring-2 ring-amber-300/90 shadow-lg shadow-amber-400/60"
-                                )}
-                            >
-                                {visibleText}
-                            </mark>
-                            {isTypewriterSynced && (
-                                <span className="inline-block w-[2.5px] h-[0.9em] ml-0.5 align-middle rounded-full bg-amber-400 animate-pulse" />
+                        <mark
+                            key={`${key}-${idx}`}
+                            className={cn(
+                                "inline font-black rounded-lg transition-colors duration-100 select-none",
+                                isModal 
+                                    ? "px-1.5 sm:px-3 py-0.5 sm:py-1 mx-0.5 sm:mx-1 rounded-xl sm:rounded-2xl ring-4 ring-amber-300 shadow-2xl" 
+                                    : "px-1 py-0.5 mx-0.5",
+                                isLightBoard
+                                    ? "bg-amber-300 text-slate-950 ring-2 ring-amber-500/80 shadow-md shadow-amber-400/40"
+                                    : "bg-amber-400 text-slate-950 ring-2 ring-amber-300/90 shadow-lg shadow-amber-400/60"
                             )}
-                        </React.Fragment>
+                        >
+                            {visibleText}
+                        </mark>
                     );
                     return;
                 }

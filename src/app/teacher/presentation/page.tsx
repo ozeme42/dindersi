@@ -18,6 +18,9 @@ import {
     AI_TURKISH_VOICES,
     getTurkishVoices,
     getBestTurkishVoice,
+    inferBrowserVoiceGender,
+    isCloudTtsInCooldown,
+    getCloudCooldownReason,
     speakTurkishText,
     stopAllTurkishSpeech,
     resetCloudTtsCooldown,
@@ -114,6 +117,8 @@ function PresentationPageContent() {
     const [ttsStatus, setTtsStatus] = useState<TtsEngineStatus>({
         mode: 'ai',
         voiceLabel: AI_TURKISH_VOICES[0].displayName,
+        desiredGender: AI_TURKISH_VOICES[0].gender,
+        actualVoiceGender: AI_TURKISH_VOICES[0].gender,
     });
 
     useEffect(() => {
@@ -125,7 +130,10 @@ function PresentationPageContent() {
             if ('speechSynthesis' in window) {
                 const list = getTurkishVoices();
                 setAvailableVoices(list);
-                best = getBestTurkishVoice(selection.isLocal ? selection.localVoicePref : null);
+                best = getBestTurkishVoice(
+                    selection.isLocal ? selection.localVoicePref : null,
+                    selection.desiredGender
+                );
                 if (best) {
                     setActiveVoiceName(best.name);
                 }
@@ -136,27 +144,53 @@ function PresentationPageContent() {
                     mode: 'browser',
                     voiceLabel: best ? best.name : 'Tarayıcı Varsayılan Sesi',
                     fallbackReason: 'LOCAL_SELECTED',
+                    desiredGender: selection.desiredGender,
+                    actualVoiceGender: inferBrowserVoiceGender(best),
+                });
+            } else if (isCloudTtsInCooldown()) {
+                setTtsStatus({
+                    mode: 'browser',
+                    voiceLabel: best ? best.name : 'Tarayıcı Varsayılan Sesi',
+                    fallbackReason: getCloudCooldownReason() || 'QUOTA',
+                    desiredGender: selection.desiredGender,
+                    actualVoiceGender: inferBrowserVoiceGender(best),
                 });
             } else if (selection.aiVoice) {
                 setTtsStatus({
                     mode: 'ai',
                     voiceLabel: selection.aiVoice.displayName,
+                    desiredGender: selection.aiVoice.gender,
+                    actualVoiceGender: selection.aiVoice.gender,
                 });
             }
         };
 
+        const handleLiveTtsStatus = (e: Event) => {
+            const detail = (e as CustomEvent<TtsEngineStatus>).detail;
+            if (detail) {
+                setTtsStatus(detail);
+                if (detail.mode === 'browser' && detail.voiceLabel) {
+                    setActiveVoiceName(detail.voiceLabel);
+                }
+            }
+        };
+
         updateVoices();
+        window.addEventListener('eduai-tts-status', handleLiveTtsStatus);
         if ('speechSynthesis' in window) {
             window.speechSynthesis.addEventListener('voiceschanged', updateVoices);
-            return () => {
-                window.speechSynthesis.removeEventListener('voiceschanged', updateVoices);
-            };
         }
+        return () => {
+            window.removeEventListener('eduai-tts-status', handleLiveTtsStatus);
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.removeEventListener('voiceschanged', updateVoices);
+            }
+        };
     }, [preferredVoice]);
 
     const handleVoiceChange = (val: string) => {
         setPreferredVoice(val);
-        resetCloudTtsCooldown();
+        resetCloudTtsCooldown(false);
         stopAllTurkishSpeech();
         if (typeof window !== 'undefined') {
             if (val === 'auto') {
@@ -1864,44 +1898,82 @@ function PresentationPageContent() {
                                                         </Label>
                                                         <span className={cn("text-[10px] truncate", mutedTone)}>
                                                             {ttsStatus.mode === 'ai'
-                                                                ? `🎙️ ${ttsStatus.voiceLabel.replace(' ✨', '')} · Tüm Tarayıcılarda Sabit`
+                                                                ? `🎙️ ${ttsStatus.voiceLabel.replace(' ✨', '')}`
                                                                 : ttsStatus.fallbackReason === 'NO_API_KEY'
-                                                                    ? `⚠️ Tarayıcı Yedeği (API yok): ${activeVoiceName || ttsStatus.voiceLabel}`
+                                                                    ? `⚠️ API Anahtarı Yok · ${activeVoiceName || ttsStatus.voiceLabel}`
                                                                     : ttsStatus.fallbackReason === 'QUOTA'
-                                                                        ? `⚠️ Tarayıcı Yedeği (Kota): ${activeVoiceName || ttsStatus.voiceLabel}`
+                                                                        ? `⚠️ AI Kotası Doldu · Yedek: ${activeVoiceName || ttsStatus.voiceLabel}`
                                                                         : ttsStatus.fallbackReason === 'NETWORK'
-                                                                            ? `⚠️ Tarayıcı Yedeği (Ağ): ${activeVoiceName || ttsStatus.voiceLabel}`
+                                                                            ? `⚠️ Bağlantı Hatası · Yedek: ${activeVoiceName || ttsStatus.voiceLabel}`
                                                                             : `💻 Yerel Ses: ${activeVoiceName || ttsStatus.voiceLabel}`}
                                                         </span>
                                                     </div>
 
-                                                    <Select value={preferredVoice} onValueChange={handleVoiceChange}>
-                                                        <SelectTrigger className={cn("w-[148px] h-7 text-xs shrink-0", isLightUi ? "bg-white border-slate-200 text-slate-900" : "bg-slate-800 border-white/20 text-white")}>
-                                                            <SelectValue />
-                                                        </SelectTrigger>
-                                                        <SelectContent className={cn(isLightUi ? "bg-white border-slate-200 text-slate-900" : "bg-slate-900 border-white/20 text-white")}>
-                                                            <SelectItem value="auto">✨ Otomatik İnsan Sesi</SelectItem>
-                                                            {AI_TURKISH_VOICES.map(v => (
-                                                                <SelectItem key={v.id} value={v.id}>
-                                                                    {v.displayName.replace(' ✨', '')}
-                                                                </SelectItem>
-                                                            ))}
-                                                            {availableVoices.length > 0 && (
-                                                                <>
-                                                                    <div className={cn("px-2 py-1 mt-1 text-[10px] font-bold uppercase tracking-wider border-t", isLightUi ? "text-slate-400 border-slate-100" : "text-slate-400 border-white/10")}>
-                                                                        Yerel Tarayıcı Sesleri
-                                                                    </div>
-                                                                    <SelectItem value="browser:auto">💻 Cihaz Varsayılanı</SelectItem>
-                                                                    {availableVoices.map(v => (
-                                                                        <SelectItem key={v.name} value={v.name}>
-                                                                            {v.displayName.replace(' ✨', '').replace(' ⚠️', '')}
-                                                                        </SelectItem>
-                                                                    ))}
-                                                                </>
-                                                            )}
-                                                        </SelectContent>
-                                                    </Select>
+                                                    <div className="flex items-center gap-1 shrink-0">
+                                                        {ttsStatus.mode === 'browser' && (ttsStatus.fallbackReason === 'QUOTA' || ttsStatus.fallbackReason === 'NETWORK') && (
+                                                            <button
+                                                                type="button"
+                                                                title="Yapay Zeka Sesini Tekrar Dene"
+                                                                onClick={() => {
+                                                                    resetCloudTtsCooldown(true);
+                                                                    const sel = resolveActiveTtsVoiceSelection(preferredVoice);
+                                                                    if (sel.aiVoice) {
+                                                                        setTtsStatus({
+                                                                            mode: 'ai',
+                                                                            voiceLabel: sel.aiVoice.displayName,
+                                                                            desiredGender: sel.aiVoice.gender,
+                                                                            actualVoiceGender: sel.aiVoice.gender,
+                                                                        });
+                                                                    }
+                                                                }}
+                                                                className={cn(
+                                                                    "h-7 w-7 rounded-lg border flex items-center justify-center transition-colors cursor-pointer",
+                                                                    isLightUi ? "bg-white border-slate-200 text-slate-700 hover:bg-slate-50" : "bg-slate-800 border-white/20 text-slate-200 hover:bg-slate-700"
+                                                                )}
+                                                            >
+                                                                <RotateCcw className="w-3.5 h-3.5" />
+                                                            </button>
+                                                        )}
+
+                                                        <Select value={preferredVoice} onValueChange={handleVoiceChange}>
+                                                            <SelectTrigger className={cn("w-[144px] h-7 text-xs shrink-0", isLightUi ? "bg-white border-slate-200 text-slate-900" : "bg-slate-800 border-white/20 text-white")}>
+                                                                <SelectValue />
+                                                            </SelectTrigger>
+                                                            <SelectContent className={cn(isLightUi ? "bg-white border-slate-200 text-slate-900" : "bg-slate-900 border-white/20 text-white")}>
+                                                                <SelectItem value="auto">✨ Otomatik İnsan Sesi</SelectItem>
+                                                                {AI_TURKISH_VOICES.map(v => (
+                                                                    <SelectItem key={v.id} value={v.id}>
+                                                                        {v.displayName.replace(' ✨', '')}
+                                                                    </SelectItem>
+                                                                ))}
+                                                                {availableVoices.length > 0 && (
+                                                                    <>
+                                                                        <div className={cn("px-2 py-1 mt-1 text-[10px] font-bold uppercase tracking-wider border-t", isLightUi ? "text-slate-400 border-slate-100" : "text-slate-400 border-white/10")}>
+                                                                            Yerel Tarayıcı Sesleri
+                                                                        </div>
+                                                                        <SelectItem value="browser:auto">💻 Cihaz Varsayılanı</SelectItem>
+                                                                        {availableVoices.map(v => (
+                                                                            <SelectItem key={v.name} value={v.name}>
+                                                                                {v.displayName.replace(' ✨', '').replace(' ⚠️', '')}
+                                                                            </SelectItem>
+                                                                        ))}
+                                                                    </>
+                                                                )}
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </div>
                                                 </div>
+
+                                                {ttsStatus.mode === 'browser' && ttsStatus.fallbackReason === 'QUOTA' && (
+                                                    <p className={cn(
+                                                        "text-[10px] leading-snug rounded-xl px-2 py-1.5 border",
+                                                        isLightUi ? "bg-amber-50 border-amber-200 text-amber-900" : "bg-amber-500/10 border-amber-400/25 text-amber-200"
+                                                    )}>
+                                                        {ttsStatus.desiredGender === 'male' && ttsStatus.actualVoiceGender === 'female'
+                                                            ? 'Gemini TTS ücretsiz günlük kotası (10 istek/gün) dolduğu için yedek sese geçildi; bu tarayıcıda Türkçe erkek ses paketi bulunamadığından kadın sesi çalıyor. Erkek sesi için Microsoft Edge veya ücretli Gemini anahtarı kullanın.'
+                                                            : 'Gemini TTS ücretsiz günlük kotası (10 istek/gün) dolduğu için cihaz/tarayıcı yedeği kullanılıyor.'}
+                                                    </p>
+                                                )}
                                             </div>
 
                                             <div className="flex items-center justify-between">

@@ -681,8 +681,8 @@ export function ContentListPlayer({
         if (allowTypewriter && animationSpeed !== 'off' && !completedSentences[targetIdx]) {
             if (isAutoReadEnabled) {
                 return (
-                    <div className={cn("highlight-text inline-flex items-center min-h-[1.2em]", fontClass)}>
-                        <span className="inline-block w-[3px] h-[0.95em] rounded-full bg-amber-400 animate-pulse" />
+                    <div className={cn("highlight-text min-h-[1.2em]", fontClass)} aria-hidden="true">
+                        &nbsp;
                     </div>
                 );
             }
