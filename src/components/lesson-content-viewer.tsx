@@ -34,6 +34,7 @@ import { useAuth } from "@/context/auth-context";
 import { PresentationDrawingBoard } from "@/components/presentation-drawing-board";
 import { PdfSlidePlayer } from "@/components/pdf-slide-player";
 import { isGameStep } from "@/lib/lesson-cache";
+import { splitHtmlIntoSentences } from "./lesson-viewer/tts-helper";
 
 // --- TİP TANIMLAMALARI ---
 type LocalProgress = {
@@ -552,11 +553,27 @@ export function LessonContentViewer({
             const raw = (currentStep as any).items || (currentStep as any).cards || [];
             let totalItems = 1;
             if (Array.isArray(raw) && raw.length > 0) {
-                totalItems = raw.length;
+                totalItems = raw.filter((it: any) => {
+                    const t = typeof it === 'string' ? it : (it?.concept || it?.term || it?.title || it?.word || it?.name || '');
+                    return t.replace(/<[^>]*>/g, '').trim().length > 0;
+                }).length;
             } else if (typeof (currentStep as any).content === 'string') {
-                const doc = new DOMParser().parseFromString(`<div>${(currentStep as any).content}</div>`, 'text/html');
-                const listItems = doc.querySelectorAll('li');
-                totalItems = listItems.length > 0 ? listItems.length : ((currentStep as any).content.match(/[^.!?,\n]+[.!?,\n]*/g) || [(currentStep as any).content]).filter((s: string) => s.trim().length > 0).length;
+                const rawContent = (currentStep as any).content;
+                if (typeof window !== 'undefined') {
+                    const doc = new DOMParser().parseFromString(`<div>${rawContent}</div>`, 'text/html');
+                    const listItems = doc.querySelectorAll('li');
+                    const pItems = doc.querySelectorAll('p');
+                    if (listItems.length > 0) {
+                        totalItems = Array.from(listItems).filter(li => (li.textContent || '').trim().length > 0).length;
+                    } else if (pItems.length > 0) {
+                        totalItems = Array.from(pItems).filter(p => (p.textContent || '').trim().length > 0).length;
+                    } else {
+                        totalItems = rawContent.split('\n').filter((s: string) => s.replace(/<[^>]*>/g, '').trim().length > 0).length;
+                    }
+                } else {
+                    const listItems = rawContent.match(/<li>/g) || [];
+                    totalItems = listItems.length > 0 ? listItems.length : rawContent.split('\n').filter((s: string) => s.trim().length > 0).length;
+                }
             }
             if (totalItems <= 0) totalItems = 1;
             return {
@@ -574,18 +591,7 @@ export function LessonContentViewer({
             else if (currentStep.type === 'accordion') totalItems = (currentStep as AccordionStep).items?.length || 0;
             else if (currentStep.type === 'content') {
                 const stepContent = (currentStep as ContentStep).content || '';
-                if (typeof window !== 'undefined') {
-                    const doc = new DOMParser().parseFromString(`<div>${stepContent}</div>`, 'text/html');
-                    const listItems = doc.querySelectorAll('li');
-                    if (listItems.length > 0) {
-                        totalItems = Array.from(listItems).map(li => li.innerHTML.trim()).filter(Boolean).length;
-                    } else {
-                        totalItems = (stepContent.match(/[^.!?]+[.!?]+/g)?.map(s => s.trim()).filter(Boolean) || [stepContent]).length;
-                    }
-                } else {
-                    const listItems = stepContent.match(/<li>/g) || [];
-                    totalItems = listItems.length > 0 ? listItems.length : (stepContent.match(/[^.!?]+[.!?]+/g) || [stepContent]).length;
-                }
+                totalItems = splitHtmlIntoSentences(stepContent).length;
             }
             if (totalItems <= 0) totalItems = 1;
             return {
@@ -882,7 +888,7 @@ export function LessonContentViewer({
                     step={currentStep}
                     answer={internalProgress.answers[currentStepIndex]}
                     onAnswer={handleAnswer}
-                    onCorrectAndNext={() => setTimeout(handleNext, 1000)}
+                    onCorrectAndNext={() => { if (!isTeacher) setTimeout(handleNext, 1000); }}
                     stepAnswers={internalProgress.answers[currentStepIndex]}
                     topic={topic}
                     courseId={courseId}

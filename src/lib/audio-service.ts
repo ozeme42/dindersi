@@ -279,6 +279,15 @@ class SoundEffects {
 }
 
 const sfx = new SoundEffects();
+let globalSoundEnabled = true;
+
+export function setGlobalSoundEnabled(enabled: boolean) {
+  globalSoundEnabled = enabled;
+}
+
+export function getGlobalSoundEnabled(): boolean {
+  return globalSoundEnabled;
+}
 
 export type SoundType = 
   | 'correct' 
@@ -301,6 +310,7 @@ export type SoundType =
   | 'lose';
 
 export function playSound(type: SoundType) {
+  if (!globalSoundEnabled) return;
   try {
     switch (type) {
       case 'correct':

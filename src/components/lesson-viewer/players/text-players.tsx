@@ -101,22 +101,55 @@ export function HookQuestionPlayer({
 }) {
     const isTeacher = useTeacherMode();
     const isSketchnote = presentationTheme === 'sketchnote';
+    const isLightPresTheme = presentationTheme === 'clean-light' || isSketchnote;
     const containerRef = useRef<HTMLDivElement>(null);
     const [isFullscreen, setIsFullscreen] = useState(Boolean(propIsFullscreen));
     const [showThoughtStarter, setShowThoughtStarter] = useState(false);
     const [hasTriggeredDiscussion, setHasTriggeredDiscussion] = useState(false);
+    const [thinkSeconds, setThinkSeconds] = useState<number>(30);
+    const [isThinkRunning, setIsThinkRunning] = useState<boolean>(false);
 
-    // ☀️ Açık Tema (Varsayılan) / 🌙 Koyu Tema
-    const [themeMode, setThemeMode] = useState<'light' | 'dark'>('light');
+    // ☀️ Açık / 🌙 Koyu Tema (Sunum temasına uyumlu başlangıç + öğretmen geçişi)
+    const [themeMode, setThemeMode] = useState<'light' | 'dark'>(isLightPresTheme ? 'light' : 'dark');
     const isLight = themeMode === 'light';
+
+    useEffect(() => {
+        setThemeMode(isLightPresTheme ? 'light' : 'dark');
+    }, [isLightPresTheme]);
 
     const questionText = step.question || '';
     const qLen = questionText.length;
 
     // Canlı Font Büyütme/Küçültme Seviyesi (0: Normal, 1: Büyük, 2: Çok Büyük [Varsayılan], 3: Dev Tahta)
-    const initialLevel = fontSizeScale === 'huge' ? 3 :
-                         fontSizeScale === 'sm' ? 1 : 2;
-    const [fontLevel, setFontLevel] = useState<number>(initialLevel);
+    const calcLevelFromScale = (scale?: string) =>
+        scale === 'huge' || scale === 'xl' ? 3 : scale === 'lg' ? 2 : scale === 'xs' || scale === 'sm' ? 1 : 2;
+    const [fontLevel, setFontLevel] = useState<number>(calcLevelFromScale(fontSizeScale));
+
+    useEffect(() => {
+        setFontLevel(calcLevelFromScale(fontSizeScale));
+    }, [fontSizeScale]);
+
+    useEffect(() => {
+        setShowThoughtStarter(false);
+        setHasTriggeredDiscussion(false);
+        setIsThinkRunning(false);
+        setThinkSeconds(30);
+    }, [step]);
+
+    useEffect(() => {
+        if (!isThinkRunning || thinkSeconds <= 0) return;
+        const timer = setInterval(() => {
+            setThinkSeconds(prev => {
+                if (prev <= 1) {
+                    setIsThinkRunning(false);
+                    playSound('pop');
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+        return () => clearInterval(timer);
+    }, [isThinkRunning, thinkSeconds]);
 
     // Ekrana tam sığacak ve taşma yapmadan belirgin ve büyük görünecek akıllı tipografi
     const getHookQuestionFontClass = () => {
@@ -186,13 +219,6 @@ export function HookQuestionPlayer({
     const handleStartDiscussion = () => {
         playSound('pop');
         setHasTriggeredDiscussion(true);
-        import('canvas-confetti').then(m => {
-            m.default({
-                particleCount: 80,
-                spread: 80,
-                origin: { y: 0.6 }
-            });
-        }).catch(() => {});
     };
 
     return (
@@ -231,7 +257,7 @@ export function HookQuestionPlayer({
                         : "bg-slate-900/70 backdrop-blur-md border-white/10 text-white"
                 )}>
                     {/* Alt İlerleme Çizgisi */}
-                    <div className="absolute bottom-0 left-0 h-1.5 w-full bg-slate-200/60 dark:bg-slate-800">
+                    <div className={cn("absolute bottom-0 left-0 h-1.5 w-full", isLight ? "bg-slate-200/70" : "bg-slate-800")}>
                         <div className="h-full bg-gradient-to-r from-amber-400 via-orange-500 to-rose-400 w-full" />
                     </div>
 
@@ -262,8 +288,48 @@ export function HookQuestionPlayer({
                             </div>
                         </div>
 
-                        {/* Sağ: Tema, Font Büyütücü ve Tam Ekran Kontrolleri */}
-                        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                        {/* Sağ: Düşünme Sayacı, Tema, Font Büyütücü ve Tam Ekran Kontrolleri */}
+                        <div className="flex flex-wrap items-center justify-end gap-1.5 sm:gap-2 shrink-0">
+                            {/* Sessiz Düşünme Sayacı (30sn) */}
+                            <div className={cn(
+                                "flex items-center gap-1 px-2 py-1 rounded-xl border text-xs font-black transition-all",
+                                isThinkRunning
+                                    ? "bg-emerald-500/20 border-emerald-400 text-emerald-700"
+                                    : thinkSeconds === 0
+                                        ? "bg-amber-500/20 border-amber-400 text-amber-700"
+                                        : isLight ? "bg-slate-100 border-slate-300 text-slate-800" : "bg-slate-900/90 border-white/15 text-slate-200"
+                            )}>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        playSound('pop');
+                                        if (thinkSeconds === 0) setThinkSeconds(30);
+                                        setIsThinkRunning(prev => !prev);
+                                    }}
+                                    className="flex items-center gap-1.5 px-1.5 py-0.5 cursor-pointer"
+                                    title="Öğrencilere sessiz düşünme süresi tanıyın"
+                                >
+                                    <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
+                                        <line x1="10" x2="14" y1="2" y2="2" />
+                                        <line x1="12" x2="15" y1="14" y2="11" />
+                                        <circle cx="12" cy="14" r="8" />
+                                    </svg>
+                                    <span className="font-mono">{thinkSeconds === 0 ? "Süre Doldu!" : `${thinkSeconds}sn`}</span>
+                                </button>
+                                {(isThinkRunning || thinkSeconds < 30) && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setIsThinkRunning(false);
+                                            setThinkSeconds(30);
+                                        }}
+                                        className="px-1 opacity-70 hover:opacity-100 cursor-pointer text-[11px]"
+                                        title="Süreyi Sıfırla"
+                                    >
+                                        ↺
+                                    </button>
+                                )}
+                            </div>
                             
                             {/* ☀️ / 🌙 Tema Toggle Butonu */}
                             <div className={cn(
@@ -1222,7 +1288,16 @@ export function ProcessFlowPlayer({
 }) {
     const isTeacher = useTeacherMode();
     const isSketchnote = presentationTheme === 'sketchnote';
+    const isLightTheme = presentationTheme === 'clean-light';
     const [activeStepIndex, setActiveStepIndex] = useState(0);
+    const [sequentialLock, setSequentialLock] = useState(false);
+    const [highestUnlockedIdx, setHighestUnlockedIdx] = useState(0);
+
+    useEffect(() => {
+        setActiveStepIndex(0);
+        setSequentialLock(false);
+        setHighestUnlockedIdx(0);
+    }, [step]);
 
     const cardScale: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 
         (fontSizeScale === 'huge' || fontSizeScale === 'xl') ? 'xl' :
@@ -1243,12 +1318,18 @@ export function ProcessFlowPlayer({
 
     const handleSelectStep = (idx: number) => {
         playSound('pop');
+        if (sequentialLock && idx > highestUnlockedIdx + 1) return;
+        if (idx > highestUnlockedIdx) setHighestUnlockedIdx(idx);
         setActiveStepIndex(idx);
     };
 
     const handleNextStep = () => {
         playSound('pop');
-        setActiveStepIndex(prev => Math.min((step.steps || []).length - 1, prev + 1));
+        setActiveStepIndex(prev => {
+            const next = Math.min((step.steps || []).length - 1, prev + 1);
+            setHighestUnlockedIdx(curr => Math.max(curr, next));
+            return next;
+        });
     };
 
     const handlePrevStep = () => {
@@ -1268,60 +1349,100 @@ export function ProcessFlowPlayer({
 
     return (
         <div className={cn(
-            "w-full h-full flex flex-col items-center justify-start p-3 md:p-6 select-none max-w-5xl mx-auto overflow-y-auto",
-            isFullscreen ? "py-6" : "py-3"
+            "w-full h-full flex flex-col items-center justify-start p-3 md:p-6 pb-20 select-none max-w-5xl mx-auto overflow-y-auto",
+            isFullscreen ? "py-6 pb-20" : "py-3 pb-20"
         )}>
-            {/* ══ BAŞLIK ROZETİ ══ */}
-            {isSketchnote ? (
-                <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-[#fefce8] border-[2.5px] border-[#1e293b] text-[#1e293b] text-base md:text-lg font-['Caveat',cursive] font-bold shadow-[3px_3px_0_#1e293b] mb-4">
-                    <Compass className="w-5 h-5 text-amber-600 animate-spin" />
-                    <span>🪜 {step.title || 'Adım Adım Yol Haritası & Süreç'}</span>
-                </div>
-            ) : (
-                <motion.div 
-                    initial={{ opacity: 0, y: -15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-blue-500/20 via-indigo-500/20 to-purple-500/20 border-2 border-blue-400/40 text-blue-700 dark:text-blue-300 text-xs md:text-sm font-black uppercase tracking-wider mb-4 md:mb-6 shadow-sm backdrop-blur-xl"
-                >
-                    <Compass className="w-4 h-4 text-blue-500 animate-spin" />
-                    <span>{step.title || '🪜 Adım Adım Yol Haritası & Süreç'}</span>
-                    <Compass className="w-4 h-4 text-blue-500 animate-spin" />
-                </motion.div>
-            )}
+            {/* ══ BAŞLIK ROZETİ VE SIRALI TAHMİN KONTROLÜ ══ */}
+            <div className="flex flex-wrap items-center justify-center gap-3 mb-4 md:mb-6">
+                {isSketchnote ? (
+                    <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-[#fefce8] border-[2.5px] border-[#1e293b] text-[#1e293b] text-base md:text-lg font-['Caveat',cursive] font-bold shadow-[3px_3px_0_#1e293b]">
+                        <Compass className="w-5 h-5 text-amber-600" />
+                        <span>🪜 {step.title || 'Adım Adım Yol Haritası & Süreç'}</span>
+                    </div>
+                ) : (
+                    <motion.div 
+                        initial={{ opacity: 0, y: -15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className={cn(
+                            "inline-flex items-center gap-2 px-4 py-1.5 rounded-full border-2 text-xs md:text-sm font-black uppercase tracking-wider shadow-sm backdrop-blur-xl",
+                            isLightTheme
+                                ? "bg-blue-50 border-blue-300 text-blue-800"
+                                : "bg-gradient-to-r from-blue-500/20 via-indigo-500/20 to-purple-500/20 border-blue-400/40 text-blue-200"
+                        )}
+                    >
+                        <Compass className={cn("w-4 h-4", isLightTheme ? "text-blue-600" : "text-blue-300")} />
+                        <span>{step.title || '🪜 Adım Adım Yol Haritası & Süreç'}</span>
+                    </motion.div>
+                )}
+
+                {stepsList.length > 1 && (
+                    <button
+                        type="button"
+                        onClick={() => {
+                            playSound('pop');
+                            setSequentialLock(prev => {
+                                const next = !prev;
+                                if (next) setHighestUnlockedIdx(activeStepIndex);
+                                return next;
+                            });
+                        }}
+                        className={cn(
+                            "px-3.5 py-1.5 rounded-full text-xs font-black border transition-all cursor-pointer",
+                            sequentialLock
+                                ? "bg-amber-400 text-slate-950 border-amber-500 shadow"
+                                : isSketchnote
+                                    ? "bg-white hover:bg-slate-100 text-slate-800 border-slate-400 font-['Patrick_Hand',cursive] text-sm"
+                                    : isLightTheme
+                                        ? "bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300"
+                                        : "bg-white/10 hover:bg-white/20 text-slate-200 border-white/20"
+                        )}
+                        title="Sonraki adım başlıklarını gizleyip sınıfa tahmin ettirin"
+                    >
+                        {sequentialLock ? "🔒 Sıralı Tahmin Aktif (Hepsini Aç)" : "👀 Sonraki Adımları Gizle"}
+                    </button>
+                )}
+            </div>
 
             {/* ══ STEPPER ÜST SEÇİCİ (Yatay Adım Çizgisi) ══ */}
             <div className="w-full flex items-center justify-between gap-2 overflow-x-auto pb-3 mb-4">
                 {stepsList.map((item, idx) => {
                     const isCurrent = idx === activeStepIndex;
                     const isPassed = idx < activeStepIndex;
+                    const isLockedFuture = sequentialLock && idx > highestUnlockedIdx;
+                    const isUnlockableNext = sequentialLock && idx === highestUnlockedIdx + 1;
                     const style = STEP_GRADIENTS[idx % STEP_GRADIENTS.length];
                     return (
                         <div key={idx} className="flex-1 min-w-[120px] flex flex-col items-center">
                             <button
                                 onClick={() => handleSelectStep(idx)}
                                 className={cn(
-                                    "w-full p-2.5 sm:p-3.5 rounded-2xl border-2 transition-all flex items-center justify-center gap-2 shadow-md cursor-pointer",
+                                    "w-full p-2.5 sm:p-3.5 rounded-2xl border-2 transition-all flex items-center justify-center gap-2 shadow-md",
+                                    (isLockedFuture && !isUnlockableNext) ? "cursor-not-allowed opacity-50" : "cursor-pointer",
                                     isSketchnote
                                         ? (isCurrent
                                             ? "bg-[#e0f2fe] border-[2.5px] border-[#0284c7] text-[#0369a1] shadow-[3px_3px_0_#0284c7] scale-105 font-['Patrick_Hand',cursive] font-bold"
                                             : isPassed
                                                 ? "bg-[#f0fdf4] border-[2px] border-[#16a34a] text-[#15803d] font-['Patrick_Hand',cursive]"
-                                                : "bg-white border-[2px] border-slate-300 text-slate-600 hover:border-slate-800 font-['Patrick_Hand',cursive]")
+                                                : "bg-white border-[2px] border-slate-300 text-slate-700 hover:border-slate-800 font-['Patrick_Hand',cursive]")
                                         : (isCurrent
                                             ? `bg-gradient-to-r ${style.active} scale-105 shadow-lg`
                                             : isPassed
-                                                ? "bg-slate-800/80 border-emerald-500/40 text-emerald-300 hover:bg-slate-800"
-                                                : "bg-white/80 dark:bg-slate-900/80 border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:border-slate-400")
+                                                ? (isLightTheme
+                                                    ? "bg-emerald-50 border-emerald-400 text-emerald-800 hover:bg-emerald-100"
+                                                    : "bg-slate-800/80 border-emerald-500/40 text-emerald-300 hover:bg-slate-800")
+                                                : isLightTheme
+                                                    ? "bg-white border-slate-300 text-slate-700 hover:border-slate-500"
+                                                    : "bg-slate-900/85 border-white/15 text-slate-300 hover:border-white/40")
                                 )}
                             >
                                 <span className={cn(
-                                    "w-6 h-6 rounded-full flex items-center justify-center font-black text-xs",
-                                    isSketchnote ? "bg-black/10 text-slate-900" : "bg-black/20"
+                                    "w-6 h-6 rounded-full flex items-center justify-center font-black text-xs shrink-0",
+                                    isSketchnote ? "bg-black/10 text-slate-900" : isLightTheme && !isCurrent ? "bg-slate-200 text-slate-800" : "bg-black/25 text-white"
                                 )}>
                                     {isPassed ? <Check className="w-3.5 h-3.5" /> : idx + 1}
                                 </span>
                                 <span className="font-bold text-xs truncate">
-                                    {item.title}
+                                    {isLockedFuture ? `Adım ${idx + 1} (?)` : item.title}
                                 </span>
                             </button>
                         </div>
@@ -1340,7 +1461,9 @@ export function ProcessFlowPlayer({
                         "relative w-full rounded-3xl p-6 sm:p-8 md:p-10 text-left overflow-hidden min-h-[220px] flex flex-col justify-between",
                         isSketchnote
                             ? "border-[3px] border-[#1e293b] bg-white shadow-[6px_6px_0_#1e293b]"
-                            : "border-2 border-blue-200/90 dark:border-white/15 bg-white/95 dark:bg-slate-900/95 shadow-2xl backdrop-blur-2xl"
+                            : isLightTheme
+                                ? "border-2 border-blue-200 bg-white shadow-xl"
+                                : "border-2 border-white/15 bg-slate-900/95 shadow-2xl backdrop-blur-2xl"
                     )}
                 >
                     {!isSketchnote && (
@@ -1353,26 +1476,35 @@ export function ProcessFlowPlayer({
                                 <span>📍 Adım {activeStepIndex + 1} / {stepsList.length}</span>
                             </div>
                         ) : (
-                            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-xl bg-blue-500/15 border border-blue-500/30 text-blue-600 dark:text-blue-300 text-xs font-black uppercase tracking-wider mb-4">
+                            <div className={cn(
+                                "inline-flex items-center gap-2 px-3.5 py-1 rounded-xl border text-xs font-black uppercase tracking-wider mb-4",
+                                isLightTheme
+                                    ? "bg-blue-50 border-blue-200 text-blue-700"
+                                    : "bg-blue-500/20 border-blue-400/35 text-blue-300"
+                            )}>
                                 <span>ADIM {activeStepIndex + 1} / {stepsList.length}</span>
                             </div>
                         )}
 
                         <h3 className={cn(
                             "text-2xl md:text-3xl font-black mb-3",
-                            isSketchnote ? "font-['Caveat',cursive] text-[#0f172a] text-3xl md:text-4xl" : "text-slate-900 dark:text-white"
+                            isSketchnote ? "font-['Caveat',cursive] text-[#0f172a] text-3xl md:text-4xl" :
+                            isLightTheme ? "text-slate-900" : "text-white"
                         )}>
                             {stepsList[activeStepIndex].title}
                         </h3>
 
-                        <p className={cn(
-                            "font-bold leading-relaxed",
-                            isSketchnote 
-                                ? "font-['Patrick_Hand',cursive] text-slate-800 text-xl md:text-2xl [&_mark]:bg-[#fef08a] [&_mark]:px-1.5 [&_mark]:py-0.5 [&_mark]:rounded-sm [&_mark]:font-black" 
-                                : cn("text-slate-700 dark:text-slate-200", getDescFontSize())
-                        )}>
-                            {stepsList[activeStepIndex].description}
-                        </p>
+                        <div
+                            className={cn(
+                                "font-bold leading-relaxed [&_mark]:px-1.5 [&_mark]:py-0.5 [&_mark]:rounded-sm",
+                                isSketchnote 
+                                    ? "font-['Patrick_Hand',cursive] text-slate-800 text-xl md:text-2xl [&_mark]:bg-[#fef08a] [&_mark]:text-[#854d0e]" 
+                                    : isLightTheme
+                                        ? cn("text-slate-700 [&_mark]:bg-amber-200 [&_mark]:text-slate-900", getDescFontSize())
+                                        : cn("text-slate-100 [&_mark]:bg-amber-400 [&_mark]:text-slate-950 [&_strong]:text-amber-300", getDescFontSize())
+                            )}
+                            dangerouslySetInnerHTML={{ __html: stepsList[activeStepIndex].description || '' }}
+                        />
                     </div>
 
                     {/* Gezinme Butonları */}
@@ -1395,12 +1527,15 @@ export function ProcessFlowPlayer({
                             </Button>
                         </div>
                     ) : (
-                        <div className="flex items-center justify-between border-t border-slate-100 dark:border-white/10 pt-4 mt-6">
+                        <div className={cn("flex items-center justify-between border-t pt-4 mt-6", isLightTheme ? "border-slate-200" : "border-white/10")}>
                             <Button
                                 variant="outline"
                                 onClick={handlePrevStep}
                                 disabled={activeStepIndex === 0}
-                                className="rounded-xl font-bold"
+                                className={cn(
+                                    "rounded-xl font-bold",
+                                    !isLightTheme && "bg-white/10 border-white/20 text-white hover:bg-white/20"
+                                )}
                             >
                                 <ArrowLeft className="w-4 h-4 mr-2" /> Önceki Adım
                             </Button>
@@ -1438,7 +1573,16 @@ export function ConceptMatrixPlayer({
 }) {
     const isTeacher = useTeacherMode();
     const isSketchnote = presentationTheme === 'sketchnote';
+    const isLightTheme = presentationTheme === 'clean-light';
     const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
+    const [hideContents, setHideContents] = useState<boolean>(false);
+    const [revealedQuads, setRevealedQuads] = useState<Record<number, boolean>>({});
+
+    useEffect(() => {
+        setFocusedIndex(null);
+        setHideContents(false);
+        setRevealedQuads({});
+    }, [step]);
 
     const cardScale: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 
         (fontSizeScale === 'huge' || fontSizeScale === 'xl') ? 'xl' :
@@ -1488,73 +1632,183 @@ export function ConceptMatrixPlayer({
         }
     ];
 
-    const QUADRANT_STYLES = [
-        {
-            border: 'border-sky-400/50 hover:border-sky-400',
-            bg: 'bg-sky-500/10 hover:bg-sky-500/15',
-            badge: 'bg-sky-500 text-white',
-            text: 'text-sky-950 dark:text-sky-100',
-            titleText: 'text-sky-700 dark:text-sky-300',
-            shadow: ''
-        },
-        {
-            border: 'border-emerald-400/50 hover:border-emerald-400',
-            bg: 'bg-emerald-500/10 hover:bg-emerald-500/15',
-            badge: 'bg-emerald-500 text-white',
-            text: 'text-emerald-950 dark:text-emerald-100',
-            titleText: 'text-emerald-700 dark:text-emerald-300',
-            shadow: ''
-        },
-        {
-            border: 'border-amber-400/50 hover:border-amber-400',
-            bg: 'bg-amber-500/10 hover:bg-amber-500/15',
-            badge: 'bg-amber-500 text-slate-950',
-            text: 'text-amber-950 dark:text-amber-100',
-            titleText: 'text-amber-700 dark:text-amber-300',
-            shadow: ''
-        },
-        {
-            border: 'border-purple-400/50 hover:border-purple-400',
-            bg: 'bg-purple-500/10 hover:bg-purple-500/15',
-            badge: 'bg-purple-500 text-white',
-            text: 'text-purple-950 dark:text-purple-100',
-            titleText: 'text-purple-700 dark:text-purple-300',
-            shadow: ''
-        }
+    const QUADRANT_STYLES = isLightTheme ? [
+        { border: 'border-sky-300 hover:border-sky-500', bg: 'bg-sky-50 hover:bg-sky-100/80', badge: 'bg-sky-600 text-white', text: 'text-sky-950 [&_strong]:text-sky-800', shadow: 'shadow-md' },
+        { border: 'border-emerald-300 hover:border-emerald-500', bg: 'bg-emerald-50 hover:bg-emerald-100/80', badge: 'bg-emerald-600 text-white', text: 'text-emerald-950 [&_strong]:text-emerald-800', shadow: 'shadow-md' },
+        { border: 'border-amber-300 hover:border-amber-500', bg: 'bg-amber-50 hover:bg-amber-100/80', badge: 'bg-amber-500 text-slate-950', text: 'text-amber-950 [&_strong]:text-amber-900', shadow: 'shadow-md' },
+        { border: 'border-purple-300 hover:border-purple-500', bg: 'bg-purple-50 hover:bg-purple-100/80', badge: 'bg-purple-600 text-white', text: 'text-purple-950 [&_strong]:text-purple-800', shadow: 'shadow-md' },
+    ] : [
+        { border: 'border-sky-400/55 hover:border-sky-400', bg: 'bg-sky-950/60 hover:bg-sky-900/70', badge: 'bg-sky-500 text-white', text: 'text-sky-50 [&_strong]:text-amber-300', shadow: 'shadow-lg' },
+        { border: 'border-emerald-400/55 hover:border-emerald-400', bg: 'bg-emerald-950/60 hover:bg-emerald-900/70', badge: 'bg-emerald-500 text-white', text: 'text-emerald-50 [&_strong]:text-amber-300', shadow: 'shadow-lg' },
+        { border: 'border-amber-400/55 hover:border-amber-400', bg: 'bg-amber-950/55 hover:bg-amber-900/65', badge: 'bg-amber-400 text-slate-950', text: 'text-amber-50 [&_strong]:text-amber-300', shadow: 'shadow-lg' },
+        { border: 'border-purple-400/55 hover:border-purple-400', bg: 'bg-purple-950/60 hover:bg-purple-900/70', badge: 'bg-purple-500 text-white', text: 'text-purple-50 [&_strong]:text-amber-300', shadow: 'shadow-lg' },
     ];
 
     const quadrants = step.quadrants || [];
 
+    useEffect(() => {
+        if (focusedIndex === null) return;
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                e.stopPropagation();
+                setFocusedIndex(null);
+            } else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+                if (quadrants.length < 2) return;
+                e.preventDefault();
+                e.stopPropagation();
+                setFocusedIndex(prev => prev === null ? 0 : e.key === 'ArrowRight' ? (prev + 1) % quadrants.length : (prev - 1 + quadrants.length) % quadrants.length);
+            }
+        };
+        window.addEventListener('keydown', onKey, true);
+        return () => window.removeEventListener('keydown', onKey, true);
+    }, [focusedIndex, quadrants.length]);
+
+    const focusedQuad = focusedIndex !== null ? quadrants[focusedIndex] : null;
+    const focusedStyle = focusedIndex !== null
+        ? (isSketchnote ? SKETCHNOTE_QUADRANTS[focusedIndex % SKETCHNOTE_QUADRANTS.length] : QUADRANT_STYLES[focusedIndex % QUADRANT_STYLES.length])
+        : null;
+
     return (
         <div className={cn(
-            "w-full h-full flex flex-col items-center justify-start p-3 md:p-6 select-none max-w-5xl mx-auto overflow-y-auto",
-            isFullscreen ? "py-6" : "py-3"
+            "w-full h-full flex flex-col items-center justify-start p-3 md:p-6 pb-20 select-none max-w-5xl mx-auto overflow-y-auto",
+            isFullscreen ? "py-6 pb-20" : "py-3 pb-20"
         )}>
-            {/* ══ BAŞLIK ══ */}
-            {isSketchnote ? (
-                <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-[#fefce8] border-[2.5px] border-[#1e293b] text-[#1e293b] text-base md:text-lg font-['Caveat',cursive] font-bold shadow-[3px_3px_0_#1e293b] mb-4 md:mb-6">
-                    <Layers className="w-5 h-5 text-amber-600 animate-pulse" />
-                    <span>🔲 {step.title || '4 Boyutta Konu Analizi'}</span>
-                    {step.topicName && <span className="opacity-80">({step.topicName})</span>}
-                </div>
-            ) : (
-                <motion.div 
-                    initial={{ opacity: 0, y: -15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-purple-500/20 via-sky-500/20 to-emerald-500/20 border-2 border-purple-400/40 text-purple-700 dark:text-purple-300 text-xs md:text-sm font-black uppercase tracking-wider mb-4 md:mb-6 shadow-sm backdrop-blur-xl"
+            {/* ══ GERÇEK ODAK BÜYÜTME MODALI ══ */}
+            {focusedQuad && focusedStyle && focusedIndex !== null && (
+                <div
+                    className="fixed inset-0 z-[210] flex items-center justify-center bg-slate-950/80 backdrop-blur-xl p-4 sm:p-6"
+                    onClick={() => setFocusedIndex(null)}
                 >
-                    <Layers className="w-4 h-4 text-purple-500 animate-pulse" />
-                    <span>{step.title || '🔲 4 Boyutta Konu Analizi'}</span>
-                    {step.topicName && <span className="opacity-70">({step.topicName})</span>}
-                    <Layers className="w-4 h-4 text-purple-500 animate-pulse" />
-                </motion.div>
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.92 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.2 }}
+                        onClick={(e) => e.stopPropagation()}
+                        className={cn(
+                            "relative w-full max-w-4xl rounded-[2rem] p-6 sm:p-10 md:p-12 shadow-2xl flex flex-col gap-5",
+                            isSketchnote
+                                ? cn("border-[3px] border-[#1e293b] shadow-[8px_8px_0_#1e293b]", focusedStyle.bg)
+                                : isLightTheme
+                                    ? "bg-white border-2 border-indigo-200 text-slate-900"
+                                    : "bg-slate-900/95 border-2 border-white/25 text-white"
+                        )}
+                    >
+                        <div className="flex items-center justify-between gap-3">
+                            <span className={cn(
+                                "px-4 py-1.5 rounded-full text-sm font-black uppercase tracking-wider shadow-sm",
+                                focusedStyle.badge
+                            )}>
+                                {focusedQuad.label}
+                            </span>
+                            <button
+                                type="button"
+                                onClick={() => setFocusedIndex(null)}
+                                className={cn(
+                                    "px-4 py-2 rounded-xl text-xs font-black border cursor-pointer transition-all",
+                                    (isSketchnote || isLightTheme)
+                                        ? "bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300"
+                                        : "bg-white/10 hover:bg-white/20 text-white border-white/20"
+                                )}
+                            >
+                                Kapat (ESC)
+                            </button>
+                        </div>
+
+                        {hideContents && !revealedQuads[focusedIndex] ? (
+                            <button
+                                type="button"
+                                onClick={() => setRevealedQuads(prev => ({ ...prev, [focusedIndex]: true }))}
+                                className="py-10 px-6 rounded-2xl border-2 border-dashed border-amber-400 bg-amber-500/15 hover:bg-amber-500/25 font-black text-xl sm:text-2xl text-amber-400 cursor-pointer"
+                            >
+                                Sınıfça Tahmin Edin • İçeriği Açmak İçin Dokunun
+                            </button>
+                        ) : (
+                            <div
+                                className={cn(
+                                    "text-2xl sm:text-3xl md:text-4xl font-bold leading-relaxed max-h-[55vh] overflow-y-auto [&_mark]:bg-amber-300 [&_mark]:text-slate-950 [&_mark]:px-1.5 [&_mark]:rounded",
+                                    isSketchnote ? "font-['Patrick_Hand',cursive] text-slate-900" : isLightTheme ? "text-slate-900" : "text-slate-100"
+                                )}
+                                dangerouslySetInnerHTML={{ __html: focusedQuad.content || '' }}
+                            />
+                        )}
+
+                        {quadrants.length > 1 && (
+                            <div className="flex items-center justify-between pt-3 border-t border-white/10">
+                                <button
+                                    type="button"
+                                    onClick={() => setFocusedIndex((focusedIndex - 1 + quadrants.length) % quadrants.length)}
+                                    className="px-4 py-2 rounded-xl font-bold text-sm bg-white/10 hover:bg-white/20 border border-white/15 cursor-pointer"
+                                >
+                                    ← Önceki Boyut
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setFocusedIndex((focusedIndex + 1) % quadrants.length)}
+                                    className="px-4 py-2 rounded-xl font-bold text-sm bg-indigo-600 hover:bg-indigo-500 text-white cursor-pointer"
+                                >
+                                    Sonraki Boyut →
+                                </button>
+                            </div>
+                        )}
+                    </motion.div>
+                </div>
             )}
 
+            {/* ══ BAŞLIK VE TAHMİN KONTROLÜ ══ */}
+            <div className="flex flex-wrap items-center justify-center gap-3 mb-4 md:mb-6">
+                {isSketchnote ? (
+                    <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-[#fefce8] border-[2.5px] border-[#1e293b] text-[#1e293b] text-base md:text-lg font-['Caveat',cursive] font-bold shadow-[3px_3px_0_#1e293b]">
+                        <Layers className="w-5 h-5 text-amber-600" />
+                        <span>🔲 {step.title || '4 Boyutta Konu Analizi'}</span>
+                        {step.topicName && <span className="opacity-80">({step.topicName})</span>}
+                    </div>
+                ) : (
+                    <motion.div 
+                        initial={{ opacity: 0, y: -15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className={cn(
+                            "inline-flex items-center gap-2 px-4 py-1.5 rounded-full border-2 text-xs md:text-sm font-black uppercase tracking-wider shadow-sm backdrop-blur-xl",
+                            isLightTheme
+                                ? "bg-purple-50 border-purple-300 text-purple-800"
+                                : "bg-gradient-to-r from-purple-500/20 via-sky-500/20 to-emerald-500/20 border-purple-400/40 text-purple-200"
+                        )}
+                    >
+                        <Layers className={cn("w-4 h-4", isLightTheme ? "text-purple-600" : "text-purple-300")} />
+                        <span>{step.title || '🔲 4 Boyutta Konu Analizi'}</span>
+                        {step.topicName && <span className="opacity-75">({step.topicName})</span>}
+                    </motion.div>
+                )}
+
+                {quadrants.length > 0 && (
+                    <button
+                        type="button"
+                        onClick={() => {
+                            playSound('pop');
+                            setHideContents(prev => !prev);
+                            setRevealedQuads({});
+                        }}
+                        className={cn(
+                            "px-3.5 py-1.5 rounded-full text-xs font-black border transition-all cursor-pointer",
+                            hideContents
+                                ? "bg-amber-400 text-slate-950 border-amber-500 shadow"
+                                : isSketchnote
+                                    ? "bg-white hover:bg-slate-100 text-slate-800 border-slate-400 font-['Patrick_Hand',cursive] text-sm"
+                                    : isLightTheme
+                                        ? "bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300"
+                                        : "bg-white/10 hover:bg-white/20 text-slate-200 border-white/20"
+                        )}
+                    >
+                        {hideContents ? "Tüm İçerikleri Aç" : "İçerikleri Gizle (Tahmin)"}
+                    </button>
+                )}
+            </div>
+
             {/* ══ 2x2 MATRİS IZGARASI ══ */}
-            <div className={cn("grid gap-4 md:gap-5 w-full", isTeacher ? "grid-cols-2 md:grid-cols-2" : "grid-cols-1 md:grid-cols-2")}>
+            <div className={cn("grid gap-4 md:gap-5 w-full", isTeacher ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1 md:grid-cols-2")}>
                 {quadrants.map((quad, idx) => {
                     const style = isSketchnote ? SKETCHNOTE_QUADRANTS[idx % SKETCHNOTE_QUADRANTS.length] : QUADRANT_STYLES[idx % QUADRANT_STYLES.length];
-                    const isFocused = focusedIndex === idx;
+                    const isHidden = hideContents && !revealedQuads[idx];
                     return (
                         <motion.div
                             key={idx}
@@ -1563,7 +1817,11 @@ export function ConceptMatrixPlayer({
                             transition={{ delay: idx * 0.08 }}
                             onClick={() => {
                                 playSound('pop');
-                                setFocusedIndex(focusedIndex === idx ? null : idx);
+                                if (isHidden) {
+                                    setRevealedQuads(prev => ({ ...prev, [idx]: true }));
+                                } else {
+                                    setFocusedIndex(idx);
+                                }
                             }}
                             className={cn(
                                 "rounded-3xl p-5 md:p-6 transition-all cursor-pointer relative flex flex-col justify-between min-h-[160px] md:min-h-[180px]",
@@ -1571,11 +1829,11 @@ export function ConceptMatrixPlayer({
                                 style.border,
                                 style.bg,
                                 style.shadow,
-                                isFocused && (isSketchnote ? "ring-4 ring-[#1e293b] scale-[1.02]" : "ring-4 ring-indigo-400/60 scale-[1.02]")
+                                "hover:scale-[1.01]"
                             )}
                         >
                             <div>
-                                <div className="flex items-center justify-between mb-3">
+                                <div className="flex items-center justify-between mb-3 gap-2">
                                     <span className={cn(
                                         "px-3 py-1 rounded-xl text-xs font-black uppercase tracking-wider shadow-sm",
                                         isSketchnote ? "font-['Patrick_Hand',cursive] font-bold text-sm rounded-full" : "",
@@ -1583,17 +1841,33 @@ export function ConceptMatrixPlayer({
                                     )}>
                                         {quad.label}
                                     </span>
-                                    <span className={cn("text-xs font-bold", isSketchnote ? "text-slate-600 font-['Patrick_Hand',cursive]" : "text-slate-400")}>
-                                        {isFocused ? "Odaktan Çık ✕" : "Büyüt 🔍"}
+                                    <span className={cn(
+                                        "text-xs font-bold shrink-0",
+                                        isSketchnote ? "text-slate-600 font-['Patrick_Hand',cursive]" : isLightTheme ? "text-slate-600" : "text-slate-300"
+                                    )}>
+                                        {isHidden ? "Açmak İçin Dokun 👁️" : "Büyüt 🔍"}
                                     </span>
                                 </div>
-                                <p className={cn(
-                                    "font-bold leading-relaxed tracking-wide",
-                                    style.text,
-                                    !isSketchnote && getContentFontSize()
-                                )}>
-                                    {quad.content}
-                                </p>
+
+                                {isHidden ? (
+                                    <div className={cn(
+                                        "py-6 px-4 rounded-2xl border-2 border-dashed text-center font-bold text-sm sm:text-base",
+                                        (isSketchnote || isLightTheme)
+                                            ? "border-amber-400 bg-white/80 text-amber-900"
+                                            : "border-amber-400/50 bg-black/30 text-amber-200"
+                                    )}>
+                                        Tahmin Et • Görmek İçin Dokun
+                                    </div>
+                                ) : (
+                                    <div
+                                        className={cn(
+                                            "font-bold leading-relaxed tracking-wide [&_mark]:bg-amber-300 [&_mark]:text-slate-950 [&_mark]:px-1 [&_mark]:rounded",
+                                            style.text,
+                                            !isSketchnote && getContentFontSize()
+                                        )}
+                                        dangerouslySetInnerHTML={{ __html: quad.content || '' }}
+                                    />
+                                )}
                             </div>
                         </motion.div>
                     );
@@ -1622,15 +1896,29 @@ export function CategoryTablePlayer({
 }) {
     const isTeacher = useTeacherMode();
     const isSketchnote = presentationTheme === 'sketchnote';
+    const isLightTheme = presentationTheme === 'clean-light';
     const categories = step.categories || [];
     const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>({});
+    const [hideExamples, setHideExamples] = useState<boolean>(false);
+    const [revealedItems, setRevealedItems] = useState<{ [key: string]: boolean }>({});
     
+    const calcScaleSize = (scale?: string) =>
+        scale === 'huge' || scale === 'xl' ? 1.4 :
+        scale === 'lg' ? 1.25 :
+        scale === 'xs' ? 0.95 : 1.15;
+
     // Punto Ayarı
-    const [baseFontSize, setBaseFontSize] = useState<number>(
-        fontSizeScale === 'huge' || fontSizeScale === 'xl' ? 1.4 :
-        fontSizeScale === 'lg' ? 1.25 :
-        fontSizeScale === 'xs' ? 0.95 : 1.15
-    );
+    const [baseFontSize, setBaseFontSize] = useState<number>(calcScaleSize(fontSizeScale));
+
+    useEffect(() => {
+        setBaseFontSize(calcScaleSize(fontSizeScale));
+    }, [fontSizeScale]);
+
+    useEffect(() => {
+        setCheckedItems({});
+        setHideExamples(false);
+        setRevealedItems({});
+    }, [step]);
 
     const increaseFontSize = () => setBaseFontSize(fs => Math.min(Number((fs + 0.15).toFixed(2)), 2.5));
     const decreaseFontSize = () => setBaseFontSize(fs => Math.max(Number((fs - 0.15).toFixed(2)), 0.85));
@@ -1638,6 +1926,10 @@ export function CategoryTablePlayer({
     const toggleItem = (catIdx: number, itemIdx: number) => {
         playSound('pop');
         const key = `${catIdx}-${itemIdx}`;
+        if (hideExamples && !revealedItems[key]) {
+            setRevealedItems(prev => ({ ...prev, [key]: true }));
+            return;
+        }
         setCheckedItems(prev => ({ ...prev, [key]: !prev[key] }));
     };
 
@@ -1699,7 +1991,23 @@ export function CategoryTablePlayer({
         },
     };
 
-    // Canlı, Doygun ve Yüksek Kontrastlı Kategori Kart Stilleri
+    const LIGHT_CATEGORY_MAP: Record<string, {
+        card: string;
+        badge: string;
+        item: string;
+        itemChecked: string;
+        num: string;
+        numChecked: string;
+    }> = {
+        emerald: { card: 'bg-emerald-50/90 border-2 border-emerald-400 text-slate-900 shadow-md', badge: 'bg-emerald-100 text-emerald-800 border-emerald-300', item: 'bg-white border-emerald-200 hover:bg-emerald-50 text-slate-900', itemChecked: 'bg-emerald-100 border-emerald-500 text-emerald-950', num: 'bg-emerald-600 text-white font-black', numChecked: 'bg-emerald-700 text-white' },
+        amber: { card: 'bg-amber-50/90 border-2 border-amber-400 text-slate-900 shadow-md', badge: 'bg-amber-100 text-amber-900 border-amber-300', item: 'bg-white border-amber-200 hover:bg-amber-50 text-slate-900', itemChecked: 'bg-amber-100 border-amber-500 text-amber-950', num: 'bg-amber-500 text-slate-950 font-black', numChecked: 'bg-amber-600 text-white' },
+        indigo: { card: 'bg-indigo-50/90 border-2 border-indigo-400 text-slate-900 shadow-md', badge: 'bg-indigo-100 text-indigo-800 border-indigo-300', item: 'bg-white border-indigo-200 hover:bg-indigo-50 text-slate-900', itemChecked: 'bg-indigo-100 border-indigo-500 text-indigo-950', num: 'bg-indigo-600 text-white font-black', numChecked: 'bg-indigo-700 text-white' },
+        rose: { card: 'bg-rose-50/90 border-2 border-rose-400 text-slate-900 shadow-md', badge: 'bg-rose-100 text-rose-800 border-rose-300', item: 'bg-white border-rose-200 hover:bg-rose-50 text-slate-900', itemChecked: 'bg-rose-100 border-rose-500 text-rose-950', num: 'bg-rose-600 text-white font-black', numChecked: 'bg-rose-700 text-white' },
+        cyan: { card: 'bg-cyan-50/90 border-2 border-cyan-400 text-slate-900 shadow-md', badge: 'bg-cyan-100 text-cyan-800 border-cyan-300', item: 'bg-white border-cyan-200 hover:bg-cyan-50 text-slate-900', itemChecked: 'bg-cyan-100 border-cyan-500 text-cyan-950', num: 'bg-cyan-600 text-white font-black', numChecked: 'bg-cyan-700 text-white' },
+        fuchsia: { card: 'bg-fuchsia-50/90 border-2 border-fuchsia-400 text-slate-900 shadow-md', badge: 'bg-fuchsia-100 text-fuchsia-800 border-fuchsia-300', item: 'bg-white border-fuchsia-200 hover:bg-fuchsia-50 text-slate-900', itemChecked: 'bg-fuchsia-100 border-fuchsia-500 text-fuchsia-950', num: 'bg-fuchsia-600 text-white font-black', numChecked: 'bg-fuchsia-700 text-white' },
+    };
+
+    // Canlı, Doygun ve Yüksek Kontrastlı Koyu Kategori Kart Stilleri
     const CATEGORY_COLOR_MAP: Record<string, {
         card: string;
         header: string;
@@ -1770,24 +2078,31 @@ export function CategoryTablePlayer({
     const getColumnGridClass = () => {
         const count = categories.length;
         if (count === 1) return 'grid-cols-1 max-w-2xl mx-auto';
-        if (count === 2) return isTeacher ? 'grid-cols-2 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-2';
-        if (count === 3) return isTeacher ? 'grid-cols-2 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
-        return isTeacher ? 'grid-cols-2 md:grid-cols-2 lg:grid-cols-4' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4';
+        if (count === 2) return isTeacher ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 md:grid-cols-2';
+        if (count === 3) return isTeacher ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
+        return isTeacher ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4';
     };
 
     return (
-        <div className={cn("w-full h-full flex flex-col justify-start p-2 md:p-3.5 select-none overflow-y-auto", isSketchnote ? "bg-transparent text-[#1e293b]" : "bg-slate-950 text-white")}>
+        <div className={cn(
+            "w-full h-full flex flex-col justify-start p-2 md:p-3.5 pb-24 select-none overflow-y-auto",
+            isSketchnote ? "bg-transparent text-[#1e293b]" :
+            isLightTheme ? "bg-transparent text-slate-900" :
+            "bg-slate-950/90 text-white rounded-3xl"
+        )}>
             
             {/* ══ ÜST KONTROL & BAŞLIK ÇUBUĞU ══ */}
             <div className={cn(
                 "flex-shrink-0 w-full flex flex-wrap items-center justify-between gap-2 mb-2.5 p-2 md:p-2.5 rounded-2xl shadow-xl",
                 isSketchnote 
                     ? "bg-white border-[2.5px] border-[#1e293b] shadow-[3px_3px_0_#1e293b] text-[#1e293b]" 
-                    : "bg-slate-900/95 border border-white/20 backdrop-blur-xl text-white"
+                    : isLightTheme
+                        ? "bg-white border-2 border-indigo-200 text-slate-900 shadow-md"
+                        : "bg-slate-900/95 border border-white/20 backdrop-blur-xl text-white"
             )}>
                 
                 {/* BAŞLIK */}
-                <div className="flex-1 flex items-center justify-center gap-2.5 text-center">
+                <div className="flex-1 flex items-center justify-center sm:justify-start gap-2.5 text-center sm:text-left">
                     <div className={cn(
                         "w-8 h-8 md:w-9 md:h-9 rounded-xl flex items-center justify-center font-black shadow-md flex-shrink-0",
                         isSketchnote ? "bg-[#fefce8] border-2 border-[#ca8a04] text-[#854d0e]" : "bg-gradient-to-br from-indigo-500 to-cyan-600 text-white"
@@ -1795,7 +2110,7 @@ export function CategoryTablePlayer({
                         <Layers className="w-4 h-4 md:w-5 md:h-5" />
                     </div>
                     {isSketchnote ? (
-                        <div className="text-center">
+                        <div>
                             <h2 className="font-['Caveat',cursive] text-2xl md:text-3xl font-bold bg-[#e0f2fe] text-[#0f172a] border-[2px] border-[#0284c7] px-3.5 py-0.5 rounded-xl shadow-[2px_2px_0_#0284c7] leading-tight inline-flex items-center gap-2">
                                 <span>{step.title || step.tableTitle || '📊 Konu Sınıflandırma Tablosu'}</span>
                             </h2>
@@ -1806,12 +2121,18 @@ export function CategoryTablePlayer({
                             )}
                         </div>
                     ) : (
-                        <div className="text-center">
-                            <h2 className="font-black text-white text-sm sm:text-base md:text-lg tracking-tight leading-tight flex items-center justify-center gap-2 text-center">
+                        <div>
+                            <h2 className={cn(
+                                "font-black text-sm sm:text-base md:text-lg tracking-tight leading-tight flex items-center gap-2",
+                                isLightTheme ? "text-slate-900" : "text-white"
+                            )}>
                                 <span>{step.title || step.tableTitle || '📊 Konu Sınıflandırma Tablosu'}</span>
                             </h2>
                             {step.description && (
-                                <p className="text-[11px] text-amber-300 font-semibold hidden sm:block leading-none mt-0.5 text-center">
+                                <p className={cn(
+                                    "text-[11px] font-semibold hidden sm:block leading-none mt-0.5",
+                                    isLightTheme ? "text-indigo-700" : "text-amber-300"
+                                )}>
                                     {step.description}
                                 </p>
                             )}
@@ -1819,43 +2140,74 @@ export function CategoryTablePlayer({
                     )}
                 </div>
 
-                {/* SAĞ: PUNTO BOYUT KONTROLLERİ */}
-                <div className="flex items-center gap-2">
-                    <div className={cn("flex items-center rounded-xl p-0.5 border", isSketchnote ? "bg-slate-100 border-slate-300" : "bg-slate-950/90 border-white/15")}>
+                {/* SAĞ: TAHMİN MODU VE PUNTO KONTROLLERİ */}
+                <div className="flex flex-wrap items-center gap-2">
+                    <button
+                        type="button"
+                        onClick={() => {
+                            playSound('pop');
+                            setHideExamples(prev => !prev);
+                            setRevealedItems({});
+                        }}
+                        className={cn(
+                            "px-3 py-1 rounded-xl text-xs font-black border transition-all cursor-pointer",
+                            hideExamples
+                                ? "bg-amber-400 text-slate-950 border-amber-500 shadow"
+                                : isSketchnote
+                                    ? "bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-400 font-['Patrick_Hand',cursive] text-sm"
+                                    : isLightTheme
+                                        ? "bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300"
+                                        : "bg-white/10 hover:bg-white/20 text-slate-200 border-white/20"
+                        )}
+                    >
+                        {hideExamples ? "Tüm Örnekleri Aç" : "Örnekleri Gizle (Tahmin)"}
+                    </button>
+
+                    <div className={cn(
+                        "flex items-center rounded-xl p-0.5 border",
+                        (isSketchnote || isLightTheme) ? "bg-slate-100 border-slate-300" : "bg-slate-950/90 border-white/15"
+                    )}>
                         <Button 
                             variant="ghost" 
                             size="icon" 
                             onClick={decreaseFontSize} 
-                            className={cn("h-7 w-7 rounded-lg", isSketchnote ? "text-slate-700 hover:text-black hover:bg-slate-200" : "text-slate-300 hover:text-white hover:bg-white/10")}
+                            className={cn("h-7 w-7 rounded-lg", (isSketchnote || isLightTheme) ? "text-slate-700 hover:text-black hover:bg-slate-200" : "text-slate-300 hover:text-white hover:bg-white/10")}
                             title="Yazı Boyutunu Küçült"
                         >
                             <Minus className="h-3.5 w-3.5"/>
                         </Button>
-                        <span className={cn("text-[10px] font-black w-8 text-center uppercase", isSketchnote ? "text-slate-700" : "text-slate-300")}>Boyut</span>
+                        <span className={cn("text-[10px] font-black w-8 text-center uppercase", (isSketchnote || isLightTheme) ? "text-slate-700" : "text-slate-300")}>Boyut</span>
                         <Button 
                             variant="ghost" 
                             size="icon" 
                             onClick={increaseFontSize} 
-                            className={cn("h-7 w-7 rounded-lg", isSketchnote ? "text-slate-700 hover:text-black hover:bg-slate-200" : "text-slate-300 hover:text-white hover:bg-white/10")}
+                            className={cn("h-7 w-7 rounded-lg", (isSketchnote || isLightTheme) ? "text-slate-700 hover:text-black hover:bg-slate-200" : "text-slate-300 hover:text-white hover:bg-white/10")}
                             title="Yazı Boyutunu Büyüt"
                         >
                             <Plus className="h-3.5 w-3.5"/>
                         </Button>
                     </div>
 
-                    <span className={cn("text-xs font-bold px-2.5 py-1 rounded-xl border hidden md:inline-block", isSketchnote ? "bg-[#fefce8] text-[#854d0e] border-[#ca8a04]" : "text-slate-400 bg-slate-900 border-white/10")}>
+                    <span className={cn(
+                        "text-xs font-bold px-2.5 py-1 rounded-xl border hidden md:inline-block",
+                        isSketchnote ? "bg-[#fefce8] text-[#854d0e] border-[#ca8a04]" :
+                        isLightTheme ? "bg-indigo-50 text-indigo-800 border-indigo-200" :
+                        "text-slate-300 bg-slate-900 border-white/15"
+                    )}>
                         {categories.length} Kategori
                     </span>
                 </div>
             </div>
 
             {/* ══ SÜTUNLU KATEGORİ IZGARASI ══ */}
-            <div className={cn("grid gap-3 w-full flex-grow items-stretch", getColumnGridClass())}>
+            <div className={cn("grid gap-3 w-full flex-grow items-stretch pb-6", getColumnGridClass())}>
                 {categories.map((cat, catIdx) => {
                     const colorKey = cat.color || defaultColors[catIdx % defaultColors.length];
                     const theme = isSketchnote 
                         ? (SKETCHNOTE_CATEGORY_MAP[colorKey] || SKETCHNOTE_CATEGORY_MAP.emerald)
-                        : (CATEGORY_COLOR_MAP[colorKey] || CATEGORY_COLOR_MAP.emerald);
+                        : isLightTheme
+                            ? (LIGHT_CATEGORY_MAP[colorKey] || LIGHT_CATEGORY_MAP.emerald)
+                            : (CATEGORY_COLOR_MAP[colorKey] || CATEGORY_COLOR_MAP.emerald);
                     const items = cat.items || [];
 
                     return (
@@ -1863,30 +2215,35 @@ export function CategoryTablePlayer({
                             key={`cat-${catIdx}`}
                             className={cn(
                                 "relative overflow-hidden rounded-3xl p-3.5 sm:p-4 md:p-5 flex flex-col justify-between transition-all duration-300",
-                                isSketchnote ? "" : "backdrop-blur-xl",
+                                (isSketchnote || isLightTheme) ? "" : "backdrop-blur-xl",
                                 theme.card
                             )}
                         >
-                            {/* Numara Filigranı */}
-                            <div className={cn("absolute top-0 right-0 font-black text-6xl p-1.5 leading-none pointer-events-none select-none rounded-bl-2xl", isSketchnote ? "text-black/10 font-['Caveat',cursive]" : "bg-black/40 text-white/30 opacity-25")}>
+                            {/* Numara Filigranı (Sağ alt arka planda, rozetle çakışmaz) */}
+                            <div className={cn(
+                                "absolute bottom-1 right-3 font-black text-5xl leading-none pointer-events-none select-none z-0",
+                                (isSketchnote || isLightTheme) ? "text-black/10 font-['Caveat',cursive]" : "text-white/15"
+                            )}>
                                 {catIdx + 1}
                             </div>
 
                             <div className="z-10 relative flex flex-col h-full space-y-3">
                                 {/* Kategori Başlığı ve Rozeti */}
-                                <div className={cn("space-y-1.5 border-b pb-3", isSketchnote ? "border-black/15" : "border-white/20")}>
+                                <div className={cn("space-y-1.5 border-b pb-3", (isSketchnote || isLightTheme) ? "border-black/15" : "border-white/20")}>
                                     <div className="flex items-center justify-between gap-2">
                                         <span className={cn("px-2.5 py-0.5 rounded-full font-bold text-[11px] border tracking-wide", isSketchnote && "font-['Patrick_Hand',cursive]", theme.badge)}>
                                             {cat.badge || `Grup ${catIdx + 1}`}
                                         </span>
-                                        <span className={cn("text-[11px] font-bold", isSketchnote ? "text-slate-600 font-['Patrick_Hand',cursive]" : "text-white/70")}>
+                                        <span className={cn("text-[11px] font-bold", (isSketchnote || isLightTheme) ? "text-slate-600" : "text-white/80", isSketchnote && "font-['Patrick_Hand',cursive]")}>
                                             {items.length} Örnek
                                         </span>
                                     </div>
                                     <h3 
                                         className={cn(
                                             "uppercase tracking-tight leading-tight",
-                                            isSketchnote ? "font-['Caveat',cursive] font-bold text-slate-900" : "font-black text-white drop-shadow-md"
+                                            isSketchnote ? "font-['Caveat',cursive] font-bold text-slate-900" :
+                                            isLightTheme ? "font-black text-slate-900" :
+                                            "font-black text-white drop-shadow-md"
                                         )}
                                         style={{ fontSize: `${baseFontSize * 1.2}rem` }}
                                     >
@@ -1897,7 +2254,9 @@ export function CategoryTablePlayer({
                                 {/* Kategori Altındaki Maddeler / Örnekler */}
                                 <div className="flex flex-col gap-2 flex-grow">
                                     {items.map((item, itemIdx) => {
-                                        const isChecked = checkedItems[`${catIdx}-${itemIdx}`] || false;
+                                        const key = `${catIdx}-${itemIdx}`;
+                                        const isChecked = checkedItems[key] || false;
+                                        const isHidden = hideExamples && !revealedItems[key];
                                         return (
                                             <div
                                                 key={`item-${catIdx}-${itemIdx}`}
@@ -1913,17 +2272,27 @@ export function CategoryTablePlayer({
                                                 )}>
                                                     {isChecked ? <Check className="w-3.5 h-3.5" /> : itemIdx + 1}
                                                 </div>
-                                                <p
-                                                    className={cn(
-                                                        "font-bold leading-snug flex-1 select-text",
-                                                        isSketchnote 
-                                                            ? (isChecked ? "line-through opacity-75 text-slate-500 font-['Patrick_Hand',cursive]" : "text-slate-800 font-['Patrick_Hand',cursive] [&_mark]:bg-[#fef08a]")
-                                                            : (isChecked ? "line-through opacity-85 text-white drop-shadow" : "text-white drop-shadow")
-                                                    )}
-                                                    style={{ fontSize: `${baseFontSize * 0.95}rem` }}
-                                                >
-                                                    {item}
-                                                </p>
+                                                {isHidden ? (
+                                                    <span className={cn(
+                                                        "flex-1 font-bold text-sm py-0.5 italic",
+                                                        (isSketchnote || isLightTheme) ? "text-amber-700" : "text-amber-300"
+                                                    )}>
+                                                        Tahmin Et • Görmek için dokun...
+                                                    </span>
+                                                ) : (
+                                                    <p
+                                                        className={cn(
+                                                            "font-bold leading-snug flex-1 select-text [&_mark]:bg-[#fef08a] [&_mark]:text-slate-900 [&_mark]:px-1 [&_mark]:rounded",
+                                                            isSketchnote 
+                                                                ? (isChecked ? "line-through opacity-75 text-slate-500 font-['Patrick_Hand',cursive]" : "text-slate-800 font-['Patrick_Hand',cursive]")
+                                                                : isLightTheme
+                                                                    ? (isChecked ? "line-through opacity-70 text-slate-500" : "text-slate-900")
+                                                                    : (isChecked ? "line-through opacity-85 text-white drop-shadow" : "text-white drop-shadow")
+                                                        )}
+                                                        style={{ fontSize: `${baseFontSize * 0.95}rem` }}
+                                                        dangerouslySetInnerHTML={{ __html: item }}
+                                                    />
+                                                )}
                                             </div>
                                         );
                                     })}
@@ -1965,6 +2334,7 @@ export function TopicOutlinePlayer({
     const isTeacher = useTeacherMode();
     const isSketchnote = presentationTheme === 'sketchnote';
     const isGame3D = presentationTheme === 'game-3d';
+    const isLightTheme = presentationTheme === 'clean-light';
 
     const GAME_3D_OUTLINE_THEMES = [
         { bg: 'linear-gradient(180deg, #1e40af 0%, #1e3a8a 50%, #0f172a 100%)', border: '#38bdf8', borderDark: '#0369a1', glow: 'rgba(56, 189, 248, 0.45)', badgeBg: 'linear-gradient(135deg, #38bdf8 0%, #0284c7 100%)', icon: '🌙' },
@@ -2036,41 +2406,41 @@ export function TopicOutlinePlayer({
         }
     };
 
-    const getCardWidthClass = () => {
-        if (count <= 4) {
-            return "flex-1 min-w-0 h-full"; // Sağa ve sola tam yaslanır, ekran genişliğini doldurur
-        }
-        if (count === 5 || count === 6) {
-            return "w-[calc(33.333%-1rem)] sm:w-[calc(33.333%-1.5rem)] lg:w-[calc(33.333%-2rem)] h-[calc(50%-0.6rem)] sm:h-[calc(50%-0.85rem)]";
-        }
-        if (count === 7 || count === 8) {
-            return "w-[calc(25%-1rem)] sm:w-[calc(25%-1.5rem)] lg:w-[calc(25%-2rem)] h-[calc(50%-0.6rem)] sm:h-[calc(50%-0.85rem)]";
-        }
-        return "w-[calc(20%-0.8rem)] sm:w-[calc(20%-1.2rem)] h-[calc(50%-0.6rem)] sm:h-[calc(50%-0.85rem)]";
-    };
-
-    const getContainerMaxClass = () => {
-        if (count <= 4) return "w-full max-h-[400px] sm:max-h-[460px] lg:max-h-[520px]";
-        return "w-full max-h-[460px] sm:max-h-[520px] lg:max-h-[580px]";
+    const getGridClass = () => {
+        if (count <= 1) return "grid-cols-1 max-w-2xl mx-auto";
+        if (count === 2) return "grid-cols-1 sm:grid-cols-2 max-w-5xl mx-auto";
+        if (count === 3) return "grid-cols-1 sm:grid-cols-3";
+        if (count === 4) return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4";
+        if (count <= 6) return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3";
+        return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4";
     };
 
     const getTargetStepIndex = (itemTitle: string, itemIndex: number) => {
         if (!allSteps || allSteps.length === 0) return null;
         const cleanTitle = itemTitle.toLowerCase().replace(/^[0-9]+[.)\-]\s*/, '').trim();
 
-        // 1. Mevcut slayttan sonra bu başlığı içeren bir content slaytı ara
-        const startIdx = typeof currentStepIndex === 'number' ? currentStepIndex + 1 : 0;
-        for (let i = startIdx; i < allSteps.length; i++) {
-            const st = allSteps[i];
-            if (st && st.title) {
-                const stTitle = st.title.toLowerCase().replace(/^[0-9]+[.)\-]\s*/, '').trim();
-                if (stTitle.includes(cleanTitle) || cleanTitle.includes(stTitle)) {
-                    return i;
+        const findBestMatch = (from: number, to: number) => {
+            for (let i = from; i < to; i++) {
+                const st = allSteps[i];
+                if (st && st.type !== 'topicOutline' && st.title) {
+                    const stTitle = st.title.toLowerCase().replace(/^[0-9]+[.)\-]\s*/, '').trim();
+                    if (stTitle && (stTitle.includes(cleanTitle) || cleanTitle.includes(stTitle))) {
+                        return i;
+                    }
                 }
             }
-        }
+            return null;
+        };
 
-        // 2. Bulunamazsa sıradaki indeksleri kullan
+        // 1. Önce mevcut slayttan sonraki adımlarda ara, bulunamazsa önceki bölümlerde ara
+        const startIdx = typeof currentStepIndex === 'number' ? currentStepIndex + 1 : 0;
+        const forwardMatch = findBestMatch(startIdx, allSteps.length);
+        if (forwardMatch !== null) return forwardMatch;
+
+        const backwardMatch = findBestMatch(0, startIdx);
+        if (backwardMatch !== null) return backwardMatch;
+
+        // 2. Eşleşme yoksa sıradaki slayt indeksi geçerliyse öner
         if (typeof currentStepIndex === 'number' && currentStepIndex + 1 + itemIndex < allSteps.length) {
             return currentStepIndex + 1 + itemIndex;
         }
@@ -2089,47 +2459,49 @@ export function TopicOutlinePlayer({
 
     return (
         <div className={cn(
-            "w-full h-full flex flex-col items-center justify-between px-4 sm:px-8 lg:px-12 py-3 sm:py-5 select-none overflow-hidden",
-            isFullscreen ? "py-5 sm:py-6" : "py-3 sm:py-4"
+            "w-full h-full flex flex-col items-center justify-start px-4 sm:px-8 lg:px-12 py-3 sm:py-5 pb-24 select-none overflow-y-auto",
+            isFullscreen ? "py-5 sm:py-6 pb-24" : "py-3 sm:py-4 pb-24"
         )}>
             {/* ══ ÜST: BAŞLIK & ROZET (shrink-0) ══ */}
-            <div className="shrink-0 flex flex-col items-center text-center">
+            <div className="shrink-0 flex flex-col items-center text-center mb-3 sm:mb-4">
                 {isSketchnote ? (
                     <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-[#fefce8] border-[2.5px] border-[#1e293b] text-[#1e293b] font-['Caveat',cursive] text-2xl font-bold shadow-[3px_3px_0_#1e293b]">
-                        <Sparkles className="w-5 h-5 text-amber-500 animate-pulse" />
+                        <Sparkles className="w-5 h-5 text-amber-500" />
                         <span>{step.title || '📑 Konu Başlıkları'}</span>
-                        <Sparkles className="w-5 h-5 text-amber-500 animate-pulse" />
                     </div>
                 ) : (
                     <motion.div 
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border-2 border-blue-500/30 text-blue-700 dark:text-blue-300 text-xs sm:text-sm font-black uppercase tracking-wider shadow-sm backdrop-blur-md"
+                        className={cn(
+                            "inline-flex items-center gap-2 px-4 py-1.5 rounded-full border-2 text-xs sm:text-sm font-black uppercase tracking-wider shadow-sm backdrop-blur-md",
+                            isLightTheme
+                                ? "bg-blue-50 border-blue-300 text-blue-800"
+                                : "bg-blue-500/15 border-blue-400/35 text-blue-200"
+                        )}
                     >
-                        <Sparkles className="w-3.5 h-3.5 text-blue-600 animate-pulse" />
+                        <Sparkles className={cn("w-3.5 h-3.5", isLightTheme ? "text-blue-600" : "text-blue-300")} />
                         <span>{step.title || '📑 Konu Başlıkları'}</span>
                     </motion.div>
                 )}
 
                 {step.description && (
                     <p className={cn(
-                        "text-xs sm:text-sm md:text-base font-semibold max-w-3xl text-center mt-1.5 line-clamp-1 sm:line-clamp-2",
-                        isSketchnote ? "font-['Patrick_Hand',cursive] text-slate-700 text-base" : "text-slate-600 dark:text-slate-300"
+                        "text-xs sm:text-sm md:text-base font-semibold max-w-3xl text-center mt-1.5 line-clamp-2",
+                        isSketchnote ? "font-['Patrick_Hand',cursive] text-slate-700 text-base" :
+                        isLightTheme ? "text-slate-600" : "text-slate-300"
                     )}>
                         {step.description}
                     </p>
                 )}
             </div>
 
-            {/* ══ ORTA: KARTLAR ALANI (flex-1 min-h-0, SAĞA VE SOLA TAM YASLANIR) ══ */}
-            <div className="flex-1 w-full min-h-0 flex items-center justify-center my-2 sm:my-3">
-                <div className={cn(
-                    "w-full h-full flex items-stretch justify-center content-center gap-4 sm:gap-6 lg:gap-8",
-                    isMultiRow ? "flex-wrap" : "flex-row",
-                    getContainerMaxClass()
-                )}>
+            {/* ══ ORTA: RESPONSIVE HARİTA IZGARASI ══ */}
+            <div className="w-full max-w-6xl mx-auto my-auto py-2">
+                <div className={cn("w-full grid gap-4 sm:gap-5 lg:gap-6 items-stretch", getGridClass())}>
                     {items.map((item, index) => {
                         const title = typeof item === 'string' ? item : item.title;
+                        const description = typeof item === 'object' ? item.description : '';
                         const itemNum = (typeof item === 'object' && item.number) ? item.number : index + 1;
                         const targetIdx = getTargetStepIndex(title, index);
                         const sketchnoteTheme = SKETCHNOTE_OUTLINE_THEMES[index % SKETCHNOTE_OUTLINE_THEMES.length];
@@ -2145,9 +2517,8 @@ export function TopicOutlinePlayer({
                                     onClick={() => handleCardClick(title, index)}
                                     title={targetIdx !== null ? `Bölüme Başla: ${title}` : title}
                                     className={cn(
-                                        "group relative flex flex-col justify-between rounded-t-[32px] rounded-b-2xl border-4 border-b-[10px] md:border-b-[14px] transition-all duration-200 cursor-pointer overflow-hidden hover:scale-105 active:scale-95 active:border-b-4",
-                                        isMultiRow ? "p-4 sm:p-5" : "p-6 sm:p-7",
-                                        getCardWidthClass()
+                                        "group relative flex flex-col justify-between rounded-t-[32px] rounded-b-2xl border-4 border-b-[10px] md:border-b-[14px] transition-all duration-200 cursor-pointer overflow-hidden hover:scale-[1.03] active:scale-95 active:border-b-4",
+                                        isMultiRow ? "p-4 sm:p-5 min-h-[160px]" : "p-6 sm:p-7 min-h-[210px]"
                                     )}
                                     style={{
                                         background: game3dTheme.bg,
@@ -2156,7 +2527,6 @@ export function TopicOutlinePlayer({
                                         boxShadow: `0 12px 25px rgba(0,0,0,0.7), 0 0 25px ${game3dTheme.glow}, inset 0 2px 4px rgba(255,255,255,0.35)`,
                                     }}
                                 >
-                                    {/* 3D Üst Kemer ve Madalya Rozeti */}
                                     <div className="flex items-center justify-between w-full shrink-0">
                                         <div
                                             className="px-3 py-1 rounded-full border-2 border-white/40 shadow-md flex items-center gap-1.5 text-xs font-black text-white"
@@ -2171,23 +2541,24 @@ export function TopicOutlinePlayer({
                                         </div>
                                     </div>
 
-                                    {/* Orta: 3D Kabartmalı Başlık */}
-                                    <div className="my-3 flex-1 flex flex-col justify-center">
-                                        <h3
-                                            className={cn(
-                                                "font-black text-white text-left leading-snug tracking-wide filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] group-hover:text-amber-200 transition-colors",
-                                                getTitleFontSize()
-                                            )}
-                                        >
+                                    <div className="my-3 flex-1 flex flex-col justify-center gap-1.5">
+                                        <h3 className={cn(
+                                            "font-black text-white text-left leading-snug tracking-wide filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] group-hover:text-amber-200 transition-colors",
+                                            getTitleFontSize()
+                                        )}>
                                             {title}
                                         </h3>
+                                        {description && (
+                                            <p className="text-xs sm:text-sm font-semibold text-white/80 line-clamp-2 text-left leading-snug">
+                                                {description}
+                                            </p>
+                                        )}
                                     </div>
 
-                                    {/* Alt: 3D Başla Buton Şeridi */}
                                     <div className="w-full flex items-center justify-between mt-auto pt-2 border-t border-white/20">
                                         <span className="text-[11px] font-extrabold text-amber-300 uppercase tracking-wider flex items-center gap-1">
                                             <Sparkles className="w-3 h-3 text-amber-400" />
-                                            <span>Derse Katıl</span>
+                                            <span>{targetIdx !== null ? 'Bölüme Git' : 'Derse Katıl'}</span>
                                         </span>
                                         <div className="w-3.5 h-3.5 rounded-full bg-amber-400 border border-white shadow-[0_0_8px_#fde047]" />
                                     </div>
@@ -2213,54 +2584,77 @@ export function TopicOutlinePlayer({
                                             sketchnoteTheme.shadow,
                                             "hover:-translate-y-1 hover:-translate-x-0.5"
                                         )
-                                        : cn(
-                                            "rounded-2xl sm:rounded-3xl border-[2.5px] sm:border-[3px] border-slate-950 dark:border-white/30 bg-white dark:bg-slate-900",
-                                            isMultiRow 
-                                                ? "shadow-[5px_5px_0px_#2563eb] sm:shadow-[6px_6px_0px_#2563eb] dark:shadow-[6px_6px_0px_#3b82f6]" 
-                                                : "shadow-[6px_6px_0px_#2563eb] sm:shadow-[8px_8px_0px_#2563eb] lg:shadow-[10px_10px_0px_#2563eb] dark:shadow-[8px_8px_0px_#3b82f6]",
-                                            "hover:shadow-[10px_10px_0px_#1d4ed8] sm:hover:shadow-[14px_14px_0px_#1d4ed8] hover:-translate-y-1.5 hover:-translate-x-1",
-                                            "active:translate-x-1 active:translate-y-1 active:shadow-[2px_2px_0px_#2563eb]"
-                                        ),
-                                    isMultiRow ? "p-4 sm:p-5 md:p-6" : "p-6 sm:p-8 md:p-9",
-                                    getCardWidthClass()
+                                        : isLightTheme
+                                            ? cn(
+                                                "rounded-2xl sm:rounded-3xl border-[2.5px] sm:border-[3px] border-slate-900 bg-white",
+                                                isMultiRow ? "shadow-[5px_5px_0px_#2563eb]" : "shadow-[8px_8px_0px_#2563eb]",
+                                                "hover:shadow-[12px_12px_0px_#1d4ed8] hover:-translate-y-1 hover:-translate-x-0.5"
+                                            )
+                                            : cn(
+                                                "rounded-2xl sm:rounded-3xl border-2 border-white/25 bg-slate-900/95",
+                                                isMultiRow ? "shadow-[5px_5px_0px_#3b82f6]" : "shadow-[8px_8px_0px_#3b82f6]",
+                                                "hover:shadow-[12px_12px_0px_#60a5fa] hover:-translate-y-1 hover:-translate-x-0.5"
+                                            ),
+                                    isMultiRow ? "p-4 sm:p-5 md:p-6 min-h-[155px]" : "p-6 sm:p-8 min-h-[195px]"
                                 )}
                             >
-                                {/* Sol Üst: Numaralandırma & Sağ Üst: Yönlendirme İkonu */}
                                 <div className="flex items-start justify-between w-full shrink-0">
                                     <span className={cn(
                                         "leading-none select-none tracking-tight",
                                         isSketchnote 
                                             ? cn("font-['Caveat',cursive] font-bold text-3xl sm:text-4xl", sketchnoteTheme.num) 
-                                            : cn("font-extrabold text-blue-600 dark:text-blue-400", getNumberFontSize())
+                                            : isLightTheme
+                                                ? cn("font-extrabold text-blue-600", getNumberFontSize())
+                                                : cn("font-extrabold text-blue-400", getNumberFontSize())
                                     )}>
                                         {itemNum}
                                     </span>
 
                                     <div className={cn(
                                         "opacity-0 group-hover:opacity-100 transition-opacity p-1.5 rounded-xl",
-                                        isSketchnote ? "bg-black/10 text-slate-800" : "bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400"
+                                        isSketchnote ? "bg-black/10 text-slate-800" :
+                                        isLightTheme ? "bg-blue-50 text-blue-600" :
+                                        "bg-blue-950/70 text-blue-300"
                                     )}>
                                         <ArrowRight className={cn(isMultiRow ? "w-4 h-4" : "w-5 h-5")} />
                                     </div>
                                 </div>
 
-                                {/* Orta: Başlık Metni - Rahat satır aralığı (leading-normal / 1.4) ile alt satıra düşüşlerde tertemiz okuma */}
-                                <div className="my-2 sm:my-3.5 flex-1 flex flex-col justify-start">
+                                <div className="my-2 sm:my-3 flex-1 flex flex-col justify-start gap-1.5">
                                     <h3 className={cn(
                                         "leading-[1.35] sm:leading-[1.45] tracking-normal break-words text-left transition-colors",
                                         isSketchnote 
                                             ? "font-['Caveat',cursive] font-bold text-2xl sm:text-3xl text-slate-900 group-hover:text-blue-700" 
-                                            : cn("font-extrabold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-300", getTitleFontSize())
+                                            : isLightTheme
+                                                ? cn("font-extrabold text-slate-900 group-hover:text-blue-600", getTitleFontSize())
+                                                : cn("font-extrabold text-white group-hover:text-blue-300", getTitleFontSize())
                                     )}>
                                         {title}
                                     </h3>
+                                    {description && (
+                                        <p className={cn(
+                                            "text-xs sm:text-sm font-medium line-clamp-2 text-left leading-snug",
+                                            isSketchnote ? "font-['Patrick_Hand',cursive] text-slate-600 text-sm sm:text-base" :
+                                            isLightTheme ? "text-slate-600" : "text-slate-300"
+                                        )}>
+                                            {description}
+                                        </p>
+                                    )}
                                 </div>
 
-                                {/* Sağ Alt: Vurgu Noktası (Referans Görseldeki Birebir Detay) */}
-                                <div className="w-full flex justify-end mt-auto pt-2 shrink-0">
+                                <div className="w-full flex justify-between items-center mt-auto pt-2 shrink-0">
+                                    <span className={cn(
+                                        "text-[11px] font-bold opacity-75",
+                                        isSketchnote ? "font-['Patrick_Hand',cursive] text-slate-700" :
+                                        isLightTheme ? "text-blue-700" : "text-blue-300"
+                                    )}>
+                                        {targetIdx !== null ? 'Bölüme Git →' : ''}
+                                    </span>
                                     <div className={cn(
                                         "rounded-full border-[2px] shrink-0 group-hover:scale-125 transition-transform shadow-xs",
-                                        isSketchnote ? cn(sketchnoteTheme.dot, "border-black/20") : "bg-blue-600 dark:bg-blue-400 border-slate-950 dark:border-white",
+                                        isSketchnote ? cn(sketchnoteTheme.dot, "border-black/20") :
+                                        isLightTheme ? "bg-blue-600 border-slate-950" :
+                                        "bg-blue-400 border-white",
                                         isMultiRow ? "w-3.5 h-3.5 sm:w-4 sm:h-4" : "w-4 h-4 sm:w-5 sm:h-5"
                                     )} />
                                 </div>
@@ -2271,8 +2665,15 @@ export function TopicOutlinePlayer({
             </div>
 
             {/* ══ ALT: İPUCU BİLGİSİ (shrink-0) ══ */}
-            <div className="shrink-0 inline-flex items-center gap-2 px-4 py-1.5 rounded-xl bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-white/10 shadow-sm text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 font-semibold text-center">
-                <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping" />
+            <div className={cn(
+                "shrink-0 inline-flex items-center gap-2 px-4 py-1.5 rounded-xl border shadow-sm text-[11px] sm:text-xs font-semibold text-center mt-3",
+                isSketchnote
+                    ? "bg-white/95 border-[#1e293b]/40 text-slate-700"
+                    : isLightTheme
+                        ? "bg-white/90 border-slate-200 text-slate-600"
+                        : "bg-slate-900/90 border-white/15 text-slate-300"
+            )}>
+                <span className="w-2 h-2 rounded-full bg-blue-500" />
                 <span>İpucu: Başlıklara tıklayarak doğrudan o konuya geçebilir veya <strong>Boşluk / İleri (→)</strong> ile sırayla ilerleyebilirsiniz.</span>
             </div>
         </div>

@@ -1,5 +1,7 @@
 'use client';
 
+import { splitHtmlIntoSentences } from '../tts-helper';
+
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { 
     Sparkles, CheckCircle2, Volume2, VolumeX, Maximize2, X, Target, 
@@ -89,18 +91,7 @@ export function ContentListPlayer({
             if (listItems.length > 0) {
                 items = Array.from(listItems).map(li => li.innerHTML.trim()).filter(Boolean);
             } else {
-                const paragraphs = doc.querySelectorAll('p');
-                if (paragraphs.length > 0) {
-                    const extracted: string[] = [];
-                    paragraphs.forEach(p => {
-                        const html = p.innerHTML.trim();
-                        const matches = html.match(/[^.!?]+[.!?]+/g)?.map(s => s.trim()) || [html];
-                        extracted.push(...matches.filter(Boolean));
-                    });
-                    items = extracted.length > 0 ? extracted : [step.content];
-                } else {
-                    items = step.content.match(/[^.!?]+[.!?]+/g)?.map(s => s.trim()) || [step.content];
-                }
+                items = splitHtmlIntoSentences(step.content);
             }
         } else if (step.type === 'objectiveList') {
             items = (step as ObjectiveListStep).items;
@@ -109,6 +100,13 @@ export function ContentListPlayer({
         }
         return items;
     }, [step]);
+
+    const hasKeyTerms = useMemo(
+        () => sentences.some(s => /<(strong|b|mark)\b/i.test(s)),
+        [sentences]
+    );
+    const [hideKeyTerms, setHideKeyTerms] = useState(false);
+    const [revealedKeywords, setRevealedKeywords] = useState<Record<number, boolean>>({});
       
     const visibleSentences = (typeof revealedSentencesCount === 'number' && revealedSentencesCount > 0)
         ? sentences.slice(0, revealedSentencesCount)
@@ -281,17 +279,35 @@ export function ContentListPlayer({
         speakSentenceRef.current = handleSpeakSentence;
     }, [handleSpeakSentence]);
 
-    // Slayt adımı değiştiğinde sayaçları ve konuşmayı sıfırla
+    // Slayt adımı değiştiğinde sayaçları, aktif hatırlamayı ve konuşmayı sıfırla
     const currentStepKey = (step as any)?.id || (step as any)?.title || JSON.stringify((step as any)?.content || '');
     useEffect(() => {
         if (prevStepKeyRef.current !== currentStepKey) {
             prevStepKeyRef.current = currentStepKey;
             prevCountRef.current = 0; // Yeni slaytta 1. kartın okunabilmesi için sıfırla
+            setHideKeyTerms(false);
+            setRevealedKeywords({});
+            setManualFocusIndex(null);
         }
         return () => {
             stopSpeech();
         };
     }, [currentStepKey, stopSpeech]);
+
+    // Sinema modalı ESC ile güvenli kapatma
+    useEffect(() => {
+        if (!isModalOpen) return;
+        const handleKey = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                e.stopPropagation();
+                stopSpeech();
+                setIsModalOpen(false);
+            }
+        };
+        window.addEventListener('keydown', handleKey, true);
+        return () => window.removeEventListener('keydown', handleKey, true);
+    }, [isModalOpen, stopSpeech]);
 
     // Kart açıldığında çalışan effect: Hem slayt ilk açıldığında (1. kart), hem yeni kartlar açıldığında çalışır
     useEffect(() => {
@@ -636,6 +652,9 @@ export function ContentListPlayer({
     };
 
     const latestSentence = modalSentence || sentences[activeIndex] || sentences[revealedSentencesCount - 1] || '';
+    const modalIdx = visibleSentences.indexOf(latestSentence);
+    const isModalMasked = hideKeyTerms && modalIdx !== -1 && !revealedKeywords[modalIdx] && /<(strong|b|mark)\b/i.test(latestSentence);
+    const maskClasses = "[&_strong]:blur-[6px] [&_strong]:opacity-45 [&_strong]:select-none [&_b]:blur-[6px] [&_b]:opacity-45 [&_b]:select-none [&_mark]:blur-[6px] [&_mark]:opacity-45 [&_mark]:select-none";
 
     return (
         <div className="w-full h-full flex flex-col items-center justify-start p-1 sm:p-2 max-w-full">
@@ -653,21 +672,43 @@ export function ContentListPlayer({
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
                         transition={{ type: "spring", stiffness: 320, damping: 28 }}
-                        className="relative w-full max-w-5xl p-8 sm:p-12 md:p-16 rounded-[2.5rem] shadow-[0_0_120px_rgba(129,140,248,0.4)] flex flex-col items-center text-center border-2 border-white/25 overflow-hidden bg-slate-900/95" 
+                        className={cn(
+                            "relative w-full max-w-5xl p-8 sm:p-12 md:p-16 rounded-[2.5rem] flex flex-col items-center text-center overflow-hidden",
+                            isSketchnote
+                                ? "bg-[#fffdf7] text-[#1e293b] border-[3px] border-[#1e293b] shadow-[8px_8px_0_#1e293b]"
+                                : isLightBoard
+                                    ? "bg-white text-slate-900 border-2 border-indigo-200 shadow-2xl"
+                                    : "bg-slate-900/95 text-white border-2 border-white/25 shadow-[0_0_120px_rgba(129,140,248,0.4)]"
+                        )}
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/40 via-purple-900/30 to-pink-900/40 pointer-events-none" />
-                        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-cyan-400 via-indigo-500 to-pink-500" />
+                        {!isSketchnote && (
+                            <>
+                                {!isLightBoard && <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/40 via-purple-900/30 to-pink-900/40 pointer-events-none" />}
+                                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-cyan-400 via-indigo-500 to-pink-500" />
+                            </>
+                        )}
                         
                         <div className="absolute top-6 right-6 flex items-center gap-2 z-30">
+                            {isModalMasked && (
+                                <button
+                                    type="button"
+                                    onClick={() => setRevealedKeywords(prev => ({ ...prev, [modalIdx]: true }))}
+                                    className="px-3.5 py-2.5 rounded-2xl text-xs font-black bg-amber-400 hover:bg-amber-300 text-slate-950 shadow-md cursor-pointer"
+                                >
+                                    Kelimeleri Aç
+                                </button>
+                            )}
                             <button
                                 type="button"
                                 onClick={(e) => handleSpeakSentence(e, latestSentence, 9999)}
                                 className={cn(
-                                    "p-3 rounded-2xl transition-all cursor-pointer backdrop-blur-md",
+                                    "p-3 rounded-2xl transition-all cursor-pointer border",
                                     speakingIndex === 9999
-                                        ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/50 animate-pulse"
-                                        : "bg-white/10 hover:bg-white/20 text-white/80 hover:text-white"
+                                        ? "bg-emerald-500 text-white border-emerald-400 shadow-lg"
+                                        : (isSketchnote || isLightBoard)
+                                            ? "bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300"
+                                            : "bg-white/10 hover:bg-white/20 text-white/85 hover:text-white border-white/20"
                                 )}
                                 title="Seslendir"
                             >
@@ -678,24 +719,42 @@ export function ContentListPlayer({
                                     stopSpeech();
                                     setIsModalOpen(false);
                                 }} 
-                                className="p-3 bg-white/10 hover:bg-white/20 rounded-2xl text-white transition-colors cursor-pointer"
-                                title="Kapat"
+                                className={cn(
+                                    "p-3 rounded-2xl transition-colors cursor-pointer border",
+                                    (isSketchnote || isLightBoard)
+                                        ? "bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300"
+                                        : "bg-white/10 hover:bg-white/20 text-white border-white/20"
+                                )}
+                                title="Kapat (ESC)"
                             >
                                 <X className="h-6 w-6" />
                             </button>
                         </div>
                         
-                        <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/20 border border-indigo-400/40 text-indigo-300 text-xs font-black uppercase tracking-wider mb-6 z-20">
-                            <Sparkles className="w-4 h-4 text-yellow-300 animate-pulse" />
+                        <div className={cn(
+                            "flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-black uppercase tracking-wider mb-6 z-20",
+                            isSketchnote
+                                ? "bg-[#fefce8] border-[#eab308] text-[#854d0e] font-['Patrick_Hand',cursive] text-sm"
+                                : isLightBoard
+                                    ? "bg-indigo-50 border-indigo-200 text-indigo-700"
+                                    : "bg-indigo-500/20 border-indigo-400/40 text-indigo-300"
+                        )}>
+                            <Sparkles className={cn("w-4 h-4", (isSketchnote || isLightBoard) ? "text-amber-500" : "text-yellow-300")} />
                             <span>Büyük Sahne Odak Modu</span>
                         </div>
 
-                        <div className={cn("text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight py-6 sm:py-10 max-h-[65vh] overflow-y-auto drop-shadow-2xl z-20 tracking-tight scrollbar-thin scrollbar-thumb-white/20", fontClass)}>
+                        <div className={cn(
+                            "text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-tight py-6 sm:py-10 max-h-[65vh] overflow-y-auto z-20 tracking-tight scrollbar-thin",
+                            (isSketchnote || isLightBoard) ? "text-slate-900" : "text-white drop-shadow-2xl",
+                            isSketchnote && "font-['Patrick_Hand',cursive] [&_mark]:bg-[#fef08a] [&_mark]:text-[#854d0e] [&_strong]:bg-[#fef08a] [&_strong]:text-[#854d0e] [&_strong]:px-1.5 [&_strong]:rounded",
+                            isModalMasked && maskClasses,
+                            fontClass
+                        )}>
                             {speakingIndex === 9999 ? (
                                 <HighlightedSentence 
                                     htmlContent={latestSentence} 
                                     activeWordIndex={currentWordIndex} 
-                                    isLightBoard={false} 
+                                    isLightBoard={isSketchnote || isLightBoard} 
                                     className={fontClass}
                                     isModal={true}
                                 />
@@ -717,7 +776,7 @@ export function ContentListPlayer({
                                 stopSpeech();
                                 setIsModalOpen(false);
                             }} 
-                            className="mt-6 h-14 px-10 text-xl font-black rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:to-pink-600 text-white shadow-xl shadow-purple-950/50 transform transition-transform hover:scale-105 active:scale-95 z-20 cursor-pointer"
+                            className="mt-6 h-14 px-10 text-xl font-black rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:to-pink-600 text-white shadow-xl transform transition-transform hover:scale-105 active:scale-95 z-20 cursor-pointer"
                         >
                             Devam Et
                         </Button>
@@ -749,7 +808,7 @@ export function ContentListPlayer({
                                             ? "bg-indigo-50 border-indigo-200 text-indigo-600 shadow-inner" 
                                             : "bg-indigo-500/20 border-indigo-500/30 text-indigo-300 shadow-inner"
                                 )}>
-                                    <Sparkles className="h-5 w-5 animate-pulse" />
+                                    <Sparkles className="h-5 w-5" />
                                 </div>
                                 <div>
                                     {isSketchnote ? (
@@ -784,8 +843,38 @@ export function ContentListPlayer({
                                 </div>
                             </div>
 
-                            {sentences.length > 1 && (
-                                <div className="flex items-center gap-3 shrink-0">
+                            <div className="flex flex-wrap items-center justify-center gap-2.5 shrink-0">
+                                {hasKeyTerms && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setHideKeyTerms(prev => !prev);
+                                            setRevealedKeywords({});
+                                        }}
+                                        className={cn(
+                                            "px-3 py-1.5 rounded-full text-xs font-black border flex items-center gap-1.5 transition-all cursor-pointer",
+                                            hideKeyTerms
+                                                ? "bg-amber-400 text-slate-950 border-amber-500 shadow-sm"
+                                                : isSketchnote
+                                                    ? "bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-400 font-['Patrick_Hand',cursive] text-sm"
+                                                    : isLightBoard
+                                                        ? "bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300"
+                                                        : "bg-white/10 hover:bg-white/20 text-slate-200 border-white/20"
+                                        )}
+                                        title="Vurgulu anahtar kelimeleri gizleyip sınıfa tahmin ettirin"
+                                    >
+                                        <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
+                                            {hideKeyTerms ? (
+                                                <><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></>
+                                            ) : (
+                                                <><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></>
+                                            )}
+                                        </svg>
+                                        <span>{hideKeyTerms ? "Kelimeleri Göster" : "Anahtar Kelimeleri Gizle"}</span>
+                                    </button>
+                                )}
+
+                                {sentences.length > 1 && (
                                     <div className="flex flex-col items-end">
                                         <span className={cn(
                                             "px-3 py-1 rounded-full text-xs font-black shadow-sm flex items-center gap-1.5",
@@ -798,15 +887,18 @@ export function ContentListPlayer({
                                             <Target className="w-3.5 h-3.5" />
                                             <span>{visibleSentences.length} / {sentences.length} Cümle</span>
                                         </span>
-                                        <div className="w-28 sm:w-32 bg-slate-200/80 dark:bg-white/10 h-1.5 rounded-full mt-1.5 overflow-hidden">
+                                        <div className={cn(
+                                            "w-28 sm:w-32 h-1.5 rounded-full mt-1.5 overflow-hidden",
+                                            isSketchnote ? "bg-slate-200" : isLightBoard ? "bg-indigo-100" : "bg-white/10"
+                                        )}>
                                             <div 
                                                 className="h-full bg-gradient-to-r from-indigo-500 to-pink-500 transition-all duration-300 rounded-full"
                                                 style={{ width: `${(visibleSentences.length / sentences.length) * 100}%` }}
                                             />
                                         </div>
                                     </div>
-                                </div>
-                            )}
+                                )}
+                            </div>
                         </div>
                     </div>
                 );
@@ -842,10 +934,60 @@ export function ContentListPlayer({
                         <div className="absolute bottom-3 left-4 w-2.5 h-2.5 rounded-full bg-amber-400 border border-amber-950 shadow-inner opacity-80" />
                         <div className="absolute bottom-3 right-4 w-2.5 h-2.5 rounded-full bg-amber-400 border border-amber-950 shadow-inner opacity-80" />
 
-                        {/* YAZILAR BU SABİT ZEMİN ÜZERİNE TEK TEK GELİR (KART OLMADAN!) */}
+                        {/* Üst Kontrol Şeridi (Başlık + Tek Kart Sekmeleri + Aktif Hatırlama + Sayaç) */}
+                        <div className="relative z-10 flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-amber-400/20 shrink-0">
+                            <h2 className="text-base sm:text-xl font-black text-amber-200 truncate">
+                                {step.title}
+                            </h2>
+                            <div className="flex flex-wrap items-center gap-2">
+                                {isSingleCardMode && visibleSentences.length > 1 && (
+                                    <div className="flex items-center gap-1">
+                                        {visibleSentences.map((_, idx) => (
+                                            <button
+                                                key={idx}
+                                                type="button"
+                                                onClick={() => setManualFocusIndex(idx)}
+                                                className={cn(
+                                                    "w-7 h-7 rounded-lg font-black text-xs border transition-all cursor-pointer",
+                                                    activeIndex === idx
+                                                        ? "bg-amber-400 text-amber-950 border-amber-200"
+                                                        : "bg-white/10 text-white/75 border-white/15 hover:bg-white/20"
+                                                )}
+                                            >
+                                                {idx + 1}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                                {hasKeyTerms && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setHideKeyTerms(prev => !prev);
+                                            setRevealedKeywords({});
+                                        }}
+                                        className={cn(
+                                            "px-3 py-1 rounded-xl text-xs font-black border transition-all cursor-pointer",
+                                            hideKeyTerms
+                                                ? "bg-amber-400 text-amber-950 border-amber-200 shadow"
+                                                : "bg-white/10 hover:bg-white/20 text-amber-100 border-white/20"
+                                        )}
+                                    >
+                                        {hideKeyTerms ? "Kelimeleri Göster" : "Anahtar Kelimeleri Gizle"}
+                                    </button>
+                                )}
+                                <span className="px-3 py-1 rounded-xl text-xs font-black bg-amber-400/20 text-amber-200 border border-amber-300/35">
+                                    {visibleSentences.length} / {sentences.length}
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* YAZILAR BU SABİT ZEMİN ÜZERİNE TEK TEK GELİR */}
                         <div className="relative z-10 flex-1 overflow-y-auto custom-scroll pr-1.5 flex flex-col gap-3.5 sm:gap-4.5 md:gap-5 justify-start">
                             {visibleSentences.map((sentence, index) => {
+                                if (isSingleCardMode && index !== activeIndex) return null;
                                 const isHero = index === activeIndex;
+                                const isSentenceMasked = hideKeyTerms && !revealedKeywords[index] && /<(strong|b|mark)\b/i.test(sentence);
                                 return (
                                     <motion.div
                                         key={index}
@@ -856,7 +998,8 @@ export function ContentListPlayer({
                                         onClick={() => setManualFocusIndex(index)}
                                         className={cn(
                                             "flex items-start gap-3.5 sm:gap-4 p-2.5 sm:p-3 rounded-2xl transition-all duration-200 cursor-pointer",
-                                            isHero ? "bg-white/10 ring-2 ring-amber-400/50 shadow-md" : "hover:bg-white/5"
+                                            isHero ? "bg-white/10 ring-2 ring-amber-400/50 shadow-md" : "hover:bg-white/5",
+                                            isSingleCardMode && "my-auto p-5 sm:p-8"
                                         )}
                                     >
                                         {/* Sıra Numarası Rozeti */}
@@ -872,10 +1015,11 @@ export function ContentListPlayer({
                                             </span>
                                         </div>
 
-                                        {/* Cümle Metni (BÜYÜTÜLMÜŞ TOK PUNTOLAR, AKILLI TAHTADA EN ARKA SIRADAN DAHİ CAM GİBİ NET) */}
+                                        {/* Cümle Metni */}
                                         <div className="flex-1 min-w-0">
                                             <div className={cn(
-                                                "font-extrabold leading-snug tracking-normal text-slate-100 drop-shadow-[0_2px_4px_rgba(0,0,0,0.85)] select-text",
+                                                "font-extrabold leading-snug tracking-normal text-slate-100 drop-shadow-[0_2px_4px_rgba(0,0,0,0.85)] select-text [&_strong]:text-amber-300 [&_b]:text-amber-300 [&_mark]:bg-amber-300 [&_mark]:text-slate-950 [&_mark]:px-1 [&_mark]:rounded",
+                                                isSentenceMasked && maskClasses,
                                                 fontSizeScale === 'huge' ? "text-3xl sm:text-4xl md:text-5xl lg:text-6xl" :
                                                 fontSizeScale === 'xl' ? "text-2xl sm:text-3xl md:text-4xl lg:text-5xl" :
                                                 fontSizeScale === 'xs' ? "text-lg sm:text-xl md:text-2xl" :
@@ -892,6 +1036,18 @@ export function ContentListPlayer({
                                                     <div className={fontClass} dangerouslySetInnerHTML={{ __html: sentence }} />
                                                 )}
                                             </div>
+                                            {isSentenceMasked && (
+                                                <button
+                                                    type="button"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setRevealedKeywords(prev => ({ ...prev, [index]: true }));
+                                                    }}
+                                                    className="mt-2 px-3 py-1 rounded-lg text-xs font-black bg-amber-400 hover:bg-amber-300 text-slate-950 shadow cursor-pointer"
+                                                >
+                                                    Kelimeyi Aç
+                                                </button>
+                                            )}
                                         </div>
 
                                         {/* Sesli Okuma Butonu */}
@@ -904,8 +1060,8 @@ export function ContentListPlayer({
                                             className={cn(
                                                 "w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center transition-all cursor-pointer shrink-0 mt-0.5 border",
                                                 speakingIndex === index
-                                                    ? "bg-amber-400 text-amber-950 border-amber-300 shadow-md animate-bounce"
-                                                    : "bg-white/10 hover:bg-white/20 text-white/70 hover:text-white border-white/20"
+                                                    ? "bg-amber-400 text-amber-950 border-amber-300 shadow-md ring-2 ring-amber-200"
+                                                    : "bg-white/10 hover:bg-white/20 text-white/75 hover:text-white border-white/20"
                                             )}
                                             title={speakingIndex === index ? "Durdur" : "Seslendir"}
                                         >
@@ -918,24 +1074,65 @@ export function ContentListPlayer({
                     </div>
                 </div>
             ) : (
-                /* ══ DİĞER TEMALAR İÇİN STANDART CÜMLE LİSTESİ ══ */
+                /* ══ DİĞER TEMALAR İÇİN STANDART CÜMLE LİSTESİ (VEYA TEK KART ODAK SAHNESİ) ══ */
                 <div className={cn(
                     "relative w-full flex flex-col items-center", 
                     isTeacher ? "pb-16 mt-1" : "pb-8 mt-1"
                 )}>
+                {isSingleCardMode && visibleSentences.length > 1 && (
+                    <div className="flex flex-wrap items-center justify-center gap-1.5 mb-3 w-full">
+                        {visibleSentences.map((_, idx) => (
+                            <button
+                                key={idx}
+                                type="button"
+                                onClick={() => setManualFocusIndex(idx)}
+                                className={cn(
+                                    "px-3 py-1 rounded-full text-xs font-black border transition-all cursor-pointer",
+                                    activeIndex === idx
+                                        ? isSketchnote
+                                            ? "bg-[#fef08a] text-[#854d0e] border-[#ca8a04] shadow-[2px_2px_0_#ca8a04]"
+                                            : "bg-indigo-600 text-white border-indigo-400 shadow-md"
+                                        : isSketchnote
+                                            ? "bg-white text-slate-700 border-slate-300 hover:bg-slate-100"
+                                            : isLightBoard
+                                                ? "bg-white text-slate-700 border-slate-300 hover:bg-slate-100"
+                                                : "bg-white/10 text-slate-300 border-white/15 hover:bg-white/20"
+                                )}
+                            >
+                                #{idx + 1}
+                            </button>
+                        ))}
+                    </div>
+                )}
+
                 {visibleSentences.length === 0 ? (
-                    <div className="w-full max-w-lg mx-auto p-8 text-center rounded-3xl bg-slate-900/60 border border-white/10 text-slate-300 backdrop-blur-xl shadow-xl">
-                        <Sparkles className="w-10 h-10 text-indigo-400 mx-auto mb-3 animate-pulse" />
-                        <p className="text-base font-bold text-white">{step.title || 'İçerik'}</p>
-                        <p className="text-xs text-slate-400 mt-1">Bu adımda henüz gösterilecek cümle bulunmuyor.</p>
+                    <div className={cn(
+                        "w-full max-w-lg mx-auto p-8 text-center rounded-3xl border shadow-xl",
+                        (isSketchnote || isLightBoard)
+                            ? "bg-white border-slate-200 text-slate-700"
+                            : "bg-slate-900/60 border-white/10 text-slate-300 backdrop-blur-xl"
+                    )}>
+                        <Sparkles className="w-10 h-10 text-indigo-400 mx-auto mb-3" />
+                        <p className={cn("text-base font-bold", (isSketchnote || isLightBoard) ? "text-slate-900" : "text-white")}>{step.title || 'İçerik'}</p>
+                        <p className="text-xs opacity-75 mt-1">Bu adımda henüz gösterilecek cümle bulunmuyor.</p>
                     </div>
                 ) : (
-                <div className="w-full max-w-full flex flex-col gap-2.5 sm:gap-3 md:gap-3.5 transition-all duration-300">
+                <div className={cn(
+                    "w-full flex flex-col gap-2.5 sm:gap-3 md:gap-3.5 transition-all duration-300",
+                    isSingleCardMode ? "max-w-4xl mx-auto" : "max-w-full"
+                )}>
                     {visibleSentences.map((sentence, index) => {
+                        if (isSingleCardMode && index !== activeIndex) return null;
                         const style = styles[index % styles.length]; 
                         const sketchnoteItem = SKETCHNOTE_PALETTE[index % SKETCHNOTE_PALETTE.length];
                         const isHero = index === activeIndex;
                         const shouldAnimate = isTeacher && index === visibleSentences.length - 1 && !isSingleCardMode; 
+                        const isSentenceMasked = hideKeyTerms && !revealedKeywords[index] && /<(strong|b|mark)\b/i.test(sentence);
+                        const actionBtnCls = isSketchnote
+                            ? "bg-white/90 hover:bg-white text-[#1e293b] border-[1.5px] border-[#1e293b]/40 shadow-[1.5px_1.5px_0_rgba(30,41,59,0.2)]"
+                            : isLightBoard
+                                ? "bg-white/25 hover:bg-white/40 text-white border border-white/40"
+                                : "bg-white/10 hover:bg-white/20 text-white/85 hover:text-white border border-white/15";
                         
                         return (
                             <motion.div
@@ -989,44 +1186,44 @@ export function ContentListPlayer({
                                             <div className="sm:hidden flex items-center">
                                                 {isHero ? (
                                                     <div className={cn(
-                                                        "flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider shadow-sm",
+                                                        "flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider shadow-sm",
                                                         isSketchnote
                                                             ? "bg-[#fefce8] text-[#854d0e] border-[1.5px] border-[#ca8a04] shadow-[1.5px_1.5px_0_#ca8a04]"
                                                             : (isGame3D || isLightBoard) 
                                                                 ? "bg-white text-slate-950 font-black shadow-md" 
-                                                                : "bg-emerald-500/25 text-emerald-300 border border-emerald-400/50 shadow-[0_0_12px_rgba(16,185,129,0.35)]"
+                                                                : "bg-emerald-500/25 text-emerald-300 border border-emerald-400/50"
                                                     )}>
-                                                        <span className={cn("w-1.5 h-1.5 rounded-full animate-ping", isLightBoard ? "bg-emerald-600" : "bg-white")} />
+                                                        <span className={cn("w-2 h-2 rounded-full", isSketchnote ? "bg-[#ca8a04]" : isLightBoard ? "bg-emerald-600" : "bg-emerald-400")} />
                                                         <span>Şimdi İnceleniyor</span>
                                                     </div>
                                                 ) : (
                                                     <div className={cn(
-                                                        "flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border transition-colors backdrop-blur-md",
-                                                        isLightBoard 
-                                                            ? "bg-white/20 text-white border-white/30" 
-                                                            : "bg-white/10 text-slate-300 border-white/15"
+                                                        "flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border transition-colors",
+                                                        isSketchnote
+                                                            ? cn(sketchnoteItem.badgeBg, sketchnoteItem.badgeText, sketchnoteItem.badgeBorder, "font-bold")
+                                                            : isLightBoard 
+                                                                ? "bg-white/25 text-white border-white/40" 
+                                                                : "bg-white/10 text-slate-300 border-white/15"
                                                     )}>
-                                                        <CheckCircle2 className="w-3 h-3 text-white" />
+                                                        <CheckCircle2 className="w-3 h-3" />
                                                         <span>İncelendi</span>
                                                     </div>
                                                 )}
                                             </div>
 
-                                            <div className="sm:hidden flex items-center gap-1 ml-auto">
+                                            <div className="sm:hidden flex items-center gap-1.5 ml-auto">
                                                 <button
                                                     type="button"
                                                     onClick={(e) => handleSpeakSentence(e, sentence, index)}
                                                     title={speakingIndex === index ? "Okumayı Durdur" : "Cümleyi Sesli Oku (TTS)"}
                                                     className={cn(
-                                                        "p-1.5 rounded-lg transition-all cursor-pointer backdrop-blur-md",
+                                                        "w-8 h-8 rounded-lg flex items-center justify-center transition-all cursor-pointer",
                                                         speakingIndex === index 
-                                                            ? "bg-emerald-400 text-slate-950 font-black shadow-lg shadow-emerald-500/50 animate-bounce" 
-                                                            : (isLightBoard
-                                                                ? "bg-white/20 hover:bg-white/30 text-white border border-white/30"
-                                                                : "bg-white/10 hover:bg-white/20 text-white/80 hover:text-white border border-white/10")
+                                                            ? "bg-emerald-400 text-slate-950 font-black shadow-md ring-2 ring-emerald-300" 
+                                                            : actionBtnCls
                                                     )}
                                                 >
-                                                    {speakingIndex === index ? <VolumeX className="w-3 h-3" /> : <Volume2 className="w-3 h-3" />}
+                                                    {speakingIndex === index ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
                                                 </button>
 
                                                 <button
@@ -1037,14 +1234,9 @@ export function ContentListPlayer({
                                                         setIsModalOpen(true);
                                                     }}
                                                     title="Tam Ekran Sahneye Al"
-                                                    className={cn(
-                                                        "p-1.5 rounded-lg transition-all cursor-pointer backdrop-blur-md",
-                                                        isLightBoard
-                                                            ? "bg-white/20 hover:bg-white/30 text-white border border-white/30"
-                                                            : "bg-white/10 hover:bg-white/20 text-white/80 hover:text-white border border-white/10")
-                                                    }
+                                                    className={cn("w-8 h-8 rounded-lg flex items-center justify-center transition-all cursor-pointer", actionBtnCls)}
                                                 >
-                                                    <Maximize2 className="w-3 h-3" />
+                                                    <Maximize2 className="w-4 h-4" />
                                                 </button>
                                             </div>
                                         </div>
@@ -1053,33 +1245,47 @@ export function ContentListPlayer({
                                             <div className="hidden sm:flex items-center gap-2">
                                                 {isHero ? (
                                                     <div className={cn(
-                                                        "flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider shadow-sm animate-in fade-in zoom-in-95 duration-200",
+                                                        "flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider shadow-sm animate-in fade-in zoom-in-95 duration-200",
                                                         isSketchnote
                                                             ? "bg-[#fefce8] text-[#854d0e] border-[1.5px] border-[#ca8a04] shadow-[1.5px_1.5px_0_#ca8a04] font-bold"
                                                             : isLightBoard 
                                                                 ? "bg-white text-slate-950 font-black shadow-md" 
-                                                                : "bg-emerald-500/25 text-emerald-300 border border-emerald-400/50 shadow-[0_0_12px_rgba(16,185,129,0.35)]"
+                                                                : "bg-emerald-500/25 text-emerald-300 border border-emerald-400/50"
                                                     )}>
-                                                        <span className={cn("w-1.5 h-1.5 rounded-full animate-ping", isLightBoard ? "bg-emerald-600" : "bg-white")} />
+                                                        <span className={cn("w-2 h-2 rounded-full", isSketchnote ? "bg-[#ca8a04]" : isLightBoard ? "bg-emerald-600" : "bg-emerald-400")} />
                                                         <span>Şimdi İnceleniyor</span>
                                                     </div>
                                                 ) : (
                                                     <div className={cn(
-                                                        "flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border transition-colors backdrop-blur-md",
-                                                        isLightBoard 
-                                                            ? "bg-white/20 text-white border-white/30" 
-                                                            : "bg-white/10 text-slate-300 border-white/15"
+                                                        "flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border transition-colors",
+                                                        isSketchnote
+                                                            ? cn(sketchnoteItem.badgeBg, sketchnoteItem.badgeText, sketchnoteItem.badgeBorder, "font-bold")
+                                                            : isLightBoard 
+                                                                ? "bg-white/25 text-white border-white/40" 
+                                                                : "bg-white/10 text-slate-300 border-white/15"
                                                     )}>
-                                                        <CheckCircle2 className="w-3 h-3 text-white" />
+                                                        <CheckCircle2 className="w-3.5 h-3.5" />
                                                         <span>İncelendi</span>
                                                     </div>
                                                 )}
                                                 <span className={cn(
-                                                    "text-[11px] font-semibold opacity-70",
-                                                    isSketchnote ? "text-slate-600 font-bold" : (isLightBoard ? "text-white/90" : "text-slate-300")
+                                                    "text-[11px] font-semibold opacity-80",
+                                                    isSketchnote ? "text-slate-700 font-bold" : (isLightBoard ? "text-white/95" : "text-slate-300")
                                                 )}>
                                                     Madde {index + 1} / {visibleSentences.length}
                                                 </span>
+                                                {isSentenceMasked && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setRevealedKeywords(prev => ({ ...prev, [index]: true }));
+                                                        }}
+                                                        className="ml-auto px-2.5 py-0.5 rounded-full text-[11px] font-black bg-amber-300 hover:bg-amber-200 text-slate-950 border border-amber-500 shadow-xs cursor-pointer"
+                                                    >
+                                                        Kelimeyi Aç
+                                                    </button>
+                                                )}
                                             </div>
 
                                             <div className={cn(
@@ -1090,13 +1296,14 @@ export function ContentListPlayer({
                                                     ? "text-[#1e293b] font-bold [&_mark]:bg-[#fef08a] [&_mark]:text-[#854d0e] [&_strong]:bg-[#fef08a] [&_strong]:text-[#854d0e] [&_strong]:px-1.5 [&_strong]:rounded-[4px] [&_b]:bg-[#fef08a] [&_b]:text-[#854d0e] [&_b]:px-1.5 [&_b]:rounded-[4px]"
                                                     : isLightBoard 
                                                         ? (isHero ? style.teacherHeroText : style.teacherCalmText)
-                                                        : (isHero ? style.heroText : style.calmText)
+                                                        : (isHero ? style.heroText : style.calmText),
+                                                isSentenceMasked && maskClasses
                                             )}>
                                                 {speakingIndex === index ? (
                                                     <HighlightedSentence 
                                                         htmlContent={sentence} 
                                                         activeWordIndex={currentWordIndex} 
-                                                        isLightBoard={isLightBoard} 
+                                                        isLightBoard={isSketchnote || isLightBoard} 
                                                         className={fontClass} 
                                                     />
                                                 ) : shouldAnimate && animationSpeed !== 'off' ? (
@@ -1114,34 +1321,36 @@ export function ContentListPlayer({
                                             {isHero && (
                                                 <div className={cn(
                                                     "mt-0.5 pt-1 border-t flex items-center justify-between text-[10px] sm:text-[11px] font-medium",
-                                                    isLightBoard ? "border-white/20 text-white/80" : "border-white/10 text-slate-400"
+                                                    isSketchnote
+                                                        ? cn(sketchnoteItem.border, sketchnoteItem.badgeText, "font-bold")
+                                                        : isLightBoard
+                                                            ? "border-white/25 text-white/90"
+                                                            : "border-white/10 text-slate-400"
                                                 )}>
                                                     <span className="flex items-center gap-1">
-                                                        <Sparkles className="w-3 h-3 text-amber-300 animate-pulse" />
+                                                        <Sparkles className={cn("w-3 h-3", isSketchnote ? sketchnoteItem.badgeText : "text-amber-300")} />
                                                         <span>Aktif Sunum Maddesi</span>
                                                     </span>
-                                                    <span className="hidden sm:inline opacity-80">
+                                                    <span className="hidden sm:inline opacity-85">
                                                         Diğer maddelere tıklayarak geçiş yapabilirsiniz
                                                     </span>
                                                 </div>
                                             )}
                                         </div>
 
-                                        <div className="hidden sm:flex items-center gap-1 shrink-0 self-center opacity-80 hover:opacity-100 transition-opacity">
+                                        <div className="hidden sm:flex items-center gap-1.5 shrink-0 self-center">
                                             <button
                                                 type="button"
                                                 onClick={(e) => handleSpeakSentence(e, sentence, index)}
                                                 title={speakingIndex === index ? "Okumayı Durdur" : "Cümleyi Sesli Oku (TTS)"}
                                                 className={cn(
-                                                    "p-1.5 sm:p-2 rounded-xl transition-all cursor-pointer backdrop-blur-md",
+                                                    "w-9 h-9 rounded-xl flex items-center justify-center transition-all cursor-pointer",
                                                     speakingIndex === index 
-                                                        ? "bg-emerald-400 text-slate-950 font-black shadow-lg shadow-emerald-500/50 animate-bounce" 
-                                                        : (isLightBoard
-                                                            ? "bg-white/20 hover:bg-white/30 text-white border border-white/30"
-                                                            : "bg-white/10 hover:bg-white/20 text-white/80 hover:text-white border border-white/10")
+                                                        ? "bg-emerald-400 text-slate-950 font-black shadow-md ring-2 ring-emerald-300" 
+                                                        : actionBtnCls
                                                 )}
                                             >
-                                                {speakingIndex === index ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+                                                {speakingIndex === index ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
                                             </button>
 
                                             <button
@@ -1152,14 +1361,9 @@ export function ContentListPlayer({
                                                     setIsModalOpen(true);
                                                 }}
                                                 title="Tam Ekran Sahneye Al"
-                                                className={cn(
-                                                    "p-1.5 sm:p-2 rounded-xl transition-all cursor-pointer backdrop-blur-md",
-                                                    isLightBoard
-                                                        ? "bg-white/20 hover:bg-white/30 text-white border border-white/30"
-                                                        : "bg-white/10 hover:bg-white/20 text-white/80 hover:text-white border border-white/10")
-                                                }
+                                                className={cn("w-9 h-9 rounded-xl flex items-center justify-center transition-all cursor-pointer", actionBtnCls)}
                                             >
-                                                <Maximize2 className="w-3.5 h-3.5" />
+                                                <Maximize2 className="w-4 h-4" />
                                             </button>
                                         </div>
                                     </div>

@@ -556,7 +556,9 @@ html.perf-mode [class*="shadow-[0_0_"],
 html.perf-mode .animate-pulse,
 .perf-mode .animate-pulse,
 html.perf-mode .animate-ping,
-.perf-mode .animate-ping {
+.perf-mode .animate-ping,
+html.perf-mode .animate-bounce,
+.perf-mode .animate-bounce {
   animation: none !important;
 }
 

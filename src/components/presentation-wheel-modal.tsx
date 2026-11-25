@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
+import { getGlobalSoundEnabled } from '@/lib/audio-service';
 
 // ══ ÖNBELLEK VE OTURUM HAFIZASI (Modal tekrar tekrar açıldığında sınıf ve çıkarılan öğrencileri korur) ══
 let cachedClasses: SchoolClass[] | null = null;
@@ -60,7 +61,7 @@ class WheelAudioEngine {
     }
 
     playTick(intensity: number = 1) {
-        if (this.isMuted) return;
+        if (this.isMuted || !getGlobalSoundEnabled()) return;
         const ctx = this.getContext();
         if (!ctx) return;
 
@@ -86,7 +87,7 @@ class WheelAudioEngine {
     }
 
     playVictoryFanfare() {
-        if (this.isMuted) return;
+        if (this.isMuted || !getGlobalSoundEnabled()) return;
         const ctx = this.getContext();
         if (!ctx) return;
 

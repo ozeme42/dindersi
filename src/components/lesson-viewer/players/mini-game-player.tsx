@@ -32,6 +32,7 @@ interface MiniGamePlayerProps {
   courseId?: string;
   unitId?: string;
   topicId?: string;
+  presentationTheme?: string;
 }
 
 const TEMPLATE_INFO: Record<string, { name: string; icon: string; desc: string; color: string; category?: 'soru' | 'kavram' }> = {
@@ -168,10 +169,12 @@ export const MiniGamePlayer: React.FC<MiniGamePlayerProps> = ({
   className = '',
   courseId,
   unitId,
-  topicId
+  topicId,
+  presentationTheme
 }) => {
   const { user } = useAuth();
   const isStudent = user?.role === 'student' || (typeof window !== 'undefined' && window.location.pathname.startsWith('/student'));
+  const isLightMode = presentationTheme === 'clean-light' || presentationTheme === 'sketchnote';
 
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [activeTemplate, setActiveTemplate] = useState<string>(step.gameTemplate || 'carkifelek');
@@ -415,10 +418,15 @@ export const MiniGamePlayer: React.FC<MiniGamePlayerProps> = ({
 
   if (questionCount === 0) {
     return (
-      <div className="flex flex-col items-center justify-center p-12 text-center bg-slate-900/40 rounded-3xl border border-white/10 text-white min-h-[400px]">
-        <Gamepad2 className="w-16 h-16 text-amber-400 mb-4 animate-bounce" />
+      <div className={cn(
+        "flex flex-col items-center justify-center p-12 text-center rounded-3xl border min-h-[400px]",
+        isLightMode
+          ? "bg-white border-indigo-200 text-slate-900 shadow-lg"
+          : "bg-slate-900/60 border-white/10 text-white"
+      )}>
+        <Gamepad2 className="w-16 h-16 text-amber-500 mb-4" />
         <h3 className="text-2xl font-bold mb-2">Henüz Soru Eklenmemiş</h3>
-        <p className="text-slate-400 max-w-md">
+        <p className={cn("max-w-md", isLightMode ? "text-slate-600" : "text-slate-400")}>
           Bu mini oyun adımı için henüz soru bulunmuyor. Düzenleme panelinden bu adıma soru ekleyerek akıllı tahta oyununu başlatabilirsiniz.
         </p>
       </div>
@@ -431,7 +439,11 @@ export const MiniGamePlayer: React.FC<MiniGamePlayerProps> = ({
       className={`relative flex flex-col w-full overflow-hidden transition-all duration-300 ${
         isFullscreen 
           ? 'fixed inset-0 z-50 bg-slate-950 p-2 md:p-4' 
-          : cn('rounded-2xl md:rounded-3xl border border-white/10 bg-slate-950/80 shadow-2xl backdrop-blur-xl', className)
+          : cn(
+              'rounded-2xl md:rounded-3xl border shadow-2xl',
+              isLightMode ? 'border-indigo-200 bg-white' : 'border-white/10 bg-slate-950/80 backdrop-blur-xl',
+              className
+            )
       }`}
       style={{
         height: isFullscreen ? '100vh' : (isStandalone ? 'calc(100dvh - 72px)' : 'calc(100vh - 220px)'),

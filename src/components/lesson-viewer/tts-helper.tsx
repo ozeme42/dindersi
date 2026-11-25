@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 
-// --- TYPEWRITER METİN EFEKTİ ---
+// --- TYPEWRITER METİN EFEKTİ (Tıklayınca Hızlı Tamamlama + HTML Varlık Koruması) ---
 export const TypewriterText = ({ 
     content, 
     onComplete, 
@@ -41,11 +41,14 @@ export const TypewriterText = ({
                 return;
             }
             
-            let char = content.charAt(currentIndexRef.current);
+            const char = content.charAt(currentIndexRef.current);
             if (char === '<') {
                 const closingIndex = content.indexOf('>', currentIndexRef.current);
-                if (closingIndex !== -1) {
-                    currentIndexRef.current = closingIndex + 1;
+                currentIndexRef.current = closingIndex !== -1 ? closingIndex + 1 : currentIndexRef.current + 1;
+            } else if (char === '&') {
+                const semiIndex = content.indexOf(';', currentIndexRef.current);
+                if (semiIndex !== -1 && semiIndex - currentIndexRef.current <= 8) {
+                    currentIndexRef.current = semiIndex + 1;
                 } else {
                     currentIndexRef.current++;
                 }
@@ -59,10 +62,26 @@ export const TypewriterText = ({
         return () => clearInterval(intervalId);
     }, [content, speed, isCompleted]); 
 
+    const finishImmediately = () => {
+        if (!isCompleted) {
+            currentIndexRef.current = content.length;
+            setDisplayedContent(content);
+            setIsCompleted(true);
+            onCompleteRef.current?.();
+        }
+    };
+
     if (isCompleted) {
         return <div className={cn("highlight-text", className)} dangerouslySetInnerHTML={{ __html: content }} />;
     }
-    return <div className={cn("highlight-text", className)} dangerouslySetInnerHTML={{ __html: displayedContent }} />;
+    return (
+        <div
+            onClick={finishImmediately}
+            title="Tamamını hemen göstermek için dokunun"
+            className={cn("highlight-text cursor-pointer", className)}
+            dangerouslySetInnerHTML={{ __html: displayedContent }}
+        />
+    );
 };
 
 // --- TÜRKÇE SES VE DİL KURALLARI YARDIMCILARI ---
@@ -72,6 +91,8 @@ export const TURKISH_ABBREVIATIONS: Record<string, string> = {
     '(s.a.v.)': 'sallallahu aleyhi ve sellem',
     's.a.v.': 'sallallahu aleyhi ve sellem',
     '(sav)': 'sallallahu aleyhi ve sellem',
+    '(s.a.s.)': 'sallallahu aleyhi ve sellem',
+    's.a.s.': 'sallallahu aleyhi ve sellem',
     '(a.s.)': 'aleyhisselam',
     'a.s.': 'aleyhisselam',
     '(as)': 'aleyhisselam',
@@ -83,18 +104,69 @@ export const TURKISH_ABBREVIATIONS: Record<string, string> = {
     '(cc)': 'celle celâluhu',
     'vb.': 've benzeri',
     'vs.': 've saire',
+    'ör.': 'örneğin',
+    'dk.': 'dakika',
     'm.ö.': 'Milattan Önce',
     'm.s.': 'Milattan Sonra',
     'yy.': 'yüzyıl',
     'bkz.': 'bakınız',
 };
 
-export const TURKISH_TOKEN_REGEX = /(\((?:s\.a\.v\.|sav|a\.s\.|as|r\.a\.|ra|c\.c\.|cc)\)|(?:s\.a\.v\.|c\.c\.|a\.s\.|r\.a\.|Hz\.|hz\.|M\.Ö\.|M\.S\.|vb\.|vs\.|yy\.|bkz\.)|[\p{L}\p{N}]+(?:['’\-][\p{L}\p{N}]+)*)/giu;
+export const TURKISH_TOKEN_REGEX = /(\((?:s\.a\.v\.|s\.a\.s\.|sav|a\.s\.|as|r\.a\.|ra|c\.c\.|cc)\)|(?:s\.a\.v\.|s\.a\.s\.|c\.c\.|a\.s\.|r\.a\.|Hz\.|hz\.|M\.Ö\.|M\.S\.|vb\.|vs\.|ör\.|dk\.|yy\.|bkz\.)|[\p{L}\p{N}]+(?:['’\-][\p{L}\p{N}]+)*)/giu;
+
+export function splitHtmlIntoSentences(rawHtml: string): string[] {
+    if (!rawHtml || typeof rawHtml !== 'string') return [];
+
+    // DOM varsa güvenli liste/paragraf parçalama, yoksa regex fallback
+    if (typeof window !== 'undefined' && typeof DOMParser !== 'undefined') {
+        try {
+            const doc = new DOMParser().parseFromString(`<div>${rawHtml}</div>`, 'text/html');
+            const listItems = doc.querySelectorAll('li');
+            if (listItems.length > 0) {
+                return Array.from(listItems).map(li => li.innerHTML.trim()).filter(Boolean);
+            }
+        } catch {
+            // fallback below
+        }
+    } else {
+        const liMatches = Array.from(rawHtml.matchAll(/<li[^>]*>([\s\S]*?)<\/li>/gi))
+            .map(m => m[1]?.trim())
+            .filter(Boolean);
+        if (liMatches.length > 0) return liMatches;
+    }
+
+    // Düz metinde Türkçe kısaltmaları ve sıra numaralarını (1., Hz., s.a.v., c.c. vb.) koruyarak cümlelere ayır
+    const plain = rawHtml.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+    if (!plain) return [];
+
+    // Kısaltma noktalarını geçici işaretle (cümle sonu sanılmasın)
+    const protectedText = plain
+        .replace(/\b(Hz|Dr|Prof|Doç|Av|St|vb|vs|ör|dk|yy|bkz|M\.Ö|M\.S|s\.a\.v|s\.a\.s|a\.s|r\.a|c\.c)\./gi, '$1__DOT__')
+        .replace(/(^|\s)(\d+)\.(?=\s)/g, '$1$2__DOT__');
+
+    const rawSentences = protectedText.match(/[^.!?]+(?:[.!?]+|$)/g) || [protectedText];
+    return rawSentences
+        .map(s => s.replace(/__DOT__/g, '.').trim())
+        .filter(Boolean);
+}
+
+function decodeBasicEntities(input: string): string {
+    return input
+        .replace(/&nbsp;/gi, ' ')
+        .replace(/&amp;/gi, '&')
+        .replace(/&quot;/gi, '"')
+        .replace(/&#39;|&apos;|&rsquo;|&lsquo;/gi, "'")
+        .replace(/&ldquo;|&rdquo;/gi, '"')
+        .replace(/&ndash;/gi, ', ')
+        .replace(/&mdash;/gi, ', ');
+}
 
 export function prepareTurkishSpeech(rawHtmlOrText: string) {
-    const cleanText = rawHtmlOrText
-        .replace(/<[^>]+>/g, ' ')
-        .replace(/&nbsp;/g, ' ')
+    const cleanText = decodeBasicEntities(
+        rawHtmlOrText
+            .replace(/<br\s*\/?>/gi, ', ')
+            .replace(/<[^>]+>/g, ' ')
+    )
         .replace(/[\u2013\u2014]/g, ', ')
         .replace(/[“”„«»]/g, '"')
         .trim();
@@ -109,7 +181,7 @@ export function prepareTurkishSpeech(rawHtmlOrText: string) {
         const token = tokens[i];
         if (!token) continue;
 
-        const isActualWord = /^(\((?:s\.a\.v\.|sav|a\.s\.|as|r\.a\.|ra|c\.c\.|cc)\)|(?:s\.a\.v\.|c\.c\.|a\.s\.|r\.a\.|Hz\.|hz\.|M\.Ö\.|M\.S\.|vb\.|vs\.|yy\.|bkz\.)|[\p{L}\p{N}]+(?:['’\-][\p{L}\p{N}]+)*)$/iu.test(token);
+        const isActualWord = /^(\((?:s\.a\.v\.|s\.a\.s\.|sav|a\.s\.|as|r\.a\.|ra|c\.c\.|cc)\)|(?:s\.a\.v\.|s\.a\.s\.|c\.c\.|a\.s\.|r\.a\.|Hz\.|hz\.|M\.Ö\.|M\.S\.|vb\.|vs\.|ör\.|dk\.|yy\.|bkz\.)|[\p{L}\p{N}]+(?:['’\-][\p{L}\p{N}]+)*)$/iu.test(token);
 
         if (!isActualWord) {
             spokenText += token;
@@ -297,14 +369,11 @@ export const HighlightedSentence = ({
     className,
     isModal = false
 }: HighlightedSentenceProps) => {
-    // Okuma aktif değilse doğrudan orijinal HTML'i bas (sıfır ek yük)
-    if (activeWordIndex === null || activeWordIndex === undefined) {
-        return <div className={cn("highlight-text", className)} dangerouslySetInnerHTML={{ __html: htmlContent }} />;
-    }
+    const isHighlightingActive = activeWordIndex !== null && activeWordIndex !== undefined;
 
-    // HTML yapısını sadece içerik değiştiğinde TEK SEFERDE parse et
+    // HTML yapısını yalnızca vurgulama aktifken ve içerik değiştiğinde parse et (Hook sırası korunur)
     const astRoot = useMemo<AstNode | null>(() => {
-        if (typeof window === 'undefined') return null;
+        if (!isHighlightingActive || typeof window === 'undefined') return null;
         try {
             const parser = new DOMParser();
             const doc = parser.parseFromString(`<div>${htmlContent}</div>`, 'text/html');
@@ -323,7 +392,7 @@ export const HighlightedSentence = ({
 
                     for (const raw of rawTokens) {
                         if (!raw) continue;
-                        const isWord = /^(\((?:s\.a\.v\.|sav|a\.s\.|as|r\.a\.|ra|c\.c\.|cc)\)|(?:s\.a\.v\.|c\.c\.|a\.s\.|r\.a\.|Hz\.|hz\.|M\.Ö\.|M\.S\.|vb\.|vs\.|yy\.|bkz\.)|[\p{L}\p{N}]+(?:['’\-][\p{L}\p{N}]+)*)$/iu.test(raw);
+                        const isWord = /^(\((?:s\.a\.v\.|s\.a\.s\.|sav|a\.s\.|as|r\.a\.|ra|c\.c\.|cc)\)|(?:s\.a\.v\.|s\.a\.s\.|c\.c\.|a\.s\.|r\.a\.|Hz\.|hz\.|M\.Ö\.|M\.S\.|vb\.|vs\.|ör\.|dk\.|yy\.|bkz\.)|[\p{L}\p{N}]+(?:['’\-][\p{L}\p{N}]+)*)$/iu.test(raw);
                         if (isWord) {
                             tokens.push({ text: raw, isWord: true, wordIndex: wordCounter++ });
                         } else {
@@ -352,9 +421,10 @@ export const HighlightedSentence = ({
         } catch {
             return null;
         }
-    }, [htmlContent]);
+    }, [htmlContent, isHighlightingActive]);
 
-    if (!astRoot) {
+    // Okuma aktif değilse veya AST oluşmadıysa doğrudan orijinal HTML'i bas
+    if (!isHighlightingActive || !astRoot) {
         return <div className={cn("highlight-text", className)} dangerouslySetInnerHTML={{ __html: htmlContent }} />;
     }
 
@@ -378,7 +448,7 @@ export const HighlightedSentence = ({
                                     ? "px-2 sm:px-4 py-0.5 sm:py-1 mx-1 sm:mx-1.5 rounded-xl sm:rounded-2xl ring-4 ring-amber-300 shadow-2xl" 
                                     : "px-1.5 py-0.5 mx-0.5",
                                 isLightBoard
-                                    ? "bg-amber-300 text-slate-950 ring-2 ring-white/90 shadow-lg shadow-amber-400/50"
+                                    ? "bg-amber-300 text-slate-950 ring-2 ring-amber-500/80 shadow-md shadow-amber-400/40"
                                     : "bg-amber-400 text-slate-950 ring-2 ring-amber-300/90 shadow-lg shadow-amber-400/60"
                             )}
                         >
@@ -394,7 +464,7 @@ export const HighlightedSentence = ({
                             className={cn(
                                 "transition-colors duration-150 font-bold",
                                 isLightBoard 
-                                    ? "text-amber-100 drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]" 
+                                    ? "text-amber-800/85 underline decoration-amber-400/70 decoration-2 underline-offset-2" 
                                     : "text-amber-200 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]"
                             )}
                         >
@@ -408,6 +478,7 @@ export const HighlightedSentence = ({
         }
 
         if (node.type === 'element' && node.tagName) {
+            if (node.tagName === 'br') return <br key={key} />;
             const children = (node.children || []).map((ch, i) => renderAstNode(ch, `${key}-${i}`));
             switch (node.tagName) {
                 case 'strong':
@@ -418,6 +489,18 @@ export const HighlightedSentence = ({
                     return <em key={key} className={node.className}>{children}</em>;
                 case 'u':
                     return <u key={key} className={node.className}>{children}</u>;
+                case 'mark':
+                    return <mark key={key} className={node.className}>{children}</mark>;
+                case 'sub':
+                    return <sub key={key} className={node.className}>{children}</sub>;
+                case 'sup':
+                    return <sup key={key} className={node.className}>{children}</sup>;
+                case 'ul':
+                    return <ul key={key} className={node.className}>{children}</ul>;
+                case 'ol':
+                    return <ol key={key} className={node.className}>{children}</ol>;
+                case 'li':
+                    return <li key={key} className={node.className}>{children}</li>;
                 case 'span':
                     return <span key={key} className={node.className}>{children}</span>;
                 case 'p':

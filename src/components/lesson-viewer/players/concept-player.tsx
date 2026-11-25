@@ -2,12 +2,67 @@
 
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { 
-    Sparkles, Crown, Zap, Flame, Star, Gem, Feather, Volume2, VolumeX 
+    Sparkles, Crown, Zap, Flame, Star, Gem, Feather, Volume2, VolumeX,
+    Maximize2, X, ChevronLeft, ChevronRight, Eye, EyeOff
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
 import { motion } from 'framer-motion';
 import { prepareTurkishSpeech, getBestTurkishVoice, getTurkishSpeechParams } from '../tts-helper';
+
+function parseConceptHtmlItem(rawHtml: string): { concept: string; definition?: string } {
+    const plain = rawHtml.replace(/<[^>]*>/g, '').trim();
+    const colonIdx = plain.indexOf(':');
+    const dashIdx = plain.indexOf(' - ');
+    const splitAtColon = colonIdx > 0 && colonIdx < 45;
+    const splitAtDash = !splitAtColon && dashIdx > 0 && dashIdx < 45;
+
+    if (!splitAtColon && !splitAtDash) {
+        return { concept: plain, definition: '' };
+    }
+
+    const conceptPlain = splitAtColon
+        ? plain.slice(0, colonIdx).trim()
+        : plain.slice(0, dashIdx).trim();
+
+    // Preserve inline HTML in definition part safely by walking outside tags
+    let inTag = false;
+    let inEntity = false;
+    let plainCharsSeen = 0;
+    const targetPlainLen = splitAtColon ? colonIdx + 1 : dashIdx + 3;
+    let htmlCutIdx = rawHtml.length;
+
+    for (let i = 0; i < rawHtml.length; i++) {
+        const ch = rawHtml[i];
+        if (ch === '<') { inTag = true; continue; }
+        if (ch === '>') { inTag = false; continue; }
+        if (!inTag) {
+            if (ch === '&') inEntity = true;
+            if (!inEntity || ch === ';') {
+                if (inEntity && ch === ';') {
+                    inEntity = false;
+                    plainCharsSeen++;
+                } else if (!inEntity) {
+                    plainCharsSeen++;
+                }
+                if (plainCharsSeen >= targetPlainLen) {
+                    htmlCutIdx = i + 1;
+                    break;
+                }
+            }
+        }
+    }
+
+    const defHtml = rawHtml
+        .slice(htmlCutIdx)
+        .replace(/^(\s*<\/(strong|b|em|i|mark|span)\s*>)+/gi, '')
+        .trim();
+
+    return {
+        concept: conceptPlain,
+        definition: defHtml || (splitAtColon ? plain.slice(colonIdx + 1).trim() : plain.slice(dashIdx + 3).trim()),
+    };
+}
 
 const useTeacherMode = () => {
     const { user } = useAuth();
@@ -306,6 +361,9 @@ export function ConceptCardItem({
     isSketchnote,
     sketchnoteTheme,
     isGame3D,
+    isDefHidden,
+    onRevealDef,
+    onZoom,
 }: {
     item: { concept: string; definition?: string };
     currentNum: number;
@@ -323,6 +381,9 @@ export function ConceptCardItem({
     isSketchnote?: boolean;
     sketchnoteTheme?: any;
     isGame3D?: boolean;
+    isDefHidden?: boolean;
+    onRevealDef?: () => void;
+    onZoom?: () => void;
 }) {
     const titleContainerRef = useRef<HTMLDivElement>(null);
     const titleTextRef = useRef<HTMLHeadingElement>(null);
@@ -336,7 +397,7 @@ export function ConceptCardItem({
 
         text.style.fontSize = '';
         let fs = parseFloat(window.getComputedStyle(text).fontSize);
-        const minFs = hasDefinition ? 11 : 12;
+        const minFs = hasDefinition ? 13 : 15;
         let iterations = 0;
 
         while ((text.scrollHeight > container.clientHeight + 2 || text.scrollWidth > container.clientWidth + 2) && fs > minFs && iterations < 80) {
@@ -347,14 +408,14 @@ export function ConceptCardItem({
     }, [item.concept, cardScale, hasDefinition, totalConceptCards]);
 
     useEffect(() => {
-        if (!hasDefinition) return;
+        if (!hasDefinition || isDefHidden) return;
         const container = defContainerRef.current;
         const text = defTextRef.current;
         if (!container || !text) return;
 
         text.style.fontSize = '';
         let fs = parseFloat(window.getComputedStyle(text).fontSize);
-        const minFs = 9;
+        const minFs = isTeacher ? 13 : 11;
         let iterations = 0;
 
         while ((text.scrollHeight > container.clientHeight + 2 || text.scrollWidth > container.clientWidth + 2) && fs > minFs && iterations < 80) {
@@ -362,7 +423,21 @@ export function ConceptCardItem({
             text.style.fontSize = `${fs}px`;
             iterations++;
         }
-    }, [item.definition, cardScale, hasDefinition, totalConceptCards]);
+    }, [item.definition, cardScale, hasDefinition, totalConceptCards, isDefHidden, isTeacher]);
+
+    const sketchnoteTitleSize =
+        cardScale === 'xl' ? "text-3xl sm:text-4xl md:text-5xl" :
+        cardScale === 'lg' ? "text-2xl sm:text-3xl md:text-4xl" :
+        cardScale === 'md' ? "text-2xl sm:text-3xl" :
+        cardScale === 'xs' ? "text-lg sm:text-xl" :
+        "text-xl sm:text-2xl md:text-3xl";
+
+    const sketchnoteDefSize =
+        cardScale === 'xl' ? "text-xl sm:text-2xl md:text-3xl" :
+        cardScale === 'lg' ? "text-lg sm:text-xl md:text-2xl" :
+        cardScale === 'md' ? "text-base sm:text-lg md:text-xl" :
+        cardScale === 'xs' ? "text-sm sm:text-base" :
+        "text-base sm:text-lg md:text-xl";
 
     if (isSketchnote) {
         return (
@@ -372,15 +447,17 @@ export function ConceptCardItem({
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                 whileHover={{ y: -4, scale: 1.01 }}
+                onClick={onZoom}
                 className={cn(
                     "relative rounded-3xl overflow-hidden flex flex-col justify-between select-none transition-all duration-300 bg-white border-[2.5px] h-full shadow-[3px_3px_0_rgba(0,0,0,0.08)]",
+                    onZoom && "cursor-pointer",
                     sketchnoteTheme?.cardBorder || 'border-[#fde047]',
                     sketchnoteTheme?.shadow || 'shadow-[3px_3px_0_#fde047]',
                     showNewBadge ? "ring-2 ring-amber-400" : "",
                     totalConceptCards >= 5 ? "p-3.5 sm:p-4" : "p-4 sm:p-5"
                 )}
             >
-                {/* Üst Bar: Numara + Ses + Tür */}
+                {/* Üst Bar: Numara + Ses + Büyüt + Tür */}
                 <div className="flex items-center justify-between w-full relative z-10 flex-shrink-0 mb-2">
                     <div className="flex items-center gap-1.5">
                         <span className={cn("bullet-num w-7 h-7 text-xs font-bold shrink-0", sketchnoteTheme?.numBg || 'bg-[#ca8a04]')}>
@@ -391,24 +468,34 @@ export function ConceptCardItem({
                                 type="button"
                                 onClick={(e) => { e.stopPropagation(); onSpeak(); }}
                                 className={cn(
-                                    "w-7 h-7 rounded-full flex items-center justify-center transition-all cursor-pointer border",
+                                    "w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer border",
                                     isSpeaking 
-                                        ? "bg-amber-400 text-amber-950 border-amber-500 shadow-md scale-110" 
+                                        ? "bg-amber-400 text-amber-950 border-amber-500 shadow-md ring-2 ring-amber-300" 
                                         : "bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300"
                                 )}
                                 title={isSpeaking ? "Durdur" : "Seslendir"}
                             >
-                                {isSpeaking ? <VolumeX className="w-3.5 h-3.5 animate-pulse" /> : <Volume2 className="w-3.5 h-3.5" />}
+                                {isSpeaking ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                            </button>
+                        )}
+                        {onZoom && (
+                            <button
+                                type="button"
+                                onClick={(e) => { e.stopPropagation(); onZoom(); }}
+                                className="w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer border bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300"
+                                title="Büyüt (Odak Modu)"
+                            >
+                                <Maximize2 className="w-3.5 h-3.5" />
                             </button>
                         )}
                     </div>
                     <div className="flex items-center gap-1.5">
                         {showNewBadge && (
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-400 text-amber-950 border border-amber-300 shadow-xs animate-pulse">
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-400 text-amber-950 border border-amber-300 shadow-xs">
                                 YENİ
                             </span>
                         )}
-                        <span className="font-['Patrick_Hand',cursive] text-xs font-bold text-slate-500">
+                        <span className="font-['Patrick_Hand',cursive] text-xs font-bold text-slate-600">
                             {hasDefinition ? 'Tanım Kartı' : 'Kavram'}
                         </span>
                     </div>
@@ -419,21 +506,36 @@ export function ConceptCardItem({
                     {/* KAVRAM ROZETİ (Örn: Tevhit, Rahman & Rahim) */}
                     <div className="flex items-center justify-center">
                         <span className={cn(
-                            "font-['Caveat',cursive] font-bold text-xl sm:text-2xl md:text-3xl px-4 py-1 rounded-2xl border-[2px] leading-tight text-center shadow-xs",
+                            "font-['Caveat',cursive] font-bold px-4 py-1 rounded-2xl border-[2px] leading-tight text-center shadow-xs",
+                            sketchnoteTitleSize,
                             sketchnoteTheme?.badgeClass || 'badge-c-yellow'
                         )}>
                             {item.concept}
                         </span>
                     </div>
 
-                    {/* TANIM METNİ (Fosforlu İfadelerle) */}
+                    {/* TANIM METNİ (Fosforlu İfadelerle veya Tahmin Perdesi) */}
                     {hasDefinition && (
-                        <div className="w-full text-center px-1">
-                            <p 
-                                className="font-['Patrick_Hand',cursive] text-base sm:text-lg md:text-xl font-medium text-slate-800 leading-relaxed text-center [&_mark]:bg-[#fef08a] [&_mark]:text-[#854d0e] [&_strong]:bg-[#fef08a] [&_strong]:text-[#854d0e] [&_strong]:px-1.5 [&_strong]:rounded-[4px] [&_b]:bg-[#fef08a] [&_b]:text-[#854d0e] [&_b]:px-1.5 [&_b]:rounded-[4px]"
-                                dangerouslySetInnerHTML={{ __html: item.definition || '' }}
-                            />
-                        </div>
+                        isDefHidden ? (
+                            <button
+                                type="button"
+                                onClick={(e) => { e.stopPropagation(); onRevealDef?.(); }}
+                                className="w-full py-4 px-3 rounded-2xl border-2 border-dashed border-amber-400 bg-amber-50/90 hover:bg-amber-100 text-amber-900 font-['Patrick_Hand',cursive] text-base sm:text-lg font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                            >
+                                <Eye className="w-4 h-4 shrink-0" />
+                                <span>Tahmin Et • Tanımı Açmak İçin Dokun</span>
+                            </button>
+                        ) : (
+                            <div className="w-full text-center px-1">
+                                <p 
+                                    className={cn(
+                                        "font-['Patrick_Hand',cursive] font-medium text-slate-800 leading-relaxed text-center [&_mark]:bg-[#fef08a] [&_mark]:text-[#854d0e] [&_mark]:px-1 [&_mark]:rounded [&_strong]:bg-[#fef08a] [&_strong]:text-[#854d0e] [&_strong]:px-1.5 [&_strong]:rounded-[4px] [&_b]:bg-[#fef08a] [&_b]:text-[#854d0e] [&_b]:px-1.5 [&_b]:rounded-[4px]",
+                                        sketchnoteDefSize
+                                    )}
+                                    dangerouslySetInnerHTML={{ __html: item.definition || '' }}
+                                />
+                            </div>
+                        )
                     )}
                 </div>
             </motion.div>
@@ -447,8 +549,10 @@ export function ConceptCardItem({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
             whileHover={{ y: -6, scale: 1.02 }}
+            onClick={onZoom}
             className={cn(
                 "relative rounded-3xl md:rounded-[2.2rem] overflow-hidden flex flex-col justify-between select-none transition-all duration-300 backdrop-blur-xl group h-full",
+                onZoom && "cursor-pointer",
                 theme.card,
                 isGame3D ? "border-3 sm:border-4 border-b-[8px] sm:border-b-[10px] border-b-black/50 shadow-[0_12px_35px_rgba(0,0,0,0.85)] ring-1 ring-white/20" : "",
                 showNewBadge ? "ring-2 ring-white/50" : "",
@@ -474,21 +578,31 @@ export function ConceptCardItem({
                             type="button"
                             onClick={(e) => { e.stopPropagation(); onSpeak(); }}
                             className={cn(
-                                "w-7 h-7 rounded-full flex items-center justify-center transition-all cursor-pointer backdrop-blur-md border",
+                                "w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer backdrop-blur-md border",
                                 isSpeaking 
-                                    ? "bg-amber-400 text-amber-950 border-amber-300 shadow-md scale-110" 
+                                    ? "bg-amber-400 text-amber-950 border-amber-300 shadow-md ring-2 ring-amber-300" 
                                     : "bg-white/20 hover:bg-white/35 text-white border-white/30"
                             )}
                             title={isSpeaking ? "Durdur" : "Seslendir"}
                         >
-                            {isSpeaking ? <VolumeX className="w-3.5 h-3.5 animate-pulse" /> : <Volume2 className="w-3.5 h-3.5" />}
+                            {isSpeaking ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                        </button>
+                    )}
+                    {onZoom && (
+                        <button
+                            type="button"
+                            onClick={(e) => { e.stopPropagation(); onZoom(); }}
+                            className="w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer backdrop-blur-md border bg-white/20 hover:bg-white/35 text-white border-white/30"
+                            title="Büyüt (Odak Modu)"
+                        >
+                            <Maximize2 className="w-3.5 h-3.5" />
                         </button>
                     )}
                 </div>
                 
                 <div className="flex items-center gap-1.5">
                     {showNewBadge && (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-400 text-amber-950 border border-amber-300 shadow-sm animate-pulse">
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-400 text-amber-950 border border-amber-300 shadow-sm">
                             YENİ
                         </span>
                     )}
@@ -514,30 +628,40 @@ export function ConceptCardItem({
                 </div>
 
                 {hasDefinition && (
-                    <div 
-                        ref={defContainerRef}
-                        className={cn(
-                            "w-full max-w-xl mx-auto rounded-2xl md:rounded-3xl backdrop-blur-md transition-colors overflow-hidden max-h-56 overflow-y-auto scrollbar-thin",
-                            totalConceptCards >= 5 ? "mt-1.5 p-2 sm:p-2.5 md:p-3" : "mt-2 p-3 sm:p-4",
-                            isGame3D ? "bg-black/55 border border-amber-300/30 text-white shadow-inner font-semibold" : theme.defBox
-                        )}
-                    >
-                        <p 
-                            ref={defTextRef}
+                    isDefHidden ? (
+                        <button
+                            type="button"
+                            onClick={(e) => { e.stopPropagation(); onRevealDef?.(); }}
+                            className="w-full max-w-xl mx-auto mt-2 py-4 px-4 rounded-2xl border-2 border-dashed border-amber-300/60 bg-black/35 hover:bg-black/50 text-amber-200 font-bold text-sm sm:text-base flex items-center justify-center gap-2 transition-colors cursor-pointer backdrop-blur-md"
+                        >
+                            <Eye className="w-4 h-4 shrink-0" />
+                            <span>Tahmin Et • Tanımı Açmak İçin Dokun</span>
+                        </button>
+                    ) : (
+                        <div 
+                            ref={defContainerRef}
                             className={cn(
-                                "font-semibold leading-relaxed tracking-normal break-words whitespace-normal [overflow-wrap:anywhere] [word-break:normal] text-center my-auto",
-                                totalConceptCards >= 6 ? (isTeacher ? "text-xs sm:text-sm font-semibold" : "text-[11px] sm:text-xs") :
-                                totalConceptCards >= 5 ? (isTeacher ? "text-xs sm:text-sm md:text-base font-semibold" : "text-xs sm:text-sm") :
-                                cardScale === 'xl' ? (isTeacher ? "text-xl md:text-2xl font-bold" : "text-base md:text-lg") :
-                                cardScale === 'lg' ? (isTeacher ? "text-lg md:text-xl font-bold" : "text-sm md:text-base") :
-                                cardScale === 'md' ? (isTeacher ? "text-base md:text-lg font-bold" : "text-xs md:text-sm") :
-                                cardScale === 'xs' ? (isTeacher ? "text-xs sm:text-sm" : "text-[11px]") :
-                                (isTeacher ? "text-sm md:text-base font-bold" : "text-xs md:text-sm")
+                                "w-full max-w-xl mx-auto rounded-2xl md:rounded-3xl backdrop-blur-md transition-colors overflow-hidden max-h-56 overflow-y-auto scrollbar-thin",
+                                totalConceptCards >= 5 ? "mt-1.5 p-2 sm:p-2.5 md:p-3" : "mt-2 p-3 sm:p-4",
+                                isGame3D ? "bg-black/55 border border-amber-300/30 text-white shadow-inner font-semibold" : theme.defBox
                             )}
                         >
-                            {item.definition}
-                        </p>
-                    </div>
+                            <p 
+                                ref={defTextRef}
+                                className={cn(
+                                    "font-semibold leading-relaxed tracking-normal break-words whitespace-normal [overflow-wrap:anywhere] [word-break:normal] text-center my-auto [&_strong]:text-amber-200 [&_b]:text-amber-200 [&_mark]:bg-amber-300 [&_mark]:text-slate-950 [&_mark]:px-1 [&_mark]:rounded",
+                                    totalConceptCards >= 6 ? (isTeacher ? "text-xs sm:text-sm font-semibold" : "text-[11px] sm:text-xs") :
+                                    totalConceptCards >= 5 ? (isTeacher ? "text-xs sm:text-sm md:text-base font-semibold" : "text-xs sm:text-sm") :
+                                    cardScale === 'xl' ? (isTeacher ? "text-xl md:text-2xl font-bold" : "text-base md:text-lg") :
+                                    cardScale === 'lg' ? (isTeacher ? "text-lg md:text-xl font-bold" : "text-sm md:text-base") :
+                                    cardScale === 'md' ? (isTeacher ? "text-base md:text-lg font-bold" : "text-xs md:text-sm") :
+                                    cardScale === 'xs' ? (isTeacher ? "text-xs sm:text-sm" : "text-[11px]") :
+                                    (isTeacher ? "text-sm md:text-base font-bold" : "text-xs md:text-sm")
+                                )}
+                                dangerouslySetInnerHTML={{ __html: item.definition || '' }}
+                            />
+                        </div>
+                    )
                 )}
             </div>
 
@@ -586,6 +710,14 @@ export function ConceptExplanationPlayer({
     const prevStepKeyRef = useRef<string>('');
     const prevAutoReadRef = useRef<boolean>(isAutoReadEnabled);
     const [speakingIndex, setSpeakingIndex] = useState<number | null>(null);
+    const [hideDefinitions, setHideDefinitions] = useState<boolean>(false);
+    const [revealedDefs, setRevealedDefs] = useState<Record<number, boolean>>({});
+    const [focusedConceptIdx, setFocusedConceptIdx] = useState<number | null>(null);
+    const [singleFocusIdx, setSingleFocusIdx] = useState<number | null>(null);
+
+    const revealSingleDef = useCallback((idx: number) => {
+        setRevealedDefs(prev => ({ ...prev, [idx]: true }));
+    }, []);
 
     const stopSpeech = useCallback(() => {
         if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
@@ -714,42 +846,40 @@ export function ConceptExplanationPlayer({
             const listItems = doc.querySelectorAll('li');
             const pItems = doc.querySelectorAll('p');
 
-            const parseItemText = (rawText: string) => {
-                const text = rawText.replace(/<[^>]*>/g, '').trim();
-                const colonIdx = text.indexOf(':');
-                const dashIdx = text.indexOf(' - ');
-                if (colonIdx > 0 && colonIdx < 40) {
-                    return { concept: text.slice(0, colonIdx).trim(), definition: text.slice(colonIdx + 1).trim() };
-                } else if (dashIdx > 0 && dashIdx < 40) {
-                    return { concept: text.slice(0, dashIdx).trim(), definition: text.slice(dashIdx + 3).trim() };
-                }
-                return { concept: text, definition: '' };
-            };
+            const parseItemHtml = (rawHtml: string) => parseConceptHtmlItem(rawHtml);
 
             if (listItems.length > 0) {
-                list = Array.from(listItems).map(li => parseItemText(li.textContent || '')).filter(it => it.concept.length > 0);
+                list = Array.from(listItems).map(li => parseItemHtml(li.innerHTML || li.textContent || '')).filter(it => it.concept.length > 0);
             } else if (pItems.length > 0) {
-                list = Array.from(pItems).map(p => parseItemText(p.textContent || '')).filter(it => it.concept.length > 0);
+                list = Array.from(pItems).map(p => parseItemHtml(p.innerHTML || p.textContent || '')).filter(it => it.concept.length > 0);
             } else {
                 list = step.content.split('\n')
-                    .map((s: string) => parseItemText(s))
+                    .map((s: string) => parseItemHtml(s))
                     .filter((it: any) => it.concept.length > 0);
             }
         }
         return list;
     }, [items, step]);
 
-    // Slayt değiştiğinde sayaç ve sesi sıfırla
+    // Slayt değiştiğinde sayaç, odak ve sesi sıfırla
     const currentStepKey = (step as any)?.id || (step as any)?.title || '';
     useEffect(() => {
         if (prevStepKeyRef.current !== currentStepKey) {
             prevStepKeyRef.current = currentStepKey;
             prevCountRef.current = 0;
+            setHideDefinitions(false);
+            setRevealedDefs({});
+            setFocusedConceptIdx(null);
+            setSingleFocusIdx(null);
         }
         return () => {
             stopSpeech();
         };
     }, [currentStepKey, stopSpeech]);
+
+    useEffect(() => {
+        setSingleFocusIdx(null);
+    }, [revealedSentencesCount]);
 
     // Kart açıldığında çalışan otomatik okuma (1. kart dahil)
     useEffect(() => {
@@ -810,6 +940,44 @@ export function ConceptExplanationPlayer({
         ? validConcepts.slice(0, revealedSentencesCount)
         : validConcepts;
     const visibleCount = visibleConcepts.filter(it => it.concept !== '[BAŞLIK]').length;
+    const hasAnyDefinition = validConcepts.some(c => c.concept !== '[BAŞLIK]' && !!(c.definition && c.definition.trim().length > 0));
+
+    // Seçili (tek kart veya zoom) gezinme için başlık-dışı visible indeksler
+    const navigableVisibleEntries = visibleConcepts
+        .map((item, origIdx) => ({ item, origIdx }))
+        .filter(e => e.item.concept !== '[BAŞLIK]');
+
+    const latestNonTitleOrigIdx = navigableVisibleEntries.length > 0
+        ? navigableVisibleEntries[navigableVisibleEntries.length - 1].origIdx
+        : 0;
+    const activeSingleOrigIdx = singleFocusIdx !== null && visibleConcepts[singleFocusIdx] && visibleConcepts[singleFocusIdx].concept !== '[BAŞLIK]'
+        ? singleFocusIdx
+        : latestNonTitleOrigIdx;
+
+    // Zoom modal klavye kısayolları
+    useEffect(() => {
+        if (focusedConceptIdx === null) return;
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                e.stopPropagation();
+                stopSpeech();
+                setFocusedConceptIdx(null);
+            } else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+                const pos = navigableVisibleEntries.findIndex(entry => entry.origIdx === focusedConceptIdx);
+                if (pos === -1) return;
+                e.preventDefault();
+                e.stopPropagation();
+                const nextPos = e.key === 'ArrowRight'
+                    ? (pos + 1) % navigableVisibleEntries.length
+                    : (pos - 1 + navigableVisibleEntries.length) % navigableVisibleEntries.length;
+                stopSpeech();
+                setFocusedConceptIdx(navigableVisibleEntries[nextPos].origIdx);
+            }
+        };
+        window.addEventListener('keydown', onKeyDown, true);
+        return () => window.removeEventListener('keydown', onKeyDown, true);
+    }, [focusedConceptIdx, navigableVisibleEntries, stopSpeech]);
 
     const scaleStyles = {
         xs: {
@@ -873,8 +1041,177 @@ export function ConceptExplanationPlayer({
         return "gap-2 sm:gap-2.5 md:gap-3";
     };
 
+    const focusedEntry = focusedConceptIdx !== null && validConcepts[focusedConceptIdx]
+        ? { item: validConcepts[focusedConceptIdx], origIdx: focusedConceptIdx }
+        : null;
+    const focusedCardNum = focusedEntry
+        ? validConcepts.slice(0, focusedEntry.origIdx + 1).filter(c => c.concept !== '[BAŞLIK]').length
+        : 1;
+    const focusedNavPos = focusedEntry
+        ? navigableVisibleEntries.findIndex(e => e.origIdx === focusedEntry.origIdx)
+        : -1;
+    const isFocusedDefHidden = focusedEntry
+        ? (hideDefinitions && !revealedDefs[focusedEntry.origIdx] && !!(focusedEntry.item.definition && focusedEntry.item.definition.trim()))
+        : false;
+
     return (
         <div className="w-full mx-auto p-2 md:p-4 animate-in fade-in duration-500 max-w-[98%]">
+            {/* ══ KAVRAM ODAK / BÜYÜTME MODALI ══ */}
+            {focusedEntry && focusedEntry.item.concept !== '[BAŞLIK]' && (
+                <div
+                    className="fixed inset-0 z-[210] flex items-center justify-center bg-slate-950/80 backdrop-blur-xl p-4 sm:p-6"
+                    onClick={() => {
+                        stopSpeech();
+                        setFocusedConceptIdx(null);
+                    }}
+                >
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        transition={{ duration: 0.2 }}
+                        onClick={(e) => e.stopPropagation()}
+                        className={cn(
+                            "relative w-full max-w-4xl rounded-[2rem] p-6 sm:p-10 md:p-12 shadow-2xl flex flex-col items-center text-center overflow-hidden",
+                            isSketchnote
+                                ? "bg-[#fffdf7] text-[#1e293b] border-[3px] border-[#1e293b] shadow-[8px_8px_0_#1e293b]"
+                                : presentationTheme === 'clean-light'
+                                    ? "bg-white text-slate-900 border-2 border-indigo-200 shadow-2xl"
+                                    : "bg-slate-900/95 text-white border-2 border-amber-400/50 shadow-[0_0_90px_rgba(245,158,11,0.28)]"
+                        )}
+                    >
+                        <div className="w-full flex items-center justify-between gap-3 mb-6">
+                            <div className="flex items-center gap-2">
+                                <span className={cn(
+                                    "px-3.5 py-1 rounded-full text-sm font-black",
+                                    isSketchnote
+                                        ? "bg-[#fefce8] text-[#854d0e] border-2 border-[#eab308]"
+                                        : presentationTheme === 'clean-light'
+                                            ? "bg-indigo-100 text-indigo-800 border border-indigo-200"
+                                            : "bg-amber-400/20 text-amber-300 border border-amber-400/40"
+                                )}>
+                                    #{focusedCardNum} / {totalCards}
+                                </span>
+                                {hideDefinitions && (
+                                    <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-400/40">
+                                        Tahmin Modu
+                                    </span>
+                                )}
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                                <button
+                                    type="button"
+                                    onClick={() => handleSpeakConcept(focusedEntry.item, focusedEntry.origIdx)}
+                                    className={cn(
+                                        "w-11 h-11 rounded-2xl flex items-center justify-center transition-all cursor-pointer border",
+                                        speakingIndex === focusedEntry.origIdx
+                                            ? "bg-emerald-500 text-white border-emerald-400 shadow-md"
+                                            : (isSketchnote || presentationTheme === 'clean-light')
+                                                ? "bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300"
+                                                : "bg-white/10 hover:bg-white/20 text-white border-white/20"
+                                    )}
+                                    title={speakingIndex === focusedEntry.origIdx ? "Durdur" : "Seslendir"}
+                                >
+                                    {speakingIndex === focusedEntry.origIdx ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        stopSpeech();
+                                        setFocusedConceptIdx(null);
+                                    }}
+                                    className={cn(
+                                        "w-11 h-11 rounded-2xl flex items-center justify-center transition-colors cursor-pointer border",
+                                        (isSketchnote || presentationTheme === 'clean-light')
+                                            ? "bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300"
+                                            : "bg-white/10 hover:bg-white/20 text-white border-white/20"
+                                    )}
+                                    title="Kapat (ESC)"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
+                        </div>
+
+                        <h2 className={cn(
+                            "font-black uppercase tracking-wide leading-tight mb-6 max-w-full break-words",
+                            isSketchnote ? "font-['Caveat',cursive] text-4xl sm:text-5xl md:text-6xl text-[#0f172a]" :
+                            presentationTheme === 'clean-light' ? "text-3xl sm:text-4xl md:text-5xl text-indigo-950" :
+                            "text-3xl sm:text-4xl md:text-5xl text-amber-300"
+                        )}>
+                            {focusedEntry.item.concept}
+                        </h2>
+
+                        {focusedEntry.item.definition && focusedEntry.item.definition.trim() && (
+                            isFocusedDefHidden ? (
+                                <button
+                                    type="button"
+                                    onClick={() => revealSingleDef(focusedEntry.origIdx)}
+                                    className={cn(
+                                        "w-full max-w-2xl py-8 px-6 rounded-3xl border-2 border-dashed font-bold text-xl sm:text-2xl flex flex-col items-center justify-center gap-3 transition-all cursor-pointer",
+                                        (isSketchnote || presentationTheme === 'clean-light')
+                                            ? "border-amber-500 bg-amber-50 hover:bg-amber-100 text-amber-900"
+                                            : "border-amber-400/60 bg-amber-500/10 hover:bg-amber-500/20 text-amber-200"
+                                    )}
+                                >
+                                    <Eye className="w-8 h-8" />
+                                    <span>Sınıfça Tahmin Edin • Tanımı Açmak İçin Tıklayın</span>
+                                </button>
+                            ) : (
+                                <div className={cn(
+                                    "w-full max-w-3xl max-h-[45vh] overflow-y-auto rounded-3xl p-6 sm:p-8 text-xl sm:text-2xl md:text-3xl leading-relaxed font-semibold",
+                                    isSketchnote
+                                        ? "bg-[#fefce8] border-2 border-[#eab308] text-slate-900 font-['Patrick_Hand',cursive]"
+                                        : presentationTheme === 'clean-light'
+                                            ? "bg-indigo-50/70 border border-indigo-200 text-slate-800"
+                                            : "bg-black/45 border border-white/15 text-slate-100"
+                                )}>
+                                    <p
+                                        className="[&_strong]:text-amber-300 [&_b]:text-amber-300 [&_mark]:bg-amber-300 [&_mark]:text-slate-950 [&_mark]:px-1 [&_mark]:rounded data-[light=true]:[&_strong]:bg-[#fef08a] data-[light=true]:[&_strong]:text-[#854d0e] data-[light=true]:[&_strong]:px-1.5 data-[light=true]:[&_strong]:rounded"
+                                        data-light={isSketchnote || presentationTheme === 'clean-light'}
+                                        dangerouslySetInnerHTML={{ __html: focusedEntry.item.definition }}
+                                    />
+                                </div>
+                            )
+                        )}
+
+                        {navigableVisibleEntries.length > 1 && focusedNavPos !== -1 && (
+                            <div className="mt-8 flex items-center justify-center gap-4">
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        stopSpeech();
+                                        const prevPos = (focusedNavPos - 1 + navigableVisibleEntries.length) % navigableVisibleEntries.length;
+                                        setFocusedConceptIdx(navigableVisibleEntries[prevPos].origIdx);
+                                    }}
+                                    className={cn(
+                                        "px-5 py-3 rounded-2xl font-bold flex items-center gap-2 border cursor-pointer transition-all",
+                                        (isSketchnote || presentationTheme === 'clean-light')
+                                            ? "bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300"
+                                            : "bg-white/10 hover:bg-white/20 text-white border-white/20"
+                                    )}
+                                >
+                                    <ChevronLeft className="w-5 h-5" />
+                                    <span>Önceki</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        stopSpeech();
+                                        const nextPos = (focusedNavPos + 1) % navigableVisibleEntries.length;
+                                        setFocusedConceptIdx(navigableVisibleEntries[nextPos].origIdx);
+                                    }}
+                                    className="px-6 py-3 rounded-2xl font-bold flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 cursor-pointer transition-all shadow-lg"
+                                >
+                                    <span>Sonraki Kavram</span>
+                                    <ChevronRight className="w-5 h-5" />
+                                </button>
+                            </div>
+                        )}
+                    </motion.div>
+                </div>
+            )}
+
             {isSketchnote ? (
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mb-6 p-4 sm:p-5 rounded-3xl border-[2.5px] border-[#1e293b] bg-white shadow-[4px_4px_0_#1e293b] relative overflow-hidden">
                     <div className="flex flex-wrap items-center gap-3 justify-center sm:justify-start">
@@ -886,7 +1223,26 @@ export function ConceptExplanationPlayer({
                             Önemli Kavram! 🎯
                         </span>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2 justify-center">
+                        {hasAnyDefinition && (
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setHideDefinitions(prev => !prev);
+                                    setRevealedDefs({});
+                                }}
+                                className={cn(
+                                    "font-['Patrick_Hand',cursive] text-xs sm:text-sm font-bold px-3.5 py-1.5 rounded-full border-[2px] flex items-center gap-1.5 transition-all cursor-pointer",
+                                    hideDefinitions
+                                        ? "bg-[#fef08a] text-[#854d0e] border-[#ca8a04] shadow-[2px_2px_0_#ca8a04]"
+                                        : "bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-400"
+                                )}
+                                title="Kavramların tanımlarını gizleyip öğrencilerden tahmin etmelerini isteyin"
+                            >
+                                {hideDefinitions ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+                                <span>{hideDefinitions ? "Tüm Tanımları Aç" : "Tanımları Gizle (Tahmin)"}</span>
+                            </button>
+                        )}
                         <span className="font-['Patrick_Hand',cursive] text-sm font-bold px-3.5 py-1 rounded-full bg-[#fefce8] text-[#854d0e] border-[1.5px] border-[#ca8a04] shadow-[1.5px_1.5px_0_#ca8a04]">
                             {visibleCount} / {totalCards} Açıldı
                         </span>
@@ -894,34 +1250,58 @@ export function ConceptExplanationPlayer({
                 </div>
             ) : !isGame3D ? (
                 <div className={cn(
-                    "flex items-center justify-center gap-3 mb-6 p-4 sm:p-5 rounded-3xl border shadow-2xl relative overflow-hidden text-center backdrop-blur-xl transition-colors",
+                    "flex flex-col sm:flex-row items-center justify-between gap-3 mb-6 p-4 sm:p-5 rounded-3xl border shadow-2xl relative overflow-hidden backdrop-blur-xl transition-colors",
                     presentationTheme === 'clean-light'
                         ? "bg-white/95 border-2 border-indigo-200/90 text-slate-900 shadow-xl shadow-indigo-100/60"
                         : "bg-slate-900/90 border-white/10 text-white shadow-2xl"
                 )}>
                     <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" />
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 text-center">
+                    <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 text-center sm:text-left">
                         <div className="w-10 h-10 md:w-11 md:h-11 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 text-white flex items-center justify-center font-black shadow-lg shadow-indigo-950/80 border border-white/20 shrink-0">
-                            <Sparkles className="w-5 h-5 text-amber-300 animate-pulse" />
+                            <Sparkles className="w-5 h-5 text-amber-300" />
                         </div>
-                        <div className="flex flex-col items-center justify-center text-center">
+                        <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
                             <h2 className={cn(
-                                "font-black text-lg md:text-2xl drop-shadow-sm tracking-tight text-center",
+                                "font-black text-lg md:text-2xl drop-shadow-sm tracking-tight",
                                 presentationTheme === 'clean-light' ? "text-slate-950" : "text-white"
                             )}>{title || 'Anahtar Kavramlar'}</h2>
-                            <div className="flex items-center justify-center gap-2 text-xs font-bold text-slate-400 mt-0.5">
-                                <span className={cn(
-                                    "px-2.5 py-0.5 rounded-full font-extrabold border transition-colors",
-                                    presentationTheme === 'clean-light'
-                                        ? (visibleCount === totalCards ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-indigo-100 text-indigo-800 border-indigo-300")
-                                        : (visibleCount === totalCards 
-                                            ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.3)]" 
-                                            : "bg-indigo-500/20 text-indigo-300 border-indigo-500/30")
-                                )}>
-                                    {visibleCount} / {totalCards} Açıldı
-                                </span>
-                            </div>
+                            <p className={cn("text-xs font-medium", presentationTheme === 'clean-light' ? "text-slate-500" : "text-slate-400")}>
+                                Büyütmek için herhangi bir kavram kartına tıklayabilirsiniz.
+                            </p>
                         </div>
+                    </div>
+                    <div className="flex flex-wrap items-center justify-center gap-2 shrink-0">
+                        {hasAnyDefinition && (
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setHideDefinitions(prev => !prev);
+                                    setRevealedDefs({});
+                                }}
+                                className={cn(
+                                    "px-3.5 py-1.5 rounded-full text-xs font-black border flex items-center gap-1.5 transition-all cursor-pointer",
+                                    hideDefinitions
+                                        ? "bg-amber-400 text-slate-950 border-amber-300 shadow-md"
+                                        : presentationTheme === 'clean-light'
+                                            ? "bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300"
+                                            : "bg-white/10 hover:bg-white/20 text-slate-200 border-white/20"
+                                )}
+                                title="Kavramların tanımlarını gizleyip öğrencilerden tahmin etmelerini isteyin"
+                            >
+                                {hideDefinitions ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
+                                <span>{hideDefinitions ? "Tüm Tanımları Aç" : "Tanımları Gizle (Tahmin)"}</span>
+                            </button>
+                        )}
+                        <span className={cn(
+                            "px-3 py-1 rounded-full text-xs font-extrabold border transition-colors",
+                            presentationTheme === 'clean-light'
+                                ? (visibleCount === totalCards ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-indigo-100 text-indigo-800 border-indigo-300")
+                                : (visibleCount === totalCards 
+                                    ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.3)]" 
+                                    : "bg-indigo-500/20 text-indigo-300 border-indigo-500/30")
+                        )}>
+                            {visibleCount} / {totalCards} Açıldı
+                        </span>
                     </div>
                 </div>
             ) : null}
@@ -956,158 +1336,300 @@ export function ConceptExplanationPlayer({
                         <div className="absolute bottom-3 left-4 w-2.5 h-2.5 rounded-full bg-amber-400 border border-amber-950 shadow-inner opacity-80" />
                         <div className="absolute bottom-3 right-4 w-2.5 h-2.5 rounded-full bg-amber-400 border border-amber-950 shadow-inner opacity-80" />
 
+                        {/* Üst Kontrol Şeridi (Başlık + Tahmin Modu + Sayaç) */}
+                        <div className="relative z-10 flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-amber-400/20 shrink-0">
+                            <div className="flex items-center gap-2 min-w-0">
+                                <Sparkles className="w-5 h-5 text-amber-300 shrink-0" />
+                                <h2 className="text-lg sm:text-xl md:text-2xl font-black text-amber-200 truncate">
+                                    {title || 'Anahtar Kavramlar'}
+                                </h2>
+                            </div>
+                            <div className="flex flex-wrap items-center gap-2">
+                                {isSingleCardMode && navigableVisibleEntries.length > 1 && (
+                                    <div className="flex items-center gap-1 mr-1">
+                                        {navigableVisibleEntries.map((entry, idx) => (
+                                            <button
+                                                key={entry.origIdx}
+                                                type="button"
+                                                onClick={() => setSingleFocusIdx(entry.origIdx)}
+                                                className={cn(
+                                                    "w-8 h-8 rounded-lg font-black text-xs border transition-all cursor-pointer",
+                                                    activeSingleOrigIdx === entry.origIdx
+                                                        ? "bg-amber-400 text-amber-950 border-amber-200 shadow"
+                                                        : "bg-white/10 text-white/75 border-white/15 hover:bg-white/20"
+                                                )}
+                                            >
+                                                {idx + 1}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                                {hasAnyDefinition && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setHideDefinitions(prev => !prev);
+                                            setRevealedDefs({});
+                                        }}
+                                        className={cn(
+                                            "px-3 py-1.5 rounded-xl text-xs font-black border flex items-center gap-1.5 transition-all cursor-pointer",
+                                            hideDefinitions
+                                                ? "bg-amber-400 text-amber-950 border-amber-200 shadow-md"
+                                                : "bg-white/10 hover:bg-white/20 text-amber-100 border-white/20"
+                                        )}
+                                    >
+                                        {hideDefinitions ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
+                                        <span>{hideDefinitions ? "Tüm Tanımları Aç" : "Tanımları Gizle (Tahmin)"}</span>
+                                    </button>
+                                )}
+                                <span className="px-3 py-1.5 rounded-xl text-xs font-black bg-amber-400/20 text-amber-200 border border-amber-300/35">
+                                    {visibleCount} / {totalCards}
+                                </span>
+                            </div>
+                        </div>
+
                         {/* KAVRAMLAR 2, 3 VEYA 4 SÜTUNLU DİNAMİK IZGARA İLE GELİR (EKRAN DIŞINA TAŞMAZ!) */}
                         <div className="relative z-10 flex-1 overflow-y-auto custom-scroll pr-1.5 flex flex-col justify-start">
                             <div className={cn(
                                 "w-full grid gap-4 sm:gap-5 md:gap-6 items-stretch",
-                                totalCards === 1 && "grid-cols-1 max-w-4xl mx-auto",
-                                totalCards === 2 && "grid-cols-1 sm:grid-cols-2",
-                                totalCards === 3 && "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
-                                totalCards === 4 && "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4",
-                                (totalCards === 5 || totalCards === 6) && "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
-                                totalCards > 6 && "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                                isSingleCardMode ? "grid-cols-1 max-w-4xl mx-auto my-auto" : cn(
+                                    totalCards === 1 && "grid-cols-1 max-w-4xl mx-auto",
+                                    totalCards === 2 && "grid-cols-1 sm:grid-cols-2",
+                                    totalCards === 3 && "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
+                                    totalCards === 4 && "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4",
+                                    (totalCards === 5 || totalCards === 6) && "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
+                                    totalCards > 6 && "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                                )
                             )}>
-                                {visibleConcepts.filter(c => c.concept !== '[BAŞLIK]').map((item, index) => {
-                                    const isSpeaking = speakingIndex === index;
-                                    const theme = GAME3D_CONCEPT_THEMES[index % GAME3D_CONCEPT_THEMES.length];
-
-                                    return (
-                                        <motion.div
-                                            key={index}
-                                            initial={{ opacity: 0, y: 16, scale: 0.98 }}
-                                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                                            transition={{ duration: 0.3, delay: index * 0.04 }}
-                                            className={cn(
-                                                "rounded-2xl sm:rounded-3xl border-2 sm:border-3 p-4 sm:p-5 md:p-6 flex flex-col justify-between transition-all duration-200 shadow-xl overflow-hidden relative",
-                                                theme.border,
-                                                theme.borderBottom,
-                                                totalCards === 1 ? "max-w-4xl mx-auto" : "h-full min-h-[160px]"
-                                            )}
-                                            style={{
-                                                background: theme.bg,
-                                                boxShadow: `0 10px 25px rgba(0,0,0,0.6), 0 0 20px ${theme.glow}, inset 0 2px 4px rgba(255,255,255,0.15)`,
-                                            }}
-                                        >
-                                            {/* Üst Satır: Numara Rozeti ve Ses Butonu */}
-                                            <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3">
-                                                <div 
-                                                    className={cn(
-                                                        "w-10 h-10 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 border-2 shadow-md",
-                                                        theme.badgeBorder
-                                                    )}
-                                                    style={{
-                                                        background: theme.badgeBg,
-                                                        boxShadow: '0 3px 10px rgba(0,0,0,0.3)',
-                                                    }}
-                                                >
-                                                    <span className="text-sm sm:text-base font-black text-amber-950 font-mono">
-                                                        #{index + 1}
-                                                    </span>
-                                                </div>
-
-                                                <button
-                                                    type="button"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        handleSpeakConcept(item, index);
-                                                    }}
-                                                    className={cn(
-                                                        "w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center transition-all cursor-pointer border",
-                                                        isSpeaking
-                                                            ? "bg-amber-400 text-amber-950 border-amber-300 shadow-md animate-bounce"
-                                                            : "bg-white/10 hover:bg-white/20 text-white/70 hover:text-white border-white/20"
-                                                    )}
-                                                    title={isSpeaking ? "Durdur" : "Seslendir"}
-                                                >
-                                                    {isSpeaking ? <VolumeX size={18} /> : <Volume2 size={18} />}
-                                                </button>
-                                            </div>
-
-                                            {/* Kavram Adı (Başlık) */}
-                                            <h3 className={cn(
-                                                "font-black uppercase tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] line-clamp-2",
-                                                theme.titleColor,
-                                                totalCards <= 2 
-                                                    ? (fontSizeScale === 'huge' ? "text-2xl sm:text-3xl md:text-4xl" : "text-xl sm:text-2xl md:text-3xl")
-                                                    : totalCards === 3
-                                                    ? (fontSizeScale === 'huge' ? "text-xl sm:text-2xl md:text-3xl" : "text-lg sm:text-xl md:text-2xl")
-                                                    : (fontSizeScale === 'huge' ? "text-lg sm:text-xl md:text-2xl" : "text-base sm:text-lg md:text-xl")
-                                            )}>
-                                                {item.concept}
-                                            </h3>
-
-                                            {/* İnce Altın/Işık Çizgisi */}
-                                            <div className="w-full h-0.5 bg-gradient-to-r from-transparent via-white/20 to-transparent my-2.5 sm:my-3" />
-
-                                            {/* Kavram Tanımı (Açıklama) - Kart İçinde Kaydırılabilir */}
-                                            {item.definition && (
-                                                <div className="flex-1 overflow-y-auto custom-scroll pr-1 min-h-[60px]">
-                                                    <p className={cn(
-                                                        "font-bold text-slate-100 leading-relaxed tracking-normal select-text drop-shadow-[0_1px_3px_rgba(0,0,0,0.85)]",
-                                                        totalCards <= 2 
-                                                            ? (fontSizeScale === 'huge' ? "text-xl sm:text-2xl md:text-3xl" : "text-lg sm:text-xl md:text-2xl")
-                                                            : totalCards === 3
-                                                            ? (fontSizeScale === 'huge' ? "text-lg sm:text-xl md:text-2xl" : "text-base sm:text-lg md:text-xl")
-                                                            : (fontSizeScale === 'huge' ? "text-base sm:text-lg md:text-xl" : "text-sm sm:text-base md:text-lg")
-                                                    )}>
+                                {(() => {
+                                    let cardNumCounter = 0;
+                                    return visibleConcepts.map((item, origIdx) => {
+                                        if (item.concept === '[BAŞLIK]') {
+                                            if (isSingleCardMode) return null;
+                                            return (
+                                                <div key={origIdx} className="col-span-full flex items-center gap-3 py-1">
+                                                    <div className="h-[2px] flex-1 bg-gradient-to-r from-transparent via-amber-400/60 to-transparent" />
+                                                    <span className="text-sm sm:text-base font-black text-amber-300 tracking-widest uppercase px-3">
                                                         {item.definition}
-                                                    </p>
+                                                    </span>
+                                                    <div className="h-[2px] flex-1 bg-gradient-to-r from-transparent via-amber-400/60 to-transparent" />
                                                 </div>
-                                            )}
-                                        </motion.div>
-                                    );
-                                })}
+                                            );
+                                        }
+
+                                        const cardNum = ++cardNumCounter;
+                                        if (isSingleCardMode && origIdx !== activeSingleOrigIdx) return null;
+
+                                        const isSpeaking = speakingIndex === origIdx;
+                                        const theme = GAME3D_CONCEPT_THEMES[(cardNum - 1) % GAME3D_CONCEPT_THEMES.length];
+                                        const isDefHidden = hideDefinitions && !revealedDefs[origIdx];
+
+                                        return (
+                                            <motion.div
+                                                key={origIdx}
+                                                initial={{ opacity: 0, y: 16, scale: 0.98 }}
+                                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                transition={{ duration: 0.28 }}
+                                                onClick={() => setFocusedConceptIdx(origIdx)}
+                                                className={cn(
+                                                    "rounded-2xl sm:rounded-3xl border-2 sm:border-3 p-4 sm:p-5 md:p-6 flex flex-col justify-between transition-all duration-200 shadow-xl overflow-hidden relative cursor-pointer",
+                                                    theme.border,
+                                                    theme.borderBottom,
+                                                    (totalCards === 1 || isSingleCardMode) ? "w-full max-w-4xl mx-auto min-h-[240px]" : "h-full min-h-[160px]"
+                                                )}
+                                                style={{
+                                                    background: theme.bg,
+                                                    boxShadow: `0 10px 25px rgba(0,0,0,0.6), 0 0 20px ${theme.glow}, inset 0 2px 4px rgba(255,255,255,0.15)`,
+                                                }}
+                                            >
+                                                {/* Üst Satır: Numara Rozeti, Ses ve Büyüt Butonları */}
+                                                <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3">
+                                                    <div 
+                                                        className={cn(
+                                                            "w-10 h-10 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 border-2 shadow-md",
+                                                            theme.badgeBorder
+                                                        )}
+                                                        style={{
+                                                            background: theme.badgeBg,
+                                                            boxShadow: '0 3px 10px rgba(0,0,0,0.3)',
+                                                        }}
+                                                    >
+                                                        <span className="text-sm sm:text-base font-black text-amber-950 font-mono">
+                                                            #{cardNum}
+                                                        </span>
+                                                    </div>
+
+                                                    <div className="flex items-center gap-1.5">
+                                                        <button
+                                                            type="button"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setFocusedConceptIdx(origIdx);
+                                                            }}
+                                                            className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center transition-all cursor-pointer border bg-white/10 hover:bg-white/20 text-white/80 hover:text-white border-white/20"
+                                                            title="Büyüt (Odak Modu)"
+                                                        >
+                                                            <Maximize2 size={17} />
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleSpeakConcept(item, origIdx);
+                                                            }}
+                                                            className={cn(
+                                                                "w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center transition-all cursor-pointer border",
+                                                                isSpeaking
+                                                                    ? "bg-amber-400 text-amber-950 border-amber-300 shadow-md ring-2 ring-amber-200"
+                                                                    : "bg-white/10 hover:bg-white/20 text-white/80 hover:text-white border-white/20"
+                                                            )}
+                                                            title={isSpeaking ? "Durdur" : "Seslendir"}
+                                                        >
+                                                            {isSpeaking ? <VolumeX size={18} /> : <Volume2 size={18} />}
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                {/* Kavram Adı (Başlık) */}
+                                                <h3 className={cn(
+                                                    "font-black uppercase tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] line-clamp-2",
+                                                    theme.titleColor,
+                                                    (totalCards <= 2 || isSingleCardMode)
+                                                        ? (fontSizeScale === 'huge' ? "text-2xl sm:text-3xl md:text-4xl" : "text-xl sm:text-2xl md:text-3xl")
+                                                        : totalCards === 3
+                                                        ? (fontSizeScale === 'huge' ? "text-xl sm:text-2xl md:text-3xl" : "text-lg sm:text-xl md:text-2xl")
+                                                        : (fontSizeScale === 'huge' ? "text-lg sm:text-xl md:text-2xl" : "text-base sm:text-lg md:text-xl")
+                                                )}>
+                                                    {item.concept}
+                                                </h3>
+
+                                                {/* İnce Altın/Işık Çizgisi */}
+                                                <div className="w-full h-0.5 bg-gradient-to-r from-transparent via-white/20 to-transparent my-2.5 sm:my-3" />
+
+                                                {/* Kavram Tanımı (Açıklama veya Tahmin Perdesi) */}
+                                                {item.definition && item.definition.trim() && (
+                                                    isDefHidden ? (
+                                                        <button
+                                                            type="button"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                revealSingleDef(origIdx);
+                                                            }}
+                                                            className="w-full py-4 px-3 rounded-2xl border-2 border-dashed border-amber-300/60 bg-black/35 hover:bg-black/55 text-amber-200 font-bold text-sm sm:text-base flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                                                        >
+                                                            <Eye className="w-4 h-4 shrink-0" />
+                                                            <span>Tahmin Et • Tanımı Açmak İçin Dokun</span>
+                                                        </button>
+                                                    ) : (
+                                                        <div className="flex-1 overflow-y-auto custom-scroll pr-1 min-h-[60px]">
+                                                            <p
+                                                                className={cn(
+                                                                    "font-bold text-slate-100 leading-relaxed tracking-normal select-text drop-shadow-[0_1px_3px_rgba(0,0,0,0.85)] [&_strong]:text-amber-200 [&_b]:text-amber-200 [&_mark]:bg-amber-300 [&_mark]:text-slate-950 [&_mark]:px-1 [&_mark]:rounded",
+                                                                    (totalCards <= 2 || isSingleCardMode)
+                                                                        ? (fontSizeScale === 'huge' ? "text-xl sm:text-2xl md:text-3xl" : "text-lg sm:text-xl md:text-2xl")
+                                                                        : totalCards === 3
+                                                                        ? (fontSizeScale === 'huge' ? "text-lg sm:text-xl md:text-2xl" : "text-base sm:text-lg md:text-xl")
+                                                                        : (fontSizeScale === 'huge' ? "text-base sm:text-lg md:text-xl" : "text-sm sm:text-base md:text-lg")
+                                                                )}
+                                                                dangerouslySetInnerHTML={{ __html: item.definition }}
+                                                            />
+                                                        </div>
+                                                    )
+                                                )}
+                                            </motion.div>
+                                        );
+                                    });
+                                })()}
                             </div>
                         </div>
                     </div>
                 </div>
             ) : (
-                /* ══ DİĞER TEMALAR İÇİN STANDART KART IZGARASI ══ */
-                <div className={cn("grid pb-20 transition-all duration-300 items-stretch", getGapClass(), getGridClass())}>
-                {(() => {
-                    let conceptCount = 0;
-                    return visibleConcepts.map((item, index) => {
-                        if (item.concept === '[BAŞLIK]') {
+                /* ══ DİĞER TEMALAR İÇİN STANDART KART IZGARASI (VEYA TEK KART ODAK SAHNESİ) ══ */
+                <div className="flex flex-col w-full">
+                    {isSingleCardMode && navigableVisibleEntries.length > 1 && (
+                        <div className="flex flex-wrap items-center justify-center gap-1.5 mb-4">
+                            {navigableVisibleEntries.map((entry, idx) => (
+                                <button
+                                    key={entry.origIdx}
+                                    type="button"
+                                    onClick={() => setSingleFocusIdx(entry.origIdx)}
+                                    className={cn(
+                                        "px-3 py-1 rounded-full text-xs font-black border transition-all cursor-pointer",
+                                        activeSingleOrigIdx === entry.origIdx
+                                            ? isSketchnote
+                                                ? "bg-[#fef08a] text-[#854d0e] border-[#ca8a04] shadow-[2px_2px_0_#ca8a04]"
+                                                : "bg-indigo-600 text-white border-indigo-400 shadow-md"
+                                            : (isSketchnote || presentationTheme === 'clean-light')
+                                                ? "bg-white text-slate-700 border-slate-300 hover:bg-slate-100"
+                                                : "bg-white/10 text-slate-300 border-white/15 hover:bg-white/20"
+                                    )}
+                                >
+                                    #{idx + 1} {entry.item.concept}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                    <div className={cn("grid pb-20 transition-all duration-300 items-stretch", getGapClass(), getGridClass())}>
+                    {(() => {
+                        let conceptCount = 0;
+                        return visibleConcepts.map((item, index) => {
+                            if (item.concept === '[BAŞLIK]') {
+                                if (isSingleCardMode) return null;
+                                return (
+                                    <div key={index} className="col-span-full mt-4 mb-2 flex items-center gap-4 w-full">
+                                        <div className={cn("h-[2px] flex-1 bg-gradient-to-r from-transparent to-transparent", isSketchnote ? "via-[#ca8a04]/70" : "via-indigo-500/70")} />
+                                        <h3 className={cn(
+                                            "tracking-widest uppercase text-center px-4 font-black",
+                                            isSketchnote
+                                                ? "font-['Caveat',cursive] text-2xl md:text-3xl text-[#1e293b] bg-[#fefce8] border-2 border-[#eab308] rounded-xl py-1 shadow-[2px_2px_0_#eab308]"
+                                                : presentationTheme === 'clean-light'
+                                                    ? "text-xl md:text-2xl text-indigo-800"
+                                                    : "text-xl md:text-2xl text-indigo-300 drop-shadow-sm"
+                                        )}>{item.definition}</h3>
+                                        <div className={cn("h-[2px] flex-1 bg-gradient-to-r from-transparent to-transparent", isSketchnote ? "via-[#ca8a04]/70" : "via-indigo-500/70")} />
+                                    </div>
+                                );
+                            }
+
+                            const currentNum = ++conceptCount;
+                            if (isSingleCardMode && index !== activeSingleOrigIdx) return null;
+
+                            const theme = CONCEPT_THEMES[(currentNum - 1) % CONCEPT_THEMES.length];
+                            const sketchnoteTheme = SKETCHNOTE_CONCEPT_THEMES[(currentNum - 1) % SKETCHNOTE_CONCEPT_THEMES.length];
+                            const isLatest = index === visibleConcepts.length - 1;
+                            const hasDefinition = !!(item.definition && item.definition.trim().length > 0);
+                            const showNewBadge = isLatest && visibleConcepts.length > 1;
+                            const isDefHidden = hideDefinitions && !revealedDefs[index];
+
                             return (
-                                <div key={index} className="col-span-full mt-4 mb-2 flex items-center gap-4 w-full">
-                                    <div className="h-[2px] bg-gradient-to-r from-transparent via-indigo-500/70 to-transparent flex-1" />
-                                    <h3 className="text-xl md:text-2xl font-black text-indigo-400 tracking-widest uppercase drop-shadow-sm text-center px-4">{item.definition}</h3>
-                                    <div className="h-[2px] bg-gradient-to-r from-transparent via-indigo-500/70 to-transparent flex-1" />
-                                </div>
+                                <ConceptCardItem
+                                    key={index}
+                                    item={item}
+                                    currentNum={currentNum}
+                                    theme={theme}
+                                    isLatest={isLatest}
+                                    showNewBadge={showNewBadge}
+                                    hasDefinition={hasDefinition}
+                                    cardScale={cardScale}
+                                    scaleStyles={scaleStyles}
+                                    isTeacher={isTeacher}
+                                    totalConceptCards={isSingleCardMode ? 1 : totalConceptCards}
+                                    scrollRef={isLatest ? scrollRef : null}
+                                    onSpeak={() => handleSpeakConcept(item, index)}
+                                    isSpeaking={speakingIndex === index}
+                                    isSketchnote={isSketchnote}
+                                    sketchnoteTheme={sketchnoteTheme}
+                                    isGame3D={isGame3D}
+                                    isDefHidden={isDefHidden}
+                                    onRevealDef={() => revealSingleDef(index)}
+                                    onZoom={() => setFocusedConceptIdx(index)}
+                                />
                             );
-                        }
-
-                        const currentNum = ++conceptCount;
-                        const theme = CONCEPT_THEMES[(currentNum - 1) % CONCEPT_THEMES.length];
-                        const sketchnoteTheme = SKETCHNOTE_CONCEPT_THEMES[(currentNum - 1) % SKETCHNOTE_CONCEPT_THEMES.length];
-                        const isLatest = index === visibleConcepts.length - 1;
-                        const hasDefinition = !!(item.definition && item.definition.trim().length > 0);
-                        const showNewBadge = isLatest && visibleConcepts.length > 1;
-
-                        return (
-                            <ConceptCardItem
-                                key={index}
-                                item={item}
-                                currentNum={currentNum}
-                                theme={theme}
-                                isLatest={isLatest}
-                                showNewBadge={showNewBadge}
-                                hasDefinition={hasDefinition}
-                                cardScale={cardScale}
-                                scaleStyles={scaleStyles}
-                                isTeacher={isTeacher}
-                                totalConceptCards={totalConceptCards}
-                                scrollRef={isLatest ? scrollRef : null}
-                                onSpeak={() => handleSpeakConcept(item, index)}
-                                isSpeaking={speakingIndex === index}
-                                isSketchnote={isSketchnote}
-                                sketchnoteTheme={sketchnoteTheme}
-                                isGame3D={isGame3D}
-                            />
-                        );
-                    });
-                })()}
-            </div>
+                        });
+                    })()}
+                    </div>
+                </div>
             )}
         </div>
     );

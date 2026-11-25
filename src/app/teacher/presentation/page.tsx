@@ -35,7 +35,7 @@ import { useToast } from '@/hooks/use-toast';
 import { saveTopicSourceText } from '@/app/teacher/source-texts/actions';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
-import { playSound } from '@/lib/audio-service';
+import { playSound, setGlobalSoundEnabled } from '@/lib/audio-service';
 
 const noOp = () => {};
 
@@ -288,6 +288,11 @@ function PresentationPageContent() {
 
     // 6. Ses Efektleri Açık/Kapalı
     const [isSoundEnabled, setIsSoundEnabled] = useState(true);
+
+    useEffect(() => {
+        setGlobalSoundEnabled(isSoundEnabled);
+        return () => setGlobalSoundEnabled(true);
+    }, [isSoundEnabled]);
 
     // 7. Mobil Kumanda (QR Kod Oturumu)
     const [isRemoteModalOpen, setIsRemoteModalOpen] = useState(false);

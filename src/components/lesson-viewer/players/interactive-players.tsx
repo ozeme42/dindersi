@@ -140,8 +140,18 @@ export function InteractiveTrueFalseList({
     const authIsTeacher = useTeacherMode();
     const isTeacher = typeof propIsTeacher === 'boolean' ? propIsTeacher : authIsTeacher;
     const isSketchnote = presentationTheme === 'sketchnote';
+    const isDarkTheme = presentationTheme === 'cosmic-dark' || presentationTheme === 'vibrant-studio' || presentationTheme === 'game-3d';
+
+    const [classVoteMode, setClassVoteMode] = useState<boolean>(false);
+    const [pendingVotes, setPendingVotes] = useState<Record<number, boolean>>({});
+    const [localRetry, setLocalRetry] = useState<boolean>(false);
+
+    useEffect(() => {
+        setPendingVotes({});
+        setLocalRetry(false);
+    }, [step]);
+
     const allAnswered = step.questions.every((_: any, index: number) => answers && answers[index] !== undefined);
-    
     const isCompleted = answers?.completed;
 
     useEffect(() => {
@@ -149,6 +159,33 @@ export function InteractiveTrueFalseList({
             onAllAnswered();
         }
     }, [allAnswered, isCompleted, onAllAnswered]);
+
+    const handleCardVoteOrAnswer = (index: number, val: boolean) => {
+        if (classVoteMode) {
+            playSound('pop');
+            setPendingVotes(prev => {
+                if (prev[index] === val) {
+                    const copy = { ...prev };
+                    delete copy[index];
+                    return copy;
+                }
+                return { ...prev, [index]: val };
+            });
+            return;
+        }
+        setLocalRetry(false);
+        onAnswer(index, val);
+    };
+
+    const handleRevealAllVotes = () => {
+        setLocalRetry(false);
+        step.questions.forEach((q, idx) => {
+            if (!answers || answers[idx] === undefined || localRetry) {
+                const chosen = pendingVotes[idx] !== undefined ? pendingVotes[idx] : q.isTrue;
+                onAnswer(idx, chosen);
+            }
+        });
+    };
 
     const sketchnoteThemes = [
         { card: 'bg-[#fefce8] border-[2.5px] border-[#1e293b] shadow-[4px_4px_0_#1e293b]', numBg: 'bg-[#fde047] text-slate-900 border border-slate-900' },
@@ -159,7 +196,14 @@ export function InteractiveTrueFalseList({
         { card: 'bg-[#faf5ff] border-[2.5px] border-[#1e293b] shadow-[4px_4px_0_#1e293b]', numBg: 'bg-[#c084fc] text-slate-900 border border-slate-900' },
     ];
 
-    const colorThemes = [
+    const colorThemes = isDarkTheme ? [
+        { card: 'border-2 border-cyan-400/50 bg-slate-900/90 hover:bg-slate-900 text-white shadow-lg', number: 'text-cyan-300' },
+        { card: 'border-2 border-purple-400/50 bg-slate-900/90 hover:bg-slate-900 text-white shadow-lg', number: 'text-purple-300' },
+        { card: 'border-2 border-amber-400/50 bg-slate-900/90 hover:bg-slate-900 text-white shadow-lg', number: 'text-amber-300' },
+        { card: 'border-2 border-rose-400/50 bg-slate-900/90 hover:bg-slate-900 text-white shadow-lg', number: 'text-rose-300' },
+        { card: 'border-2 border-emerald-400/50 bg-slate-900/90 hover:bg-slate-900 text-white shadow-lg', number: 'text-emerald-300' },
+        { card: 'border-2 border-indigo-400/50 bg-slate-900/90 hover:bg-slate-900 text-white shadow-lg', number: 'text-indigo-300' },
+    ] : [
         { card: 'border-2 border-cyan-300 bg-white/95 hover:bg-cyan-50/60 shadow-md shadow-cyan-100/50', number: 'text-cyan-600' },
         { card: 'border-2 border-purple-300 bg-white/95 hover:bg-purple-50/60 shadow-md shadow-purple-100/50', number: 'text-purple-600' },
         { card: 'border-2 border-amber-300 bg-white/95 hover:bg-amber-50/60 shadow-md shadow-amber-100/50', number: 'text-amber-600' },
@@ -202,27 +246,73 @@ export function InteractiveTrueFalseList({
     return (
         <div className={cn("w-full flex flex-col items-center justify-start p-1 sm:p-2", isTeacher ? "h-full max-w-[96%] mx-auto" : "max-w-3xl mx-auto pb-8")}>
              <div className={cn(
-                "relative rounded-2xl border backdrop-blur-xl flex-shrink-0 w-full text-center overflow-hidden shadow-md",
+                "relative rounded-2xl border backdrop-blur-xl flex-shrink-0 w-full overflow-hidden shadow-md",
                 isTeacher 
                     ? (isSketchnote 
                         ? "border-[3.5px] border-[#1e293b] bg-[#fefce8] py-3 px-6 mb-4 mt-0 shadow-[5px_5px_0_#1e293b]" 
-                        : "border-2 border-indigo-200 bg-white/95 py-3 px-6 mb-4 mt-0 shadow-indigo-100/50") 
+                        : isDarkTheme
+                            ? "border-2 border-white/15 bg-slate-900/90 py-3 px-6 mb-4 mt-0 text-white"
+                            : "border-2 border-indigo-200 bg-white/95 py-3 px-6 mb-4 mt-0 shadow-indigo-100/50") 
                     : "border-white/10 bg-slate-900/80 py-2.5 px-4 mb-3"
             )}>
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
-                <h2 className={cn(
-                    "font-black tracking-tight",
-                    isSketchnote 
-                        ? "font-['Caveat',cursive] text-slate-900 text-3xl md:text-5xl" 
-                        : (isTeacher ? "bg-clip-text text-transparent bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-600 text-2xl md:text-4xl" : "bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 text-base sm:text-xl")
-                )}>{step.title}</h2>
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
+                    <h2 className={cn(
+                        "font-black tracking-tight",
+                        isSketchnote 
+                            ? "font-['Caveat',cursive] text-slate-900 text-3xl md:text-5xl" 
+                            : (isTeacher && !isDarkTheme ? "bg-clip-text text-transparent bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-600 text-2xl md:text-4xl" : "bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 text-lg sm:text-2xl")
+                    )}>{step.title}</h2>
+
+                    {isTeacher && (
+                        <div className="flex flex-wrap items-center justify-center gap-2 shrink-0">
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    playSound('pop');
+                                    setClassVoteMode(prev => !prev);
+                                    setPendingVotes({});
+                                }}
+                                className={cn(
+                                    "px-3 py-1 rounded-xl text-xs font-black border transition-all cursor-pointer",
+                                    classVoteMode
+                                        ? "bg-amber-400 text-slate-950 border-amber-500 shadow-xs"
+                                        : isDarkTheme
+                                            ? "bg-white/10 text-slate-200 border-white/20 hover:bg-white/20"
+                                            : "bg-slate-100 text-slate-700 border-slate-300 hover:bg-slate-200"
+                                )}
+                            >
+                                {classVoteMode ? "🗳️ Önce İşaretle (Açık)" : "⚡ Anlık Kontrol"}
+                            </button>
+                            {classVoteMode && (
+                                <button
+                                    type="button"
+                                    onClick={handleRevealAllVotes}
+                                    className="px-3 py-1 rounded-xl text-xs font-black bg-emerald-500 hover:bg-emerald-400 text-white shadow cursor-pointer"
+                                >
+                                    Cevapları Aç
+                                </button>
+                            )}
+                            {allAnswered && !localRetry && (
+                                <button
+                                    type="button"
+                                    onClick={() => { setPendingVotes({}); setLocalRetry(true); }}
+                                    className="px-3 py-1 rounded-xl text-xs font-black bg-indigo-600 hover:bg-indigo-500 text-white shadow cursor-pointer"
+                                >
+                                    Tekrar Sor
+                                </button>
+                            )}
+                        </div>
+                    )}
+                </div>
             </div>
 
-            <div className={cn("w-full grid gap-3 pb-8", isTeacher ? "grid-cols-2 md:grid-cols-2 gap-3.5 sm:gap-5 md:gap-6 pb-16" : "grid-cols-1")}>
+            <div className={cn("w-full grid gap-3 pb-20", isTeacher ? "grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-5 md:gap-6" : "grid-cols-1")}>
                 {step.questions.map((q: any, index: number) => {
-                    const userAnswer = answers && answers[index];
+                    const userAnswer = !localRetry && answers ? answers[index] : undefined;
                     const isAnswered = userAnswer !== undefined;
                     const isCorrect = isAnswered && userAnswer.isCorrect;
+                    const votedVal = !isAnswered ? pendingVotes[index] : undefined;
                     
                     const theme = colorThemes[index % colorThemes.length];
                     const skTheme = sketchnoteThemes[index % sketchnoteThemes.length];
@@ -237,13 +327,13 @@ export function InteractiveTrueFalseList({
                                 ? (isCorrect 
                                     ? (isSketchnote 
                                         ? "border-[3px] border-[#15803d] bg-[#dcfce7] shadow-[4px_4px_0_#15803d]" 
-                                        : (isTeacher ? "border-2 border-emerald-500 bg-emerald-50 shadow-[0_0_20px_rgba(16,185,129,0.25)]" : "border-emerald-500/60 bg-emerald-950/40 shadow-[0_0_20px_rgba(16,185,129,0.2)]")) 
+                                        : (isTeacher && !isDarkTheme ? "border-2 border-emerald-500 bg-emerald-50 shadow-[0_0_20px_rgba(16,185,129,0.25)]" : "border-emerald-500/60 bg-emerald-950/60 text-white shadow-[0_0_20px_rgba(16,185,129,0.2)]")) 
                                     : (isSketchnote 
                                         ? "border-[3px] border-[#991b1b] bg-[#fee2e2] shadow-[4px_4px_0_#991b1b]" 
-                                        : (isTeacher ? "border-2 border-rose-500 bg-rose-50 shadow-[0_0_20px_rgba(244,63,94,0.25)]" : "border-rose-500/60 bg-rose-950/40 shadow-[0_0_20px_rgba(244,63,94,0.2)]")))
+                                        : (isTeacher && !isDarkTheme ? "border-2 border-rose-500 bg-rose-50 shadow-[0_0_20px_rgba(244,63,94,0.25)]" : "border-rose-500/60 bg-rose-950/60 text-white shadow-[0_0_20px_rgba(244,63,94,0.2)]")))
                                 : (isSketchnote 
                                     ? skTheme.card 
-                                    : (isTeacher ? `${theme.card} border` : `${theme.card} border backdrop-blur-xl shadow-lg`))
+                                    : `${theme.card} border`)
                         )}>
                             <div className="flex gap-2.5 sm:gap-3 mb-3">
                                 <span className={cn(
@@ -257,27 +347,42 @@ export function InteractiveTrueFalseList({
                                 </span>
                                 <p className={cn(
                                     "font-bold leading-snug sm:leading-relaxed", 
-                                    isSketchnote ? "font-['Patrick_Hand',cursive] text-slate-900" : (isTeacher ? "text-slate-800" : "text-slate-100"),
+                                    isSketchnote ? "font-['Patrick_Hand',cursive] text-slate-900" : (isTeacher && !isDarkTheme ? "text-slate-800" : "text-slate-100"),
                                     getTfFontSize()
                                 )}>
                                     {q.statement}
                                 </p>
                             </div>
 
+                            {isAnswered && q.explanation && (
+                                <div className={cn(
+                                    "mb-3 px-3.5 py-2 rounded-xl border text-left text-xs sm:text-sm md:text-base font-semibold leading-snug",
+                                    isSketchnote
+                                        ? "bg-white/90 border-[#1e293b]/30 text-slate-800 font-['Patrick_Hand',cursive]"
+                                        : isDarkTheme || !isTeacher
+                                            ? "bg-black/35 border-white/15 text-slate-100"
+                                            : "bg-white/85 border-slate-300 text-slate-800"
+                                )}>
+                                    <span className="font-black mr-1">💡 Açıklama:</span>
+                                    {q.explanation}
+                                </div>
+                            )}
+
                             <div className="flex gap-2 sm:gap-3 mt-auto">
                                 <button
-                                    onClick={() => !isAnswered && onAnswer(index, true)}
+                                    onClick={() => !isAnswered && handleCardVoteOrAnswer(index, true)}
                                     disabled={isAnswered}
                                     className={cn(
                                         "flex-1 font-black transition-all border flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer",
                                         isSketchnote && "font-['Patrick_Hand',cursive] text-lg md:text-xl",
                                         getTfBtnClass(),
+                                        votedVal === true && "ring-4 ring-amber-400 scale-[1.02]",
                                         isAnswered && userAnswer.answer === true
                                             ? (userAnswer.isCorrect 
                                                 ? (isSketchnote ? "bg-[#22c55e] border-[2.5px] border-[#15803d] text-white shadow-[3px_3px_0_#15803d]" : "bg-emerald-500 border-emerald-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]") 
                                                 : (isSketchnote ? "bg-[#ef4444] border-[2.5px] border-[#991b1b] text-white shadow-[3px_3px_0_#991b1b]" : "bg-rose-500 border-rose-400 text-white shadow-[0_0_15px_rgba(244,63,94,0.4)]"))
                                             : isAnswered && userAnswer.answer !== true
-                                                ? "bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-400 dark:text-slate-500 opacity-40 shadow-none"
+                                                ? (isDarkTheme || !isTeacher ? "bg-white/5 border-white/10 text-slate-400 opacity-40 shadow-none" : "bg-slate-100 border-slate-200 text-slate-400 opacity-40 shadow-none")
                                                 : isTeacher
                                                     ? (isSketchnote 
                                                         ? "bg-[#22c55e] hover:bg-[#16a34a] text-white border-[2.5px] border-[#1e293b] shadow-[3px_3px_0_#1e293b]" 
@@ -288,18 +393,19 @@ export function InteractiveTrueFalseList({
                                     <CheckCircle className={getTfBtnIconClass()} /> Doğru
                                 </button>
                                 <button
-                                    onClick={() => !isAnswered && onAnswer(index, false)}
+                                    onClick={() => !isAnswered && handleCardVoteOrAnswer(index, false)}
                                     disabled={isAnswered}
                                     className={cn(
                                         "flex-1 font-black transition-all border flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer",
                                         isSketchnote && "font-['Patrick_Hand',cursive] text-lg md:text-xl",
                                         getTfBtnClass(),
+                                        votedVal === false && "ring-4 ring-amber-400 scale-[1.02]",
                                         isAnswered && userAnswer.answer === false
                                             ? (userAnswer.isCorrect 
                                                 ? (isSketchnote ? "bg-[#22c55e] border-[2.5px] border-[#15803d] text-white shadow-[3px_3px_0_#15803d]" : "bg-emerald-500 border-emerald-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]") 
                                                 : (isSketchnote ? "bg-[#ef4444] border-[2.5px] border-[#991b1b] text-white shadow-[3px_3px_0_#991b1b]" : "bg-rose-500 border-rose-400 text-white shadow-[0_0_15px_rgba(244,63,94,0.4)]"))
                                             : isAnswered && userAnswer.answer !== false
-                                                ? "bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-400 dark:text-slate-500 opacity-40 shadow-none"
+                                                ? (isDarkTheme || !isTeacher ? "bg-white/5 border-white/10 text-slate-400 opacity-40 shadow-none" : "bg-slate-100 border-slate-200 text-slate-400 opacity-40 shadow-none")
                                                 : isTeacher
                                                     ? (isSketchnote 
                                                         ? "bg-[#ef4444] hover:bg-[#dc2626] text-white border-[2.5px] border-[#1e293b] shadow-[3px_3px_0_#1e293b]" 
@@ -516,7 +622,7 @@ export function AnagramGamePlayer({ step, onAnswered, isTeacher, isFullscreen }:
     return (
         <div className="w-full h-full flex flex-col justify-center relative">
              <div className="flex justify-between items-center px-4 mb-2 md:mb-4">
-                 <div className="text-slate-500 font-bold uppercase tracking-widest text-xs md:text-sm bg-white shadow-sm dark:shadow-none dark:bg-white/50 px-3 py-1 rounded-full">
+                 <div className="text-slate-600 font-bold uppercase tracking-widest text-xs md:text-sm bg-white shadow-sm border border-slate-200 px-3 py-1 rounded-full">
                     Kelime {currentCardIndex + 1} / {step.cards.length}
                 </div>
                 {isTeacher && !answerState[currentCardIndex] && (
@@ -552,7 +658,8 @@ export function SentenceScrambleGame({
     answer, 
     isAnswerRevealed,
     fontSizeScale = 'normal',
-    isFullscreen = false
+    isFullscreen = false,
+    presentationTheme
 }: { 
     step: SentenceScrambleStep, 
     onAnswer: (answer: string) => void, 
@@ -560,9 +667,11 @@ export function SentenceScrambleGame({
     answer?: { answer: string, isCorrect: boolean } | null, 
     isAnswerRevealed: boolean,
     fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge',
-    isFullscreen?: boolean
+    isFullscreen?: boolean,
+    presentationTheme?: string
 }) {
     const isTeacher = useTeacherMode();
+    const isDarkTheme = presentationTheme === 'cosmic-dark' || presentationTheme === 'vibrant-studio' || presentationTheme === 'game-3d';
 
     type ScrambleWordItem = { id: number; word: string };
 
@@ -619,6 +728,21 @@ export function SentenceScrambleGame({
         }
     };
       
+    const handleRemoveFromConstructed = (wordIndex: number) => {
+        if (isAnswerRevealed) return;
+        playSound('pop');
+        const removed = constructedWords.slice(wordIndex);
+        setConstructedWords(prev => prev.slice(0, wordIndex));
+        setBankWords(prev => [...prev, ...removed].sort((a, b) => a.id - b.id));
+    };
+
+    const handleResetScramble = () => {
+        playSound('pop');
+        setBankWords(getWordsFromStep());
+        setConstructedWords([]);
+        setMistakenWordId(null);
+    };
+
     useEffect(() => {
         if (!isAnswerRevealed && bankWords.length === 0 && constructedWords.length > 0) {
             const userAnswer = constructedWords.map(w => w.word).join(' ');
@@ -627,11 +751,11 @@ export function SentenceScrambleGame({
     }, [bankWords.length, constructedWords, isAnswerRevealed, onAnswer]);
 
     useEffect(() => {
-        if (answer?.isCorrect) {
+        if (answer?.isCorrect && !isTeacher) {
             const timeoutId = setTimeout(() => { onCorrectAndNext(); }, 1500);
             return () => clearTimeout(timeoutId);
         }
-    }, [answer, onCorrectAndNext]);
+    }, [answer, onCorrectAndNext, isTeacher]);
 
     const getInstructionClass = () => {
         if (!isTeacher) return "text-sm md:text-base";
@@ -672,19 +796,44 @@ export function SentenceScrambleGame({
     };
 
     return (
-        <div className={cn("w-full mx-auto flex flex-col justify-center min-h-[65vh] gap-4 md:gap-6 p-2 sm:p-4 text-center", isTeacher ? "max-w-[96%] w-full pt-4 md:pt-8" : "max-w-4xl")}>
-            <div className="text-center">
-                <p className={cn("text-slate-800 font-black bg-white/95 backdrop-blur-md rounded-full inline-block border-2 border-indigo-200 shadow-md shadow-indigo-100/50", getInstructionClass())}>
+        <div className={cn("w-full mx-auto flex flex-col justify-center min-h-[65vh] gap-4 md:gap-6 p-2 sm:p-4 pb-20 text-center", isTeacher ? "max-w-[96%] w-full pt-4 md:pt-8" : "max-w-4xl")}>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+                <p className={cn(
+                    "font-black rounded-full inline-block border-2 shadow-md",
+                    isDarkTheme
+                        ? "bg-slate-900/90 text-white border-white/20"
+                        : "text-slate-800 bg-white/95 backdrop-blur-md border-indigo-200 shadow-indigo-100/50",
+                    getInstructionClass()
+                )}>
                     Kelimeleri doğru sıraya dizerek cümleyi oluşturun.
                 </p>
+                {!isAnswerRevealed && constructedWords.length > 0 && (
+                    <button
+                        type="button"
+                        onClick={handleResetScramble}
+                        className="px-4 py-2 rounded-full text-xs sm:text-sm font-black bg-amber-400 hover:bg-amber-300 text-slate-950 border-2 border-amber-500 shadow flex items-center gap-1.5 cursor-pointer"
+                        title="Cümleyi sıfırla"
+                    >
+                        <RotateCcw className="w-4 h-4" /> Sıfırla
+                    </button>
+                )}
             </div>
              
-             <div className={cn("relative flex flex-wrap justify-center content-center gap-2.5 sm:gap-4 md:gap-6 bg-white/95 backdrop-blur-xl border-2 border-indigo-200 shadow-xl shadow-indigo-100/50 p-4 sm:p-6 md:p-10 rounded-3xl", isTeacher ? "min-h-[14rem] md:min-h-[18rem]" : "min-h-[7rem] md:min-h-[12rem]")}>
-                {constructedWords.map((wordObj) => (
+             <div className={cn(
+                 "relative flex flex-wrap justify-center content-center gap-2.5 sm:gap-4 md:gap-6 backdrop-blur-xl border-2 shadow-xl p-4 sm:p-6 md:p-10 rounded-3xl",
+                 isDarkTheme
+                    ? "bg-slate-900/85 border-white/15"
+                    : "bg-white/95 border-indigo-200 shadow-indigo-100/50",
+                 isTeacher ? "min-h-[14rem] md:min-h-[18rem]" : "min-h-[7rem] md:min-h-[12rem]"
+             )}>
+                {constructedWords.map((wordObj, idx) => (
                     <div 
                         key={wordObj.id} 
+                        onClick={() => handleRemoveFromConstructed(idx)}
+                        title={!isAnswerRevealed ? "Geri almak için tıklayın" : undefined}
                         className={cn(
                             "font-black animate-in zoom-in duration-200 border-2",
+                            !isAnswerRevealed && "cursor-pointer hover:opacity-90",
                             wordColors[wordObj.id % wordColors.length], 
                             getConstructedWordClass()
                         )}
@@ -693,7 +842,7 @@ export function SentenceScrambleGame({
                     </div>
                 ))}
                 {constructedWords.length === 0 && (
-                    <span className={cn("text-slate-400 font-bold italic absolute select-none", isTeacher ? (fontSizeScale === 'xl' || fontSizeScale === 'huge' ? "text-2xl md:text-4xl" : "text-xl md:text-2xl") : "text-sm md:text-xl")}>
+                    <span className={cn("font-bold italic absolute select-none", isDarkTheme ? "text-slate-400" : "text-slate-400", isTeacher ? (fontSizeScale === 'xl' || fontSizeScale === 'huge' ? "text-2xl md:text-4xl" : "text-xl md:text-2xl") : "text-sm md:text-xl")}>
                         Cümleniz burada görünecek...
                     </span>
                 )}
@@ -731,8 +880,9 @@ export function SentenceScrambleGame({
 
 
 // 9. HtmlSlidePlayer
-export function HtmlSlidePlayer({ step, onSlideScrolledToEnd }: { step: HtmlSlideStep, onSlideScrolledToEnd: () => void }) {
+export function HtmlSlidePlayer({ step, onSlideScrolledToEnd, presentationTheme }: { step: HtmlSlideStep, onSlideScrolledToEnd: () => void, presentationTheme?: string }) {
     const iframeRef = useRef<HTMLIFrameElement>(null);
+    const isLightSlide = presentationTheme === 'clean-light' || presentationTheme === 'sketchnote';
 
     const fullDocument = useMemo(() => {
         let content = step.htmlContent || '';
@@ -745,7 +895,7 @@ export function HtmlSlidePlayer({ step, onSlideScrolledToEnd }: { step: HtmlSlid
         }
 
         return `<!DOCTYPE html>
-<html lang="tr" class="dark">
+<html lang="tr" class="${isLightSlide ? '' : 'dark'}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -782,8 +932,8 @@ export function HtmlSlidePlayer({ step, onSlideScrolledToEnd }: { step: HtmlSlid
     <style>
         body {
             font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-            background-color: #020617;
-            color: #f8fafc;
+            background-color: ${isLightSlide ? '#fffdf9' : '#020617'};
+            color: ${isLightSlide ? '#0f172a' : '#f8fafc'};
             margin: 0;
             padding: 16px;
             overflow-x: hidden;
@@ -792,10 +942,10 @@ export function HtmlSlidePlayer({ step, onSlideScrolledToEnd }: { step: HtmlSlid
             width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #090d16;
+            background: ${isLightSlide ? '#f1f5f9' : '#090d16'};
         }
         ::-webkit-scrollbar-thumb {
-            background: #334155;
+            background: ${isLightSlide ? '#cbd5e1' : '#334155'};
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
@@ -803,11 +953,11 @@ export function HtmlSlidePlayer({ step, onSlideScrolledToEnd }: { step: HtmlSlid
         }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-2 sm:p-6">
+<body class="${isLightSlide ? 'bg-[#fffdf9] text-slate-900' : 'bg-slate-950 text-slate-100'} min-h-screen flex items-center justify-center p-2 sm:p-6">
     ${content}
 </body>
 </html>`;
-    }, [step.htmlContent]);
+    }, [step.htmlContent, isLightSlide]);
 
     useEffect(() => {
         const iframe = iframeRef.current;
@@ -1266,15 +1416,6 @@ export function MatchingPlayer({
             setSelectedDefId(null);
             setWrongPair(null);
 
-            // Mini konfeti
-            import('canvas-confetti').then(m => {
-                m.default({
-                    particleCount: 40,
-                    spread: 55,
-                    origin: { y: 0.6 }
-                });
-            }).catch(() => {});
-
             // Tur bitti mi?
             if (nextMatched.size === currentRoundPairs.length) {
                 setIsRoundFinished(true);
@@ -1349,7 +1490,9 @@ export function MatchingPlayer({
                 "w-full h-12 md:h-14 flex-shrink-0 flex items-center justify-between gap-3 px-3 sm:px-4 rounded-2xl border mb-2 md:mb-3 shadow-md",
                 isSketchnote 
                     ? "bg-[#fefce8] border-[2.5px] border-[#1e293b] shadow-[3px_3px_0_#1e293b]" 
-                    : "bg-slate-900/90 border-white/10 text-white"
+                    : presentationTheme === 'clean-light'
+                        ? "bg-white/95 border-indigo-200 text-slate-900"
+                        : "bg-slate-900/90 border-white/10 text-white"
             )}>
                 {/* Sol: Tur & Skor Rozeti */}
                 <div className="flex items-center gap-2">

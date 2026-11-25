@@ -249,9 +249,6 @@ export function OpenEndedQuestionsPlayer({
                     if (prev <= 1) {
                         setIsTimerRunning(false);
                         playSound('win');
-                        import('canvas-confetti').then(m => {
-                            m.default({ particleCount: 100, spread: 90, origin: { y: 0.6 } });
-                        }).catch(() => {});
                         return 0;
                     }
                     return prev - 1;
@@ -270,15 +267,7 @@ export function OpenEndedQuestionsPlayer({
 
     const toggleAnswer = (idx: number) => {
         playSound('pop');
-        setShowAnswers(prev => {
-            const nextState = !prev[idx];
-            if (nextState) {
-                import('canvas-confetti').then(m => {
-                    m.default({ particleCount: 50, spread: 70, origin: { y: 0.7 } });
-                }).catch(() => {});
-            }
-            return { ...prev, [idx]: nextState };
-        });
+        setShowAnswers(prev => ({ ...prev, [idx]: !prev[idx] }));
     };
 
     const toggleAnswered = (idx: number) => {
@@ -550,7 +539,7 @@ export function OpenEndedQuestionsPlayer({
                     <div className={cn(
                         "flex items-center gap-1 px-2.5 py-1 rounded-xl border text-xs font-black",
                         timeLeft <= 10 && timeLeft > 0
-                            ? "bg-rose-100 border-rose-400 text-rose-800 animate-pulse"
+                            ? "bg-rose-100 border-rose-400 text-rose-800 font-extrabold"
                             : "bg-[#F4F1EA] border-[#D8C7A5] text-[#4a2c11]"
                     )}>
                         <Timer className="w-3.5 h-3.5 text-amber-700" />
