@@ -92,10 +92,10 @@ export const ADVENTURE_STAGES: AdventureStage[] = [
         islandId: 1,
         islandName: "Harfler Sahili",
         items: [
-            { id: '1', name: 'Elif', imgSrc: '/elifba/harfler/harfler/1.png', audSrc: '/elifba/harfler/harfler/1.mp3', arabic: 'ا' },
-            { id: '2', name: 'Be', imgSrc: '/elifba/harfler/harfler/2.png', audSrc: '/elifba/harfler/harfler/2.mp3', arabic: 'ب' },
-            { id: '3', name: 'Te', imgSrc: '/elifba/harfler/harfler/3.png', audSrc: '/elifba/harfler/harfler/3.mp3', arabic: 'ت' },
-            { id: '4', name: 'Peltek Se', imgSrc: '/elifba/harfler/harfler/4.png', audSrc: '/elifba/harfler/harfler/4.mp3', arabic: 'ث' }
+            { id: '1', name: 'Elif', imgSrc: '/elifba/dosyalar/1.png', audSrc: '/elifba/dosyalar/1.mp3', arabic: 'ا' },
+            { id: '2', name: 'Be', imgSrc: '/elifba/dosyalar/2.png', audSrc: '/elifba/dosyalar/2.mp3', arabic: 'ب' },
+            { id: '3', name: 'Te', imgSrc: '/elifba/dosyalar/3.png', audSrc: '/elifba/dosyalar/3.mp3', arabic: 'ت' },
+            { id: '4', name: 'Peltek Se', imgSrc: '/elifba/dosyalar/4.png', audSrc: '/elifba/dosyalar/4.mp3', arabic: 'ث' }
         ]
     },
     {
@@ -108,10 +108,10 @@ export const ADVENTURE_STAGES: AdventureStage[] = [
         islandId: 1,
         islandName: "Harfler Sahili",
         items: [
-            { id: '5', name: 'Cim', imgSrc: '/elifba/harfler/harfler/5.png', audSrc: '/elifba/harfler/harfler/5.mp3', arabic: 'ج' },
-            { id: '6', name: 'Ha', imgSrc: '/elifba/harfler/harfler/6.png', audSrc: '/elifba/harfler/harfler/6.mp3', arabic: 'ح' },
-            { id: '7', name: 'Hı', imgSrc: '/elifba/harfler/harfler/7.png', audSrc: '/elifba/harfler/harfler/7.mp3', arabic: 'خ' },
-            { id: '8', name: 'Dal', imgSrc: '/elifba/harfler/harfler/8.png', audSrc: '/elifba/harfler/harfler/8.mp3', arabic: 'د' }
+            { id: '5', name: 'Cim', imgSrc: '/elifba/dosyalar/5.png', audSrc: '/elifba/dosyalar/5.mp3', arabic: 'ج' },
+            { id: '6', name: 'Ha', imgSrc: '/elifba/dosyalar/6.png', audSrc: '/elifba/dosyalar/6.mp3', arabic: 'ح' },
+            { id: '7', name: 'Hı', imgSrc: '/elifba/dosyalar/7.png', audSrc: '/elifba/dosyalar/7.mp3', arabic: 'خ' },
+            { id: '8', name: 'Dal', imgSrc: '/elifba/dosyalar/8.png', audSrc: '/elifba/dosyalar/8.mp3', arabic: 'د' }
         ]
     },
     {
@@ -124,10 +124,10 @@ export const ADVENTURE_STAGES: AdventureStage[] = [
         islandId: 1,
         islandName: "Harfler Sahili",
         items: [
-            { id: '9', name: 'Peltek Zel', imgSrc: '/elifba/harfler/harfler/9.png', audSrc: '/elifba/harfler/harfler/9.mp3', arabic: 'ذ' },
-            { id: '10', name: 'Ra', imgSrc: '/elifba/harfler/harfler/10.png', audSrc: '/elifba/harfler/harfler/10.mp3', arabic: 'ر' },
-            { id: '11', name: 'Ze', imgSrc: '/elifba/harfler/harfler/11.png', audSrc: '/elifba/harfler/harfler/11.mp3', arabic: 'ز' },
-            { id: '12', name: 'Sin', imgSrc: '/elifba/harfler/harfler/12.png', audSrc: '/elifba/harfler/harfler/12.mp3', arabic: 'س' }
+            { id: '9', name: 'Peltek Zel', imgSrc: '/elifba/dosyalar/9.png', audSrc: '/elifba/dosyalar/9.mp3', arabic: 'ذ' },
+            { id: '10', name: 'Ra', imgSrc: '/elifba/dosyalar/10.png', audSrc: '/elifba/dosyalar/10.mp3', arabic: 'ر' },
+            { id: '11', name: 'Ze', imgSrc: '/elifba/dosyalar/11.png', audSrc: '/elifba/dosyalar/11.mp3', arabic: 'ز' },
+            { id: '12', name: 'Sin', imgSrc: '/elifba/dosyalar/12.png', audSrc: '/elifba/dosyalar/12.mp3', arabic: 'س' }
         ]
     },
     {
@@ -140,10 +140,10 @@ export const ADVENTURE_STAGES: AdventureStage[] = [
         islandId: 1,
         islandName: "Harfler Sahili",
         items: [
-            { id: '13', name: 'Şın', imgSrc: '/elifba/harfler/harfler/13.png', audSrc: '/elifba/harfler/harfler/13.mp3', arabic: 'ش' },
-            { id: '14', name: 'Sad', imgSrc: '/elifba/harfler/harfler/14.png', audSrc: '/elifba/harfler/harfler/14.mp3', arabic: 'ص' },
-            { id: '15', name: 'Dad', imgSrc: '/elifba/harfler/harfler/15.png', audSrc: '/elifba/harfler/harfler/15.mp3', arabic: 'ض' },
-            { id: '16', name: 'Tı', imgSrc: '/elifba/harfler/harfler/16.png', audSrc: '/elifba/harfler/harfler/16.mp3', arabic: 'ط' }
+            { id: '13', name: 'Şın', imgSrc: '/elifba/dosyalar/13.png', audSrc: '/elifba/dosyalar/13.mp3', arabic: 'ش' },
+            { id: '14', name: 'Sad', imgSrc: '/elifba/dosyalar/14.png', audSrc: '/elifba/dosyalar/14.mp3', arabic: 'ص' },
+            { id: '15', name: 'Dad', imgSrc: '/elifba/dosyalar/15.png', audSrc: '/elifba/dosyalar/15.mp3', arabic: 'ض' },
+            { id: '16', name: 'Tı', imgSrc: '/elifba/dosyalar/16.png', audSrc: '/elifba/dosyalar/16.mp3', arabic: 'ط' }
         ]
     },
     {
@@ -156,10 +156,10 @@ export const ADVENTURE_STAGES: AdventureStage[] = [
         islandId: 1,
         islandName: "Harfler Sahili",
         items: [
-            { id: '17', name: 'Peltek Zı', imgSrc: '/elifba/harfler/harfler/17.png', audSrc: '/elifba/harfler/harfler/17.mp3', arabic: 'ظ' },
-            { id: '18', name: 'Ayn', imgSrc: '/elifba/harfler/harfler/18.png', audSrc: '/elifba/harfler/harfler/18.mp3', arabic: 'ع' },
-            { id: '19', name: 'Gayn', imgSrc: '/elifba/harfler/harfler/19.png', audSrc: '/elifba/harfler/harfler/19.mp3', arabic: 'غ' },
-            { id: '20', name: 'Fe', imgSrc: '/elifba/harfler/harfler/20.png', audSrc: '/elifba/harfler/harfler/20.mp3', arabic: 'ف' }
+            { id: '17', name: 'Peltek Zı', imgSrc: '/elifba/dosyalar/17.png', audSrc: '/elifba/dosyalar/17.mp3', arabic: 'ظ' },
+            { id: '18', name: 'Ayn', imgSrc: '/elifba/dosyalar/18.png', audSrc: '/elifba/dosyalar/18.mp3', arabic: 'ع' },
+            { id: '19', name: 'Gayn', imgSrc: '/elifba/dosyalar/19.png', audSrc: '/elifba/dosyalar/19.mp3', arabic: 'غ' },
+            { id: '20', name: 'Fe', imgSrc: '/elifba/dosyalar/20.png', audSrc: '/elifba/dosyalar/20.mp3', arabic: 'ف' }
         ]
     },
     {
@@ -172,10 +172,10 @@ export const ADVENTURE_STAGES: AdventureStage[] = [
         islandId: 1,
         islandName: "Harfler Sahili",
         items: [
-            { id: '21', name: 'Kaf', imgSrc: '/elifba/harfler/harfler/21.png', audSrc: '/elifba/harfler/harfler/21.mp3', arabic: 'ق' },
-            { id: '22', name: 'Kef', imgSrc: '/elifba/harfler/harfler/22.png', audSrc: '/elifba/harfler/harfler/22.mp3', arabic: 'ك' },
-            { id: '23', name: 'Lam', imgSrc: '/elifba/harfler/harfler/23.png', audSrc: '/elifba/harfler/harfler/23.mp3', arabic: 'ل' },
-            { id: '24', name: 'Mim', imgSrc: '/elifba/harfler/harfler/24.png', audSrc: '/elifba/harfler/harfler/24.mp3', arabic: 'م' }
+            { id: '21', name: 'Kaf', imgSrc: '/elifba/dosyalar/21.png', audSrc: '/elifba/dosyalar/21.mp3', arabic: 'ق' },
+            { id: '22', name: 'Kef', imgSrc: '/elifba/dosyalar/22.png', audSrc: '/elifba/dosyalar/22.mp3', arabic: 'ك' },
+            { id: '23', name: 'Lam', imgSrc: '/elifba/dosyalar/23.png', audSrc: '/elifba/dosyalar/23.mp3', arabic: 'ل' },
+            { id: '24', name: 'Mim', imgSrc: '/elifba/dosyalar/24.png', audSrc: '/elifba/dosyalar/24.mp3', arabic: 'م' }
         ]
     },
     {
@@ -188,11 +188,11 @@ export const ADVENTURE_STAGES: AdventureStage[] = [
         islandId: 1,
         islandName: "Harfler Sahili",
         items: [
-            { id: '25', name: 'Nun', imgSrc: '/elifba/harfler/harfler/25.png', audSrc: '/elifba/harfler/harfler/25.mp3', arabic: 'ن' },
-            { id: '26', name: 'Vav', imgSrc: '/elifba/harfler/harfler/26.png', audSrc: '/elifba/harfler/harfler/26.mp3', arabic: 'و' },
-            { id: '27', name: 'He', imgSrc: '/elifba/harfler/harfler/27.png', audSrc: '/elifba/harfler/harfler/27.mp3', arabic: 'ه' },
-            { id: '28', name: 'Lâmelif', imgSrc: '/elifba/harfler/harfler/28.png', audSrc: '/elifba/harfler/harfler/28.mp3', arabic: 'لا' },
-            { id: '29', name: 'Ye', imgSrc: '/elifba/harfler/harfler/29.png', audSrc: '/elifba/harfler/harfler/29.mp3', arabic: 'ي' }
+            { id: '25', name: 'Nun', imgSrc: '/elifba/dosyalar/25.png', audSrc: '/elifba/dosyalar/25.mp3', arabic: 'ن' },
+            { id: '26', name: 'Vav', imgSrc: '/elifba/dosyalar/26.png', audSrc: '/elifba/dosyalar/26.mp3', arabic: 'و' },
+            { id: '27', name: 'He', imgSrc: '/elifba/dosyalar/27.png', audSrc: '/elifba/dosyalar/27.mp3', arabic: 'ه' },
+            { id: '28', name: 'Lâmelif', imgSrc: '/elifba/dosyalar/28.png', audSrc: '/elifba/dosyalar/28.mp3', arabic: 'لا' },
+            { id: '29', name: 'Ye', imgSrc: '/elifba/dosyalar/29.png', audSrc: '/elifba/dosyalar/29.mp3', arabic: 'ي' }
         ]
     },
     {
@@ -401,7 +401,7 @@ export const ADVENTURE_STAGES: AdventureStage[] = [
         islandId: 4,
         islandName: "Tenvin & Kur'an Zirvesi",
         items: [
-            { id: 'f1', name: 'Elif', imgSrc: '/elifba/harfler/harfler/1.png', audSrc: '/elifba/harfler/harfler/1.mp3', arabic: 'ا' },
+            { id: 'f1', name: 'Elif', imgSrc: '/elifba/dosyalar/1.png', audSrc: '/elifba/dosyalar/1.mp3', arabic: 'ا' },
             { id: 'f2', name: 'Darabe', imgSrc: '/elifba/ustun/ustun/darabe.png', audSrc: '/elifba/ustun/ustun/darabe.mp3', arabic: 'ضَرَبَ' },
             { id: 'f3', name: 'Kâle', imgSrc: '/elifba/medelif/medelif/medelif1.png', audSrc: '/elifba/medelif/medelif/medelif1.mp3', arabic: 'قَالَ' },
             { id: 'f4', name: 'El', imgSrc: '/elifba/cezm/cezm/cez1.png', audSrc: '/elifba/cezm/cezm/cez1.mp3', arabic: 'اَلْ' },

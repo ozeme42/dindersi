@@ -152,7 +152,18 @@ export function StepContent({
                     />
                 );
             case 'notebookNote':
-                return <NotebookNotePlayer step={step as NotebookNoteStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} presentationTheme={presentationTheme} presentationFont={presentationFont} />;
+                return (
+                    <NotebookNotePlayer
+                        step={step as NotebookNoteStep}
+                        isFullscreen={isFullscreen}
+                        fontSizeScale={fontSizeScale}
+                        presentationTheme={presentationTheme}
+                        presentationFont={presentationFont}
+                        courseName={courseTitle}
+                        unitName={unitTitle}
+                        topicTitle={topic?.title}
+                    />
+                );
             case 'processFlow':
                 return <ProcessFlowPlayer step={step as ProcessFlowStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} presentationTheme={presentationTheme} presentationFont={presentationFont} />;
             case 'conceptMatrix':
@@ -773,7 +784,7 @@ export function StepContent({
         }
     }
 
-    const isStepFullHeight = isTeacher || ['visual', 'htmlSlide', 'pdfSlide', 'iframe', 'activityLink', 'video', 'topicOutline', 'summaryOverview', 'categoryTable', 'hookQuestion', 'miniGame', 'categorySort', 'clozeParagraph', 'openEndedQuestions'].includes(step?.type || '');
+    const isStepFullHeight = isTeacher || ['visual', 'htmlSlide', 'pdfSlide', 'iframe', 'activityLink', 'video', 'topicOutline', 'summaryOverview', 'categoryTable', 'hookQuestion', 'notebookNote', 'miniGame', 'categorySort', 'clozeParagraph', 'openEndedQuestions'].includes(step?.type || '');
 
     return (
         <div className={cn("relative w-full", isStepFullHeight ? "h-full" : "min-h-full flex flex-col justify-start")}>
