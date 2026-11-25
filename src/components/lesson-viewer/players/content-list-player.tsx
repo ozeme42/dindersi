@@ -61,6 +61,10 @@ export function ContentListPlayer({
     const [manualFocusIndex, setManualFocusIndex] = useState<number | null>(null);
     const [speakingIndex, setSpeakingIndex] = useState<number | null>(null);
     const [currentWordIndex, setCurrentWordIndex] = useState<number | null>(null);
+    const [activeWordCharRatio, setActiveWordCharRatio] = useState<number>(1);
+    const [isSpeechSyncedTyping, setIsSpeechSyncedTyping] = useState<boolean>(false);
+    const [isSpeechPreparing, setIsSpeechPreparing] = useState<boolean>(false);
+    const [completedSentences, setCompletedSentences] = useState<Record<number, boolean>>({});
 
     // Kilitlenmeyi önleyen güvenli referanslar
     const autoReadTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -68,6 +72,12 @@ export function ContentListPlayer({
     const prevCountRef = useRef<number>(0);
     const prevStepKeyRef = useRef<string>('');
     const prevAutoReadRef = useRef<boolean>(isAutoReadEnabled);
+    const activeSpeakingTargetRef = useRef<number | null>(null);
+    const modalTargetIndexRef = useRef<number>(0);
+    const completedSentencesRef = useRef<Record<number, boolean>>(completedSentences);
+    completedSentencesRef.current = completedSentences;
+    const onAnimationEndRef = useRef(onAnimationEnd);
+    onAnimationEndRef.current = onAnimationEnd;
 
     const isGame3D = presentationTheme === 'game-3d';
     const isSketchnote = presentationTheme === 'sketchnote';
@@ -118,6 +128,11 @@ export function ContentListPlayer({
         setManualFocusIndex(null);
     }, [revealedSentencesCount]);
 
+    const markSentenceCompleted = useCallback((targetIdx: number) => {
+        if (targetIdx < 0) return;
+        setCompletedSentences(prev => (prev[targetIdx] ? prev : { ...prev, [targetIdx]: true }));
+    }, []);
+
     // Sesli okumayı tam ve güvenli durdurma
     const stopSpeech = useCallback(() => {
         speechSeqRef.current += 1;
@@ -126,48 +141,97 @@ export function ContentListPlayer({
             clearTimeout(autoReadTimerRef.current);
             autoReadTimerRef.current = null;
         }
+        // Yarıda durdurulan senkron yazının baştan başlamaması için tamamlandı say
+        if (activeSpeakingTargetRef.current !== null) {
+            markSentenceCompleted(activeSpeakingTargetRef.current);
+            activeSpeakingTargetRef.current = null;
+        }
         setSpeakingIndex(null);
         setCurrentWordIndex(null);
-    }, []);
+        setActiveWordCharRatio(1);
+        setIsSpeechSyncedTyping(false);
+        setIsSpeechPreparing(false);
+    }, [markSentenceCompleted]);
 
-    // Sesli Okuma (Tüm tarayıcılarda aynı gerçek yapay zeka insan sesi + çevrimdışı tarayıcı yedeği)
-    const handleSpeakSentence = useCallback((e: React.MouseEvent | null | undefined, text: string, idx: number) => {
+    // Sesli Okuma (Tüm tarayıcılarda aynı gerçek yapay zeka insan sesi + daktilo senkronizasyonu)
+    const handleSpeakSentence = useCallback((
+        e: React.MouseEvent | null | undefined,
+        text: string,
+        idx: number,
+        opts?: { syncedTypewriter?: boolean }
+    ) => {
         e?.stopPropagation?.();
         if (typeof window === 'undefined') return;
 
+        const resolvedIdx = idx === 9999 ? modalTargetIndexRef.current : idx;
+
         if (speakingIndex === idx) {
+            markSentenceCompleted(resolvedIdx);
             stopSpeech();
             return;
         }
 
+        const shouldUseSyncedTypewriter =
+            Boolean(opts?.syncedTypewriter) &&
+            animationSpeed !== 'off' &&
+            !completedSentencesRef.current[resolvedIdx];
+
+        if (!shouldUseSyncedTypewriter) {
+            markSentenceCompleted(resolvedIdx);
+        }
+
         stopSpeech();
         const seq = speechSeqRef.current;
+        activeSpeakingTargetRef.current = resolvedIdx;
         setSpeakingIndex(idx);
-        setCurrentWordIndex(0);
+        setIsSpeechSyncedTyping(shouldUseSyncedTypewriter);
+        setIsSpeechPreparing(shouldUseSyncedTypewriter);
+        setCurrentWordIndex(shouldUseSyncedTypewriter ? null : 0);
+        setActiveWordCharRatio(shouldUseSyncedTypewriter ? 0 : 1);
 
         void speakTurkishText({
             text,
+            onLoading: () => {
+                if (speechSeqRef.current !== seq) return;
+                setIsSpeechPreparing(shouldUseSyncedTypewriter);
+            },
             onStart: () => {
                 if (speechSeqRef.current !== seq) return;
+                setIsSpeechPreparing(false);
                 setSpeakingIndex(idx);
                 setCurrentWordIndex(0);
+                setActiveWordCharRatio(shouldUseSyncedTypewriter ? 0.12 : 1);
             },
-            onWordIndex: (wordIdx) => {
+            onWordProgress: (wordIdx, charRatio) => {
                 if (speechSeqRef.current !== seq) return;
+                setIsSpeechPreparing(false);
                 setCurrentWordIndex(wordIdx);
+                setActiveWordCharRatio(charRatio);
             },
             onEnd: () => {
                 if (speechSeqRef.current !== seq) return;
+                markSentenceCompleted(resolvedIdx);
+                activeSpeakingTargetRef.current = null;
                 setSpeakingIndex(null);
                 setCurrentWordIndex(null);
+                setActiveWordCharRatio(1);
+                setIsSpeechSyncedTyping(false);
+                setIsSpeechPreparing(false);
+                onAnimationEndRef.current?.();
             },
             onError: () => {
                 if (speechSeqRef.current !== seq) return;
+                markSentenceCompleted(resolvedIdx);
+                activeSpeakingTargetRef.current = null;
                 setSpeakingIndex(null);
                 setCurrentWordIndex(null);
+                setActiveWordCharRatio(1);
+                setIsSpeechSyncedTyping(false);
+                setIsSpeechPreparing(false);
+                onAnimationEndRef.current?.();
             },
         });
-    }, [speakingIndex, stopSpeech]);
+    }, [speakingIndex, stopSpeech, markSentenceCompleted, animationSpeed]);
 
     // handleSpeakSentence referansını kararlı tutarak gereksiz tetiklenmeleri önle
     const speakSentenceRef = useRef(handleSpeakSentence);
@@ -181,11 +245,14 @@ export function ContentListPlayer({
         if (prevStepKeyRef.current !== currentStepKey) {
             prevStepKeyRef.current = currentStepKey;
             prevCountRef.current = 0; // Yeni slaytta 1. kartın okunabilmesi için sıfırla
+            activeSpeakingTargetRef.current = null;
+            setCompletedSentences({});
             setHideKeyTerms(false);
             setRevealedKeywords({});
             setManualFocusIndex(null);
         }
         return () => {
+            activeSpeakingTargetRef.current = null;
             stopSpeech();
         };
     }, [currentStepKey, stopSpeech]);
@@ -212,10 +279,24 @@ export function ContentListPlayer({
         const prev = prevCountRef.current;
         prevCountRef.current = revealedSentencesCount;
 
+        if (revealedSentencesCount < prev) {
+            setCompletedSentences(old => {
+                const next: Record<number, boolean> = {};
+                for (const key of Object.keys(old)) {
+                    const num = Number(key);
+                    if (!Number.isNaN(num) && num < revealedSentencesCount) {
+                        next[num] = old[num];
+                    }
+                }
+                return next;
+            });
+        }
+
         if (revealedSentencesCount > prev) {
             const newIdx = revealedSentencesCount - 1;
             const newSentence = sentences[newIdx];
             if (isSingleCardMode) {
+                modalTargetIndexRef.current = newIdx;
                 setModalSentence(newSentence || null);
                 setIsModalOpen(true);
                 onAnimationStart?.();
@@ -233,10 +314,15 @@ export function ContentListPlayer({
                 if (autoReadTimerRef.current) {
                     clearTimeout(autoReadTimerRef.current);
                 }
-                // İlk kart (prev === 0) slayt geçiş animasyonunun oturması için 380ms, sonrakiler 220ms bekler
-                const delay = prev === 0 ? 380 : 220;
+                // Okuma ve daktilo aynı anda sıfırdan senkron başlar
+                const delay = prev === 0 ? 90 : 45;
                 autoReadTimerRef.current = setTimeout(() => {
-                    speakSentenceRef.current(null, newSentence, isSingleCardMode ? 9999 : newIdx);
+                    speakSentenceRef.current(
+                        null,
+                        newSentence,
+                        isSingleCardMode ? 9999 : newIdx,
+                        { syncedTypewriter: true }
+                    );
                 }, delay);
             }
         }
@@ -557,8 +643,64 @@ export function ContentListPlayer({
 
     const latestSentence = modalSentence || sentences[activeIndex] || sentences[revealedSentencesCount - 1] || '';
     const modalIdx = visibleSentences.indexOf(latestSentence);
+    const resolvedModalIdx = modalIdx >= 0 ? modalIdx : Math.max(0, activeIndex);
+    modalTargetIndexRef.current = resolvedModalIdx;
     const isModalMasked = hideKeyTerms && modalIdx !== -1 && !revealedKeywords[modalIdx] && /<(strong|b|mark)\b/i.test(latestSentence);
     const maskClasses = "[&_strong]:blur-[6px] [&_strong]:opacity-45 [&_strong]:select-none [&_b]:blur-[6px] [&_b]:opacity-45 [&_b]:select-none [&_mark]:blur-[6px] [&_mark]:opacity-45 [&_mark]:select-none";
+
+    const renderSentenceBody = ({
+        html,
+        targetIdx,
+        speechIdx,
+        allowTypewriter,
+        lightBoardMode,
+        modalView = false,
+    }: {
+        html: string;
+        targetIdx: number;
+        speechIdx: number;
+        allowTypewriter: boolean;
+        lightBoardMode: boolean;
+        modalView?: boolean;
+    }) => {
+        if (speakingIndex === speechIdx) {
+            return (
+                <HighlightedSentence
+                    htmlContent={html}
+                    activeWordIndex={currentWordIndex}
+                    activeWordCharRatio={activeWordCharRatio}
+                    isTypewriterSynced={isSpeechSyncedTyping}
+                    isPreparing={isSpeechPreparing}
+                    isLightBoard={lightBoardMode}
+                    className={fontClass}
+                    isModal={modalView}
+                />
+            );
+        }
+
+        if (allowTypewriter && animationSpeed !== 'off' && !completedSentences[targetIdx]) {
+            if (isAutoReadEnabled) {
+                return (
+                    <div className={cn("highlight-text inline-flex items-center min-h-[1.2em]", fontClass)}>
+                        <span className="inline-block w-[3px] h-[0.95em] rounded-full bg-amber-400 animate-pulse" />
+                    </div>
+                );
+            }
+            return (
+                <TypewriterText
+                    content={html}
+                    className={fontClass}
+                    onComplete={() => {
+                        markSentenceCompleted(targetIdx);
+                        onAnimationEnd?.();
+                    }}
+                    speed={animationSpeed === 'slow' ? 80 : (animationSpeed === 'fast' ? 15 : 40)}
+                />
+            );
+        }
+
+        return <div className={fontClass} dangerouslySetInnerHTML={{ __html: html }} />;
+    };
 
     return (
         <div className="w-full h-full flex flex-col items-center justify-start p-1 sm:p-2 max-w-full">
@@ -654,24 +796,14 @@ export function ContentListPlayer({
                             isModalMasked && maskClasses,
                             fontClass
                         )}>
-                            {speakingIndex === 9999 ? (
-                                <HighlightedSentence 
-                                    htmlContent={latestSentence} 
-                                    activeWordIndex={currentWordIndex} 
-                                    isLightBoard={isSketchnote || isLightBoard} 
-                                    className={fontClass}
-                                    isModal={true}
-                                />
-                            ) : animationSpeed !== 'off' ? (
-                                <TypewriterText 
-                                    content={latestSentence} 
-                                    className={fontClass}
-                                    onComplete={() => onAnimationEnd?.()} 
-                                    speed={animationSpeed === 'slow' ? 80 : (animationSpeed === 'fast' ? 15 : 40)} 
-                                />
-                            ) : (
-                                <div className={fontClass} dangerouslySetInnerHTML={{ __html: latestSentence }} />
-                            )}
+                            {renderSentenceBody({
+                                html: latestSentence,
+                                targetIdx: resolvedModalIdx,
+                                speechIdx: 9999,
+                                allowTypewriter: true,
+                                lightBoardMode: isSketchnote || isLightBoard,
+                                modalView: true,
+                            })}
                         </div>
                         
                         <Button 
@@ -929,16 +1061,13 @@ export function ContentListPlayer({
                                                 fontSizeScale === 'xs' ? "text-lg sm:text-xl md:text-2xl" :
                                                 "text-xl sm:text-2xl md:text-3xl lg:text-[2.2rem]"
                                             )}>
-                                                {speakingIndex === index ? (
-                                                    <HighlightedSentence 
-                                                        htmlContent={sentence} 
-                                                        activeWordIndex={currentWordIndex} 
-                                                        isLightBoard={false} 
-                                                        className={fontClass} 
-                                                    />
-                                                ) : (
-                                                    <div className={fontClass} dangerouslySetInnerHTML={{ __html: sentence }} />
-                                                )}
+                                                {renderSentenceBody({
+                                                    html: sentence,
+                                                    targetIdx: index,
+                                                    speechIdx: index,
+                                                    allowTypewriter: isTeacher && index === visibleSentences.length - 1 && !isSingleCardMode,
+                                                    lightBoardMode: false,
+                                                })}
                                             </div>
                                             {isSentenceMasked && (
                                                 <button
@@ -1203,23 +1332,13 @@ export function ContentListPlayer({
                                                         : (isHero ? style.heroText : style.calmText),
                                                 isSentenceMasked && maskClasses
                                             )}>
-                                                {speakingIndex === index ? (
-                                                    <HighlightedSentence 
-                                                        htmlContent={sentence} 
-                                                        activeWordIndex={currentWordIndex} 
-                                                        isLightBoard={isSketchnote || isLightBoard} 
-                                                        className={fontClass} 
-                                                    />
-                                                ) : shouldAnimate && animationSpeed !== 'off' ? (
-                                                    <TypewriterText 
-                                                        content={sentence} 
-                                                        className={fontClass}
-                                                        onComplete={() => onAnimationEnd?.()} 
-                                                        speed={animationSpeed === 'slow' ? 80 : (animationSpeed === 'fast' ? 15 : 40)} 
-                                                    />
-                                                ) : (
-                                                    <div className={fontClass} dangerouslySetInnerHTML={{ __html: sentence }} />
-                                                )}
+                                                {renderSentenceBody({
+                                                    html: sentence,
+                                                    targetIdx: index,
+                                                    speechIdx: index,
+                                                    allowTypewriter: shouldAnimate,
+                                                    lightBoardMode: isSketchnote || isLightBoard,
+                                                })}
                                             </div>
 
                                             {isHero && (
