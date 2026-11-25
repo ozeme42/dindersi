@@ -58,9 +58,9 @@ function getSliceColor(index: number, totalSlices: number): WheelSliceColor {
 
 type SpinDurationMode = 'fast' | 'normal' | 'dramatic';
 const DURATION_SECONDS: Record<SpinDurationMode, number> = {
-    fast: 4.5,
-    normal: 7.5,
-    dramatic: 10.5,
+    fast: 5.5,
+    normal: 9.0,
+    dramatic: 12.5,
 };
 
 interface WheelCandidate {
@@ -221,8 +221,8 @@ const WHEEL_CURVE_LUT: number[] = (() => {
         const uPrev = (i - 1) / WHEEL_CURVE_SAMPLES;
         const uCurr = i / WHEEL_CURVE_SAMPLES;
         const uMid = (uPrev + uCurr) * 0.5;
-        // Yumuşak başlangıç rampası (t≈0.06'da tepe) * uzun sönümleme (son dilimler nefes kesici yavaşlıkta)
-        const vMid = (0.12 + 0.88 * (1 - Math.exp(-uMid / 0.032))) * Math.pow(1 - uMid, 3.25);
+        // Yumuşak başlangıç hızlanması (t≈0.09'da dengeli tepe hızı) + uzun, kademeli sönümleme
+        const vMid = (0.15 + 0.85 * (1 - Math.exp(-uMid / 0.045))) * Math.pow(1 - uMid, 2.35);
         acc += vMid;
         lut[i] = acc;
     }
@@ -454,7 +454,7 @@ export function PresentationWheelModal({
             const dt = Math.min(0.05, Math.max(0.001, (now - lastTime) / 1000));
             lastTime = now;
 
-            const nextRot = currentRotationRef.current + 13.5 * dt;
+            const nextRot = currentRotationRef.current + 10 * dt;
             currentRotationRef.current = nextRot;
             wheelContainerRef.current.style.transform = `rotate(${nextRot}deg)`;
             syncPointerColor(nextRot);
@@ -513,7 +513,7 @@ export function PresentationWheelModal({
         const startMod = ((startRot % 360) + 360) % 360;
         const alignDelta = (targetNormalized - startMod + 360) % 360;
 
-        const baseTurns = spinMode === 'fast' ? 6 : spinMode === 'dramatic' ? 11 : 8;
+        const baseTurns = spinMode === 'fast' ? 3 : spinMode === 'dramatic' ? 7 : 5;
         const totalDelta = 360 * (baseTurns + Math.floor(Math.random() * 2)) + alignDelta;
         const durationMs = DURATION_SECONDS[spinMode] * 1000;
 
@@ -541,7 +541,7 @@ export function PresentationWheelModal({
 
             const degPerSec = Math.max(0, (baseRot - lastRot) / dt);
             lastRot = baseRot;
-            const speedNorm = Math.max(0, Math.min(1, degPerSec / 950));
+            const speedNorm = Math.max(0, Math.min(1, degPerSec / 720));
 
             const pegStep = Math.floor(baseRot / sliceAngle);
             if (pegStep > lastPegStep) {
@@ -731,9 +731,9 @@ export function PresentationWheelModal({
                                 <>
                                     <div className="hidden sm:flex items-center gap-1 bg-white/5 border border-white/10 rounded-xl p-0.5 mr-1">
                                         {[
-                                            { id: 'fast' as SpinDurationMode, label: '4sn' },
-                                            { id: 'normal' as SpinDurationMode, label: '7sn' },
-                                            { id: 'dramatic' as SpinDurationMode, label: '10sn' },
+                                            { id: 'fast' as SpinDurationMode, label: '5sn' },
+                                            { id: 'normal' as SpinDurationMode, label: '9sn' },
+                                            { id: 'dramatic' as SpinDurationMode, label: '12sn' },
                                         ].map(m => (
                                             <button
                                                 key={m.id}
@@ -951,9 +951,9 @@ export function PresentationWheelModal({
 
                                     <div className="grid grid-cols-3 gap-1.5">
                                         {[
-                                            { id: 'fast' as SpinDurationMode, label: 'Hızlı (4sn)' },
-                                            { id: 'normal' as SpinDurationMode, label: 'Normal (7sn)' },
-                                            { id: 'dramatic' as SpinDurationMode, label: 'Final (10sn)' },
+                                            { id: 'fast' as SpinDurationMode, label: 'Hızlı (5sn)' },
+                                            { id: 'normal' as SpinDurationMode, label: 'Normal (9sn)' },
+                                            { id: 'dramatic' as SpinDurationMode, label: 'Final (12sn)' },
                                         ].map(m => (
                                             <button
                                                 key={m.id}
