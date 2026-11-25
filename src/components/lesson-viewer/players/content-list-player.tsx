@@ -13,9 +13,9 @@ import { useAuth } from '@/context/auth-context';
 import type { ContentStep, ObjectiveListStep, AccordionStep } from '@/lib/types';
 import { motion } from 'framer-motion';
 import { 
-    prepareTurkishSpeech, 
-    getBestTurkishVoice, 
-    getTurkishSpeechParams,
+    speakTurkishText, 
+    stopAllTurkishSpeech, 
+    prefetchTurkishSpeech,
     HighlightedSentence, 
     TypewriterText 
 } from '../tts-helper';
@@ -63,10 +63,8 @@ export function ContentListPlayer({
     const [currentWordIndex, setCurrentWordIndex] = useState<number | null>(null);
 
     // Kilitlenmeyi önleyen güvenli referanslar
-    const activeUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
     const autoReadTimerRef = useRef<NodeJS.Timeout | null>(null);
-    const fallbackTimerRef = useRef<NodeJS.Timeout | null>(null);
-    const boundaryFiredRef = useRef<boolean>(false);
+    const speechSeqRef = useRef<number>(0);
     const prevCountRef = useRef<number>(0);
     const prevStepKeyRef = useRef<string>('');
     const prevAutoReadRef = useRef<boolean>(isAutoReadEnabled);
@@ -122,49 +120,20 @@ export function ContentListPlayer({
 
     // Sesli okumayı tam ve güvenli durdurma
     const stopSpeech = useCallback(() => {
-        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-            try {
-                if (window.speechSynthesis.paused) {
-                    window.speechSynthesis.resume();
-                }
-                window.speechSynthesis.cancel();
-            } catch (_) {}
-            if ((window as any).__activeSpeechUtterance) {
-                (window as any).__activeSpeechUtterance = null;
-            }
-        }
-        if (fallbackTimerRef.current) {
-            clearInterval(fallbackTimerRef.current);
-            fallbackTimerRef.current = null;
-        }
+        speechSeqRef.current += 1;
+        stopAllTurkishSpeech();
         if (autoReadTimerRef.current) {
             clearTimeout(autoReadTimerRef.current);
             autoReadTimerRef.current = null;
         }
-        activeUtteranceRef.current = null;
-        boundaryFiredRef.current = false;
         setSpeakingIndex(null);
         setCurrentWordIndex(null);
     }, []);
 
-    // Doğal sesleri yükleme
-    useEffect(() => {
-        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-            window.speechSynthesis.getVoices();
-            const handleVoicesChanged = () => {
-                window.speechSynthesis.getVoices();
-            };
-            window.speechSynthesis.addEventListener('voiceschanged', handleVoicesChanged);
-            return () => {
-                window.speechSynthesis.removeEventListener('voiceschanged', handleVoicesChanged);
-            };
-        }
-    }, []);
-
-    // Sesli Okuma (TTS - Web Speech API, Doğal Türkçe Ses, GC Korumalı & Kilitsiz)
+    // Sesli Okuma (Tüm tarayıcılarda aynı gerçek yapay zeka insan sesi + çevrimdışı tarayıcı yedeği)
     const handleSpeakSentence = useCallback((e: React.MouseEvent | null | undefined, text: string, idx: number) => {
         e?.stopPropagation?.();
-        if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+        if (typeof window === 'undefined') return;
 
         if (speakingIndex === idx) {
             stopSpeech();
@@ -172,105 +141,32 @@ export function ContentListPlayer({
         }
 
         stopSpeech();
+        const seq = speechSeqRef.current;
+        setSpeakingIndex(idx);
+        setCurrentWordIndex(0);
 
-        const { spokenText, spokenWordRanges, totalVisualWords } = prepareTurkishSpeech(text);
-        if (!spokenText.trim()) return;
-
-        const utterance = new SpeechSynthesisUtterance(spokenText);
-        activeUtteranceRef.current = utterance; // V8 Garbage Collection donmasını önleme
-        if (typeof window !== 'undefined') {
-            (window as any).__activeSpeechUtterance = utterance;
-        }
-
-        const bestVoice = getBestTurkishVoice();
-        if (bestVoice) {
-            utterance.voice = bestVoice;
-            utterance.lang = bestVoice.lang;
-        } else {
-            utterance.lang = 'tr-TR';
-        }
-
-        const { rate, pitch } = getTurkishSpeechParams(bestVoice);
-        utterance.rate = rate;
-        utterance.pitch = pitch;
-        boundaryFiredRef.current = false;
-
-        utterance.onboundary = (event) => {
-            boundaryFiredRef.current = true;
-            if (fallbackTimerRef.current) {
-                clearInterval(fallbackTimerRef.current);
-                fallbackTimerRef.current = null;
-            }
-
-            if (event.name === 'word' || !event.name || event.name === '') {
-                const charIndex = event.charIndex;
-                let matchedRange = spokenWordRanges.find(w => charIndex >= w.start && charIndex < w.end);
-                if (!matchedRange) {
-                    matchedRange = spokenWordRanges.find(w => w.start >= charIndex);
-                }
-                if (!matchedRange && spokenWordRanges.length > 0) {
-                    matchedRange = spokenWordRanges.reduce((prev, curr) => {
-                        return Math.abs(curr.start - charIndex) < Math.abs(prev.start - charIndex) ? curr : prev;
-                    }, spokenWordRanges[0]);
-                }
-                if (matchedRange) {
-                    setCurrentWordIndex(matchedRange.visualIndex);
-                }
-            }
-        };
-
-        utterance.onstart = () => {
-            setSpeakingIndex(idx);
-            setCurrentWordIndex(0);
-
-            setTimeout(() => {
-                if (!boundaryFiredRef.current && totalVisualWords > 1 && activeUtteranceRef.current === utterance) {
-                    let simIndex = 0;
-                    fallbackTimerRef.current = setInterval(() => {
-                        simIndex++;
-                        if (simIndex < totalVisualWords) {
-                            setCurrentWordIndex(simIndex);
-                        } else {
-                            if (fallbackTimerRef.current) clearInterval(fallbackTimerRef.current);
-                        }
-                    }, 430);
-                }
-            }, 700);
-        };
-
-        utterance.onend = () => {
-            if (activeUtteranceRef.current === utterance) {
-                activeUtteranceRef.current = null;
-            }
-            if (typeof window !== 'undefined' && (window as any).__activeSpeechUtterance === utterance) {
-                (window as any).__activeSpeechUtterance = null;
-            }
-            setSpeakingIndex(null);
-            setCurrentWordIndex(null);
-        };
-
-        utterance.onerror = () => {
-            if (activeUtteranceRef.current === utterance) {
-                activeUtteranceRef.current = null;
-            }
-            if (typeof window !== 'undefined' && (window as any).__activeSpeechUtterance === utterance) {
-                (window as any).__activeSpeechUtterance = null;
-            }
-            setSpeakingIndex(null);
-            setCurrentWordIndex(null);
-        };
-
-        // Tarayıcı ses motorunun sıfırlanması için güvenli 80ms aralık
-        setTimeout(() => {
-            try {
-                if (window.speechSynthesis.paused) {
-                    window.speechSynthesis.resume();
-                }
+        void speakTurkishText({
+            text,
+            onStart: () => {
+                if (speechSeqRef.current !== seq) return;
                 setSpeakingIndex(idx);
                 setCurrentWordIndex(0);
-                window.speechSynthesis.speak(utterance);
-            } catch (_) {}
-        }, 80);
+            },
+            onWordIndex: (wordIdx) => {
+                if (speechSeqRef.current !== seq) return;
+                setCurrentWordIndex(wordIdx);
+            },
+            onEnd: () => {
+                if (speechSeqRef.current !== seq) return;
+                setSpeakingIndex(null);
+                setCurrentWordIndex(null);
+            },
+            onError: () => {
+                if (speechSeqRef.current !== seq) return;
+                setSpeakingIndex(null);
+                setCurrentWordIndex(null);
+            },
+        });
     }, [speakingIndex, stopSpeech]);
 
     // handleSpeakSentence referansını kararlı tutarak gereksiz tetiklenmeleri önle
@@ -323,6 +219,14 @@ export function ContentListPlayer({
                 setModalSentence(newSentence || null);
                 setIsModalOpen(true);
                 onAnimationStart?.();
+            }
+
+            // Kart açılır açılmaz gerçek insan sesi önbelleğe alınır
+            if (newSentence) {
+                prefetchTurkishSpeech(newSentence);
+            }
+            if (sentences[newIdx + 1]) {
+                prefetchTurkishSpeech(sentences[newIdx + 1]);
             }
 
             if (isAutoReadEnabled && newSentence) {

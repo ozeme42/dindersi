@@ -338,6 +338,443 @@ export const getTurkishSpeechParams = (voice: SpeechSynthesisVoice | null): { ra
     return { rate: 0.83, pitch: 1.0 };
 };
 
+// --- TARAYICIDAN BAĞIMSIZ YAPAY ZEKA İNSAN SESİ MOTORU (CHROME / EDGE / SAFARİ / FIREFOX / LINUX AYNI KALİTE) ---
+export interface AiTurkishVoiceOption {
+    id: string;
+    voiceName: string;
+    displayName: string;
+    gender: 'female' | 'male';
+}
+
+export const AI_TURKISH_VOICES: AiTurkishVoiceOption[] = [
+    { id: 'ai:Aoede', voiceName: 'Aoede', displayName: 'Elif — Doğal İnsan Sesi (Kadın) ✨', gender: 'female' },
+    { id: 'ai:Kore', voiceName: 'Kore', displayName: 'Zeynep — Net Öğretmen Sesi (Kadın) ✨', gender: 'female' },
+    { id: 'ai:Orus', voiceName: 'Orus', displayName: 'Ahmet — Doğal İnsan Sesi (Erkek) ✨', gender: 'male' },
+    { id: 'ai:Charon', voiceName: 'Charon', displayName: 'Kerem — Tok Anlatıcı Sesi (Erkek) ✨', gender: 'male' },
+];
+
+export interface TtsEngineStatus {
+    mode: 'ai' | 'browser';
+    voiceLabel: string;
+    fallbackReason?: 'NO_API_KEY' | 'QUOTA' | 'NETWORK' | 'LOCAL_SELECTED';
+}
+
+const TTS_CACHE_NAME = 'eduai-tts-v1';
+const memoryAudioUrlCache = new Map<string, string>();
+const inflightTtsRequests = new Map<string, Promise<Blob>>();
+let activeSpeechGenId = 0;
+let activeAudioEl: HTMLAudioElement | null = null;
+let activeAudioRaf: number | null = null;
+let activeAbortCtrl: AbortController | null = null;
+let activeFallbackTimer: ReturnType<typeof setInterval> | null = null;
+let activeUtteranceRef: SpeechSynthesisUtterance | null = null;
+let cloudCooldownUntil = 0;
+let lastCloudFallbackReason: TtsEngineStatus['fallbackReason'] | undefined;
+let lastTtsStatus: TtsEngineStatus = { mode: 'ai', voiceLabel: 'Elif — Doğal İnsan Sesi (Kadın) ✨' };
+
+export function getLastTtsStatus(): TtsEngineStatus {
+    return lastTtsStatus;
+}
+
+export function resolveActiveTtsVoiceSelection(preferredVoiceName?: string | null): {
+    isLocal: boolean;
+    aiVoice?: AiTurkishVoiceOption;
+    localVoicePref?: string | null;
+} {
+    const rawPref = preferredVoiceName !== undefined
+        ? preferredVoiceName
+        : (typeof window !== 'undefined' ? localStorage.getItem('preferred_turkish_voice') : null);
+
+    if (rawPref && rawPref !== 'auto') {
+        if (rawPref.startsWith('ai:')) {
+            const matched = AI_TURKISH_VOICES.find(v => v.id === rawPref || v.voiceName === rawPref.slice(3));
+            return { isLocal: false, aiVoice: matched || AI_TURKISH_VOICES[0] };
+        }
+        if (rawPref === 'browser:auto') {
+            return { isLocal: true, localVoicePref: null };
+        }
+        return { isLocal: true, localVoicePref: rawPref };
+    }
+
+    // Varsayılan ('auto'): tüm tarayıcılarda aynı gerçek yapay zeka insan sesi
+    return { isLocal: false, aiVoice: AI_TURKISH_VOICES[0] };
+}
+
+export function resetCloudTtsCooldown() {
+    cloudCooldownUntil = 0;
+    lastCloudFallbackReason = undefined;
+}
+
+function getCacheStorageKey(cacheKey: string): string {
+    return `https://tts.local/${encodeURIComponent(cacheKey)}`;
+}
+
+async function fetchOrGetCachedTtsBlob(
+    spokenText: string,
+    voiceName: string,
+    signal?: AbortSignal
+): Promise<Blob> {
+    const cacheKey = `${voiceName}::${spokenText}`;
+
+    // 1. Browser CacheStorage kontrolü
+    if (typeof window !== 'undefined' && 'caches' in window) {
+        try {
+            const cache = await window.caches.open(TTS_CACHE_NAME);
+            const cachedResp = await cache.match(getCacheStorageKey(cacheKey));
+            if (cachedResp) {
+                return await cachedResp.blob();
+            }
+        } catch {}
+    }
+
+    // 2. Aynı metin için bekleyen isteği paylaş
+    const inflight = inflightTtsRequests.get(cacheKey);
+    if (inflight) {
+        return inflight;
+    }
+
+    const requestPromise = (async () => {
+        const resp = await fetch('/api/tts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: spokenText, voiceName }),
+            signal,
+        });
+
+        if (!resp.ok) {
+            const errBody = await resp.json().catch(() => ({}));
+            const code = errBody?.errorCode || (resp.status === 503 ? 'NO_API_KEY' : resp.status === 429 ? 'QUOTA' : 'NETWORK');
+            const err = new Error(errBody?.error || 'TTS API error');
+            (err as any).code = code;
+            throw err;
+        }
+
+        const blob = await resp.blob();
+        if (typeof window !== 'undefined' && 'caches' in window && blob.size > 44) {
+            try {
+                const cache = await window.caches.open(TTS_CACHE_NAME);
+                await cache.put(
+                    getCacheStorageKey(cacheKey),
+                    new Response(blob, { headers: { 'Content-Type': 'audio/wav' } })
+                );
+            } catch {}
+        }
+        return blob;
+    })();
+
+    inflightTtsRequests.set(cacheKey, requestPromise);
+    try {
+        return await requestPromise;
+    } finally {
+        inflightTtsRequests.delete(cacheKey);
+    }
+}
+
+async function resolveAudioObjectUrl(spokenText: string, voiceName: string, signal?: AbortSignal): Promise<string> {
+    const cacheKey = `${voiceName}::${spokenText}`;
+    const existing = memoryAudioUrlCache.get(cacheKey);
+    if (existing) return existing;
+
+    const blob = await fetchOrGetCachedTtsBlob(spokenText, voiceName, signal);
+    const objectUrl = URL.createObjectURL(blob);
+    if (memoryAudioUrlCache.size >= 100) {
+        const oldest = memoryAudioUrlCache.keys().next().value;
+        if (oldest) {
+            const oldUrl = memoryAudioUrlCache.get(oldest);
+            memoryAudioUrlCache.delete(oldest);
+            if (oldUrl) {
+                try { URL.revokeObjectURL(oldUrl); } catch {}
+            }
+        }
+    }
+    memoryAudioUrlCache.set(cacheKey, objectUrl);
+    return objectUrl;
+}
+
+/** Görünür bir sonraki cümlenin insan sesini sessizce önbelleğe alır (anında başlatma için) */
+export function prefetchTurkishSpeech(rawTextOrHtml: string, preferredVoiceName?: string | null) {
+    if (typeof window === 'undefined' || !rawTextOrHtml?.trim()) return;
+    if (Date.now() < cloudCooldownUntil) return;
+
+    const selection = resolveActiveTtsVoiceSelection(preferredVoiceName);
+    if (selection.isLocal || !selection.aiVoice) return;
+
+    const { spokenText } = prepareTurkishSpeech(rawTextOrHtml);
+    if (!spokenText.trim()) return;
+
+    const key = `${selection.aiVoice.voiceName}::${spokenText}`;
+    if (memoryAudioUrlCache.has(key) || inflightTtsRequests.has(key)) return;
+
+    resolveAudioObjectUrl(spokenText, selection.aiVoice.voiceName).catch(() => {
+        // Arka plan önbellekleme hatalarını sessizce yoksay
+    });
+}
+
+export function stopAllTurkishSpeech() {
+    activeSpeechGenId++;
+
+    if (activeAbortCtrl) {
+        try { activeAbortCtrl.abort(); } catch {}
+        activeAbortCtrl = null;
+    }
+    if (activeAudioRaf !== null) {
+        cancelAnimationFrame(activeAudioRaf);
+        activeAudioRaf = null;
+    }
+    if (activeAudioEl) {
+        try {
+            activeAudioEl.pause();
+            activeAudioEl.onended = null;
+            activeAudioEl.onerror = null;
+            activeAudioEl.src = '';
+        } catch {}
+        activeAudioEl = null;
+    }
+    if (activeFallbackTimer) {
+        clearInterval(activeFallbackTimer);
+        activeFallbackTimer = null;
+    }
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        try {
+            if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+            window.speechSynthesis.cancel();
+        } catch {}
+        if ((window as any).__activeSpeechUtterance) {
+            (window as any).__activeSpeechUtterance = null;
+        }
+    }
+    activeUtteranceRef = null;
+}
+
+export interface SpeakTurkishOptions {
+    text: string;
+    preferredVoice?: string | null;
+    onStart?: (status: TtsEngineStatus) => void;
+    onWordIndex?: (wordIndex: number | null) => void;
+    onEnd?: () => void;
+    onError?: () => void;
+}
+
+/**
+ * Tüm tarayıcılarda aynı gerçek insan sesiyle (Genkit Gemini Neural TTS + önbellek) metni seslendirir;
+ * API/internet erişilemediğinde otomatik tarayıcı yedeğine düşer.
+ */
+export async function speakTurkishText(options: SpeakTurkishOptions): Promise<void> {
+    if (typeof window === 'undefined') return;
+
+    stopAllTurkishSpeech();
+    const genId = activeSpeechGenId;
+
+    const { spokenText, spokenWordRanges, totalVisualWords } = prepareTurkishSpeech(options.text);
+    if (!spokenText.trim()) {
+        options.onEnd?.();
+        return;
+    }
+
+    const selection = resolveActiveTtsVoiceSelection(options.preferredVoice);
+    const shouldTryCloud = !selection.isLocal && Date.now() >= cloudCooldownUntil;
+
+    const playViaBrowserFallback = (reason?: TtsEngineStatus['fallbackReason']) => {
+        if (genId !== activeSpeechGenId) return;
+        if (!('speechSynthesis' in window)) {
+            options.onError?.();
+            return;
+        }
+
+        const bestVoice = getBestTurkishVoice(selection.localVoicePref);
+        const status: TtsEngineStatus = {
+            mode: 'browser',
+            voiceLabel: bestVoice ? bestVoice.name : 'Tarayıcı Varsayılan Sesi',
+            fallbackReason: reason,
+        };
+        lastTtsStatus = status;
+
+        const utterance = new SpeechSynthesisUtterance(spokenText);
+        activeUtteranceRef = utterance;
+        (window as any).__activeSpeechUtterance = utterance;
+
+        if (bestVoice) {
+            utterance.voice = bestVoice;
+            utterance.lang = bestVoice.lang;
+        } else {
+            utterance.lang = 'tr-TR';
+        }
+
+        const { rate, pitch } = getTurkishSpeechParams(bestVoice);
+        utterance.rate = rate;
+        utterance.pitch = pitch;
+
+        let boundaryFired = false;
+
+        utterance.onboundary = (event) => {
+            if (genId !== activeSpeechGenId) return;
+            boundaryFired = true;
+            if (activeFallbackTimer) {
+                clearInterval(activeFallbackTimer);
+                activeFallbackTimer = null;
+            }
+            if (event.name === 'word' || !event.name || event.name === '') {
+                const charIndex = event.charIndex;
+                let matchedRange = spokenWordRanges.find(w => charIndex >= w.start && charIndex < w.end);
+                if (!matchedRange) matchedRange = spokenWordRanges.find(w => w.start >= charIndex);
+                if (!matchedRange && spokenWordRanges.length > 0) {
+                    matchedRange = spokenWordRanges.reduce((prev, curr) =>
+                        Math.abs(curr.start - charIndex) < Math.abs(prev.start - charIndex) ? curr : prev
+                    , spokenWordRanges[0]);
+                }
+                if (matchedRange) {
+                    options.onWordIndex?.(matchedRange.visualIndex);
+                }
+            }
+        };
+
+        utterance.onstart = () => {
+            if (genId !== activeSpeechGenId) return;
+            options.onStart?.(status);
+            options.onWordIndex?.(0);
+
+            setTimeout(() => {
+                if (genId === activeSpeechGenId && !boundaryFired && totalVisualWords > 1 && activeUtteranceRef === utterance) {
+                    let simIdx = 0;
+                    activeFallbackTimer = setInterval(() => {
+                        if (genId !== activeSpeechGenId) return;
+                        simIdx++;
+                        if (simIdx < totalVisualWords) {
+                            options.onWordIndex?.(simIdx);
+                        } else if (activeFallbackTimer) {
+                            clearInterval(activeFallbackTimer);
+                            activeFallbackTimer = null;
+                        }
+                    }, 430);
+                }
+            }, 650);
+        };
+
+        utterance.onend = () => {
+            if (genId !== activeSpeechGenId) return;
+            if (activeFallbackTimer) {
+                clearInterval(activeFallbackTimer);
+                activeFallbackTimer = null;
+            }
+            activeUtteranceRef = null;
+            (window as any).__activeSpeechUtterance = null;
+            options.onWordIndex?.(null);
+            options.onEnd?.();
+        };
+
+        utterance.onerror = () => {
+            if (genId !== activeSpeechGenId) return;
+            if (activeFallbackTimer) {
+                clearInterval(activeFallbackTimer);
+                activeFallbackTimer = null;
+            }
+            activeUtteranceRef = null;
+            (window as any).__activeSpeechUtterance = null;
+            options.onWordIndex?.(null);
+            options.onError?.();
+        };
+
+        setTimeout(() => {
+            if (genId !== activeSpeechGenId) return;
+            try {
+                if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+                options.onStart?.(status);
+                options.onWordIndex?.(0);
+                window.speechSynthesis.speak(utterance);
+            } catch {
+                options.onError?.();
+            }
+        }, 60);
+    };
+
+    if (!shouldTryCloud || !selection.aiVoice) {
+        playViaBrowserFallback(selection.isLocal ? 'LOCAL_SELECTED' : lastCloudFallbackReason);
+        return;
+    }
+
+    const aiVoice = selection.aiVoice;
+    const ctrl = new AbortController();
+    activeAbortCtrl = ctrl;
+
+    const status: TtsEngineStatus = { mode: 'ai', voiceLabel: aiVoice.displayName };
+    options.onStart?.(status);
+
+    try {
+        const timeoutId = setTimeout(() => ctrl.abort(), 8500);
+        const objectUrl = await resolveAudioObjectUrl(spokenText, aiVoice.voiceName, ctrl.signal);
+        clearTimeout(timeoutId);
+
+        if (genId !== activeSpeechGenId) return;
+
+        const audio = new Audio(objectUrl);
+        activeAudioEl = audio;
+        lastTtsStatus = status;
+
+        const syncWords = () => {
+            if (genId !== activeSpeechGenId || activeAudioEl !== audio) return;
+            if (totalVisualWords > 0 && audio.duration && isFinite(audio.duration) && audio.duration > 0) {
+                const ratio = Math.max(0, Math.min(0.999, audio.currentTime / audio.duration));
+                const targetChar = ratio * spokenText.length;
+                let matched = spokenWordRanges.find(w => targetChar >= w.start && targetChar <= w.end);
+                if (!matched) {
+                    matched = spokenWordRanges.find(w => w.start >= targetChar);
+                }
+                if (matched) {
+                    options.onWordIndex?.(matched.visualIndex);
+                }
+            }
+            if (!audio.paused && !audio.ended) {
+                activeAudioRaf = requestAnimationFrame(syncWords);
+            }
+        };
+
+        audio.onplay = () => {
+            if (genId !== activeSpeechGenId) return;
+            options.onStart?.(status);
+            options.onWordIndex?.(0);
+            if (spokenWordRanges.length > 0) {
+                activeAudioRaf = requestAnimationFrame(syncWords);
+            }
+        };
+
+        audio.onended = () => {
+            if (genId !== activeSpeechGenId) return;
+            if (activeAudioRaf !== null) {
+                cancelAnimationFrame(activeAudioRaf);
+                activeAudioRaf = null;
+            }
+            activeAudioEl = null;
+            options.onWordIndex?.(null);
+            options.onEnd?.();
+        };
+
+        audio.onerror = () => {
+            if (genId !== activeSpeechGenId) return;
+            if (activeAudioRaf !== null) {
+                cancelAnimationFrame(activeAudioRaf);
+                activeAudioRaf = null;
+            }
+            activeAudioEl = null;
+            playViaBrowserFallback('NETWORK');
+        };
+
+        await audio.play();
+    } catch (err: any) {
+        if (genId !== activeSpeechGenId) return;
+        const code = err?.code;
+        if (code === 'NO_API_KEY') {
+            cloudCooldownUntil = Date.now() + 60000;
+            lastCloudFallbackReason = 'NO_API_KEY';
+        } else if (code === 'QUOTA') {
+            cloudCooldownUntil = Date.now() + 20000;
+            lastCloudFallbackReason = 'QUOTA';
+        } else {
+            lastCloudFallbackReason = 'NETWORK';
+        }
+        playViaBrowserFallback(lastCloudFallbackReason);
+    }
+}
+
 // --- YÜKSEK PERFORMANSLI KARAOKE VURGULAMA BİLEŞENİ ---
 // HTML her kelimede tekrar tekrar parse EDİLMEZ; tek seferde parse edilip memoize edilir.
 interface AstToken {

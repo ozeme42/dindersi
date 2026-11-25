@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import {
-    X, Users, Sparkles, RotateCcw, UserMinus, Trophy,
+    X, Users, RotateCcw, UserMinus, Trophy,
     Check, Maximize2, Minimize2, Volume2, VolumeX, Flame, Zap,
     Shuffle, Clock, Award, History, Trash2
 } from 'lucide-react';
@@ -29,25 +29,25 @@ let lastRemovedStudentIds: Set<string> = new Set();
 
 // ══ ZENGİN STÜDYO ÇARK RENK PALETİ ══
 const SLICE_COLORS = [
-    { bg: '#2563eb', light: '#60a5fa', dark: '#1e40af', text: '#ffffff' }, // Royal Blue
-    { bg: '#db2777', light: '#f472b6', dark: '#9d174d', text: '#ffffff' }, // Magenta Pink
-    { bg: '#059669', light: '#34d399', dark: '#065f46', text: '#ffffff' }, // Emerald
-    { bg: '#d97706', light: '#fbbf24', dark: '#92400e', text: '#ffffff' }, // Amber Gold
-    { bg: '#7c3aed', light: '#a78bfa', dark: '#5b21b6', text: '#ffffff' }, // Violet
-    { bg: '#0891b2', light: '#22d3ee', dark: '#155e75', text: '#ffffff' }, // Cyan
-    { bg: '#dc2626', light: '#f87171', dark: '#991b1b', text: '#ffffff' }, // Crimson
-    { bg: '#0d9488', light: '#2dd4bf', dark: '#115e59', text: '#ffffff' }, // Teal
-    { bg: '#ea580c', light: '#fb923c', dark: '#9a3412', text: '#ffffff' }, // Vibrant Orange
-    { bg: '#4f46e5', light: '#818cf8', dark: '#3730a3', text: '#ffffff' }, // Deep Indigo
-    { bg: '#65a30d', light: '#a3e635', dark: '#3f6212', text: '#ffffff' }, // Lime
-    { bg: '#c026d3', light: '#e879f9', dark: '#86198f', text: '#ffffff' }, // Fuchsia
+    { bg: '#2563eb', dark: '#1e3a8a', text: '#ffffff' },
+    { bg: '#db2777', dark: '#831843', text: '#ffffff' },
+    { bg: '#059669', dark: '#064e3b', text: '#ffffff' },
+    { bg: '#d97706', dark: '#78350f', text: '#ffffff' },
+    { bg: '#7c3aed', dark: '#4c1d95', text: '#ffffff' },
+    { bg: '#0891b2', dark: '#164e63', text: '#ffffff' },
+    { bg: '#dc2626', dark: '#7f1d1d', text: '#ffffff' },
+    { bg: '#0d9488', dark: '#134e4a', text: '#ffffff' },
+    { bg: '#ea580c', dark: '#7c2d12', text: '#ffffff' },
+    { bg: '#4f46e5', dark: '#312e81', text: '#ffffff' },
+    { bg: '#65a30d', dark: '#365314', text: '#ffffff' },
+    { bg: '#c026d3', dark: '#701a75', text: '#ffffff' },
 ];
 
 type SpinDurationMode = 'fast' | 'normal' | 'dramatic';
 const DURATION_SECONDS: Record<SpinDurationMode, number> = {
-    fast: 4.2,
-    normal: 7.0,
-    dramatic: 10.2,
+    fast: 4.6,
+    normal: 7.4,
+    dramatic: 10.6,
 };
 
 interface WheelCandidate {
@@ -81,17 +81,17 @@ class WheelAudioEngine {
         if (this.noiseBuffer && this.noiseBuffer.sampleRate === ctx.sampleRate) {
             return this.noiseBuffer;
         }
-        const length = Math.floor(ctx.sampleRate * 0.04);
+        const length = Math.floor(ctx.sampleRate * 0.045);
         const buffer = ctx.createBuffer(1, length, ctx.sampleRate);
         const data = buffer.getChannelData(0);
         for (let i = 0; i < length; i++) {
-            data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (length * 0.25));
+            data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (length * 0.22));
         }
         this.noiseBuffer = buffer;
         return buffer;
     }
 
-    /** Mekanik mandalın pirinç pimlere çarpma sesi (hız orantılı tını) */
+    /** Esnek mekanik mandalın pirinç pime çarpıp kurtulma sesi (doğal organik varyasyonlu) */
     playPegTick(speedNorm: number = 0.5) {
         if (this.isMuted || !getGlobalSoundEnabled()) return;
         const ctx = this.getContext();
@@ -100,33 +100,35 @@ class WheelAudioEngine {
         try {
             const now = ctx.currentTime;
             const clamped = Math.max(0, Math.min(1, speedNorm));
+            // Her vuruşta hafif doğal ton farkı (±%5)
+            const jitter = 0.95 + Math.random() * 0.1;
 
-            // 1. Katman: Sert plastik/ahşap "tok" gövde vuruşu
+            // 1. Katman: Derin ahşap/plastik vuruş gövdesi (hız düştükçe baslaşır)
             const osc = ctx.createOscillator();
             const oscGain = ctx.createGain();
-            const startFreq = 420 + clamped * 520;
+            const startFreq = (320 + clamped * 560) * jitter;
             osc.type = 'triangle';
             osc.frequency.setValueAtTime(startFreq, now);
-            osc.frequency.exponentialRampToValueAtTime(95, now + 0.028);
+            osc.frequency.exponentialRampToValueAtTime(78 * jitter, now + 0.032);
 
-            oscGain.gain.setValueAtTime(0.18 + clamped * 0.1, now);
-            oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.032);
+            oscGain.gain.setValueAtTime((0.2 + clamped * 0.08) * jitter, now);
+            oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.036);
             osc.connect(oscGain);
             oscGain.connect(ctx.destination);
             osc.start(now);
-            osc.stop(now + 0.035);
+            osc.stop(now + 0.04);
 
-            // 2. Katman: Kısa yüksek frekanslı tıkırtı darbesi
+            // 2. Katman: Sert pirinç-mandal sürtünme çıt sesi
             const src = ctx.createBufferSource();
             src.buffer = this.getNoiseBuffer(ctx);
             const filter = ctx.createBiquadFilter();
             filter.type = 'bandpass';
-            filter.frequency.setValueAtTime(1700 + clamped * 1200, now);
-            filter.Q.setValueAtTime(2.2, now);
+            filter.frequency.setValueAtTime((1450 + clamped * 1450) * jitter, now);
+            filter.Q.setValueAtTime(2.6, now);
 
             const noiseGain = ctx.createGain();
-            noiseGain.gain.setValueAtTime(0.22, now);
-            noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.024);
+            noiseGain.gain.setValueAtTime(0.24 * jitter, now);
+            noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.026);
 
             src.connect(filter);
             filter.connect(noiseGain);
@@ -135,7 +137,7 @@ class WheelAudioEngine {
         } catch {}
     }
 
-    /** Çarkın ilk fırlatılma ivme sesi */
+    /** Çarkın kolla savrulma başlangıç sesi */
     playSpinLaunch() {
         if (this.isMuted || !getGlobalSoundEnabled()) return;
         const ctx = this.getContext();
@@ -146,18 +148,18 @@ class WheelAudioEngine {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(180, now);
-            osc.frequency.exponentialRampToValueAtTime(520, now + 0.18);
-            gain.gain.setValueAtTime(0.16, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+            osc.frequency.setValueAtTime(140, now);
+            osc.frequency.exponentialRampToValueAtTime(480, now + 0.22);
+            gain.gain.setValueAtTime(0.18, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
             osc.connect(gain);
             gain.connect(ctx.destination);
             osc.start(now);
-            osc.stop(now + 0.23);
+            osc.stop(now + 0.26);
         } catch {}
     }
 
-    /** Zafer fanfarı */
+    /** Kazanan zafer fanfarı */
     playVictoryFanfare() {
         if (this.isMuted || !getGlobalSoundEnabled()) return;
         const ctx = this.getContext();
@@ -192,6 +194,24 @@ function formatSliceLabel(fullName: string): string {
     if (parts.length === 0) return 'ÖĞRENCİ';
     if (parts.length === 1) return parts[0].toUpperCase();
     return `${parts[0]} ${parts[1].charAt(0)}.`.toUpperCase();
+}
+
+/**
+ * Fiziksel hızlanma -> süzülme -> mandal sürtünme direnci -> mikro yerleşme eğrisi
+ */
+function evaluateRealisticWheelCurve(t: number): number {
+    // 1. Kısa el savurma ivmelenmesi + eksponansiyel rulman ve hava direnci yavaşlaması
+    // t in [0, 1] -> p in [0, 1], türevi t=0'da yumuşak artışa, ardından uzun doğal yavaşlamaya sahip
+    const ramp = t < 0.045 ? Math.pow(t / 0.045, 1.55) * 0.015 : 0.015;
+    const coastT = t < 0.045 ? 0 : (t - 0.045) / 0.955;
+    const expDecay = 1 - Math.exp(-5.1 * coastT);
+    const expNorm = 1 - Math.exp(-5.1);
+    const tailDrop = Math.pow(coastT, 5);
+    const smoothCoast = ((expDecay / expNorm) * (1 - 0.025 * tailDrop) + 0.025 * tailDrop);
+    // Ayrıca sonda ağır teker hissiyatı için kuartik sönümleme ile harmanla
+    const quartic = 1 - Math.pow(1 - coastT, 4.4);
+    const blended = smoothCoast * 0.35 + quartic * 0.65;
+    return Math.min(1, ramp + blended * 0.985);
 }
 
 interface PresentationWheelModalProps {
@@ -230,7 +250,6 @@ export function PresentationWheelModal({
     const [winner, setWinner] = useState<WheelCandidate | null>(null);
     const [removedStudentIds, setRemovedStudentIds] = useState<Set<string>>(() => new Set(lastRemovedStudentIds));
     const [recentWinners, setRecentWinners] = useState<WheelCandidate[]>([]);
-    const [liveCandidateName, setLiveCandidateName] = useState<string>('');
     const [ledStep, setLedStep] = useState(0);
 
     // 60fps Animasyon & DOM Referansları
@@ -239,7 +258,6 @@ export function PresentationWheelModal({
     const currentRotationRef = useRef<number>(0);
     const isRollingRef = useRef<boolean>(false);
     const rafIdRef = useRef<number | null>(null);
-    const lastSliceIdxRef = useRef<number>(-1);
 
     // Sınıf & Öğrenci Yükle
     useEffect(() => {
@@ -329,11 +347,9 @@ export function PresentationWheelModal({
             .filter(it => !removedStudentIds.has(it.id));
     }, [pickerSource, allStudents, branchFilter, selectedClassData, removedStudentIds, customNamesText]);
 
-    // Görsel karıştırma desteği
     const wheelItems = useMemo(() => {
         if (shuffleSeed === 0 || baseItems.length < 2) return baseItems;
         const copy = [...baseItems];
-        // Deterministik-görünümlü Fisher-Yates karıştırma (shuffleSeed arttığında tetiklenir)
         let s = shuffleSeed * 9301 + 49297;
         for (let i = copy.length - 1; i > 0; i--) {
             s = (s * 16807) % 2147483647;
@@ -351,7 +367,7 @@ export function PresentationWheelModal({
         if (!isOpen) return;
         const interval = setInterval(() => {
             setLedStep(prev => (prev + 1) % 24);
-        }, isRolling ? 65 : 280);
+        }, isRolling ? 55 : 260);
         return () => clearInterval(interval);
     }, [isOpen, isRolling]);
 
@@ -371,26 +387,14 @@ export function PresentationWheelModal({
         };
     }, [isOpen]);
 
-    // Döndürme açısına göre sağdaki (saat 3 / 0°) ibrenin altındaki dilimi bul
-    const getSliceIndexAtRotation = useCallback(
-        (rotDeg: number, count: number) => {
-            if (count <= 0) return 0;
-            const anglePer = 360 / count;
-            const norm = ((rotDeg % 360) + 360) % 360;
-            const wheelDegUnderPointer = (360 - norm) % 360;
-            return Math.min(count - 1, Math.max(0, Math.floor(wheelDegUnderPointer / anglePer)));
-        },
-        []
-    );
-
-    // Başlangıçta da görünür rotasyonu DOM'a yansıt
+    // Başlangıç açısını DOM'a yansıt
     useEffect(() => {
         if (wheelContainerRef.current && !isRollingRef.current) {
             wheelContainerRef.current.style.transform = `rotate(${currentRotationRef.current}deg)`;
         }
-    }, [isOpen, wheelItems.length]);
+    }, [isOpen, wheelItems.length, isWheelFullscreen]);
 
-    // ══ GERÇEKÇİ 60FPS FİZİK VE İBRE YAY MOTORU ══
+    // ══ GERÇEKÇİ 60FPS FİZİK, MANDAL DİRENCİ VE YAYLI İBRE MOTORU ══
     const spinWheel = useCallback(() => {
         if (totalSlices < 2 || !wheelContainerRef.current) return;
         if (isRollingRef.current) return;
@@ -402,26 +406,25 @@ export function PresentationWheelModal({
         setWinner(null);
         audioEngine.playSpinLaunch();
 
-        // Rastgele kazanan dilim seçimi
         const winningIndex = Math.floor(Math.random() * totalSlices);
-        // Pime aşırı yakın düşüp kafa karıştırmaması için dilimin orta %64 bandında dur
-        const offsetInSlice = (0.18 + Math.random() * 0.64) * sliceAngle;
+        // Güvenli orta alan: pimlere fazla yakın durup yanılgı oluşturmaz (0.20..0.80)
+        const offsetInSlice = (0.20 + Math.random() * 0.60) * sliceAngle;
         const targetNormalized = (360 - (winningIndex * sliceAngle + offsetInSlice) + 360) % 360;
 
         const startRot = currentRotationRef.current;
         const startMod = ((startRot % 360) + 360) % 360;
         const alignDelta = (targetNormalized - startMod + 360) % 360;
 
-        const baseTurns = spinMode === 'fast' ? 5 : spinMode === 'dramatic' ? 10 : 7;
+        const baseTurns = spinMode === 'fast' ? 6 : spinMode === 'dramatic' ? 11 : 8;
         const totalDelta = 360 * (baseTurns + Math.floor(Math.random() * 2)) + alignDelta;
         const durationMs = DURATION_SECONDS[spinMode] * 1000;
 
         const startTime = performance.now();
         let lastFrameTime = startTime;
+        let lastRot = startRot;
         let lastPegStep = Math.floor(startRot / sliceAngle);
         let needleAngle = 0;
         let needleVel = 0;
-        lastSliceIdxRef.current = getSliceIndexAtRotation(startRot, totalSlices);
 
         const stepFrame = (now: number) => {
             if (!isRollingRef.current || !wheelContainerRef.current) return;
@@ -431,53 +434,57 @@ export function PresentationWheelModal({
             lastFrameTime = now;
 
             const t = Math.min(1, elapsed / durationMs);
+            const progress = evaluateRealisticWheelCurve(t);
 
-            // Doğal yavaşlama eğrisi + dramatik son süzülüş + mikro yerleşme sekmesi
-            const ease = 1 - Math.pow(1 - t, 4.15);
-            const settleBump = t > 0.965 ? Math.sin(((t - 0.965) / 0.035) * Math.PI) * -0.45 : 0;
-            const rot = startRot + totalDelta * ease + settleBump;
-            currentRotationRef.current = rot;
+            // Kısa başlangıç geri gerilme hissi (0..2.2% sürede minik yaylanma) + ana dönme
+            const windupOffset = t < 0.025 ? -Math.sin((t / 0.025) * Math.PI) * 3.2 : 0;
+            let baseRot = startRot + totalDelta * progress + windupOffset;
 
-            // Doğrudan GPU Transform uygula
-            wheelContainerRef.current.style.transform = `rotate(${rot}deg)`;
-
-            // Anlık hız kestirimi (0..1)
-            const speedNorm = Math.max(0, Math.min(1, Math.pow(1 - t, 3.1)));
-
-            // Pirinç pim geçişini gerçek açı üzerinden yakala
-            const pegStep = Math.floor(rot / sliceAngle);
-            if (pegStep > lastPegStep) {
-                lastPegStep = pegStep;
-                audioEngine.playPegTick(speedNorm);
-                // İbreyi hıza göre geriye it (-14° ila -34°)
-                const kick = -(13 + speedNorm * 21);
-                needleAngle = Math.min(needleAngle, kick);
-                needleVel = -120 * speedNorm;
+            // Sona doğru pime çarpma direnci + kurtulma ivmesi ve mikro yerleşme sekmesi
+            if (t > 0.68 && t < 0.975) {
+                const detentFade = (t - 0.68) / (0.975 - 0.68);
+                const envelope = Math.sin(detentFade * Math.PI) * 0.45;
+                const phase = ((baseRot % sliceAngle) / sliceAngle) * 2 * Math.PI;
+                baseRot -= Math.sin(phase) * Math.min(2.2, sliceAngle * 0.09) * envelope;
+            } else if (t >= 0.975 && t < 1) {
+                // Ağır çarkın yerçekimiyle iki pim arasında son hafif salınımla oturması
+                const settleT = (t - 0.975) / 0.025;
+                baseRot += Math.sin(settleT * Math.PI * 1.6) * (1 - settleT) * 0.95;
             }
 
-            // Yay-sönümleme mekanik ibre hareketi
-            const springK = 280;
-            const damping = 18;
+            currentRotationRef.current = baseRot;
+            wheelContainerRef.current.style.transform = `rotate(${baseRot}deg)`;
+
+            // Anlık açısal hız (deg/sec -> 0..1 normalize)
+            const degPerSec = Math.max(0, (baseRot - lastRot) / dt);
+            lastRot = baseRot;
+            const speedNorm = Math.max(0, Math.min(1, degPerSec / 950));
+
+            // Gerçek pim geçişi anı: t >= 0.025 sonrası her pim çarpışında mandal sekmesi
+            const pegStep = Math.floor(baseRot / sliceAngle);
+            if (t > 0.025 && pegStep > lastPegStep) {
+                lastPegStep = pegStep;
+                audioEngine.playPegTick(speedNorm);
+                const kick = -(15 + speedNorm * 23);
+                needleAngle = Math.min(needleAngle, kick);
+                needleVel = -140 - speedNorm * 90;
+            }
+
+            // Yay-sönümlemeli mekanik ibre hareketi
+            const springK = 310;
+            const damping = 17;
             const accel = -springK * needleAngle - damping * needleVel;
             needleVel += accel * dt;
             needleAngle += needleVel * dt;
-            needleAngle = Math.max(-36, Math.min(10, needleAngle));
+            needleAngle = Math.max(-40, Math.min(12, needleAngle));
 
             if (needleRef.current) {
                 needleRef.current.style.transform = `rotate(${needleAngle.toFixed(2)}deg)`;
             }
 
-            // İbre altındaki anlık isim etiketini yalnızca dilim değiştiğinde güncelle
-            const curIdx = getSliceIndexAtRotation(rot, totalSlices);
-            if (curIdx !== lastSliceIdxRef.current && wheelItems[curIdx]) {
-                lastSliceIdxRef.current = curIdx;
-                setLiveCandidateName(wheelItems[curIdx].name);
-            }
-
             if (t < 1) {
                 rafIdRef.current = requestAnimationFrame(stepFrame);
             } else {
-                // Kesin duruş
                 const exactFinal = startRot + totalDelta;
                 currentRotationRef.current = exactFinal;
                 wheelContainerRef.current.style.transform = `rotate(${exactFinal}deg)`;
@@ -490,16 +497,15 @@ export function PresentationWheelModal({
                 const chosen = wheelItems[winningIndex];
                 if (chosen) {
                     setWinner(chosen);
-                    setLiveCandidateName(chosen.name);
                     setRecentWinners(prev => [chosen, ...prev.filter(w => w.id !== chosen.id)].slice(0, 6));
                 }
 
                 audioEngine.playVictoryFanfare();
                 try {
                     confetti({
-                        particleCount: 150,
+                        particleCount: 160,
                         spread: 95,
-                        origin: { y: 0.52 },
+                        origin: { y: 0.5 },
                         colors: ['#f59e0b', '#ec4899', '#3b82f6', '#10b981', '#ffffff']
                     });
                 } catch {}
@@ -507,7 +513,21 @@ export function PresentationWheelModal({
         };
 
         rafIdRef.current = requestAnimationFrame(stepFrame);
-    }, [totalSlices, sliceAngle, spinMode, wheelItems, getSliceIndexAtRotation]);
+    }, [totalSlices, sliceAngle, spinMode, wheelItems]);
+
+    // Boşluk (Space) tuşu ile hızlı çevir
+    useEffect(() => {
+        if (!isOpen) return;
+        const onKey = (e: KeyboardEvent) => {
+            if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) return;
+            if (e.code === 'Space' && !winner && !isRollingRef.current && totalSlices >= 2) {
+                e.preventDefault();
+                spinWheel();
+            }
+        };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+    }, [isOpen, winner, totalSlices, spinWheel]);
 
     const removeCurrentStudent = () => {
         if (!winner) return;
@@ -565,7 +585,7 @@ export function PresentationWheelModal({
                 className={cn(
                     'fixed inset-0 z-50 flex items-center justify-center select-none',
                     isWheelFullscreen
-                        ? 'bg-slate-950 p-0'
+                        ? 'bg-[#040712] p-0'
                         : isLightStage
                         ? 'bg-slate-900/50 backdrop-blur-md p-3 sm:p-6'
                         : 'bg-slate-950/80 backdrop-blur-xl p-3 sm:p-6'
@@ -579,7 +599,7 @@ export function PresentationWheelModal({
                     transition={{ type: 'spring', damping: 24, stiffness: 280 }}
                     onClick={e => e.stopPropagation()}
                     className={cn(
-                        'relative flex flex-col bg-gradient-to-b from-slate-900 via-[#0b1224] to-[#050812] text-white overflow-hidden shadow-2xl transition-all duration-300',
+                        'relative flex flex-col bg-gradient-to-b from-slate-900 via-[#090f20] to-[#040710] text-white overflow-hidden shadow-2xl transition-all duration-300',
                         isWheelFullscreen
                             ? 'w-screen h-screen max-w-none max-h-none rounded-none border-0'
                             : 'w-full max-w-6xl max-h-[94vh] rounded-[2rem] border border-amber-400/30 shadow-[0_25px_90px_rgba(2,6,23,0.75)]'
@@ -588,38 +608,81 @@ export function PresentationWheelModal({
                     {/* Üst Metalik Altın Vurgu Çizgisi */}
                     <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-yellow-300 to-orange-500 z-30" />
 
-                    {/* ══ ÜST BAŞLIK BAR ══ */}
+                    {/* ══ ÜST BAŞLIK BAR (Tam Ekranda İnce Minimal Kontrol Çubuğu) ══ */}
                     <div
                         className={cn(
-                            'flex items-center justify-between border-b border-white/10 bg-slate-950/85 flex-shrink-0 z-20',
-                            isWheelFullscreen ? 'py-3.5 px-7' : 'py-3 px-5'
+                            'flex items-center justify-between border-b border-white/10 flex-shrink-0 z-20',
+                            isWheelFullscreen
+                                ? 'py-2 px-4 sm:px-6 bg-slate-950/60 backdrop-blur-md'
+                                : 'py-3 px-5 bg-slate-950/85'
                         )}
                     >
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-300 via-amber-500 to-orange-600 flex items-center justify-center shadow-lg border border-white/25">
-                                <Trophy className="w-5 h-5 text-slate-950" />
+                        <div className="flex items-center gap-3 min-w-0">
+                            <div className={cn(
+                                'rounded-2xl bg-gradient-to-br from-amber-300 via-amber-500 to-orange-600 flex items-center justify-center shadow-lg border border-white/25 shrink-0',
+                                isWheelFullscreen ? 'w-8 h-8 rounded-xl' : 'w-10 h-10'
+                            )}>
+                                <Trophy className={cn('text-slate-950', isWheelFullscreen ? 'w-4 h-4' : 'w-5 h-5')} />
                             </div>
-                            <div>
-                                <h3 className={cn('font-black tracking-tight text-white flex items-center gap-2', isWheelFullscreen ? 'text-xl sm:text-2xl' : 'text-base sm:text-lg')}>
+                            <div className="min-w-0">
+                                <h3 className={cn('font-black tracking-tight text-white flex items-center gap-2 truncate', isWheelFullscreen ? 'text-sm sm:text-base' : 'text-base sm:text-lg')}>
                                     <span>Şanslı Kura Çarkı</span>
-                                    <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-400/15 text-amber-300 border border-amber-400/30">
+                                    <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-400/15 text-amber-300 border border-amber-400/30 shrink-0">
                                         {totalSlices} Kişi
                                     </span>
                                 </h3>
-                                <p className="text-xs text-slate-400 font-semibold truncate max-w-[260px] sm:max-w-md">
-                                    {pickerSource === 'registered'
-                                        ? (selectedClassData ? `${selectedClassData.name}${branchFilter !== 'all' ? ` • ${branchFilter}` : ''}` : 'Sınıf Seçimi Bekleniyor')
-                                        : 'Özel İsim Listesi'}
-                                </p>
+                                {!isWheelFullscreen && (
+                                    <p className="text-xs text-slate-400 font-semibold truncate max-w-[260px] sm:max-w-md">
+                                        {pickerSource === 'registered'
+                                            ? (selectedClassData ? `${selectedClassData.name}${branchFilter !== 'all' ? ` • ${branchFilter}` : ''}` : 'Sınıf Seçimi Bekleniyor')
+                                            : 'Özel İsim Listesi'}
+                                    </p>
+                                )}
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1.5 sm:gap-2">
+                            {isWheelFullscreen && (
+                                <>
+                                    <div className="hidden sm:flex items-center gap-1 bg-white/5 border border-white/10 rounded-xl p-0.5 mr-1">
+                                        {[
+                                            { id: 'fast' as SpinDurationMode, label: '4sn' },
+                                            { id: 'normal' as SpinDurationMode, label: '7sn' },
+                                            { id: 'dramatic' as SpinDurationMode, label: '10sn' },
+                                        ].map(m => (
+                                            <button
+                                                key={m.id}
+                                                type="button"
+                                                disabled={isRolling}
+                                                onClick={() => setSpinMode(m.id)}
+                                                className={cn(
+                                                    'px-2 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer disabled:opacity-50',
+                                                    spinMode === m.id ? 'bg-amber-400 text-slate-950 font-black' : 'text-slate-300 hover:text-white'
+                                                )}
+                                            >
+                                                {m.label}
+                                            </button>
+                                        ))}
+                                    </div>
+
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={() => setShuffleSeed(prev => prev + 1)}
+                                        disabled={isRolling || totalSlices < 2}
+                                        className="h-8 w-8 rounded-xl border border-white/10 text-sky-300 hover:bg-white/10 cursor-pointer"
+                                        title="Listeyi Karıştır"
+                                    >
+                                        <Shuffle className="w-3.5 h-3.5" />
+                                    </Button>
+                                </>
+                            )}
+
                             <Button
                                 variant="ghost"
                                 size="icon"
                                 onClick={toggleMute}
-                                className="h-9 w-9 rounded-xl border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 cursor-pointer"
+                                className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 cursor-pointer"
                                 title={isMuted ? 'Sesi Aç' : 'Sesi Kapat'}
                             >
                                 {isMuted ? <VolumeX className="w-4 h-4 text-rose-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
@@ -629,9 +692,9 @@ export function PresentationWheelModal({
                                 <Button
                                     onClick={spinWheel}
                                     disabled={isRolling || totalSlices < 2}
-                                    className="h-9 px-5 text-xs font-black bg-gradient-to-r from-amber-400 via-yellow-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 rounded-xl shadow-lg active:scale-95 transition-all cursor-pointer"
+                                    className="h-8 sm:h-9 px-4 sm:px-5 text-xs font-black bg-gradient-to-r from-amber-300 via-yellow-400 to-orange-500 hover:from-amber-200 hover:to-orange-400 text-slate-950 rounded-xl shadow-lg active:scale-95 transition-all cursor-pointer"
                                 >
-                                    <Flame className="w-4 h-4 mr-1.5 fill-current text-amber-900" />
+                                    <Flame className="w-3.5 h-3.5 mr-1 fill-current text-amber-900" />
                                     {isRolling ? 'Dönüyor...' : 'ÇEVİR'}
                                 </Button>
                             )}
@@ -640,16 +703,16 @@ export function PresentationWheelModal({
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => setIsWheelFullscreen(prev => !prev)}
-                                className="h-9 px-3 rounded-xl border border-white/10 hover:bg-white/10 text-slate-300 hover:text-white text-xs font-bold gap-1.5 cursor-pointer"
+                                className="h-8 sm:h-9 px-2.5 sm:px-3 rounded-xl border border-white/10 hover:bg-white/10 text-slate-300 hover:text-white text-xs font-bold gap-1.5 cursor-pointer"
                             >
                                 {isWheelFullscreen ? (
                                     <>
-                                        <Minimize2 className="w-4 h-4 text-rose-400" />
+                                        <Minimize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-rose-400" />
                                         <span className="hidden sm:inline">Küçült</span>
                                     </>
                                 ) : (
                                     <>
-                                        <Maximize2 className="w-4 h-4 text-sky-400" />
+                                        <Maximize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-sky-400" />
                                         <span className="hidden sm:inline">Tam Ekran</span>
                                     </>
                                 )}
@@ -660,7 +723,7 @@ export function PresentationWheelModal({
                                 size="sm"
                                 onClick={onClose}
                                 disabled={isRolling}
-                                className="h-9 px-3 rounded-xl border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 hover:text-white text-xs font-bold cursor-pointer"
+                                className="h-8 sm:h-9 px-2.5 sm:px-3 rounded-xl border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 hover:text-white text-xs font-bold cursor-pointer"
                             >
                                 Sunuma Dön
                             </Button>
@@ -668,10 +731,10 @@ export function PresentationWheelModal({
                             <button
                                 onClick={onClose}
                                 disabled={isRolling}
-                                className="p-2 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer disabled:opacity-30"
+                                className="p-1.5 sm:p-2 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer disabled:opacity-30"
                                 title="Kapat"
                             >
-                                <X className="w-5 h-5" />
+                                <X className="w-4 h-4 sm:w-5 sm:h-5" />
                             </button>
                         </div>
                     </div>
@@ -680,242 +743,236 @@ export function PresentationWheelModal({
                     <div
                         className={cn(
                             'flex-1 flex overflow-hidden min-h-0 relative',
-                            isWheelFullscreen ? 'flex-col lg:flex-row p-4 md:p-6 gap-6' : 'flex-col md:flex-row p-4 md:p-5 gap-5'
+                            isWheelFullscreen ? 'p-1 sm:p-2' : 'flex-col md:flex-row p-4 md:p-5 gap-5'
                         )}
                     >
-                        {/* SOL PANEL: Kaynak, Sınıf/Liste, Gerilim Süresi & Geçmiş */}
-                        <div className="flex flex-col gap-3 overflow-y-auto pr-1 flex-shrink-0 z-10 w-full md:w-80">
-                            {/* Kaynak Seçimi */}
-                            <div className="grid grid-cols-2 gap-1 p-1 rounded-2xl bg-slate-950/90 border border-white/10">
-                                <button
-                                    onClick={() => { lastPickerSource = 'registered'; setPickerSource('registered'); resetStudentList(); }}
-                                    disabled={isRolling}
-                                    className={cn(
-                                        'py-2 rounded-xl text-xs font-black transition-all cursor-pointer',
-                                        pickerSource === 'registered'
-                                            ? 'bg-indigo-600 text-white shadow-md'
-                                            : 'text-slate-400 hover:text-white'
-                                    )}
-                                >
-                                    Kayıtlı Sınıf
-                                </button>
-                                <button
-                                    onClick={() => { lastPickerSource = 'custom'; setPickerSource('custom'); resetStudentList(); }}
-                                    disabled={isRolling}
-                                    className={cn(
-                                        'py-2 rounded-xl text-xs font-black transition-all cursor-pointer',
-                                        pickerSource === 'custom'
-                                            ? 'bg-indigo-600 text-white shadow-md'
-                                            : 'text-slate-400 hover:text-white'
-                                    )}
-                                >
-                                    Özel Liste
-                                </button>
-                            </div>
+                        {/* SOL PANEL: Yalnızca Normal Görünümde Gösterilir (Tam Ekranda Çark Tam Ekran Olur) */}
+                        {!isWheelFullscreen && (
+                            <div className="flex flex-col gap-3 overflow-y-auto pr-1 flex-shrink-0 z-10 w-full md:w-80">
+                                {/* Kaynak Seçimi */}
+                                <div className="grid grid-cols-2 gap-1 p-1 rounded-2xl bg-slate-950/90 border border-white/10">
+                                    <button
+                                        onClick={() => { lastPickerSource = 'registered'; setPickerSource('registered'); resetStudentList(); }}
+                                        disabled={isRolling}
+                                        className={cn(
+                                            'py-2 rounded-xl text-xs font-black transition-all cursor-pointer',
+                                            pickerSource === 'registered'
+                                                ? 'bg-indigo-600 text-white shadow-md'
+                                                : 'text-slate-400 hover:text-white'
+                                        )}
+                                    >
+                                        Kayıtlı Sınıf
+                                    </button>
+                                    <button
+                                        onClick={() => { lastPickerSource = 'custom'; setPickerSource('custom'); resetStudentList(); }}
+                                        disabled={isRolling}
+                                        className={cn(
+                                            'py-2 rounded-xl text-xs font-black transition-all cursor-pointer',
+                                            pickerSource === 'custom'
+                                                ? 'bg-indigo-600 text-white shadow-md'
+                                                : 'text-slate-400 hover:text-white'
+                                        )}
+                                    >
+                                        Özel Liste
+                                    </button>
+                                </div>
 
-                            {/* Sınıf veya Özel Liste */}
-                            {pickerSource === 'registered' ? (
-                                <div className="space-y-2.5 p-3.5 rounded-2xl bg-white/5 border border-white/10">
-                                    <div className="space-y-1">
-                                        <Label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">Sınıf</Label>
-                                        <Select
-                                            value={classFilter}
-                                            onValueChange={val => {
-                                                lastSelectedClassFilter = val;
-                                                setClassFilter(val);
-                                                lastSelectedBranchFilter = 'all';
-                                                setBranchFilter('all');
-                                                resetStudentList();
-                                            }}
-                                            disabled={isRolling || isLoadingData}
-                                        >
-                                            <SelectTrigger className="bg-slate-950/80 border-white/15 h-9 text-xs text-white rounded-xl">
-                                                <SelectValue placeholder="Sınıf Seçin..." />
-                                            </SelectTrigger>
-                                            <SelectContent className="bg-slate-900 border-white/15 text-white">
-                                                {allClasses.map(c => (
-                                                    <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-
-                                    {selectedClassData && selectedClassData.branches && selectedClassData.branches.length > 0 && (
+                                {/* Sınıf veya Özel Liste */}
+                                {pickerSource === 'registered' ? (
+                                    <div className="space-y-2.5 p-3.5 rounded-2xl bg-white/5 border border-white/10">
                                         <div className="space-y-1">
-                                            <Label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">Şube</Label>
+                                            <Label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">Sınıf</Label>
                                             <Select
-                                                value={branchFilter}
+                                                value={classFilter}
                                                 onValueChange={val => {
-                                                    lastSelectedBranchFilter = val;
-                                                    setBranchFilter(val);
+                                                    lastSelectedClassFilter = val;
+                                                    setClassFilter(val);
+                                                    lastSelectedBranchFilter = 'all';
+                                                    setBranchFilter('all');
                                                     resetStudentList();
                                                 }}
-                                                disabled={isRolling}
+                                                disabled={isRolling || isLoadingData}
                                             >
                                                 <SelectTrigger className="bg-slate-950/80 border-white/15 h-9 text-xs text-white rounded-xl">
-                                                    <SelectValue placeholder="Şube Seçin..." />
+                                                    <SelectValue placeholder="Sınıf Seçin..." />
                                                 </SelectTrigger>
                                                 <SelectContent className="bg-slate-900 border-white/15 text-white">
-                                                    <SelectItem value="all">Tüm Şubeler</SelectItem>
-                                                    {selectedClassData.branches.map(b => (
-                                                        <SelectItem key={b} value={b}>{b}</SelectItem>
+                                                    {allClasses.map(c => (
+                                                        <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
                                                     ))}
                                                 </SelectContent>
                                             </Select>
                                         </div>
-                                    )}
-                                </div>
-                            ) : (
-                                <div className="space-y-1.5 p-3 rounded-2xl bg-white/5 border border-white/10 flex flex-col">
-                                    <Label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">İsimler (Alt Alta)</Label>
-                                    <textarea
-                                        rows={isWheelFullscreen ? 6 : 4}
-                                        value={customNamesText}
-                                        onChange={e => {
-                                            lastCustomNamesText = e.target.value;
-                                            setCustomNamesText(e.target.value);
-                                            resetStudentList();
-                                        }}
-                                        disabled={isRolling}
-                                        className="w-full p-2.5 rounded-xl bg-slate-950/80 border border-white/15 text-xs text-white resize-none font-medium focus:outline-none focus:border-amber-400"
-                                        placeholder="İsim 1&#10;İsim 2..."
-                                    />
-                                </div>
-                            )}
 
-                            {/* Dönüş Hızı / Gerilim Modu & Karıştır */}
-                            <div className="p-3 rounded-2xl bg-white/5 border border-white/10 space-y-2.5">
-                                <div className="flex items-center justify-between">
-                                    <span className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-                                        <Clock className="w-3.5 h-3.5 text-amber-400" /> Gerilim Süresi
-                                    </span>
-                                    <button
-                                        type="button"
-                                        onClick={() => setShuffleSeed(prev => prev + 1)}
-                                        disabled={isRolling || totalSlices < 2}
-                                        className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-[11px] font-bold text-sky-300 cursor-pointer disabled:opacity-40"
-                                        title="Dilim sırasını karıştır"
-                                    >
-                                        <Shuffle className="w-3 h-3" /> Karıştır
-                                    </button>
-                                </div>
-
-                                <div className="grid grid-cols-3 gap-1.5">
-                                    {[
-                                        { id: 'fast' as SpinDurationMode, label: 'Hızlı (4sn)' },
-                                        { id: 'normal' as SpinDurationMode, label: 'Normal (7sn)' },
-                                        { id: 'dramatic' as SpinDurationMode, label: 'Final (10sn)' },
-                                    ].map(m => (
-                                        <button
-                                            key={m.id}
-                                            type="button"
-                                            disabled={isRolling}
-                                            onClick={() => setSpinMode(m.id)}
-                                            className={cn(
-                                                'py-1.5 px-1 rounded-xl text-[11px] font-bold border transition-all cursor-pointer disabled:opacity-50',
-                                                spinMode === m.id
-                                                    ? 'bg-amber-400/20 border-amber-400 text-amber-200 font-black'
-                                                    : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10'
-                                            )}
-                                        >
-                                            {m.label}
-                                        </button>
-                                    ))}
-                                </div>
-
-                                <div className="flex items-center justify-between pt-1 border-t border-white/10">
-                                    <span className="text-[11px] font-bold text-slate-300">Çıkanı otomatik listeden düş</span>
-                                    <Switch
-                                        checked={autoRemoveWinner}
-                                        onCheckedChange={setAutoRemoveWinner}
-                                        disabled={isRolling}
-                                    />
-                                </div>
-                            </div>
-
-                            {/* İstatistik & Son Seçilenler */}
-                            <div className="p-3 rounded-2xl bg-white/5 border border-white/10 space-y-2 text-xs text-slate-300">
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-1.5 font-bold">
-                                        <Users className="w-4 h-4 text-amber-400" />
-                                        <span>Aktif Aday: <strong className="text-white font-black">{totalSlices}</strong></span>
-                                    </div>
-                                    {removedStudentIds.size > 0 && (
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            onClick={resetStudentList}
-                                            disabled={isRolling}
-                                            className="h-7 px-2 text-[11px] font-bold text-rose-400 hover:text-rose-300 hover:bg-rose-500/15 rounded-lg cursor-pointer"
-                                        >
-                                            <RotateCcw className="w-3 h-3 mr-1" /> Geri Al ({removedStudentIds.size})
-                                        </Button>
-                                    )}
-                                </div>
-
-                                {recentWinners.length > 0 && (
-                                    <div className="pt-2 border-t border-white/10 space-y-1">
-                                        <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                                            <span className="flex items-center gap-1"><History className="w-3 h-3 text-emerald-400" /> Seçilenler</span>
-                                            <button
-                                                type="button"
-                                                onClick={() => setRecentWinners([])}
-                                                className="hover:text-white cursor-pointer"
-                                                title="Geçmişi Temizle"
-                                            >
-                                                <Trash2 className="w-3 h-3" />
-                                            </button>
-                                        </div>
-                                        <div className="flex flex-wrap gap-1">
-                                            {recentWinners.map((rw, idx) => (
-                                                <span
-                                                    key={rw.id}
-                                                    className={cn(
-                                                        'text-[10px] font-bold px-2 py-0.5 rounded-full border',
-                                                        idx === 0
-                                                            ? 'bg-amber-400/20 border-amber-400/50 text-amber-200'
-                                                            : 'bg-white/5 border-white/10 text-slate-300'
-                                                    )}
+                                        {selectedClassData && selectedClassData.branches && selectedClassData.branches.length > 0 && (
+                                            <div className="space-y-1">
+                                                <Label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">Şube</Label>
+                                                <Select
+                                                    value={branchFilter}
+                                                    onValueChange={val => {
+                                                        lastSelectedBranchFilter = val;
+                                                        setBranchFilter(val);
+                                                        resetStudentList();
+                                                    }}
+                                                    disabled={isRolling}
                                                 >
-                                                    {formatSliceLabel(rw.name)}
-                                                </span>
-                                            ))}
-                                        </div>
+                                                    <SelectTrigger className="bg-slate-950/80 border-white/15 h-9 text-xs text-white rounded-xl">
+                                                        <SelectValue placeholder="Şube Seçin..." />
+                                                    </SelectTrigger>
+                                                    <SelectContent className="bg-slate-900 border-white/15 text-white">
+                                                        <SelectItem value="all">Tüm Şubeler</SelectItem>
+                                                        {selectedClassData.branches.map(b => (
+                                                            <SelectItem key={b} value={b}>{b}</SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <div className="space-y-1.5 p-3 rounded-2xl bg-white/5 border border-white/10 flex flex-col">
+                                        <Label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">İsimler (Alt Alta)</Label>
+                                        <textarea
+                                            rows={4}
+                                            value={customNamesText}
+                                            onChange={e => {
+                                                lastCustomNamesText = e.target.value;
+                                                setCustomNamesText(e.target.value);
+                                                resetStudentList();
+                                            }}
+                                            disabled={isRolling}
+                                            className="w-full p-2.5 rounded-xl bg-slate-950/80 border border-white/15 text-xs text-white resize-none font-medium focus:outline-none focus:border-amber-400"
+                                            placeholder="İsim 1&#10;İsim 2..."
+                                        />
                                     </div>
                                 )}
-                            </div>
 
-                            {/* Ana Çevir Butonu */}
-                            <Button
-                                size="lg"
-                                onClick={spinWheel}
-                                disabled={isRolling || totalSlices < 2}
-                                className="w-full h-12 sm:h-14 text-base sm:text-lg text-slate-950 bg-gradient-to-r from-amber-300 via-yellow-400 to-orange-500 hover:from-amber-200 hover:to-orange-400 shadow-xl rounded-2xl transition-all active:scale-95 disabled:opacity-40 cursor-pointer mt-auto font-black uppercase tracking-wider"
-                            >
-                                <Flame className="w-5 h-5 mr-1.5 fill-current text-amber-900" />
-                                {isRolling
-                                    ? 'Çark Dönüyor...'
-                                    : (pickerSource === 'registered' && !classFilter
-                                        ? 'Sınıf Seçiniz'
-                                        : (totalSlices < 2 ? 'En Az 2 Kişi Gerekli' : 'ÇARKI ÇEVİR'))}
-                            </Button>
-                        </div>
+                                {/* Dönüş Hızı / Gerilim Modu & Karıştır */}
+                                <div className="p-3 rounded-2xl bg-white/5 border border-white/10 space-y-2.5">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                                            <Clock className="w-3.5 h-3.5 text-amber-400" /> Gerilim Süresi
+                                        </span>
+                                        <button
+                                            type="button"
+                                            onClick={() => setShuffleSeed(prev => prev + 1)}
+                                            disabled={isRolling || totalSlices < 2}
+                                            className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-[11px] font-bold text-sky-300 cursor-pointer disabled:opacity-40"
+                                            title="Dilim sırasını karıştır"
+                                        >
+                                            <Shuffle className="w-3 h-3" /> Karıştır
+                                        </button>
+                                    </div>
 
-                        {/* SAĞ SAHNE: GERÇEKÇİ 60FPS METALİK STÜDYO ÇARKI */}
-                        <div className="flex-1 flex flex-col items-center justify-center relative bg-gradient-to-b from-slate-900/70 to-slate-950/90 rounded-3xl border border-white/10 overflow-hidden p-3 sm:p-5 min-h-[340px]">
-                            {/* Canlı İbre Altındaki Aday Göstergesi */}
-                            {totalSlices >= 2 && (
-                                <div className="mb-2 sm:mb-3 z-20 flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-950/90 border border-amber-400/35 shadow-md">
-                                    <span className={cn('w-2 h-2 rounded-full', isRolling ? 'bg-amber-400' : 'bg-emerald-400')} />
-                                    <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                                        {isRolling ? 'İbre Geçiyor:' : 'Hazır Aday:'}
-                                    </span>
-                                    <span className="text-xs sm:text-sm font-black text-amber-300 min-w-[90px] text-center truncate max-w-[180px]">
-                                        {liveCandidateName || wheelItems[0]?.name}
-                                    </span>
+                                    <div className="grid grid-cols-3 gap-1.5">
+                                        {[
+                                            { id: 'fast' as SpinDurationMode, label: 'Hızlı (4sn)' },
+                                            { id: 'normal' as SpinDurationMode, label: 'Normal (7sn)' },
+                                            { id: 'dramatic' as SpinDurationMode, label: 'Final (10sn)' },
+                                        ].map(m => (
+                                            <button
+                                                key={m.id}
+                                                type="button"
+                                                disabled={isRolling}
+                                                onClick={() => setSpinMode(m.id)}
+                                                className={cn(
+                                                    'py-1.5 px-1 rounded-xl text-[11px] font-bold border transition-all cursor-pointer disabled:opacity-50',
+                                                    spinMode === m.id
+                                                        ? 'bg-amber-400/20 border-amber-400 text-amber-200 font-black'
+                                                        : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10'
+                                                )}
+                                            >
+                                                {m.label}
+                                            </button>
+                                        ))}
+                                    </div>
+
+                                    <div className="flex items-center justify-between pt-1 border-t border-white/10">
+                                        <span className="text-[11px] font-bold text-slate-300">Çıkanı otomatik listeden düş</span>
+                                        <Switch
+                                            checked={autoRemoveWinner}
+                                            onCheckedChange={setAutoRemoveWinner}
+                                            disabled={isRolling}
+                                        />
+                                    </div>
                                 </div>
-                            )}
 
+                                {/* İstatistik & Son Seçilenler */}
+                                <div className="p-3 rounded-2xl bg-white/5 border border-white/10 space-y-2 text-xs text-slate-300">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-1.5 font-bold">
+                                            <Users className="w-4 h-4 text-amber-400" />
+                                            <span>Aktif Aday: <strong className="text-white font-black">{totalSlices}</strong></span>
+                                        </div>
+                                        {removedStudentIds.size > 0 && (
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={resetStudentList}
+                                                disabled={isRolling}
+                                                className="h-7 px-2 text-[11px] font-bold text-rose-400 hover:text-rose-300 hover:bg-rose-500/15 rounded-lg cursor-pointer"
+                                            >
+                                                <RotateCcw className="w-3 h-3 mr-1" /> Geri Al ({removedStudentIds.size})
+                                            </Button>
+                                        )}
+                                    </div>
+
+                                    {recentWinners.length > 0 && (
+                                        <div className="pt-2 border-t border-white/10 space-y-1">
+                                            <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                                                <span className="flex items-center gap-1"><History className="w-3 h-3 text-emerald-400" /> Seçilenler</span>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setRecentWinners([])}
+                                                    className="hover:text-white cursor-pointer"
+                                                    title="Geçmişi Temizle"
+                                                >
+                                                    <Trash2 className="w-3 h-3" />
+                                                </button>
+                                            </div>
+                                            <div className="flex flex-wrap gap-1">
+                                                {recentWinners.map((rw, idx) => (
+                                                    <span
+                                                        key={rw.id}
+                                                        className={cn(
+                                                            'text-[10px] font-bold px-2 py-0.5 rounded-full border',
+                                                            idx === 0
+                                                                ? 'bg-amber-400/20 border-amber-400/50 text-amber-200'
+                                                                : 'bg-white/5 border-white/10 text-slate-300'
+                                                        )}
+                                                    >
+                                                        {formatSliceLabel(rw.name)}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Ana Çevir Butonu */}
+                                <Button
+                                    size="lg"
+                                    onClick={spinWheel}
+                                    disabled={isRolling || totalSlices < 2}
+                                    className="w-full h-12 sm:h-14 text-base sm:text-lg text-slate-950 bg-gradient-to-r from-amber-300 via-yellow-400 to-orange-500 hover:from-amber-200 hover:to-orange-400 shadow-xl rounded-2xl transition-all active:scale-95 disabled:opacity-40 cursor-pointer mt-auto font-black uppercase tracking-wider"
+                                >
+                                    <Flame className="w-5 h-5 mr-1.5 fill-current text-amber-900" />
+                                    {isRolling
+                                        ? 'Çark Dönüyor...'
+                                        : (pickerSource === 'registered' && !classFilter
+                                            ? 'Sınıf Seçiniz'
+                                            : (totalSlices < 2 ? 'En Az 2 Kişi Gerekli' : 'ÇARKI ÇEVİR'))}
+                                </Button>
+                            </div>
+                        )}
+
+                        {/* SAĞ / TAM EKRAN SAHNE: GERÇEKÇİ 60FPS METALİK STÜDYO ÇARKI (ÜSTTE İSİM YOK) */}
+                        <div className={cn(
+                            'flex-1 flex flex-col items-center justify-center relative overflow-hidden',
+                            isWheelFullscreen
+                                ? 'w-full h-full bg-radial from-slate-900/50 via-[#060b18] to-[#02040a] p-2 sm:p-4'
+                                : 'bg-gradient-to-b from-slate-900/70 to-slate-950/90 rounded-3xl border border-white/10 p-3 sm:p-5 min-h-[360px]'
+                        )}>
                             {totalSlices === 0 ? (
                                 <div className="flex flex-col items-center justify-center text-center p-8 text-slate-400 gap-4 max-w-md">
                                     <div className="w-16 h-16 rounded-3xl bg-indigo-600/20 text-indigo-300 border border-indigo-500/30 flex items-center justify-center">
@@ -923,32 +980,44 @@ export function PresentationWheelModal({
                                     </div>
                                     <h4 className="text-xl font-black text-white">Sınıf veya Liste Seçiniz</h4>
                                     <p className="text-xs text-slate-400 font-medium leading-relaxed">
-                                        Kura çarkını çalıştırmak için sol panelden bir sınıf seçin ya da Özel Liste sekmesine geçip isim girin.
+                                        Kura çarkını çalıştırmak için bir sınıf seçin ya da Özel Liste sekmesine geçip isim girin.
                                     </p>
                                 </div>
                             ) : (
                                 <div
                                     className={cn(
                                         'relative aspect-square flex items-center justify-center my-auto',
-                                        isWheelFullscreen ? 'w-[70vh] h-[70vh] max-w-[70vh]' : 'w-full max-w-[330px] sm:max-w-[400px] md:max-w-[430px]'
+                                        isWheelFullscreen
+                                            ? 'w-[min(86vh,88vw)] h-[min(86vh,88vw)]'
+                                            : 'w-full max-w-[360px] sm:max-w-[440px] md:max-w-[480px]'
                                     )}
                                 >
-                                    {/* Dış Metalik Altın Çerçeve ve 24 Ampul */}
-                                    <div className="absolute inset-[-12px] sm:inset-[-16px] rounded-full bg-gradient-to-b from-slate-700 via-slate-900 to-black border-2 border-amber-400/50 shadow-2xl pointer-events-none z-0" />
-                                    <div className="absolute inset-[-12px] sm:inset-[-16px] rounded-full pointer-events-none z-10">
+                                    {/* Arka Sahne Hareli Derinlik Işığı */}
+                                    <div className="absolute inset-[-8%] rounded-full bg-gradient-to-tr from-indigo-950/40 via-amber-500/5 to-purple-950/30 pointer-events-none" />
+
+                                    {/* Dış Metalik Pirinç Çerçeve & 24 Stüdyo Ampulü */}
+                                    <div className={cn(
+                                        'absolute rounded-full bg-gradient-to-b from-slate-600 via-slate-900 to-black border-2 border-amber-400/60 shadow-2xl pointer-events-none z-0',
+                                        isWheelFullscreen ? 'inset-[-20px] sm:inset-[-26px]' : 'inset-[-14px] sm:inset-[-18px]'
+                                    )} />
+                                    <div className={cn(
+                                        'absolute rounded-full pointer-events-none z-10',
+                                        isWheelFullscreen ? 'inset-[-20px] sm:inset-[-26px]' : 'inset-[-14px] sm:inset-[-18px]'
+                                    )}>
                                         {Array.from({ length: 24 }).map((_, i) => {
                                             const angle = (i / 24) * 2 * Math.PI;
-                                            const x = 50 + 48.2 * Math.cos(angle);
-                                            const y = 50 + 48.2 * Math.sin(angle);
+                                            const x = 50 + 48.3 * Math.cos(angle);
+                                            const y = 50 + 48.3 * Math.sin(angle);
                                             const isActive = (i + ledStep) % 3 === 0;
                                             return (
                                                 <div
                                                     key={i}
                                                     style={{ left: `${x}%`, top: `${y}%` }}
                                                     className={cn(
-                                                        'absolute w-2.5 h-2.5 sm:w-3 sm:h-3 -translate-x-1/2 -translate-y-1/2 rounded-full transition-colors duration-100',
+                                                        'absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition-colors duration-100',
+                                                        isWheelFullscreen ? 'w-3.5 h-3.5 sm:w-4 sm:h-4' : 'w-2.5 h-2.5 sm:w-3 sm:h-3',
                                                         isActive
-                                                            ? 'bg-amber-300 ring-2 ring-amber-400/50'
+                                                            ? 'bg-amber-300 ring-2 ring-amber-400/60'
                                                             : 'bg-slate-700/80'
                                                     )}
                                                 />
@@ -956,24 +1025,28 @@ export function PresentationWheelModal({
                                         })}
                                     </div>
 
-                                    {/* DÖNEN SVG ÇARK (Doğrudan 60fps DOM Transform) */}
+                                    {/* DÖNEN SVG ÇARK (60FPS Gerçek Fizik Transformu) */}
                                     <div
                                         ref={wheelContainerRef}
-                                        className="w-full h-full rounded-full relative overflow-hidden bg-slate-950 border-[8px] border-slate-900 shadow-inner will-change-transform z-10"
+                                        onClick={spinWheel}
+                                        className={cn(
+                                            'w-full h-full rounded-full relative overflow-hidden bg-slate-950 border-slate-900 shadow-inner will-change-transform z-10 cursor-pointer',
+                                            isWheelFullscreen ? 'border-[12px]' : 'border-[8px]'
+                                        )}
                                         style={{ transform: 'rotate(0deg)' }}
+                                        title={isRolling ? 'Dönüyor...' : 'Çevirmek için tıklayın (Boşluk)'}
                                     >
                                         <svg viewBox="-1 -1 2 2" className="w-full h-full block">
                                             <defs>
-                                                {/* Merkez Derinlik ve Parlaklık Katmanı */}
-                                                <radialGradient id="wheelGlossOverlay" cx="35%" cy="30%" r="70%">
-                                                    <stop offset="0%" stopColor="rgba(255,255,255,0.22)" />
-                                                    <stop offset="60%" stopColor="rgba(255,255,255,0.03)" />
-                                                    <stop offset="100%" stopColor="rgba(0,0,0,0.28)" />
-                                                </radialGradient>
                                                 <radialGradient id="brassPegGrad" cx="35%" cy="30%" r="65%">
                                                     <stop offset="0%" stopColor="#fef9c3" />
-                                                    <stop offset="55%" stopColor="#f59e0b" />
+                                                    <stop offset="50%" stopColor="#f59e0b" />
                                                     <stop offset="100%" stopColor="#78350f" />
+                                                </radialGradient>
+                                                <radialGradient id="sliceRimDepth" cx="50%" cy="50%" r="50%">
+                                                    <stop offset="55%" stopColor="rgba(0,0,0,0)" />
+                                                    <stop offset="92%" stopColor="rgba(0,0,0,0.22)" />
+                                                    <stop offset="100%" stopColor="rgba(0,0,0,0.42)" />
                                                 </radialGradient>
                                             </defs>
 
@@ -988,15 +1061,15 @@ export function PresentationWheelModal({
 
                                                 const theme = SLICE_COLORS[index % SLICE_COLORS.length];
                                                 const midAngle = (startPercent + endPercent) * Math.PI;
-                                                const textRadius = totalSlices > 16 ? 0.68 : 0.63;
+                                                const textRadius = totalSlices > 16 ? 0.67 : 0.62;
                                                 const textX = Math.cos(midAngle) * textRadius;
                                                 const textY = Math.sin(midAngle) * textRadius;
                                                 const rotationDeg = (midAngle * 180) / Math.PI;
 
-                                                const fontSize = Math.max(0.044, Math.min(0.088, 0.56 / Math.max(4, totalSlices)));
+                                                const fontSize = Math.max(0.044, Math.min(0.092, 0.58 / Math.max(4, totalSlices)));
                                                 const displayName = formatSliceLabel(item.name);
 
-                                                const pegRadius = 0.945;
+                                                const pegRadius = 0.942;
                                                 const pegX = Math.cos(startPercent * 2 * Math.PI) * pegRadius;
                                                 const pegY = Math.sin(startPercent * 2 * Math.PI) * pegRadius;
 
@@ -1005,7 +1078,7 @@ export function PresentationWheelModal({
                                                         <path
                                                             d={pathData}
                                                             fill={theme.bg}
-                                                            stroke="rgba(15,23,42,0.85)"
+                                                            stroke="rgba(15,23,42,0.9)"
                                                             strokeWidth="0.008"
                                                         />
                                                         <text
@@ -1018,8 +1091,8 @@ export function PresentationWheelModal({
                                                             textAnchor="middle"
                                                             dominantBaseline="central"
                                                             transform={`rotate(${rotationDeg}, ${textX}, ${textY})`}
-                                                            stroke="rgba(0,0,0,0.72)"
-                                                            strokeWidth="0.004"
+                                                            stroke="rgba(0,0,0,0.78)"
+                                                            strokeWidth="0.0045"
                                                             paintOrder="stroke fill"
                                                         >
                                                             {displayName}
@@ -1028,7 +1101,7 @@ export function PresentationWheelModal({
                                                         <circle
                                                             cx={pegX}
                                                             cy={pegY}
-                                                            r="0.024"
+                                                            r="0.025"
                                                             fill="url(#brassPegGrad)"
                                                             stroke="#451a03"
                                                             strokeWidth="0.005"
@@ -1037,33 +1110,42 @@ export function PresentationWheelModal({
                                                 );
                                             })}
 
-                                            {/* Üst Işıklandırma Cam Katmanı */}
-                                            <circle cx="0" cy="0" r="1" fill="url(#wheelGlossOverlay)" pointerEvents="none" />
-                                            {/* İç Göbek Halkası */}
-                                            <circle cx="0" cy="0" r="0.985" fill="none" stroke="rgba(255,255,255,0.18)" strokeWidth="0.012" />
+                                            {/* Kenar Gölgeli Derinlik Halkası */}
+                                            <circle cx="0" cy="0" r="1" fill="url(#sliceRimDepth)" pointerEvents="none" />
+                                            <circle cx="0" cy="0" r="0.985" fill="none" stroke="rgba(255,255,255,0.16)" strokeWidth="0.012" />
                                         </svg>
                                     </div>
+
+                                    {/* SABİT STÜDYO ÜST IŞIK YANSIMASI (Çark Altında Dönerken Işık Sabit Kalır!) */}
+                                    <div
+                                        className="w-full h-full rounded-full absolute inset-0 pointer-events-none z-10 overflow-hidden"
+                                        style={{
+                                            background: 'linear-gradient(145deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.03) 34%, rgba(0,0,0,0) 58%, rgba(0,0,0,0.22) 100%)',
+                                        }}
+                                    />
 
                                     {/* YAYLI MEKANİK SVG İBRE (SAAT 3 KONUMU - FİZİKSEL GERİ TEPME) */}
                                     <div
                                         ref={needleRef}
-                                        className="absolute right-[-22px] sm:right-[-28px] top-1/2 -translate-y-1/2 z-30 pointer-events-none"
+                                        className={cn(
+                                            'absolute top-1/2 -translate-y-1/2 z-30 pointer-events-none',
+                                            isWheelFullscreen ? 'right-[-34px] sm:right-[-42px]' : 'right-[-22px] sm:right-[-28px]'
+                                        )}
                                         style={{ transformOrigin: '78% 50%' }}
                                     >
                                         <svg
-                                            width={isWheelFullscreen ? '72' : '56'}
-                                            height={isWheelFullscreen ? '56' : '44'}
+                                            width={isWheelFullscreen ? '86' : '60'}
+                                            height={isWheelFullscreen ? '68' : '48'}
                                             viewBox="0 0 72 56"
-                                            className="drop-shadow-lg"
+                                            className="drop-shadow-xl"
                                         >
                                             <defs>
                                                 <linearGradient id="needleMetal" x1="0" y1="0" x2="1" y2="1">
                                                     <stop offset="0%" stopColor="#fef08a" />
                                                     <stop offset="45%" stopColor="#f59e0b" />
-                                                    <stop offset="100%" stopColor="#b45309" />
+                                                    <stop offset="100%" stopColor="#92400e" />
                                                 </linearGradient>
                                             </defs>
-                                            {/* Üçgen mekanik gösterge gövdesi */}
                                             <path
                                                 d="M 4 28 L 54 8 C 62 12 66 20 66 28 C 66 36 62 44 54 48 Z"
                                                 fill="url(#needleMetal)"
@@ -1074,28 +1156,27 @@ export function PresentationWheelModal({
                                             <path
                                                 d="M 14 28 L 48 16 L 48 40 Z"
                                                 fill="#fef9c3"
-                                                opacity="0.55"
+                                                opacity="0.58"
                                             />
-                                            {/* Pim Vidası */}
                                             <circle cx="54" cy="28" r="8" fill="#1e293b" stroke="#fde047" strokeWidth="2.5" />
                                             <circle cx="54" cy="28" r="2.8" fill="#fde047" />
                                         </svg>
                                     </div>
 
-                                    {/* MERKEZ METALİK BUTON */}
+                                    {/* MERKEZ METALİK GÖBEK & BUTON */}
                                     <button
                                         type="button"
                                         onClick={spinWheel}
                                         disabled={isRolling || totalSlices < 2}
                                         className={cn(
-                                            'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border-[6px] border-slate-900 shadow-2xl flex items-center justify-center z-20 cursor-pointer hover:scale-105 active:scale-95 transition-transform overflow-hidden disabled:cursor-not-allowed',
-                                            isWheelFullscreen ? 'w-26 h-26' : 'w-20 h-20'
+                                            'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border-slate-900 shadow-2xl flex items-center justify-center z-20 cursor-pointer hover:scale-105 active:scale-95 transition-transform overflow-hidden disabled:cursor-not-allowed',
+                                            isWheelFullscreen ? 'w-28 h-28 sm:w-32 sm:h-32 border-[8px]' : 'w-20 h-20 border-[6px]'
                                         )}
                                     >
                                         <div className="absolute inset-0 bg-gradient-to-br from-amber-200 via-amber-400 to-orange-600" />
                                         <div className="relative flex flex-col items-center justify-center leading-none text-slate-950 font-black">
-                                            <Zap className={cn('w-4 h-4 mb-0.5 fill-current', isRolling && 'opacity-60')} />
-                                            <span className={cn('tracking-tight uppercase', isWheelFullscreen ? 'text-sm' : 'text-[11px]')}>
+                                            <Zap className={cn('mb-0.5 fill-current', isWheelFullscreen ? 'w-5 h-5' : 'w-4 h-4', isRolling && 'opacity-60')} />
+                                            <span className={cn('tracking-tight uppercase', isWheelFullscreen ? 'text-sm sm:text-base' : 'text-[11px]')}>
                                                 {isRolling ? 'DÖNÜYOR' : 'ÇEVİR'}
                                             </span>
                                         </div>
@@ -1115,7 +1196,7 @@ export function PresentationWheelModal({
                                     <div
                                         className={cn(
                                             'relative text-center bg-gradient-to-b from-slate-900 via-[#101935] to-slate-950 border-4 border-amber-400 rounded-[2.25rem] shadow-2xl w-full overflow-hidden',
-                                            isWheelFullscreen ? 'p-8 max-w-lg' : 'p-6 max-w-md'
+                                            isWheelFullscreen ? 'p-8 sm:p-10 max-w-lg' : 'p-6 max-w-md'
                                         )}
                                     >
                                         <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-300 to-orange-500 text-slate-950 flex items-center justify-center mx-auto mb-3 shadow-lg border-2 border-white/40">

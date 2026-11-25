@@ -14,7 +14,17 @@ import { db } from '@/lib/firebase';
 import { getCachedSteps, setCachedSteps } from '@/lib/lesson-cache';
 import type { Topic, Unit, LessonStep } from '@/lib/types';
 import { LessonContentViewer, getStepTypeBadge } from '@/components/lesson-content-viewer';
-import { getTurkishVoices, getBestTurkishVoice, prepareTurkishSpeech, getTurkishSpeechParams, type TurkishVoiceOption } from '@/components/lesson-viewer/tts-helper';
+import {
+    AI_TURKISH_VOICES,
+    getTurkishVoices,
+    getBestTurkishVoice,
+    speakTurkishText,
+    stopAllTurkishSpeech,
+    resetCloudTtsCooldown,
+    resolveActiveTtsVoiceSelection,
+    type TurkishVoiceOption,
+    type TtsEngineStatus
+} from '@/components/lesson-viewer/tts-helper';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { PresentationDrawingBoard } from '@/components/presentation-drawing-board';
 import { PresentationWheelModal } from '@/components/presentation-wheel-modal';
@@ -101,26 +111,53 @@ function PresentationPageContent() {
         }
         return 'auto';
     });
+    const [ttsStatus, setTtsStatus] = useState<TtsEngineStatus>({
+        mode: 'ai',
+        voiceLabel: AI_TURKISH_VOICES[0].displayName,
+    });
 
     useEffect(() => {
-        if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+        if (typeof window === 'undefined') return;
+        const selection = resolveActiveTtsVoiceSelection(preferredVoice);
+
         const updateVoices = () => {
-            const list = getTurkishVoices();
-            setAvailableVoices(list);
-            const best = getBestTurkishVoice(preferredVoice === 'auto' ? null : preferredVoice);
-            if (best) {
-                setActiveVoiceName(best.name);
+            let best: SpeechSynthesisVoice | null = null;
+            if ('speechSynthesis' in window) {
+                const list = getTurkishVoices();
+                setAvailableVoices(list);
+                best = getBestTurkishVoice(selection.isLocal ? selection.localVoicePref : null);
+                if (best) {
+                    setActiveVoiceName(best.name);
+                }
+            }
+
+            if (selection.isLocal) {
+                setTtsStatus({
+                    mode: 'browser',
+                    voiceLabel: best ? best.name : 'Tarayıcı Varsayılan Sesi',
+                    fallbackReason: 'LOCAL_SELECTED',
+                });
+            } else if (selection.aiVoice) {
+                setTtsStatus({
+                    mode: 'ai',
+                    voiceLabel: selection.aiVoice.displayName,
+                });
             }
         };
+
         updateVoices();
-        window.speechSynthesis.addEventListener('voiceschanged', updateVoices);
-        return () => {
-            window.speechSynthesis.removeEventListener('voiceschanged', updateVoices);
-        };
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.addEventListener('voiceschanged', updateVoices);
+            return () => {
+                window.speechSynthesis.removeEventListener('voiceschanged', updateVoices);
+            };
+        }
     }, [preferredVoice]);
 
     const handleVoiceChange = (val: string) => {
         setPreferredVoice(val);
+        resetCloudTtsCooldown();
+        stopAllTurkishSpeech();
         if (typeof window !== 'undefined') {
             if (val === 'auto') {
                 localStorage.removeItem('preferred_turkish_voice');
@@ -178,32 +215,37 @@ function PresentationPageContent() {
     const setIsDarkMode = (checked: boolean) => setThemeMode(checked ? 'dark' : 'light');
 
     useEffect(() => {
-        if (!isSourceTextOpen && isSpeakingSource && typeof window !== 'undefined' && 'speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
+        if (!isSourceTextOpen && isSpeakingSource) {
+            stopAllTurkishSpeech();
             setIsSpeakingSource(false);
         }
     }, [isSourceTextOpen, isSpeakingSource]);
 
+    useEffect(() => {
+        return () => {
+            stopAllTurkishSpeech();
+        };
+    }, []);
+
     const toggleSpeakSourceText = useCallback(() => {
-        if (typeof window === 'undefined' || !('speechSynthesis' in window) || !sourceText) return;
+        if (typeof window === 'undefined' || !sourceText) return;
         if (isSpeakingSource) {
-            window.speechSynthesis.cancel();
+            stopAllTurkishSpeech();
             setIsSpeakingSource(false);
             return;
         }
-        window.speechSynthesis.cancel();
-        const { spokenText } = prepareTurkishSpeech(sourceText);
-        const voice = getBestTurkishVoice(preferredVoice === 'auto' ? null : preferredVoice);
-        const { rate, pitch } = getTurkishSpeechParams(voice);
-        const utter = new SpeechSynthesisUtterance(spokenText);
-        if (voice) utter.voice = voice;
-        utter.lang = 'tr-TR';
-        utter.rate = rate;
-        utter.pitch = pitch;
-        utter.onend = () => setIsSpeakingSource(false);
-        utter.onerror = () => setIsSpeakingSource(false);
+        stopAllTurkishSpeech();
         setIsSpeakingSource(true);
-        window.speechSynthesis.speak(utter);
+        void speakTurkishText({
+            text: sourceText,
+            preferredVoice,
+            onStart: (status) => {
+                setTtsStatus(status);
+                setIsSpeakingSource(true);
+            },
+            onEnd: () => setIsSpeakingSource(false),
+            onError: () => setIsSpeakingSource(false),
+        });
     }, [isSpeakingSource, sourceText, preferredVoice]);
 
     const handleSaveSourceText = async () => {
@@ -1821,35 +1863,44 @@ function PresentationPageContent() {
                                                             <span>Sesli Okuma Motoru</span>
                                                         </Label>
                                                         <span className={cn("text-[10px] truncate", mutedTone)}>
-                                                            {activeVoiceName ? (
-                                                                activeVoiceName.toLowerCase().includes('emel') 
-                                                                    ? '✨ Microsoft Emel (Doğal Ses)'
-                                                                    : activeVoiceName.toLowerCase().includes('ahmet')
-                                                                        ? '✨ Microsoft Ahmet (Doğal Ses)'
-                                                                        : activeVoiceName.toLowerCase().includes('google')
-                                                                            ? '✨ Google Türkçe'
-                                                                            : activeVoiceName.toLowerCase().includes('tolga')
-                                                                                ? '⚠️ Microsoft Tolga (Klasik)'
-                                                                                : activeVoiceName
-                                                            ) : 'Sistem sesi taranıyor...'}
+                                                            {ttsStatus.mode === 'ai'
+                                                                ? `🎙️ ${ttsStatus.voiceLabel.replace(' ✨', '')} · Tüm Tarayıcılarda Sabit`
+                                                                : ttsStatus.fallbackReason === 'NO_API_KEY'
+                                                                    ? `⚠️ Tarayıcı Yedeği (API yok): ${activeVoiceName || ttsStatus.voiceLabel}`
+                                                                    : ttsStatus.fallbackReason === 'QUOTA'
+                                                                        ? `⚠️ Tarayıcı Yedeği (Kota): ${activeVoiceName || ttsStatus.voiceLabel}`
+                                                                        : ttsStatus.fallbackReason === 'NETWORK'
+                                                                            ? `⚠️ Tarayıcı Yedeği (Ağ): ${activeVoiceName || ttsStatus.voiceLabel}`
+                                                                            : `💻 Yerel Ses: ${activeVoiceName || ttsStatus.voiceLabel}`}
                                                         </span>
                                                     </div>
 
-                                                    {availableVoices.length > 1 && (
-                                                        <Select value={preferredVoice} onValueChange={handleVoiceChange}>
-                                                            <SelectTrigger className={cn("w-[130px] h-7 text-xs shrink-0", isLightUi ? "bg-white border-slate-200 text-slate-900" : "bg-slate-800 border-white/20 text-white")}>
-                                                                <SelectValue />
-                                                            </SelectTrigger>
-                                                            <SelectContent className={cn(isLightUi ? "bg-white border-slate-200 text-slate-900" : "bg-slate-900 border-white/20 text-white")}>
-                                                                <SelectItem value="auto">✨ Otomatik</SelectItem>
-                                                                {availableVoices.map(v => (
-                                                                    <SelectItem key={v.name} value={v.name}>
-                                                                        {v.displayName.replace(' ✨', '').replace(' ⚠️', '')}
-                                                                    </SelectItem>
-                                                                ))}
-                                                            </SelectContent>
-                                                        </Select>
-                                                    )}
+                                                    <Select value={preferredVoice} onValueChange={handleVoiceChange}>
+                                                        <SelectTrigger className={cn("w-[148px] h-7 text-xs shrink-0", isLightUi ? "bg-white border-slate-200 text-slate-900" : "bg-slate-800 border-white/20 text-white")}>
+                                                            <SelectValue />
+                                                        </SelectTrigger>
+                                                        <SelectContent className={cn(isLightUi ? "bg-white border-slate-200 text-slate-900" : "bg-slate-900 border-white/20 text-white")}>
+                                                            <SelectItem value="auto">✨ Otomatik İnsan Sesi</SelectItem>
+                                                            {AI_TURKISH_VOICES.map(v => (
+                                                                <SelectItem key={v.id} value={v.id}>
+                                                                    {v.displayName.replace(' ✨', '')}
+                                                                </SelectItem>
+                                                            ))}
+                                                            {availableVoices.length > 0 && (
+                                                                <>
+                                                                    <div className={cn("px-2 py-1 mt-1 text-[10px] font-bold uppercase tracking-wider border-t", isLightUi ? "text-slate-400 border-slate-100" : "text-slate-400 border-white/10")}>
+                                                                        Yerel Tarayıcı Sesleri
+                                                                    </div>
+                                                                    <SelectItem value="browser:auto">💻 Cihaz Varsayılanı</SelectItem>
+                                                                    {availableVoices.map(v => (
+                                                                        <SelectItem key={v.name} value={v.name}>
+                                                                            {v.displayName.replace(' ✨', '').replace(' ⚠️', '')}
+                                                                        </SelectItem>
+                                                                    ))}
+                                                                </>
+                                                            )}
+                                                        </SelectContent>
+                                                    </Select>
                                                 </div>
                                             </div>
 

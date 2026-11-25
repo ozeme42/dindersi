@@ -8,7 +8,7 @@ import {
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
 import { motion } from 'framer-motion';
-import { prepareTurkishSpeech, getBestTurkishVoice, getTurkishSpeechParams } from '../tts-helper';
+import { speakTurkishText, stopAllTurkishSpeech, prefetchTurkishSpeech } from '../tts-helper';
 
 function parseConceptHtmlItem(rawHtml: string): { concept: string; definition?: string } {
     const plain = rawHtml.replace(/<[^>]*>/g, '').trim();
@@ -704,8 +704,8 @@ export function ConceptExplanationPlayer({
     const scrollRef = useRef<HTMLDivElement>(null);
 
     // Kilitlenmeyi önleyen güvenli ses referansları
-    const activeUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
     const autoReadTimerRef = useRef<NodeJS.Timeout | null>(null);
+    const speechSeqRef = useRef<number>(0);
     const prevCountRef = useRef<number>(0);
     const prevStepKeyRef = useRef<string>('');
     const prevAutoReadRef = useRef<boolean>(isAutoReadEnabled);
@@ -720,27 +720,17 @@ export function ConceptExplanationPlayer({
     }, []);
 
     const stopSpeech = useCallback(() => {
-        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-            try {
-                if (window.speechSynthesis.paused) {
-                    window.speechSynthesis.resume();
-                }
-                window.speechSynthesis.cancel();
-            } catch (_) {}
-            if ((window as any).__activeSpeechUtterance) {
-                (window as any).__activeSpeechUtterance = null;
-            }
-        }
+        speechSeqRef.current += 1;
+        stopAllTurkishSpeech();
         if (autoReadTimerRef.current) {
             clearTimeout(autoReadTimerRef.current);
             autoReadTimerRef.current = null;
         }
-        activeUtteranceRef.current = null;
         setSpeakingIndex(null);
     }, []);
 
     const handleSpeakConcept = useCallback((conceptItem: { concept: string; definition?: string }, idx: number) => {
-        if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+        if (typeof window === 'undefined') return;
 
         if (speakingIndex === idx) {
             stopSpeech();
@@ -750,60 +740,26 @@ export function ConceptExplanationPlayer({
         stopSpeech();
 
         const fullText = `${conceptItem.concept}${conceptItem.definition ? ': ' + conceptItem.definition : ''}`;
-        const { spokenText } = prepareTurkishSpeech(fullText);
-        if (!spokenText.trim()) return;
+        if (!fullText.trim()) return;
 
-        const utterance = new SpeechSynthesisUtterance(spokenText);
-        activeUtteranceRef.current = utterance;
-        if (typeof window !== 'undefined') {
-            (window as any).__activeSpeechUtterance = utterance;
-        }
+        const seq = speechSeqRef.current;
+        setSpeakingIndex(idx);
 
-        const bestVoice = getBestTurkishVoice();
-        if (bestVoice) {
-            utterance.voice = bestVoice;
-            utterance.lang = bestVoice.lang;
-        } else {
-            utterance.lang = 'tr-TR';
-        }
-
-        const { rate, pitch } = getTurkishSpeechParams(bestVoice);
-        utterance.rate = rate;
-        utterance.pitch = pitch;
-
-        utterance.onstart = () => {
-            setSpeakingIndex(idx);
-        };
-
-        utterance.onend = () => {
-            if (activeUtteranceRef.current === utterance) {
-                activeUtteranceRef.current = null;
-            }
-            if (typeof window !== 'undefined' && (window as any).__activeSpeechUtterance === utterance) {
-                (window as any).__activeSpeechUtterance = null;
-            }
-            setSpeakingIndex(null);
-        };
-
-        utterance.onerror = () => {
-            if (activeUtteranceRef.current === utterance) {
-                activeUtteranceRef.current = null;
-            }
-            if (typeof window !== 'undefined' && (window as any).__activeSpeechUtterance === utterance) {
-                (window as any).__activeSpeechUtterance = null;
-            }
-            setSpeakingIndex(null);
-        };
-
-        setTimeout(() => {
-            try {
-                if (window.speechSynthesis.paused) {
-                    window.speechSynthesis.resume();
-                }
+        void speakTurkishText({
+            text: fullText,
+            onStart: () => {
+                if (speechSeqRef.current !== seq) return;
                 setSpeakingIndex(idx);
-                window.speechSynthesis.speak(utterance);
-            } catch (_) {}
-        }, 80);
+            },
+            onEnd: () => {
+                if (speechSeqRef.current !== seq) return;
+                setSpeakingIndex(null);
+            },
+            onError: () => {
+                if (speechSeqRef.current !== seq) return;
+                setSpeakingIndex(null);
+            },
+        });
     }, [speakingIndex, stopSpeech]);
 
     const speakConceptRef = useRef(handleSpeakConcept);
@@ -892,6 +848,14 @@ export function ConceptExplanationPlayer({
         if (count > prev) {
             const newIdx = count - 1;
             const newConcept = validConcepts[newIdx];
+            const nextConcept = validConcepts[newIdx + 1];
+
+            if (newConcept && newConcept.concept !== '[BAŞLIK]') {
+                prefetchTurkishSpeech(`${newConcept.concept}${newConcept.definition ? ': ' + newConcept.definition : ''}`);
+            }
+            if (nextConcept && nextConcept.concept !== '[BAŞLIK]') {
+                prefetchTurkishSpeech(`${nextConcept.concept}${nextConcept.definition ? ': ' + nextConcept.definition : ''}`);
+            }
 
             if (isAutoReadEnabled && newConcept && newConcept.concept !== '[BAŞLIK]') {
                 if (autoReadTimerRef.current) {
