@@ -536,6 +536,15 @@ const FOCUS_CARD_BORDERS = [
     'bg-fuchsia-950/95 border-fuchsia-400',
 ];
 
+const NOTE_BADGE_COLORS = [
+    'from-indigo-500 to-blue-600 border-indigo-300/40',
+    'from-emerald-500 to-teal-600 border-emerald-300/40',
+    'from-rose-500 to-pink-600 border-rose-300/40',
+    'from-amber-500 to-orange-600 border-amber-300/40',
+    'from-cyan-500 to-sky-600 border-cyan-300/40',
+    'from-fuchsia-500 to-purple-600 border-fuchsia-300/40',
+];
+
 export function NotebookNotePlayer({
     step,
     isFullscreen,
@@ -825,25 +834,24 @@ export function NotebookNotePlayer({
                         key={`n-${index}`}
                         onClick={() => toggleCheckItem(index)}
                         className={cn(
-                            "flex items-start gap-2.5 p-2 sm:p-2.5 rounded-xl border-[1.5px] shadow-lg transition-all cursor-pointer group relative",
-                            isChecked
-                                ? "bg-emerald-950/60 border-emerald-500/60 opacity-65"
-                                : "bg-slate-900/75 border-slate-700/70 hover:bg-slate-800/80 hover:border-amber-500/50 backdrop-blur-sm"
+                            "flex items-start gap-2.5 p-2 sm:p-2.5 rounded-xl border-[1.5px] shadow-lg transition-all cursor-pointer group relative overflow-hidden",
+                            SMARTBOARD_CARD_COLORS[index % SMARTBOARD_CARD_COLORS.length],
+                            isChecked ? "opacity-50 border-dashed" : ""
                         )}
                     >
                         <div className={cn(
-                            "flex-shrink-0 flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg font-black text-sm sm:text-base shadow border mt-0.5 transition-colors",
+                            "flex-shrink-0 flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg font-black text-sm sm:text-base shadow border mt-0.5 transition-colors relative z-10",
                             isChecked
                                 ? "bg-emerald-600 border-emerald-400/50 text-white"
-                                : "bg-gradient-to-br from-amber-500 to-orange-600 border-amber-400/30 text-white"
+                                : cn("bg-gradient-to-br text-white", NOTE_BADGE_COLORS[index % NOTE_BADGE_COLORS.length])
                         )}>
                             {isChecked ? <Check className="w-4 h-4 stroke-[3]" /> : index + 1}
                         </div>
 
                         <p
                             className={cn(
-                                "font-medium leading-snug select-text flex-1 pr-5",
-                                isChecked ? "line-through text-emerald-200/80" : "text-slate-100"
+                                "font-medium leading-snug select-text flex-1 pr-5 relative z-10",
+                                isChecked ? "line-through text-white/65" : "text-white/95"
                             )}
                             style={{ fontSize: `${effectiveFontSize}rem` }}
                         >
@@ -857,7 +865,7 @@ export function NotebookNotePlayer({
                                 playSound('pop');
                                 setFocusState({ type: 'note', index });
                             }}
-                            className="absolute top-1.5 right-1.5 p-1 rounded-md text-slate-400 hover:text-white hover:bg-white/10 opacity-40 group-hover:opacity-100 transition-opacity cursor-pointer"
+                            className="absolute top-1.5 right-1.5 p-1 rounded-md text-white/70 hover:text-white hover:bg-white/15 opacity-45 group-hover:opacity-100 transition-opacity cursor-pointer z-10"
                             title="Bu Notu Akıllı Tahtada Büyüt"
                         >
                             <Maximize2 className="w-3.5 h-3.5" />
@@ -1107,9 +1115,7 @@ export function NotebookNotePlayer({
                             <div
                                 className={cn(
                                     "w-full max-w-4xl my-auto p-6 sm:p-10 rounded-3xl border-2 shadow-2xl relative",
-                                    isConcept
-                                        ? FOCUS_CARD_BORDERS[currentIndex % FOCUS_CARD_BORDERS.length]
-                                        : "bg-slate-900 border-amber-500/70"
+                                    FOCUS_CARD_BORDERS[currentIndex % FOCUS_CARD_BORDERS.length]
                                 )}
                             >
                                 <div className="absolute top-3 right-5 text-white/10 font-black text-7xl leading-none pointer-events-none select-none">
@@ -1135,7 +1141,10 @@ export function NotebookNotePlayer({
 
                                 {!isConcept && (
                                     <div className="flex items-start gap-5 relative z-10">
-                                        <div className="flex-shrink-0 flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 text-white font-black text-2xl shadow-lg border border-amber-400/30">
+                                        <div className={cn(
+                                            "flex-shrink-0 flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br text-white font-black text-2xl shadow-lg border",
+                                            NOTE_BADGE_COLORS[currentIndex % NOTE_BADGE_COLORS.length]
+                                        )}>
                                             {currentIndex + 1}
                                         </div>
                                         <p
