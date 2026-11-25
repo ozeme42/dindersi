@@ -82,7 +82,7 @@ export * from './lesson-viewer';
 import { StepContent, DrawingCanvas } from './lesson-viewer';
 import { PresentationWoodenTray } from './presentation-wooden-tray';
 
-function getStepTypeBadge(type?: string): string {
+export function getStepTypeBadge(type?: string): string {
     switch (type) {
         case 'topicOutline': return '📑 Konu Başlıkları';
         case 'hookQuestion': return '💭 Merak Sorusu';

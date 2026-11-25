@@ -276,6 +276,75 @@ class SoundEffects {
       osc.stop(now + 0.25);
     });
   }
+
+  /** Sıcak pirinç ders / dikkat zili */
+  playBell() {
+    const ctx = this.getContext();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+    const harmonics = [
+      { freq: 659.25, gain: 0.22, dur: 1.0 },
+      { freq: 1318.51, gain: 0.12, dur: 0.85 },
+      { freq: 1975.53, gain: 0.06, dur: 0.6 },
+    ];
+    harmonics.forEach(h => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(h.freq, now);
+      gain.gain.setValueAtTime(h.gain, now);
+      gain.gain.exponentialRampToValueAtTime(0.0008, now + h.dur);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + h.dur + 0.04);
+    });
+  }
+
+  /** Sınıf alkış & tebrik efekti */
+  playApplause() {
+    const ctx = this.getContext();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+    // Kısa alkış darbeleri (bandpass gürültü) + neşeli çan vurgusu
+    const sampleCount = Math.floor(ctx.sampleRate * 0.055);
+    const noiseBuf = ctx.createBuffer(1, sampleCount, ctx.sampleRate);
+    const data = noiseBuf.getChannelData(0);
+    for (let i = 0; i < sampleCount; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (sampleCount * 0.35));
+    }
+
+    for (let i = 0; i < 12; i++) {
+      const t = now + i * 0.068 + (i % 3) * 0.014;
+      const src = ctx.createBufferSource();
+      src.buffer = noiseBuf;
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.setValueAtTime(1100 + (i % 4) * 320, t);
+      filter.Q.setValueAtTime(1.4, t);
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.14, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.055);
+      src.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+      src.start(t);
+    }
+
+    [523.25, 659.25, 783.99, 1046.5].forEach((freq, idx) => {
+      const t = now + idx * 0.07;
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, t);
+      g.gain.setValueAtTime(0.11, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+      osc.connect(g);
+      g.connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + 0.38);
+    });
+  }
 }
 
 const sfx = new SoundEffects();
@@ -307,7 +376,9 @@ export type SoundType =
   | 'click'
   | 'flip'
   | 'coin-flip'
-  | 'lose';
+  | 'lose'
+  | 'bell'
+  | 'applause';
 
 export function playSound(type: SoundType) {
   if (!globalSoundEnabled) return;
@@ -362,6 +433,12 @@ export function playSound(type: SoundType) {
         break;
       case 'lose':
         sfx.playLose();
+        break;
+      case 'bell':
+        sfx.playBell();
+        break;
+      case 'applause':
+        sfx.playApplause();
         break;
       default:
         break;

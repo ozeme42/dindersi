@@ -7,14 +7,14 @@ import {
     Maximize2, X, Zap, Timer, Users, EyeOff, LayoutGrid, Play, Pause, 
     RotateCcw, Sparkles, BookOpen, HelpCircle, CheckCircle2, ChevronRight, 
     ChevronDown, ChevronUp, Check, Trophy, Volume2, VolumeX, Shuffle, Pencil, Minus, Plus,
-    Copy, Lock, Gauge, LogOut, Palette, Type, Pin, PinOff, Mic
+    Copy, Lock, Gauge, LogOut, Palette, Type, Pin, PinOff, Mic, Bell, Award, Search, SlidersHorizontal, Clock
 } from 'lucide-react';
 import { doc, getDoc, collection, query, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { getCachedSteps, setCachedSteps } from '@/lib/lesson-cache';
 import type { Topic, Unit, LessonStep } from '@/lib/types';
-import { LessonContentViewer } from '@/components/lesson-content-viewer';
-import { getTurkishVoices, getBestTurkishVoice, type TurkishVoiceOption } from '@/components/lesson-viewer/tts-helper';
+import { LessonContentViewer, getStepTypeBadge } from '@/components/lesson-content-viewer';
+import { getTurkishVoices, getBestTurkishVoice, prepareTurkishSpeech, getTurkishSpeechParams, type TurkishVoiceOption } from '@/components/lesson-viewer/tts-helper';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { PresentationDrawingBoard } from '@/components/presentation-drawing-board';
 import { PresentationWheelModal } from '@/components/presentation-wheel-modal';
@@ -158,6 +158,15 @@ function PresentationPageContent() {
     }, [isPerfMode, animationSpeed]);
 
     const [isToolsOpen, setIsToolsOpen] = useState(false);
+    const [toolsTab, setToolsTab] = useState<'tools' | 'display'>('tools');
+    const [timerLabel, setTimerLabel] = useState<string>('Etkinlik Süresi');
+    const [isTimerFinishedAlert, setIsTimerFinishedAlert] = useState<boolean>(false);
+    const [blackoutMessage, setBlackoutMessage] = useState<string>('Dikkat Öğretmende 👨‍🏫');
+    const [slideDrawerFilter, setSlideDrawerFilter] = useState<'all' | 'hidden'>('all');
+    const [slideDrawerQuery, setSlideDrawerQuery] = useState<string>('');
+    const [sourceTextSize, setSourceTextSize] = useState<'sm' | 'md' | 'lg' | 'xl'>('md');
+    const [sourceSearchQuery, setSourceSearchQuery] = useState<string>('');
+    const [isSpeakingSource, setIsSpeakingSource] = useState<boolean>(false);
     const { toast } = useToast();
     const [sourceText, setSourceText] = useState<string>('');
     const [isSourceTextOpen, setIsSourceTextOpen] = useState(false);
@@ -167,6 +176,35 @@ function PresentationPageContent() {
     const { themeMode, setThemeMode } = useTheme();
     const isDarkMode = themeMode === 'dark';
     const setIsDarkMode = (checked: boolean) => setThemeMode(checked ? 'dark' : 'light');
+
+    useEffect(() => {
+        if (!isSourceTextOpen && isSpeakingSource && typeof window !== 'undefined' && 'speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            setIsSpeakingSource(false);
+        }
+    }, [isSourceTextOpen, isSpeakingSource]);
+
+    const toggleSpeakSourceText = useCallback(() => {
+        if (typeof window === 'undefined' || !('speechSynthesis' in window) || !sourceText) return;
+        if (isSpeakingSource) {
+            window.speechSynthesis.cancel();
+            setIsSpeakingSource(false);
+            return;
+        }
+        window.speechSynthesis.cancel();
+        const { spokenText } = prepareTurkishSpeech(sourceText);
+        const voice = getBestTurkishVoice(preferredVoice === 'auto' ? null : preferredVoice);
+        const { rate, pitch } = getTurkishSpeechParams(voice);
+        const utter = new SpeechSynthesisUtterance(spokenText);
+        if (voice) utter.voice = voice;
+        utter.lang = 'tr-TR';
+        utter.rate = rate;
+        utter.pitch = pitch;
+        utter.onend = () => setIsSpeakingSource(false);
+        utter.onerror = () => setIsSpeakingSource(false);
+        setIsSpeakingSource(true);
+        window.speechSynthesis.speak(utter);
+    }, [isSpeakingSource, sourceText, preferredVoice]);
 
     const handleSaveSourceText = async () => {
         if (!courseId || !unitId || (!topicId && !unitId)) return;
@@ -481,10 +519,11 @@ function PresentationPageContent() {
                     if (prev <= 1) {
                         clearInterval(timerRef.current!);
                         setIsTimerRunning(false);
+                        setIsTimerFinishedAlert(true);
                         if (isSoundEnabled) {
                             try { playSound('timeUp'); } catch(e) {}
                         }
-                        confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+                        try { confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } }); } catch(e) {}
                         return 0;
                     }
                     return prev - 1;
@@ -507,7 +546,17 @@ function PresentationPageContent() {
     const startTimerPreset = (sec: number) => {
         setInitialTimerSeconds(sec);
         setTimerSeconds(sec);
+        setIsTimerFinishedAlert(false);
         setIsTimerRunning(true);
+    };
+
+    const adjustTimerSeconds = (delta: number) => {
+        setIsTimerFinishedAlert(false);
+        setTimerSeconds(prev => {
+            const next = Math.max(0, prev + delta);
+            setInitialTimerSeconds(init => Math.max(init, next, 15));
+            return next;
+        });
     };
 
 
@@ -1322,630 +1371,533 @@ function PresentationPageContent() {
             </div>
 
             {/* ══ SUNUM ARAÇLARI & AYARLAR PANELİ (ALT MENÜDEKİ 'ARAÇLAR' BUTONUNDAN AÇILIR) ══ */}
+            {/* ══ SUNUM ARAÇLARI & AYARLAR PANELİ (İKİ SEKMELİ KOMUTA MERKEZİ) ══ */}
             <AnimatePresence>
                 {isToolsOpen && (() => {
                     const isLightUi = presentationTheme === 'clean-light' || presentationTheme === 'sketchnote';
-                    const sectionDivider = cn("space-y-2 pt-2 border-t", isLightUi ? "border-slate-200" : "border-white/10");
+                    const sectionDivider = cn("space-y-2 pt-2.5 border-t", isLightUi ? "border-slate-200" : "border-white/10");
                     const optionIdle = isLightUi
                         ? "border-slate-200 bg-slate-100/70 text-slate-700 hover:border-slate-300"
                         : "border-white/10 bg-white/5 text-slate-300 hover:border-white/25";
                     const labelTone = isLightUi ? "text-slate-800" : "text-white";
                     const mutedTone = isLightUi ? "text-slate-500" : "text-slate-400";
+                    const sourceWordCount = sourceText ? sourceText.trim().split(/\s+/).filter(Boolean).length : 0;
 
                     return (
                     <div 
-                        className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-950/40 backdrop-blur-sm p-3 sm:p-4" 
+                        className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-950/45 backdrop-blur-sm p-3 sm:p-4" 
                         onClick={() => setIsToolsOpen(false)}
                     >
                         <motion.div
-                            initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                            initial={{ opacity: 0, y: 36, scale: 0.96 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, y: 40, scale: 0.95 }}
-                            transition={{ duration: 0.25, ease: "easeOut" }}
+                            exit={{ opacity: 0, y: 36, scale: 0.96 }}
+                            transition={{ duration: 0.22, ease: "easeOut" }}
                             onClick={(e) => e.stopPropagation()}
                             className={cn(
-                                "w-full max-w-md p-0 rounded-3xl border-2 shadow-2xl backdrop-blur-3xl overflow-hidden mb-16 sm:mb-0",
+                                "w-full max-w-lg p-0 rounded-3xl border shadow-2xl overflow-hidden mb-14 sm:mb-0",
                                 isLightUi
-                                    ? "border-indigo-200 bg-white/95 text-slate-900"
-                                    : "border-white/15 bg-slate-950/95 text-white"
+                                    ? "border-slate-200 bg-white text-slate-900"
+                                    : "border-white/15 bg-slate-950 text-white"
                             )}
                         >
-                            {/* Menü Başlığı */}
+                            {/* Üst Başlık ve Sekme Değiştirici */}
                             <div className={cn(
-                                "p-3.5 px-4 border-b flex items-center justify-between",
-                                isLightUi
-                                    ? "border-slate-200 bg-slate-50"
-                                    : "border-white/10 bg-white/5"
+                                "p-3.5 px-4 border-b space-y-2.5",
+                                isLightUi ? "border-slate-200 bg-slate-50/90" : "border-white/10 bg-white/[0.03]"
                             )}>
-                                <div className="flex items-center gap-2">
-                                    <Sparkles className="w-4 h-4 text-indigo-500" />
-                                    <h4 className="font-extrabold text-xs uppercase tracking-wider">
-                                        Sunum Araçları & Ayarlar
-                                    </h4>
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-7 h-7 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-xs">
+                                            <Sparkles className="w-3.5 h-3.5" />
+                                        </div>
+                                        <div>
+                                            <h4 className="font-black text-xs uppercase tracking-wider leading-tight">
+                                                Sunum Merkezi
+                                            </h4>
+                                            <span className={cn("text-[10px] font-medium block leading-tight", mutedTone)}>
+                                                Adım {currentStepIndex + 1} / {totalStepsCount || 1} • {currentTime}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                        <Button 
+                                            variant="ghost" 
+                                            size="icon" 
+                                            onClick={() => setIsSoundEnabled(prev => !prev)}
+                                            className={cn("h-8 w-8 rounded-xl cursor-pointer", isLightUi ? "text-slate-600 hover:bg-slate-200/70" : "text-slate-300 hover:bg-white/10")}
+                                            title={isSoundEnabled ? "Ses Efektleri Açık" : "Ses Efektleri Kapalı"}
+                                        >
+                                            {isSoundEnabled ? <Volume2 className="w-4 h-4 text-emerald-500" /> : <VolumeX className="w-4 h-4 text-slate-400" />}
+                                        </Button>
+                                        <Button 
+                                            variant="ghost" 
+                                            size="icon" 
+                                            onClick={() => setIsToolsOpen(false)}
+                                            className={cn("h-8 w-8 rounded-xl cursor-pointer", isLightUi ? "text-slate-600 hover:bg-slate-200/70" : "text-slate-300 hover:bg-white/10")}
+                                            title="Kapat"
+                                        >
+                                            <X className="w-4 h-4" />
+                                        </Button>
+                                    </div>
                                 </div>
-                                <div className="flex items-center gap-1">
-                                    <Button 
-                                        variant="ghost" 
-                                        size="icon" 
-                                        onClick={() => setIsSoundEnabled(prev => !prev)}
-                                        className={cn("h-7 w-7 rounded-lg text-slate-500 cursor-pointer", isLightUi ? "hover:text-slate-800" : "hover:text-white")}
-                                        title={isSoundEnabled ? "Ses Efektleri Açık" : "Ses Efektleri Kapalı"}
+
+                                {/* 2 Sekme Seçici */}
+                                <div className={cn("grid grid-cols-2 gap-1 p-1 rounded-2xl border", isLightUi ? "bg-slate-200/60 border-slate-200" : "bg-white/5 border-white/10")}>
+                                    <button
+                                        type="button"
+                                        onClick={() => setToolsTab('tools')}
+                                        className={cn(
+                                            "py-1.5 px-3 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 transition-all cursor-pointer",
+                                            toolsTab === 'tools'
+                                                ? (isLightUi ? "bg-white text-indigo-700 shadow-xs" : "bg-indigo-600 text-white shadow-xs")
+                                                : mutedTone
+                                        )}
                                     >
-                                        {isSoundEnabled ? <Volume2 className="w-3.5 h-3.5 text-emerald-500" /> : <VolumeX className="w-3.5 h-3.5 text-slate-400" />}
-                                    </Button>
-                                    <Button 
-                                        variant="ghost" 
-                                        size="icon" 
-                                        onClick={() => setIsToolsOpen(false)}
-                                        className={cn("h-7 w-7 rounded-lg text-slate-500 cursor-pointer", isLightUi ? "hover:text-slate-800" : "hover:text-white")}
-                                        title="Kapat"
+                                        <SlidersHorizontal className="w-3.5 h-3.5" />
+                                        <span>Sınıf Araçları</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setToolsTab('display')}
+                                        className={cn(
+                                            "py-1.5 px-3 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 transition-all cursor-pointer",
+                                            toolsTab === 'display'
+                                                ? (isLightUi ? "bg-white text-indigo-700 shadow-xs" : "bg-indigo-600 text-white shadow-xs")
+                                                : mutedTone
+                                        )}
                                     >
-                                        <X className="w-4 h-4" />
-                                    </Button>
+                                        <Palette className="w-3.5 h-3.5" />
+                                        <span>Görünüm & Ayarlar</span>
+                                    </button>
                                 </div>
                             </div>
 
-                            <div className="p-4 space-y-4 max-h-[75vh] overflow-y-auto">
-                                {/* 1. Sınıf Araçları Izgara */}
-                                <div className="space-y-1.5">
-                                    <span className={cn("text-[11px] font-bold uppercase tracking-wider", mutedTone)}>Tahta Araçları</span>
-                                    <div className="grid grid-cols-2 gap-2">
-                                        <button
-                                            onClick={() => { setIsRemoteModalOpen(true); setIsToolsOpen(false); }}
-                                            className={cn("flex items-center gap-2.5 p-2.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 transition-all text-left group cursor-pointer", isLightUi ? "text-indigo-700" : "text-indigo-300")}
-                                        >
-                                            <div className="p-2 rounded-lg bg-indigo-500/20 group-hover:bg-indigo-500 group-hover:text-white transition-colors">
-                                                <Smartphone className="w-4 h-4" />
-                                            </div>
-                                            <div className="flex flex-col">
-                                                <span className="font-bold text-xs flex items-center gap-1">
-                                                    Mobil Kumanda (Q)
-                                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                            <div className="p-4 space-y-3.5 max-h-[72vh] overflow-y-auto">
+                                {toolsTab === 'tools' ? (
+                                    <>
+                                        {/* 1. Tahta & Öğrenci Araçları (3x2 Izgara) */}
+                                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                                            <button
+                                                onClick={() => { handleOpenWheel(); setIsToolsOpen(false); }}
+                                                className={cn("flex flex-col justify-between p-3 rounded-2xl border transition-all text-left group cursor-pointer", isLightUi ? "bg-sky-50/90 hover:bg-sky-100 border-sky-200 text-sky-900" : "bg-sky-500/10 hover:bg-sky-500/20 border-sky-500/25 text-sky-200")}
+                                            >
+                                                <div className="flex items-center justify-between w-full mb-2">
+                                                    <div className="p-1.5 rounded-lg bg-sky-500 text-white">
+                                                        <Users className="w-4 h-4" />
+                                                    </div>
+                                                    <span className="text-[10px] font-mono opacity-65">R</span>
+                                                </div>
+                                                <span className="font-black text-xs">Şanslı Çark</span>
+                                                <span className="text-[10px] opacity-75">Kura & Öğrenci Seç</span>
+                                            </button>
+
+                                            <button
+                                                onClick={() => { setIsTimerOpen(true); setIsToolsOpen(false); }}
+                                                className={cn("flex flex-col justify-between p-3 rounded-2xl border transition-all text-left group cursor-pointer", isLightUi ? "bg-amber-50/90 hover:bg-amber-100 border-amber-200 text-amber-900" : "bg-amber-500/10 hover:bg-amber-500/20 border-amber-500/25 text-amber-200")}
+                                            >
+                                                <div className="flex items-center justify-between w-full mb-2">
+                                                    <div className="p-1.5 rounded-lg bg-amber-500 text-slate-950">
+                                                        <Timer className="w-4 h-4" />
+                                                    </div>
+                                                    {isTimerRunning ? (
+                                                        <span className="text-[10px] font-mono font-black px-1.5 py-0.5 rounded bg-amber-500 text-slate-950">
+                                                            {formatTimer(timerSeconds)}
+                                                        </span>
+                                                    ) : (
+                                                        <span className="text-[10px] font-mono opacity-65">T</span>
+                                                    )}
+                                                </div>
+                                                <span className="font-black text-xs">Sınıf Sayacı</span>
+                                                <span className="text-[10px] opacity-75">{isTimerRunning ? 'Çalışıyor • Aç' : 'Geri sayım kur'}</span>
+                                            </button>
+
+                                            <button
+                                                onClick={() => { setIsDrawingOpen(true); setIsToolsOpen(false); }}
+                                                className={cn("flex flex-col justify-between p-3 rounded-2xl border transition-all text-left group cursor-pointer", isLightUi ? "bg-cyan-50/90 hover:bg-cyan-100 border-cyan-200 text-cyan-900" : "bg-cyan-500/10 hover:bg-cyan-500/20 border-cyan-500/25 text-cyan-200")}
+                                            >
+                                                <div className="flex items-center justify-between w-full mb-2">
+                                                    <div className="p-1.5 rounded-lg bg-cyan-500 text-slate-950">
+                                                        <Pencil className="w-4 h-4" />
+                                                    </div>
+                                                    <span className="text-[10px] font-mono opacity-65">D</span>
+                                                </div>
+                                                <span className="font-black text-xs">Çizim Tahtası</span>
+                                                <span className="text-[10px] opacity-75">Kalem, fosfor & şekil</span>
+                                            </button>
+
+                                            <button
+                                                onClick={() => { setIsRemoteModalOpen(true); setIsToolsOpen(false); }}
+                                                className={cn("flex flex-col justify-between p-3 rounded-2xl border transition-all text-left group cursor-pointer", isLightUi ? "bg-indigo-50/90 hover:bg-indigo-100 border-indigo-200 text-indigo-900" : "bg-indigo-500/10 hover:bg-indigo-500/20 border-indigo-500/25 text-indigo-200")}
+                                            >
+                                                <div className="flex items-center justify-between w-full mb-2">
+                                                    <div className="p-1.5 rounded-lg bg-indigo-600 text-white">
+                                                        <Smartphone className="w-4 h-4" />
+                                                    </div>
+                                                    <span className="text-[10px] font-mono opacity-65">Q</span>
+                                                </div>
+                                                <span className="font-black text-xs">Mobil Kumanda</span>
+                                                <span className="text-[10px] opacity-75">QR kod ile telefon</span>
+                                            </button>
+
+                                            <button
+                                                onClick={() => { setIsSlideDrawerOpen(true); setIsToolsOpen(false); }}
+                                                className={cn("flex flex-col justify-between p-3 rounded-2xl border transition-all text-left group cursor-pointer", isLightUi ? "bg-purple-50/90 hover:bg-purple-100 border-purple-200 text-purple-900" : "bg-purple-500/10 hover:bg-purple-500/20 border-purple-500/25 text-purple-200")}
+                                            >
+                                                <div className="flex items-center justify-between w-full mb-2">
+                                                    <div className="p-1.5 rounded-lg bg-purple-600 text-white">
+                                                        <LayoutGrid className="w-4 h-4" />
+                                                    </div>
+                                                    <span className="text-[10px] font-mono opacity-65">G</span>
+                                                </div>
+                                                <span className="font-black text-xs">Slayt Çekmecesi</span>
+                                                <span className="text-[10px] opacity-75">{totalStepsCount} adımda gezin</span>
+                                            </button>
+
+                                            <button
+                                                onClick={() => { setIsSourceTextOpen(true); setIsToolsOpen(false); }}
+                                                className={cn("flex flex-col justify-between p-3 rounded-2xl border transition-all text-left group cursor-pointer", isLightUi ? "bg-teal-50/90 hover:bg-teal-100 border-teal-200 text-teal-900" : "bg-teal-500/10 hover:bg-teal-500/20 border-teal-500/25 text-teal-200")}
+                                            >
+                                                <div className="flex items-center justify-between w-full mb-2">
+                                                    <div className="p-1.5 rounded-lg bg-teal-600 text-white">
+                                                        <BookOpen className="w-4 h-4" />
+                                                    </div>
+                                                    <span className="text-[10px] font-mono opacity-65">K</span>
+                                                </div>
+                                                <span className="font-black text-xs">Kaynak Metin</span>
+                                                <span className="text-[10px] opacity-75">
+                                                    {sourceWordCount > 0 ? `${sourceWordCount} kelime` : 'Ders notu ekle'}
                                                 </span>
-                                                <span className="text-[10px] opacity-75">QR ile telefondan yönet</span>
-                                            </div>
-                                        </button>
+                                            </button>
+                                        </div>
 
-                                        <button
-                                            onClick={() => { setIsDrawingOpen(true); setIsToolsOpen(false); }}
-                                            className={cn("flex items-center gap-2.5 p-2.5 rounded-xl border border-cyan-500/20 bg-cyan-500/10 hover:bg-cyan-500/20 transition-all text-left group cursor-pointer", isLightUi ? "text-cyan-700" : "text-cyan-400")}
-                                        >
-                                            <div className="p-2 rounded-lg bg-cyan-500/20 group-hover:bg-cyan-500 group-hover:text-slate-950 transition-colors">
-                                                <Pencil className="w-4 h-4" />
+                                        {/* 2. Hızlı Dikkat & Sınıf Sesleri Barı */}
+                                        <div className={sectionDivider}>
+                                            <span className={cn("text-[11px] font-bold uppercase tracking-wider", mutedTone)}>Dikkat & Sınıf Sesleri</span>
+                                            <div className="grid grid-cols-3 gap-2">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => { setIsBlackout(true); setIsToolsOpen(false); }}
+                                                    className={cn("flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl border text-xs font-bold transition-all cursor-pointer", isLightUi ? "bg-rose-50 hover:bg-rose-100 border-rose-200 text-rose-700" : "bg-rose-500/15 hover:bg-rose-500/25 border-rose-500/30 text-rose-300")}
+                                                >
+                                                    <EyeOff className="w-3.5 h-3.5" />
+                                                    <span>Karart (B)</span>
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        try { playSound('bell'); } catch {}
+                                                    }}
+                                                    className={cn("flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl border text-xs font-bold transition-all cursor-pointer active:scale-95", isLightUi ? "bg-amber-50 hover:bg-amber-100 border-amber-200 text-amber-800" : "bg-amber-500/15 hover:bg-amber-500/25 border-amber-500/30 text-amber-300")}
+                                                >
+                                                    <Bell className="w-3.5 h-3.5" />
+                                                    <span>Ders Zili</span>
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        try { playSound('applause'); } catch {}
+                                                        try { confetti({ particleCount: 70, spread: 75, origin: { y: 0.7 } }); } catch {}
+                                                    }}
+                                                    className={cn("flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl border text-xs font-bold transition-all cursor-pointer active:scale-95", isLightUi ? "bg-emerald-50 hover:bg-emerald-100 border-emerald-200 text-emerald-700" : "bg-emerald-500/15 hover:bg-emerald-500/25 border-emerald-500/30 text-emerald-300")}
+                                                >
+                                                    <Award className="w-3.5 h-3.5" />
+                                                    <span>Alkışla</span>
+                                                </button>
                                             </div>
-                                            <div className="flex flex-col">
-                                                <span className="font-bold text-xs">Çizim & Not (D)</span>
-                                                <span className="text-[10px] opacity-75">Kalem & Şekiller</span>
-                                            </div>
-                                        </button>
+                                        </div>
 
-                                        <button
-                                            onClick={() => { setIsTimerOpen(true); setIsToolsOpen(false); }}
-                                            className={cn("flex items-center gap-2.5 p-2.5 rounded-xl border border-amber-500/20 bg-amber-500/10 hover:bg-amber-500/20 transition-all text-left group cursor-pointer", isLightUi ? "text-amber-700" : "text-amber-400")}
-                                        >
-                                            <div className="p-2 rounded-lg bg-amber-500/20 group-hover:bg-amber-500 group-hover:text-slate-950 transition-colors">
-                                                <Timer className="w-4 h-4" />
+                                        {/* 3. Anlık Yazı Boyutu Stepper & Hızlı Anahtarlar */}
+                                        <div className={sectionDivider}>
+                                            <div className="flex items-center justify-between">
+                                                <span className={cn("text-[11px] font-bold uppercase tracking-wider", mutedTone)}>Yazı & Kart Boyutu</span>
+                                                <span className={cn("text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20", isLightUi ? "text-indigo-700" : "text-indigo-300")}>
+                                                    {FONT_SIZE_LEVELS[getCurrentScaleIndex()]?.badge} ({FONT_SIZE_LEVELS[getCurrentScaleIndex()]?.percent})
+                                                </span>
                                             </div>
-                                            <div className="flex flex-col">
-                                                <span className="font-bold text-xs">Sayaç (T)</span>
-                                                <span className="text-[10px] opacity-75">{isTimerRunning ? formatTimer(timerSeconds) : 'Geri sayım'}</span>
-                                            </div>
-                                        </button>
 
-                                        <button
-                                            onClick={() => { handleOpenWheel(); setIsToolsOpen(false); }}
-                                            className={cn("flex items-center gap-2.5 p-2.5 rounded-xl border border-sky-500/20 bg-sky-500/10 hover:bg-sky-500/20 transition-all text-left group cursor-pointer", isLightUi ? "text-sky-700" : "text-sky-400")}
-                                        >
-                                            <div className="p-2 rounded-lg bg-sky-500/20 group-hover:bg-sky-500 group-hover:text-white transition-colors">
-                                                <Users className="w-4 h-4" />
-                                            </div>
-                                            <div className="flex flex-col">
-                                                <span className="font-bold text-xs">Öğrenci (R)</span>
-                                                <span className="text-[10px] opacity-75">Kura & Çark</span>
-                                            </div>
-                                        </button>
+                                            <div className={cn("flex items-center justify-between gap-2 p-1.5 rounded-2xl border", isLightUi ? "bg-slate-100 border-slate-200" : "bg-white/5 border-white/10")}>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    disabled={getCurrentScaleIndex() === 0}
+                                                    onClick={decreaseFontSize}
+                                                    className={cn("h-8 w-8 p-0 rounded-xl shadow-xs disabled:opacity-30 flex items-center justify-center cursor-pointer", isLightUi ? "bg-white hover:bg-slate-200 text-slate-700" : "bg-white/10 hover:bg-white/20 text-white")}
+                                                    title="Küçült (-)"
+                                                >
+                                                    <Minus className="w-4 h-4 stroke-[3]" />
+                                                </Button>
 
-                                        <button
-                                            onClick={() => { setIsSlideDrawerOpen(true); setIsToolsOpen(false); }}
-                                            className={cn("flex items-center gap-2.5 p-2.5 rounded-xl border border-purple-500/20 bg-purple-500/10 hover:bg-purple-500/20 transition-all text-left group cursor-pointer", isLightUi ? "text-purple-700" : "text-purple-400")}
-                                        >
-                                            <div className="p-2 rounded-lg bg-purple-500/20 group-hover:bg-purple-500 group-hover:text-white transition-colors">
-                                                <LayoutGrid className="w-4 h-4" />
-                                            </div>
-                                            <div className="flex flex-col">
-                                                <span className="font-bold text-xs">Slaytlar (G)</span>
-                                                <span className="text-[10px] opacity-75">Tüm adımlar</span>
-                                            </div>
-                                        </button>
+                                                <div className="flex-1 flex flex-col items-center">
+                                                    <div className="flex items-center gap-1.5 py-1">
+                                                        {FONT_SIZE_LEVELS.map((lvl, idx) => (
+                                                            <div
+                                                                key={lvl.key}
+                                                                onClick={() => setFontSizeScale(lvl.key)}
+                                                                className={cn(
+                                                                    "h-2.5 rounded-full cursor-pointer transition-all duration-300",
+                                                                    idx === getCurrentScaleIndex()
+                                                                        ? "w-6 bg-indigo-600"
+                                                                        : idx < getCurrentScaleIndex()
+                                                                            ? "w-2.5 bg-indigo-400/60 hover:bg-indigo-500"
+                                                                            : (isLightUi ? "w-2.5 bg-slate-300 hover:bg-slate-400" : "w-2.5 bg-white/20 hover:bg-white/35")
+                                                                )}
+                                                                title={lvl.label}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                    <span className={cn("text-[11px] font-black", labelTone)}>
+                                                        {FONT_SIZE_LEVELS[getCurrentScaleIndex()]?.label}
+                                                    </span>
+                                                </div>
 
-                                        <button
-                                            onClick={() => { setIsSourceTextOpen(true); setIsToolsOpen(false); }}
-                                            className={cn("flex items-center gap-2.5 p-2.5 rounded-xl border border-teal-500/20 bg-teal-500/10 hover:bg-teal-500/20 transition-all text-left group cursor-pointer", isLightUi ? "text-teal-700" : "text-teal-400")}
-                                        >
-                                            <div className="p-2 rounded-lg bg-teal-500/20 group-hover:bg-teal-500 group-hover:text-slate-950 transition-colors">
-                                                <BookOpen className="w-4 h-4" />
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    disabled={getCurrentScaleIndex() === FONT_SIZE_LEVELS.length - 1}
+                                                    onClick={increaseFontSize}
+                                                    className={cn("h-8 w-8 p-0 rounded-xl shadow-xs disabled:opacity-30 flex items-center justify-center cursor-pointer", isLightUi ? "bg-white hover:bg-slate-200 text-slate-700" : "bg-white/10 hover:bg-white/20 text-white")}
+                                                    title="Büyüt (+)"
+                                                >
+                                                    <Plus className="w-4 h-4 stroke-[3]" />
+                                                </Button>
                                             </div>
-                                            <div className="flex flex-col">
-                                                <span className="font-bold text-xs">Kaynak Metin (K)</span>
-                                                <span className="text-[10px] opacity-75">Ders Notu & Özet</span>
+
+                                            <div className="grid grid-cols-2 gap-2 pt-1">
+                                                <div className={cn("flex items-center justify-between px-3 py-2 rounded-xl border", isLightUi ? "bg-slate-50 border-slate-200" : "bg-white/5 border-white/10")}>
+                                                    <span className={cn("text-xs font-bold flex items-center gap-1.5", labelTone)}>
+                                                        <LayoutList className="w-3.5 h-3.5 text-sky-500" /> Tek Kart
+                                                    </span>
+                                                    <Switch checked={isSingleCardMode} onCheckedChange={setIsSingleCardMode} />
+                                                </div>
+                                                <div className={cn("flex items-center justify-between px-3 py-2 rounded-xl border", isLightUi ? "bg-slate-50 border-slate-200" : "bg-white/5 border-white/10")}>
+                                                    <span className={cn("text-xs font-bold flex items-center gap-1.5", labelTone)}>
+                                                        <Volume2 className="w-3.5 h-3.5 text-violet-500" /> Oto Oku
+                                                    </span>
+                                                    <Switch checked={isAutoReadEnabled} onCheckedChange={toggleAutoRead} />
+                                                </div>
                                             </div>
-                                        </button>
-
-                                        <button
-                                            onClick={() => { setIsBlackout(true); setIsToolsOpen(false); }}
-                                            className={cn("flex items-center gap-2.5 p-2.5 rounded-xl border border-rose-500/20 bg-rose-500/10 hover:bg-rose-500/20 transition-all text-left group cursor-pointer", isLightUi ? "text-rose-700" : "text-rose-400")}
-                                        >
-                                            <div className="p-2 rounded-lg bg-rose-500/20 group-hover:bg-rose-500 group-hover:text-white transition-colors">
-                                                <EyeOff className="w-4 h-4" />
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        {/* SEKME 2: TEMA, TİPOGRAFİ VE SİSTEM AYARLARI */}
+                                        <div className="space-y-2">
+                                            <div className="flex items-center justify-between">
+                                                <span className={cn("text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5", mutedTone)}>
+                                                    <Palette className="w-3.5 h-3.5 text-indigo-500" />
+                                                    Sunum Atmosferi (M)
+                                                </span>
                                             </div>
-                                            <div className="flex flex-col">
-                                                <span className="font-bold text-xs">Tahtayı Karart (B)</span>
-                                                <span className="text-[10px] opacity-75">Dikkati öğretmene topla</span>
+                                            <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
+                                                <button
+                                                    onClick={() => handleThemeChange('game-3d')}
+                                                    className={cn(
+                                                        "flex flex-col items-center justify-center p-2 rounded-2xl border-2 transition-all cursor-pointer text-center",
+                                                        presentationTheme === 'game-3d'
+                                                            ? "border-amber-400 bg-amber-500/20 text-amber-400 font-black"
+                                                            : optionIdle
+                                                    )}
+                                                >
+                                                    <span className="text-lg mb-0.5">🎮</span>
+                                                    <span className="text-[11px] font-black leading-tight">3D Oyun</span>
+                                                </button>
+                                                <button
+                                                    onClick={() => handleThemeChange('sketchnote')}
+                                                    className={cn(
+                                                        "flex flex-col items-center justify-center p-2 rounded-2xl border-2 transition-all cursor-pointer text-center",
+                                                        presentationTheme === 'sketchnote'
+                                                            ? cn("border-amber-500 bg-amber-500/20 font-black", isLightUi ? "text-amber-800" : "text-amber-200")
+                                                            : optionIdle
+                                                    )}
+                                                >
+                                                    <Sparkles className="w-4 h-4 mb-1 text-amber-500" />
+                                                    <span className="text-[11px] font-bold leading-tight font-['Patrick_Hand']">Defter</span>
+                                                </button>
+                                                <button
+                                                    onClick={() => handleThemeChange('clean-light')}
+                                                    className={cn(
+                                                        "flex flex-col items-center justify-center p-2 rounded-2xl border-2 transition-all cursor-pointer text-center",
+                                                        presentationTheme === 'clean-light'
+                                                            ? cn("border-amber-500 bg-amber-500/15 font-black", isLightUi ? "text-amber-700" : "text-amber-300")
+                                                            : optionIdle
+                                                    )}
+                                                >
+                                                    <Sun className="w-4 h-4 mb-1 text-amber-500" />
+                                                    <span className="text-[11px] font-bold leading-tight">Aydınlık</span>
+                                                </button>
+                                                <button
+                                                    onClick={() => handleThemeChange('cosmic-dark')}
+                                                    className={cn(
+                                                        "flex flex-col items-center justify-center p-2 rounded-2xl border-2 transition-all cursor-pointer text-center",
+                                                        presentationTheme === 'cosmic-dark'
+                                                            ? cn("border-indigo-500 bg-indigo-500/20 font-black", isLightUi ? "text-indigo-700" : "text-white")
+                                                            : optionIdle
+                                                    )}
+                                                >
+                                                    <Moon className="w-4 h-4 mb-1 text-indigo-400" />
+                                                    <span className="text-[11px] font-bold leading-tight">Kozmik</span>
+                                                </button>
+                                                <button
+                                                    onClick={() => handleThemeChange('vibrant-studio')}
+                                                    className={cn(
+                                                        "flex flex-col items-center justify-center p-2 rounded-2xl border-2 transition-all cursor-pointer text-center",
+                                                        presentationTheme === 'vibrant-studio'
+                                                            ? cn("border-purple-500 bg-purple-500/20 font-black", isLightUi ? "text-purple-700" : "text-white")
+                                                            : optionIdle
+                                                    )}
+                                                >
+                                                    <Zap className="w-4 h-4 mb-1 text-amber-400" />
+                                                    <span className="text-[11px] font-bold leading-tight">Canlı</span>
+                                                </button>
                                             </div>
-                                        </button>
-                                    </div>
-                                </div>
+                                        </div>
 
-                                {/* 2. Anlık Yazı & Kart Boyutu (Adım Adım Büyütme/Küçültme) */}
-                                <div className={sectionDivider}>
-                                    <div className="flex items-center justify-between">
-                                        <span className={cn("text-[11px] font-bold uppercase tracking-wider", mutedTone)}>Yazı & Kart Boyutu</span>
-                                        <span className={cn("text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20", isLightUi ? "text-indigo-700" : "text-indigo-300")}>
-                                            {FONT_SIZE_LEVELS[getCurrentScaleIndex()]?.badge} ({FONT_SIZE_LEVELS[getCurrentScaleIndex()]?.percent})
-                                        </span>
-                                    </div>
-
-                                    {/* Adım Adım Stepper (+ / -) */}
-                                    <div className={cn("flex items-center justify-between gap-2 p-1.5 rounded-2xl border", isLightUi ? "bg-slate-100 border-slate-200" : "bg-white/5 border-white/10")}>
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            disabled={getCurrentScaleIndex() === 0}
-                                            onClick={decreaseFontSize}
-                                            className={cn("h-8 w-8 p-0 rounded-xl shadow-xs disabled:opacity-30 flex items-center justify-center cursor-pointer", isLightUi ? "bg-white hover:bg-slate-200 text-slate-700" : "bg-white/10 hover:bg-white/20 text-white")}
-                                            title="Bir Adım Küçült (-)"
-                                        >
-                                            <Minus className="w-4 h-4 stroke-[3]" />
-                                        </Button>
-
-                                        <div className="flex-1 flex flex-col items-center">
-                                            <div className="flex items-center gap-1.5 py-1">
-                                                {FONT_SIZE_LEVELS.map((lvl, idx) => (
-                                                    <div
-                                                        key={lvl.key}
-                                                        onClick={() => setFontSizeScale(lvl.key)}
+                                        <div className={sectionDivider}>
+                                            <span className={cn("text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5", mutedTone)}>
+                                                <Type className="w-3.5 h-3.5 text-indigo-500" />
+                                                Yazı Tipi (O)
+                                            </span>
+                                            <div className="grid grid-cols-5 gap-1.5">
+                                                {[
+                                                    { id: 'sketchnote', label: 'El Yazısı', cls: "font-['Caveat',cursive]" },
+                                                    { id: 'outfit', label: 'Outfit', cls: 'font-outfit' },
+                                                    { id: 'poppins', label: 'Poppins', cls: 'font-poppins' },
+                                                    { id: 'jakarta', label: 'Jakarta', cls: 'font-jakarta' },
+                                                    { id: 'playfair', label: 'Playfair', cls: 'font-playfair italic' },
+                                                ].map(f => (
+                                                    <button
+                                                        key={f.id}
+                                                        onClick={() => handleFontChange(f.id as any)}
                                                         className={cn(
-                                                            "h-2.5 rounded-full cursor-pointer transition-all duration-300",
-                                                            idx === getCurrentScaleIndex()
-                                                                ? "w-6 bg-indigo-600 shadow-[0_0_8px_rgba(79,70,229,0.6)]"
-                                                                : idx < getCurrentScaleIndex()
-                                                                    ? "w-2.5 bg-indigo-400/60 hover:bg-indigo-500"
-                                                                    : (isLightUi ? "w-2.5 bg-slate-300 hover:bg-slate-400" : "w-2.5 bg-white/20 hover:bg-white/35")
+                                                            "flex flex-col items-center justify-center p-2 rounded-xl border-2 transition-all cursor-pointer text-center",
+                                                            presentationFont === f.id
+                                                                ? cn("border-indigo-500 bg-indigo-500/15 font-black", isLightUi ? "text-indigo-700" : "text-white")
+                                                                : optionIdle
                                                         )}
-                                                        title={lvl.label}
-                                                    />
+                                                    >
+                                                        <span className={cn("text-sm font-black", f.cls)}>Aa</span>
+                                                        <span className="text-[10px] font-bold truncate w-full">{f.label}</span>
+                                                    </button>
                                                 ))}
                                             </div>
-                                            <span className={cn("text-[11px] font-black", labelTone)}>
-                                                {FONT_SIZE_LEVELS[getCurrentScaleIndex()]?.label}
+                                        </div>
+
+                                        <div className={sectionDivider}>
+                                            <span className={cn("text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5", mutedTone)}>
+                                                <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
+                                                Arka Plan Deseni (P)
                                             </span>
+                                            <div className="grid grid-cols-5 gap-1.5">
+                                                {[
+                                                    { id: 'notebook-dots', label: 'Defter' },
+                                                    { id: 'spotlight', label: 'Spot' },
+                                                    { id: 'aurora', label: 'Aurora' },
+                                                    { id: 'matrix', label: 'Izgara' },
+                                                    { id: 'minimal', label: 'Sade' },
+                                                ].map(bg => (
+                                                    <button
+                                                        key={bg.id}
+                                                        onClick={() => handleBgPatternChange(bg.id as any)}
+                                                        className={cn(
+                                                            "py-2 px-1 rounded-xl border-2 text-[11px] font-bold transition-all cursor-pointer text-center",
+                                                            presentationBgPattern === bg.id
+                                                                ? cn("border-indigo-500 bg-indigo-500/15 font-black", isLightUi ? "text-indigo-700" : "text-white")
+                                                                : optionIdle
+                                                        )}
+                                                    >
+                                                        {bg.label}
+                                                    </button>
+                                                ))}
+                                            </div>
                                         </div>
 
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            disabled={getCurrentScaleIndex() === FONT_SIZE_LEVELS.length - 1}
-                                            onClick={increaseFontSize}
-                                            className={cn("h-8 w-8 p-0 rounded-xl shadow-xs disabled:opacity-30 flex items-center justify-center cursor-pointer", isLightUi ? "bg-white hover:bg-slate-200 text-slate-700" : "bg-white/10 hover:bg-white/20 text-white")}
-                                            title="Bir Adım Büyüt (+)"
-                                        >
-                                            <Plus className="w-4 h-4 stroke-[3]" />
-                                        </Button>
-                                    </div>
+                                        <div className={cn("space-y-2.5 pt-2.5 border-t", isLightUi ? "border-slate-200" : "border-white/10")}>
+                                            <div className={cn("p-2.5 rounded-2xl border space-y-2", isLightUi ? "bg-slate-100/80 border-slate-200/80" : "bg-white/5 border-white/10")}>
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <div className="flex flex-col gap-0.5 min-w-0">
+                                                        <Label className={cn("text-xs font-bold flex items-center gap-1.5", labelTone)}>
+                                                            <Mic className="w-3.5 h-3.5 text-violet-500 shrink-0" />
+                                                            <span>Sesli Okuma Motoru</span>
+                                                        </Label>
+                                                        <span className={cn("text-[10px] truncate", mutedTone)}>
+                                                            {activeVoiceName ? (
+                                                                activeVoiceName.toLowerCase().includes('emel') 
+                                                                    ? '✨ Microsoft Emel (Doğal Ses)'
+                                                                    : activeVoiceName.toLowerCase().includes('ahmet')
+                                                                        ? '✨ Microsoft Ahmet (Doğal Ses)'
+                                                                        : activeVoiceName.toLowerCase().includes('google')
+                                                                            ? '✨ Google Türkçe'
+                                                                            : activeVoiceName.toLowerCase().includes('tolga')
+                                                                                ? '⚠️ Microsoft Tolga (Klasik)'
+                                                                                : activeVoiceName
+                                                            ) : 'Sistem sesi taranıyor...'}
+                                                        </span>
+                                                    </div>
 
-                                    {/* Hızlı Boyut Butonları (5 Kademe) */}
-                                    <div className={cn("grid grid-cols-5 gap-1 p-1 rounded-xl border", isLightUi ? "bg-slate-100 border-slate-200" : "bg-white/5 border-white/10")}>
-                                        {FONT_SIZE_LEVELS.map((lvl) => {
-                                            const isActive = (fontSizeScale === lvl.key) || (fontSizeScale === 'normal' && lvl.key === 'md') || (fontSizeScale === 'huge' && lvl.key === 'xl');
-                                            return (
-                                                <button
-                                                    key={lvl.key}
-                                                    onClick={() => setFontSizeScale(lvl.key)}
-                                                    className={cn(
-                                                        "py-1 rounded-lg text-[10px] font-bold transition-all truncate px-0.5 text-center cursor-pointer",
-                                                        isActive
-                                                            ? "bg-indigo-600 text-white shadow-xs font-black"
-                                                            : (isLightUi ? "text-slate-600 hover:bg-slate-200/60" : "text-slate-300 hover:bg-white/10")
+                                                    {availableVoices.length > 1 && (
+                                                        <Select value={preferredVoice} onValueChange={handleVoiceChange}>
+                                                            <SelectTrigger className={cn("w-[130px] h-7 text-xs shrink-0", isLightUi ? "bg-white border-slate-200 text-slate-900" : "bg-slate-800 border-white/20 text-white")}>
+                                                                <SelectValue />
+                                                            </SelectTrigger>
+                                                            <SelectContent className={cn(isLightUi ? "bg-white border-slate-200 text-slate-900" : "bg-slate-900 border-white/20 text-white")}>
+                                                                <SelectItem value="auto">✨ Otomatik</SelectItem>
+                                                                {availableVoices.map(v => (
+                                                                    <SelectItem key={v.name} value={v.name}>
+                                                                        {v.displayName.replace(' ✨', '').replace(' ⚠️', '')}
+                                                                    </SelectItem>
+                                                                ))}
+                                                            </SelectContent>
+                                                        </Select>
                                                     )}
-                                                    title={lvl.label}
-                                                >
-                                                    {lvl.short}
-                                                </button>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-
-                                {/* 3. Sunum Atmosferi & Teması */}
-                                <div className={sectionDivider}>
-                                    <div className="flex items-center justify-between">
-                                        <span className={cn("text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5", mutedTone)}>
-                                            <Palette className="w-3.5 h-3.5 text-indigo-500" />
-                                            Sunum Atmosferi (M)
-                                        </span>
-                                        <span className="text-[10px] font-mono text-slate-400">Kısayol: M</span>
-                                    </div>
-                                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-                                        <button
-                                            onClick={() => handleThemeChange('game-3d')}
-                                            className={cn(
-                                                "flex flex-col items-center justify-center p-2.5 rounded-2xl border-2 transition-all cursor-pointer text-center",
-                                                presentationTheme === 'game-3d'
-                                                    ? "border-amber-400 bg-amber-500/25 text-amber-300 shadow-lg shadow-amber-500/30 font-black ring-2 ring-amber-400/50"
-                                                    : optionIdle
-                                            )}
-                                        >
-                                            <span className="text-xl mb-0.5">🎮</span>
-                                            <span className="text-xs font-black leading-tight text-amber-400">3D Oyun</span>
-                                            <span className="text-[9px] opacity-80">Sahne & Maskot</span>
-                                        </button>
-
-                                        <button
-                                            onClick={() => handleThemeChange('sketchnote')}
-                                            className={cn(
-                                                "flex flex-col items-center justify-center p-2.5 rounded-2xl border-2 transition-all cursor-pointer text-center",
-                                                presentationTheme === 'sketchnote'
-                                                    ? cn("border-amber-500 bg-amber-500/20 shadow-md shadow-amber-500/20 font-black", isLightUi ? "text-amber-800" : "text-amber-200")
-                                                    : optionIdle
-                                            )}
-                                        >
-                                            <Sparkles className="w-4 h-4 mb-1 text-amber-500" />
-                                            <span className="text-xs font-bold leading-tight font-['Patrick_Hand']">Defter</span>
-                                            <span className="text-[9px] opacity-70">Sketchnote & Fosfor</span>
-                                        </button>
-
-                                        <button
-                                            onClick={() => handleThemeChange('clean-light')}
-                                            className={cn(
-                                                "flex flex-col items-center justify-center p-2.5 rounded-2xl border-2 transition-all cursor-pointer text-center",
-                                                presentationTheme === 'clean-light'
-                                                    ? cn("border-amber-500 bg-amber-500/15 shadow-md shadow-amber-500/20 font-black", isLightUi ? "text-amber-700" : "text-amber-300")
-                                                    : optionIdle
-                                            )}
-                                        >
-                                            <Sun className="w-4 h-4 mb-1 text-amber-500" />
-                                            <span className="text-xs font-bold leading-tight">Aydınlık</span>
-                                            <span className="text-[9px] opacity-70">Akıllı Tahta</span>
-                                        </button>
-
-                                        <button
-                                            onClick={() => handleThemeChange('cosmic-dark')}
-                                            className={cn(
-                                                "flex flex-col items-center justify-center p-2.5 rounded-2xl border-2 transition-all cursor-pointer text-center",
-                                                presentationTheme === 'cosmic-dark'
-                                                    ? cn("border-indigo-500 bg-indigo-500/20 shadow-md shadow-indigo-500/20 font-black", isLightUi ? "text-indigo-700" : "text-white")
-                                                    : optionIdle
-                                            )}
-                                        >
-                                            <Moon className="w-4 h-4 mb-1 text-indigo-400" />
-                                            <span className="text-xs font-bold leading-tight">Kozmik</span>
-                                            <span className="text-[9px] opacity-70">Keynote</span>
-                                        </button>
-
-                                        <button
-                                            onClick={() => handleThemeChange('vibrant-studio')}
-                                            className={cn(
-                                                "flex flex-col items-center justify-center p-2.5 rounded-2xl border-2 transition-all cursor-pointer text-center",
-                                                presentationTheme === 'vibrant-studio'
-                                                    ? cn("border-purple-500 bg-purple-500/20 shadow-md shadow-purple-500/20 font-black", isLightUi ? "text-purple-700" : "text-white")
-                                                    : optionIdle
-                                            )}
-                                        >
-                                            <Zap className="w-4 h-4 mb-1 text-amber-400" />
-                                            <span className="text-xs font-bold leading-tight">Canlı</span>
-                                            <span className="text-[9px] opacity-70">Neon Stüdyo</span>
-                                        </button>
-                                    </div>
-                                </div>
-
-                                {/* 3.5. Yazı Tipi & Tipografi Stili (Font) */}
-                                <div className={sectionDivider}>
-                                    <div className="flex items-center justify-between">
-                                        <span className={cn("text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5", mutedTone)}>
-                                            <Type className="w-3.5 h-3.5 text-indigo-500" />
-                                            Yazı Tipi & Tipografi (O)
-                                        </span>
-                                        <span className="text-[10px] font-mono text-slate-400">Kısayol: O</span>
-                                    </div>
-                                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-                                        <button
-                                            onClick={() => handleFontChange('sketchnote')}
-                                            className={cn(
-                                                "flex flex-col items-center justify-center p-2.5 rounded-2xl border-2 transition-all cursor-pointer text-center",
-                                                presentationFont === 'sketchnote'
-                                                    ? cn("border-amber-500 bg-amber-500/20 shadow-md shadow-amber-500/20 font-black", isLightUi ? "text-amber-800" : "text-amber-200")
-                                                    : optionIdle
-                                            )}
-                                        >
-                                            <span className="text-base font-black font-['Caveat',cursive] mb-0.5">Aa</span>
-                                            <span className="text-xs font-bold leading-tight font-['Patrick_Hand']">El Yazısı</span>
-                                            <span className="text-[9px] opacity-70">Caveat Defter</span>
-                                        </button>
-
-                                        <button
-                                            onClick={() => handleFontChange('outfit')}
-                                            className={cn(
-                                                "flex flex-col items-center justify-center p-2.5 rounded-2xl border-2 transition-all cursor-pointer text-center",
-                                                presentationFont === 'outfit'
-                                                    ? cn("border-indigo-500 bg-indigo-500/20 shadow-md shadow-indigo-500/20 font-black", isLightUi ? "text-indigo-700" : "text-white")
-                                                    : optionIdle
-                                            )}
-                                        >
-                                            <span className="text-base font-black font-outfit mb-0.5">Aa</span>
-                                            <span className="text-xs font-bold leading-tight font-outfit">Outfit</span>
-                                            <span className="text-[9px] opacity-70">Keynote Modern</span>
-                                        </button>
-
-                                        <button
-                                            onClick={() => handleFontChange('poppins')}
-                                            className={cn(
-                                                "flex flex-col items-center justify-center p-2.5 rounded-2xl border-2 transition-all cursor-pointer text-center",
-                                                presentationFont === 'poppins'
-                                                    ? cn("border-purple-500 bg-purple-500/20 shadow-md shadow-purple-500/20 font-black", isLightUi ? "text-purple-700" : "text-white")
-                                                    : optionIdle
-                                            )}
-                                        >
-                                            <span className="text-base font-black font-poppins mb-0.5">Aa</span>
-                                            <span className="text-xs font-bold leading-tight font-poppins">Poppins</span>
-                                            <span className="text-[9px] opacity-70">Yuvarlak & Samimi</span>
-                                        </button>
-
-                                        <button
-                                            onClick={() => handleFontChange('jakarta')}
-                                            className={cn(
-                                                "flex flex-col items-center justify-center p-2.5 rounded-2xl border-2 transition-all cursor-pointer text-center",
-                                                presentationFont === 'jakarta'
-                                                    ? cn("border-cyan-500 bg-cyan-500/20 shadow-md shadow-cyan-500/20 font-black", isLightUi ? "text-cyan-700" : "text-white")
-                                                    : optionIdle
-                                            )}
-                                        >
-                                            <span className="text-base font-black font-jakarta mb-0.5">Aa</span>
-                                            <span className="text-xs font-bold leading-tight font-jakarta">Plus Jakarta</span>
-                                            <span className="text-[9px] opacity-70">Keskin Stüdyo</span>
-                                        </button>
-
-                                        <button
-                                            onClick={() => handleFontChange('playfair')}
-                                            className={cn(
-                                                "flex flex-col items-center justify-center p-2.5 rounded-2xl border-2 transition-all cursor-pointer text-center",
-                                                presentationFont === 'playfair'
-                                                    ? cn("border-amber-500 bg-amber-500/20 shadow-md shadow-amber-500/20 font-black", isLightUi ? "text-amber-700" : "text-amber-300")
-                                                    : optionIdle
-                                            )}
-                                        >
-                                            <span className="text-base font-black font-playfair mb-0.5 italic">Aa</span>
-                                            <span className="text-xs font-bold leading-tight font-playfair">Playfair</span>
-                                            <span className="text-[9px] opacity-70">Zarif Serif</span>
-                                        </button>
-                                    </div>
-                                </div>
-
-                                {/* 3.6. Arka Plan Işıltısı & Deseni (P) */}
-                                <div className={sectionDivider}>
-                                    <div className="flex items-center justify-between">
-                                        <span className={cn("text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5", mutedTone)}>
-                                            <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
-                                            Arka Plan Işıltısı (P)
-                                        </span>
-                                        <span className="text-[10px] font-mono text-slate-400">Kısayol: P</span>
-                                    </div>
-                                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-                                        <button
-                                            onClick={() => handleBgPatternChange('notebook-dots')}
-                                            className={cn(
-                                                "flex flex-col items-center justify-center p-2.5 rounded-2xl border-2 transition-all cursor-pointer text-center",
-                                                presentationBgPattern === 'notebook-dots'
-                                                    ? cn("border-amber-500 bg-amber-500/20 shadow-md shadow-amber-500/20 font-black", isLightUi ? "text-amber-800" : "text-white")
-                                                    : optionIdle
-                                            )}
-                                        >
-                                            <BookOpen className="w-4 h-4 mb-1 text-amber-500" />
-                                            <span className="text-xs font-bold leading-tight">Defter</span>
-                                            <span className="text-[9px] opacity-70">Noktalı Sayfa</span>
-                                        </button>
-                                        <button
-                                            onClick={() => handleBgPatternChange('spotlight')}
-                                            className={cn(
-                                                "flex flex-col items-center justify-center p-2.5 rounded-2xl border-2 transition-all cursor-pointer text-center",
-                                                presentationBgPattern === 'spotlight'
-                                                    ? cn("border-indigo-500 bg-indigo-500/20 shadow-md shadow-indigo-500/20 font-black", isLightUi ? "text-indigo-700" : "text-white")
-                                                    : optionIdle
-                                            )}
-                                        >
-                                            <Sparkles className="w-4 h-4 mb-1 text-indigo-400" />
-                                            <span className="text-xs font-bold leading-tight">Sahne Spotu</span>
-                                            <span className="text-[9px] opacity-70">Keynote Tepe</span>
-                                        </button>
-
-                                        <button
-                                            onClick={() => handleBgPatternChange('aurora')}
-                                            className={cn(
-                                                "flex flex-col items-center justify-center p-2.5 rounded-2xl border-2 transition-all cursor-pointer text-center",
-                                                presentationBgPattern === 'aurora'
-                                                    ? cn("border-purple-500 bg-purple-500/20 shadow-md shadow-purple-500/20 font-black", isLightUi ? "text-purple-700" : "text-white")
-                                                    : optionIdle
-                                            )}
-                                        >
-                                            <Zap className="w-4 h-4 mb-1 text-purple-400" />
-                                            <span className="text-xs font-bold leading-tight">Aurora</span>
-                                            <span className="text-[9px] opacity-70">Kuzey Işıkları</span>
-                                        </button>
-
-                                        <button
-                                            onClick={() => handleBgPatternChange('matrix')}
-                                            className={cn(
-                                                "flex flex-col items-center justify-center p-2.5 rounded-2xl border-2 transition-all cursor-pointer text-center",
-                                                presentationBgPattern === 'matrix'
-                                                    ? cn("border-cyan-500 bg-cyan-500/20 shadow-md shadow-cyan-500/20 font-black", isLightUi ? "text-cyan-700" : "text-white")
-                                                    : optionIdle
-                                            )}
-                                        >
-                                            <LayoutGrid className="w-4 h-4 mb-1 text-cyan-400" />
-                                            <span className="text-xs font-bold leading-tight">Izgara</span>
-                                            <span className="text-[9px] opacity-70">Noktalı Matrix</span>
-                                        </button>
-
-                                        <button
-                                            onClick={() => handleBgPatternChange('minimal')}
-                                            className={cn(
-                                                "flex flex-col items-center justify-center p-2.5 rounded-2xl border-2 transition-all cursor-pointer text-center",
-                                                presentationBgPattern === 'minimal'
-                                                    ? cn("border-slate-500 bg-slate-500/20 shadow-md font-black", isLightUi ? "text-slate-800" : "text-white")
-                                                    : optionIdle
-                                            )}
-                                        >
-                                            <Moon className="w-4 h-4 mb-1 text-slate-400" />
-                                            <span className="text-xs font-bold leading-tight">Sade</span>
-                                            <span className="text-[9px] opacity-70">Minimal Mat</span>
-                                        </button>
-                                    </div>
-                                </div>
-
-                                {/* 4. Sunum Ayarları */}
-                                <div className={cn("space-y-3 pt-1 border-t", isLightUi ? "border-slate-200" : "border-white/10")}>
-                                    <span className={cn("text-[11px] font-bold uppercase tracking-wider", mutedTone)}>Görünüm & Efektler</span>
-
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex flex-col gap-0.5">
-                                            <Label className={cn("text-xs font-bold flex items-center gap-1.5", labelTone)}>
-                                                <Pin className="w-3.5 h-3.5 text-indigo-500" />
-                                                Üst Menü Çubuğunu Sabitle
-                                            </Label>
-                                            <span className={cn("text-[10px]", mutedTone)}>Ders esnasında dikkat dağıtmaması için varsayılan olarak gizlidir (H).</span>
-                                        </div>
-                                        <Switch checked={isHeaderPinned} onCheckedChange={toggleHeaderPinned} />
-                                    </div>
-
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex flex-col gap-0.5">
-                                            <Label className={cn("text-xs font-bold flex items-center gap-1.5", labelTone)}>
-                                                <Volume2 className="w-3.5 h-3.5 text-violet-500" />
-                                                Kart Açılınca Otomatik Oku
-                                            </Label>
-                                            <span className={cn("text-[10px]", mutedTone)}>Yeni cümle kartı açıldığında sesli okumayı otomatik başlatır (varsayılan kapalı).</span>
-                                        </div>
-                                        <Switch checked={isAutoReadEnabled} onCheckedChange={toggleAutoRead} />
-                                    </div>
-
-                                    {/* Sesli Okuma Ses Motoru & Gerçek İnsan Sesi Rehberi */}
-                                    <div className={cn("p-2.5 rounded-2xl border space-y-2", isLightUi ? "bg-slate-100/80 border-slate-200/80" : "bg-white/5 border-white/10")}>
-                                        <div className="flex items-center justify-between gap-2">
-                                            <div className="flex flex-col gap-0.5 min-w-0">
-                                                <Label className={cn("text-xs font-bold flex items-center gap-1.5", labelTone)}>
-                                                    <Mic className="w-3.5 h-3.5 text-violet-500 shrink-0" />
-                                                    <span>Sesli Okuma Kalitesi</span>
-                                                </Label>
-                                                <span className={cn("text-[10px] truncate", mutedTone)}>
-                                                    {activeVoiceName ? (
-                                                        activeVoiceName.toLowerCase().includes('emel') 
-                                                            ? '✨ Microsoft Emel (Doğal İnsan Sesi - Kadın)'
-                                                            : activeVoiceName.toLowerCase().includes('ahmet')
-                                                                ? '✨ Microsoft Ahmet (Doğal İnsan Sesi - Erkek)'
-                                                                : activeVoiceName.toLowerCase().includes('google')
-                                                                    ? '✨ Google Türkçe (Doğal Ses)'
-                                                                    : activeVoiceName.toLowerCase().includes('tolga')
-                                                                        ? '⚠️ Microsoft Tolga (Windows Mekanik Robot Sesi)'
-                                                                        : activeVoiceName
-                                                    ) : 'Sistem sesi taranıyor...'}
-                                                </span>
+                                                </div>
                                             </div>
 
-                                            {availableVoices.length > 1 && (
-                                                <Select value={preferredVoice} onValueChange={handleVoiceChange}>
-                                                    <SelectTrigger className={cn("w-[130px] h-7 text-xs shrink-0", isLightUi ? "bg-white border-slate-200 text-slate-900" : "bg-slate-800 border-white/20 text-white")}>
+                                            <div className="flex items-center justify-between">
+                                                <Label className={cn("text-xs font-bold flex items-center gap-1.5", labelTone)}>
+                                                    <Pin className="w-3.5 h-3.5 text-indigo-500" />
+                                                    Üst Menü Çubuğunu Sabitle (H)
+                                                </Label>
+                                                <Switch checked={isHeaderPinned} onCheckedChange={toggleHeaderPinned} />
+                                            </div>
+
+                                            <div className="flex items-center justify-between">
+                                                <Label className={cn("text-xs font-bold flex items-center gap-1.5", labelTone)}>
+                                                    <Gauge className="w-3.5 h-3.5 text-emerald-500" />
+                                                    Akıllı Tahta Hızlı Mod
+                                                </Label>
+                                                <Switch 
+                                                    checked={isPerfMode} 
+                                                    onCheckedChange={(checked) => {
+                                                        setIsPerfMode(checked);
+                                                        if (checked) setAnimationSpeed('off');
+                                                    }} 
+                                                />
+                                            </div>
+
+                                            <div className="flex items-center justify-between">
+                                                <Label className={cn("text-xs font-bold flex items-center gap-1.5", labelTone)}>
+                                                    <Zap className="w-3.5 h-3.5 text-amber-500" />
+                                                    Yazı Animasyon Hızı
+                                                </Label>
+                                                <Select value={animationSpeed} onValueChange={(v: any) => setAnimationSpeed(v)}>
+                                                    <SelectTrigger className={cn("w-[100px] h-7 text-xs", isLightUi ? "bg-slate-100 border-slate-200 text-slate-900" : "bg-white/10 border-white/20 text-white")}>
                                                         <SelectValue />
                                                     </SelectTrigger>
                                                     <SelectContent className={cn(isLightUi ? "bg-white border-slate-200 text-slate-900" : "bg-slate-900 border-white/20 text-white")}>
-                                                        <SelectItem value="auto">✨ Otomatik (En Doğal)</SelectItem>
-                                                        {availableVoices.map(v => (
-                                                            <SelectItem key={v.name} value={v.name}>
-                                                                {v.displayName.replace(' ✨', '').replace(' ⚠️', '')}
-                                                            </SelectItem>
-                                                        ))}
+                                                        <SelectItem value="off">Kapalı</SelectItem>
+                                                        <SelectItem value="slow">Yavaş</SelectItem>
+                                                        <SelectItem value="normal">Normal</SelectItem>
+                                                        <SelectItem value="fast">Hızlı</SelectItem>
                                                     </SelectContent>
                                                 </Select>
-                                            )}
-                                        </div>
-
-                                        {/* Eğer Tolga (robotik mekanik ses) aktifse kullanıcıya açık ve pratik rehber */}
-                                        {activeVoiceName && (activeVoiceName.toLowerCase().includes('tolga') || activeVoiceName.toLowerCase().includes('desktop')) && (
-                                            <div className={cn("p-2 rounded-xl bg-amber-500/10 border border-amber-500/25 text-[11px] leading-relaxed flex flex-col gap-1", isLightUi ? "text-amber-900" : "text-amber-200")}>
-                                                <div className={cn("font-bold flex items-center gap-1", isLightUi ? "text-amber-700" : "text-amber-400")}>
-                                                    <span>💡 Gerçek İnsan Sesi İçin:</span>
-                                                </div>
-                                                <p className="text-[10px] opacity-90">
-                                                    Şu an Chrome&apos;da Windows&apos;un eski mekanik robot sesi çalmaktadır. Gerçek bir insan spiker kalitesi için:
-                                                </p>
-                                                <div className="text-[10px] space-y-1">
-                                                    <div>• <strong>En pratik yol:</strong> Sunumu bilgisayarınızdaki <strong>Microsoft Edge</strong> tarayıcısında açın (Stüdyo kalitesinde yapay zeka sesi kendiliğinden devreye girer).</div>
-                                                    <div>• <strong>Chrome için:</strong> Windows 11 Ayarları &gt; Erişilebilirlik &gt; Ekran Okuyucusu menüsünden <em>&quot;Doğal sesler ekle &gt; Türkçe&quot;</em> paketini indirin.</div>
-                                                </div>
                                             </div>
-                                        )}
-                                    </div>
-
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex flex-col gap-0.5">
-                                            <Label className={cn("text-xs font-bold flex items-center gap-1.5", labelTone)}>
-                                                {isSingleCardMode ? <Maximize2 className="w-3.5 h-3.5 text-emerald-500" /> : <LayoutList className="w-3.5 h-3.5 text-sky-500" />} 
-                                                Tek Kart Modu
-                                            </Label>
-                                            <span className={cn("text-[10px]", mutedTone)}>Konu anlatımında tek tek göster.</span>
                                         </div>
-                                        <Switch checked={isSingleCardMode} onCheckedChange={setIsSingleCardMode} />
-                                    </div>
+                                    </>
+                                )}
 
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex flex-col gap-0.5">
-                                            <Label className={cn("text-xs font-bold flex items-center gap-1.5", labelTone)}>
-                                                <Gauge className="w-3.5 h-3.5 text-emerald-500" />
-                                                Akıllı Tahta Hızlı Mod
-                                            </Label>
-                                            <span className={cn("text-[10px]", mutedTone)}>Pardus ve eski tahtalarda donmayı önler.</span>
-                                        </div>
-                                        <Switch 
-                                            checked={isPerfMode} 
-                                            onCheckedChange={(checked) => {
-                                                setIsPerfMode(checked);
-                                                if (checked) setAnimationSpeed('off');
-                                            }} 
-                                        />
-                                    </div>
-
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex flex-col gap-0.5">
-                                            <Label className={cn("text-xs font-bold flex items-center gap-1.5", labelTone)}>
-                                                <Zap className="w-3.5 h-3.5 text-amber-500" />
-                                                Animasyon Hızı
-                                            </Label>
-                                            <span className={cn("text-[10px]", mutedTone)}>Daktilo efektinin hızı.</span>
-                                        </div>
-                                        <Select value={animationSpeed} onValueChange={(v: any) => setAnimationSpeed(v)}>
-                                            <SelectTrigger className={cn("w-[95px] h-7 text-xs", isLightUi ? "bg-slate-100 border-slate-200 text-slate-900" : "bg-white/10 border-white/20 text-white")}>
-                                                <SelectValue />
-                                            </SelectTrigger>
-                                            <SelectContent className={cn(isLightUi ? "bg-white border-slate-200 text-slate-900" : "bg-slate-900 border-white/20 text-white")}>
-                                                <SelectItem value="off">Kapalı</SelectItem>
-                                                <SelectItem value="slow">Yavaş</SelectItem>
-                                                <SelectItem value="normal">Normal</SelectItem>
-                                                <SelectItem value="fast">Hızlı</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                </div>
-
-                                {/* 4. Hızlı Aksiyon (Çıkış) */}
-                                <div className={cn("pt-2 border-t", isLightUi ? "border-slate-200" : "border-white/10")}>
+                                {/* Çıkış Butonu */}
+                                <div className={cn("pt-2.5 border-t", isLightUi ? "border-slate-200" : "border-white/10")}>
                                     <Button 
                                         asChild 
                                         variant="ghost" 
@@ -1978,74 +1930,192 @@ function PresentationPageContent() {
                 </motion.div>
             )}
 
-            {/* ══ 1. SINIF GERİ SAYIM SAYACI MODALI ══ */}
+            {/* ══ 1. SINIF GERİ SAYIM SAYACI MODALI (PREMİUM HALKA GRAFİK + CANLI EKLEME) ══ */}
             <AnimatePresence>
-                {isTimerOpen && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xl p-4" onClick={() => setIsTimerOpen(false)}>
+                {isTimerOpen && (() => {
+                    const isLightUi = presentationTheme === 'clean-light' || presentationTheme === 'sketchnote';
+                    const safeInit = Math.max(1, initialTimerSeconds);
+                    const progress = Math.max(0, Math.min(1, timerSeconds / safeInit));
+                    const radius = 84;
+                    const circumference = 2 * Math.PI * radius;
+                    const strokeDashoffset = circumference * (1 - progress);
+                    const ringColor = timerSeconds <= 10 && isTimerRunning
+                        ? '#f43f5e'
+                        : progress <= 0.25
+                        ? '#f59e0b'
+                        : '#4f46e5';
+
+                    return (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 backdrop-blur-sm p-4" onClick={() => setIsTimerOpen(false)}>
                         <motion.div 
-                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                            initial={{ scale: 0.92, opacity: 0, y: 18 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
-                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                            className="relative w-full max-w-md p-8 rounded-[2.5rem] bg-white/95 border-2 border-amber-300 shadow-2xl flex flex-col items-center text-center text-slate-900 overflow-hidden"
+                            exit={{ scale: 0.92, opacity: 0, y: 18 }}
+                            className={cn(
+                                "relative w-full max-w-md p-6 sm:p-7 rounded-[2rem] border shadow-2xl flex flex-col items-center text-center overflow-hidden",
+                                isLightUi ? "bg-white border-slate-200 text-slate-900" : "bg-slate-950 border-white/15 text-white"
+                            )}
                             onClick={e => e.stopPropagation()}
                         >
-                            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-400 via-orange-400 to-rose-400" />
-                            
-                            <button onClick={() => setIsTimerOpen(false)} className="absolute top-5 right-5 p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors">
-                                <X className="w-5 h-5" />
-                            </button>
+                            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-amber-400 to-emerald-500" />
 
-                            <div className="flex items-center gap-2 text-amber-600 font-black uppercase tracking-widest text-xs mb-4">
-                                <Timer className="w-4 h-4" /> Sınıf Geri Sayım Sayacı
-                            </div>
-
-                            {/* Dev Dijital Ekran */}
-                            <div className="w-full py-8 my-2 rounded-3xl bg-amber-50/90 border-2 border-amber-300 flex items-center justify-center shadow-inner">
-                                <span className={cn(
-                                    "font-mono font-black text-6xl md:text-7xl tracking-tighter drop-shadow-sm",
-                                    timerSeconds <= 10 && isTimerRunning ? "text-rose-600 animate-pulse" : "text-amber-600"
-                                )}>
-                                    {formatTimer(timerSeconds)}
-                                </span>
-                            </div>
-
-                            {/* Preset Butonları */}
-                            <div className="grid grid-cols-4 gap-2 w-full mt-4">
-                                {[30, 60, 120, 300].map((sec) => (
-                                    <Button
-                                        key={sec}
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() => startTimerPreset(sec)}
-                                        className="h-10 rounded-xl bg-amber-100/70 border-amber-300 hover:bg-amber-500 hover:text-white font-black text-xs transition-all text-amber-950 shadow-sm"
+                            <div className="w-full flex items-center justify-between mb-3">
+                                <div className="flex items-center gap-2 font-black uppercase tracking-wider text-xs text-amber-500">
+                                    <Timer className="w-4 h-4" /> Sınıf Zamanlayıcısı
+                                </div>
+                                <div className="flex items-center gap-1">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsTimerOpen(false)}
+                                        className={cn("px-2.5 py-1 rounded-lg text-[11px] font-bold transition-colors cursor-pointer", isLightUi ? "bg-slate-100 hover:bg-slate-200 text-slate-600" : "bg-white/10 hover:bg-white/15 text-slate-300")}
+                                        title="Köşeye küçült"
                                     >
-                                        {sec < 60 ? `${sec}sn` : `${sec / 60}dk`}
-                                    </Button>
+                                        Küçült
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsTimerOpen(false)}
+                                        className={cn("p-1.5 rounded-lg transition-colors cursor-pointer", isLightUi ? "hover:bg-slate-100 text-slate-500" : "hover:bg-white/10 text-slate-400")}
+                                    >
+                                        <X className="w-4 h-4" />
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Etkinlik Amacı Etiketi */}
+                            <div className="flex flex-wrap items-center justify-center gap-1.5 mb-4">
+                                {['Etkinlik Süresi', 'Sessiz Düşünme', 'Soru Çözümü', 'Grup Tartışması'].map(lbl => (
+                                    <button
+                                        key={lbl}
+                                        type="button"
+                                        onClick={() => setTimerLabel(lbl)}
+                                        className={cn(
+                                            "px-2.5 py-0.5 rounded-full text-[11px] font-bold border transition-all cursor-pointer",
+                                            timerLabel === lbl
+                                                ? "bg-indigo-600 text-white border-indigo-500"
+                                                : (isLightUi ? "bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200" : "bg-white/5 border-white/10 text-slate-400 hover:text-white")
+                                        )}
+                                    >
+                                        {lbl}
+                                    </button>
                                 ))}
                             </div>
 
-                            {/* Kontrol Düğmeleri */}
-                            <div className="flex items-center gap-3 w-full mt-6">
-                                <Button
-                                    onClick={() => setIsTimerRunning(prev => !prev)}
-                                    className={cn(
-                                        "flex-1 h-14 rounded-2xl font-black text-lg shadow-xl transition-all active:scale-95 flex items-center justify-center gap-2",
-                                        isTimerRunning 
-                                            ? "bg-rose-500 hover:bg-rose-600 text-white shadow-rose-500/30" 
-                                            : "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white shadow-amber-500/30"
+                            {/* Dairesel İlerleme Halkalı Dijital Ekran */}
+                            <div className="relative w-52 h-52 flex items-center justify-center my-1">
+                                <svg className="w-full h-full -rotate-90" viewBox="0 0 200 200">
+                                    <circle
+                                        cx="100"
+                                        cy="100"
+                                        r={radius}
+                                        fill="none"
+                                        stroke={isLightUi ? '#e2e8f0' : 'rgba(255,255,255,0.1)'}
+                                        strokeWidth="12"
+                                    />
+                                    <circle
+                                        cx="100"
+                                        cy="100"
+                                        r={radius}
+                                        fill="none"
+                                        stroke={ringColor}
+                                        strokeWidth="12"
+                                        strokeLinecap="round"
+                                        strokeDasharray={circumference}
+                                        strokeDashoffset={strokeDashoffset}
+                                        style={{ transition: 'stroke-dashoffset 0.35s linear, stroke 0.25s ease' }}
+                                    />
+                                </svg>
+                                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                    <span className={cn("text-[10px] font-bold uppercase tracking-wider mb-0.5", isLightUi ? "text-slate-500" : "text-slate-400")}>
+                                        {timerLabel}
+                                    </span>
+                                    <span className={cn(
+                                        "font-mono font-black text-5xl tracking-tight tabular-nums",
+                                        timerSeconds <= 10 && isTimerRunning ? "text-rose-500" : (isLightUi ? "text-slate-900" : "text-white")
+                                    )}>
+                                        {formatTimer(timerSeconds)}
+                                    </span>
+                                    {timerSeconds === 0 && isTimerFinishedAlert && (
+                                        <span className="mt-1 text-xs font-black text-rose-500">Süre Doldu! ⏰</span>
                                     )}
-                                >
-                                    {isTimerRunning ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 fill-current" />}
-                                    {isTimerRunning ? 'Duraklat' : 'Başlat'}
-                                </Button>
+                                </div>
+                            </div>
+
+                            {/* Canlı Süre Ekle / Çıkar */}
+                            <div className="flex items-center justify-center gap-2 mt-2">
+                                {[
+                                    { delta: -15, label: '-15sn' },
+                                    { delta: 15, label: '+15sn' },
+                                    { delta: 60, label: '+1dk' },
+                                ].map(btn => (
+                                    <button
+                                        key={btn.label}
+                                        type="button"
+                                        onClick={() => adjustTimerSeconds(btn.delta)}
+                                        className={cn(
+                                            "px-3 py-1 rounded-xl text-xs font-black border transition-all cursor-pointer active:scale-95",
+                                            isLightUi ? "bg-slate-100 hover:bg-slate-200 border-slate-200 text-slate-700" : "bg-white/10 hover:bg-white/15 border-white/15 text-slate-200"
+                                        )}
+                                    >
+                                        {btn.label}
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* Hazır Süreler */}
+                            <div className="grid grid-cols-6 gap-1.5 w-full mt-4">
+                                {[30, 60, 120, 180, 300, 600].map((sec) => (
+                                    <button
+                                        key={sec}
+                                        type="button"
+                                        onClick={() => startTimerPreset(sec)}
+                                        className={cn(
+                                            "h-9 rounded-xl border font-black text-xs transition-all cursor-pointer",
+                                            initialTimerSeconds === sec
+                                                ? "bg-amber-500 border-amber-400 text-slate-950"
+                                                : (isLightUi ? "bg-amber-50 border-amber-200 hover:bg-amber-100 text-amber-900" : "bg-white/5 border-white/10 hover:bg-white/10 text-slate-200")
+                                        )}
+                                    >
+                                        {sec < 60 ? `${sec}sn` : `${sec / 60}dk`}
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* Başlat / Duraklat / Sıfırla */}
+                            <div className="flex items-center gap-2.5 w-full mt-5">
+                                {timerSeconds === 0 ? (
+                                    <Button
+                                        onClick={() => startTimerPreset(30)}
+                                        className="flex-1 h-12 rounded-2xl font-black text-base bg-indigo-600 hover:bg-indigo-500 text-white cursor-pointer"
+                                    >
+                                        +30sn Uzat & Başlat
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        onClick={() => {
+                                            setIsTimerFinishedAlert(false);
+                                            setIsTimerRunning(prev => !prev);
+                                        }}
+                                        className={cn(
+                                            "flex-1 h-12 rounded-2xl font-black text-base shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2 cursor-pointer",
+                                            isTimerRunning 
+                                                ? "bg-rose-500 hover:bg-rose-600 text-white" 
+                                                : "bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950"
+                                        )}
+                                    >
+                                        {isTimerRunning ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 fill-current" />}
+                                        {isTimerRunning ? 'Duraklat' : 'Başlat'}
+                                    </Button>
+                                )}
 
                                 <Button
                                     variant="outline"
                                     onClick={() => {
                                         setIsTimerRunning(false);
+                                        setIsTimerFinishedAlert(false);
                                         setTimerSeconds(initialTimerSeconds);
                                     }}
-                                    className="h-14 w-14 rounded-2xl bg-slate-100 border border-slate-200 hover:bg-slate-200 text-slate-700 flex items-center justify-center shadow-sm"
+                                    className={cn("h-12 w-12 rounded-2xl flex items-center justify-center cursor-pointer", isLightUi ? "bg-slate-100 border-slate-200 hover:bg-slate-200 text-slate-700" : "bg-white/10 border-white/15 hover:bg-white/15 text-white")}
                                     title="Sıfırla"
                                 >
                                     <RotateCcw className="w-5 h-5" />
@@ -2053,39 +2123,115 @@ function PresentationPageContent() {
                             </div>
                         </motion.div>
                     </div>
-                )}
+                    );
+                })()}
             </AnimatePresence>
 
             {/* ══ 2. ŞANSLI KURA ÇARKI (KAYITLI ÖĞRENCİLER & ÖZEL LİSTE) ══ */}
             <PresentationWheelModal 
                 isOpen={isPickerOpen} 
                 onClose={() => setIsPickerOpen(false)} 
+                presentationTheme={presentationTheme}
             />
 
-            {/* ══ 3. SLAYT ÇEKMECESİ (SLIDE GRID OVERVIEW) ══ */}
+            {/* ══ 3. SLAYT ÇEKMECESİ (TÜRKÇE ETİKETLER & ARAMA / FİLTRE) ══ */}
             <AnimatePresence>
-                {isSlideDrawerOpen && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-end bg-slate-900/40 backdrop-blur-xl" onClick={() => setIsSlideDrawerOpen(false)}>
+                {isSlideDrawerOpen && (() => {
+                    const isLightUi = presentationTheme === 'clean-light' || presentationTheme === 'sketchnote';
+                    const allSteps = content.steps || [];
+                    const hiddenCount = allSteps.filter((s: any) => s.isPublished === false).length;
+                    const q = slideDrawerQuery.trim().toLowerCase();
+
+                    return (
+                    <div className="fixed inset-0 z-50 flex items-center justify-end bg-slate-950/45 backdrop-blur-sm" onClick={() => setIsSlideDrawerOpen(false)}>
                         <motion.div 
                             initial={{ x: '100%' }}
                             animate={{ x: 0 }}
                             exit={{ x: '100%' }}
-                            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                            className="relative w-full max-w-md h-full bg-white/95 border-l border-indigo-100 p-6 flex flex-col text-slate-800 shadow-2xl overflow-hidden"
+                            transition={{ type: 'spring', damping: 26, stiffness: 240 }}
+                            className={cn(
+                                "relative w-full max-w-md h-full border-l p-5 flex flex-col shadow-2xl overflow-hidden",
+                                isLightUi ? "bg-white border-slate-200 text-slate-900" : "bg-slate-950 border-white/15 text-white"
+                            )}
                             onClick={e => e.stopPropagation()}
                         >
-                            <div className="flex items-center justify-between pb-4 border-b border-indigo-100">
+                            <div className={cn("flex items-center justify-between pb-3.5 border-b", isLightUi ? "border-slate-200" : "border-white/10")}>
                                 <div className="flex items-center gap-2.5">
-                                    <LayoutGrid className="w-5 h-5 text-purple-600" />
-                                    <h3 className="font-black text-lg text-slate-900">Slayt Çekmecesi ({content.steps?.length || 0})</h3>
+                                    <div className="p-2 rounded-xl bg-purple-600 text-white">
+                                        <LayoutGrid className="w-4 h-4" />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-black text-base leading-tight">Slayt Çekmecesi</h3>
+                                        <p className={cn("text-xs font-medium", isLightUi ? "text-slate-500" : "text-slate-400")}>
+                                            Toplam {allSteps.length} adım{hiddenCount > 0 ? ` • ${hiddenCount} gizli` : ''}
+                                        </p>
+                                    </div>
                                 </div>
-                                <button onClick={() => setIsSlideDrawerOpen(false)} className="p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-700">
+                                <button
+                                    onClick={() => setIsSlideDrawerOpen(false)}
+                                    className={cn("p-2 rounded-xl cursor-pointer transition-colors", isLightUi ? "hover:bg-slate-100 text-slate-500" : "hover:bg-white/10 text-slate-400")}
+                                >
                                     <X className="w-5 h-5" />
                                 </button>
                             </div>
 
-                            <div className="flex-1 overflow-y-auto py-4 space-y-3 pr-1">
-                                {(content.steps || []).map((step, idx) => {
+                            {/* Arama & Filtre Barı */}
+                            <div className="py-3 space-y-2 border-b border-slate-500/15">
+                                <div className="relative">
+                                    <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                                    <input
+                                        type="text"
+                                        value={slideDrawerQuery}
+                                        onChange={e => setSlideDrawerQuery(e.target.value)}
+                                        placeholder="Slayt başlığı veya tür ara..."
+                                        className={cn(
+                                            "w-full h-9 pl-8 pr-8 rounded-xl border text-xs font-medium focus:outline-none focus:ring-2 focus:ring-purple-500/40",
+                                            isLightUi ? "bg-slate-50 border-slate-200 text-slate-900" : "bg-white/5 border-white/15 text-white placeholder:text-slate-500"
+                                        )}
+                                    />
+                                    {slideDrawerQuery && (
+                                        <button
+                                            type="button"
+                                            onClick={() => setSlideDrawerQuery('')}
+                                            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                                        >
+                                            <X className="w-3.5 h-3.5" />
+                                        </button>
+                                    )}
+                                </div>
+
+                                {hiddenCount > 0 && (
+                                    <div className="flex items-center gap-1.5">
+                                        {[
+                                            { id: 'all' as const, label: `Tümü (${allSteps.length})` },
+                                            { id: 'hidden' as const, label: `Öğrencide Gizli (${hiddenCount})` },
+                                        ].map(tab => (
+                                            <button
+                                                key={tab.id}
+                                                type="button"
+                                                onClick={() => setSlideDrawerFilter(tab.id)}
+                                                className={cn(
+                                                    "px-2.5 py-1 rounded-lg text-[11px] font-bold border transition-all cursor-pointer",
+                                                    slideDrawerFilter === tab.id
+                                                        ? "bg-purple-600 border-purple-500 text-white"
+                                                        : (isLightUi ? "bg-slate-100 border-slate-200 text-slate-600" : "bg-white/5 border-white/10 text-slate-300")
+                                                )}
+                                            >
+                                                {tab.label}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="flex-1 overflow-y-auto py-3 space-y-2.5 pr-1">
+                                {allSteps.map((step, idx) => {
+                                    const badge = getStepTypeBadge(step.type);
+                                    if (slideDrawerFilter === 'hidden' && step.isPublished !== false) return null;
+                                    if (q) {
+                                        const hay = `${step.title || ''} ${badge}`.toLowerCase();
+                                        if (!hay.includes(q)) return null;
+                                    }
                                     const isActive = idx === currentStepIndex;
                                     return (
                                         <button
@@ -2095,30 +2241,35 @@ function PresentationPageContent() {
                                                 setIsSlideDrawerOpen(false);
                                             }}
                                             className={cn(
-                                                "w-full text-left p-4 rounded-2xl border-2 transition-all flex items-start gap-3.5 group",
-                                                isActive 
-                                                    ? "bg-purple-50 border-purple-400 shadow-md shadow-purple-100" 
-                                                    : "bg-slate-50/80 border-slate-200 hover:bg-indigo-50/80 hover:border-indigo-300"
+                                                "w-full text-left p-3.5 rounded-2xl border-2 transition-all flex items-start gap-3 group cursor-pointer",
+                                                isActive
+                                                    ? (isLightUi ? "bg-purple-50 border-purple-500 shadow-sm" : "bg-purple-500/20 border-purple-400")
+                                                    : (isLightUi ? "bg-slate-50 border-slate-200 hover:bg-indigo-50/70 hover:border-indigo-300" : "bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/25")
                                             )}
                                         >
                                             <div className={cn(
                                                 "w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs shrink-0 mt-0.5",
-                                                isActive ? "bg-purple-600 text-white" : "bg-slate-200 text-slate-600 group-hover:bg-indigo-600 group-hover:text-white"
+                                                isActive
+                                                    ? "bg-purple-600 text-white"
+                                                    : (isLightUi ? "bg-slate-200 text-slate-700 group-hover:bg-indigo-600 group-hover:text-white" : "bg-white/10 text-slate-300 group-hover:bg-indigo-500 group-hover:text-white")
                                             )}>
                                                 {idx + 1}
                                             </div>
                                             <div className="flex-1 min-w-0">
-                                                <div className="flex items-center gap-2 mb-1">
-                                                    <span className="text-[10px] font-black uppercase tracking-wider text-purple-700 bg-purple-100 px-2 py-0.5 rounded-md">
-                                                        {step.type}
+                                                <div className="flex items-center flex-wrap gap-1.5 mb-1">
+                                                    <span className={cn(
+                                                        "text-[10px] font-black px-2 py-0.5 rounded-md",
+                                                        isLightUi ? "text-purple-700 bg-purple-100" : "text-purple-200 bg-purple-500/25"
+                                                    )}>
+                                                        {badge}
                                                     </span>
                                                     {step.isPublished === false && (
                                                         <span className="text-[10px] font-bold text-amber-800 bg-amber-100 border border-amber-300 px-1.5 py-0.5 rounded-md flex items-center gap-1">
-                                                            <Lock className="w-2.5 h-2.5 text-amber-600" /> Öğrencide Gizli
+                                                            <Lock className="w-2.5 h-2.5 text-amber-600" /> Gizli
                                                         </span>
                                                     )}
                                                 </div>
-                                                <h4 className="font-bold text-sm text-slate-800 truncate group-hover:text-indigo-900">
+                                                <h4 className={cn("font-bold text-sm truncate", isLightUi ? "text-slate-900" : "text-white")}>
                                                     {step.title || `Adım ${idx + 1}`}
                                                 </h4>
                                             </div>
@@ -2128,10 +2279,11 @@ function PresentationPageContent() {
                             </div>
                         </motion.div>
                     </div>
-                )}
+                    );
+                })()}
             </AnimatePresence>
 
-            {/* ══ 4. TAHTAYI KARART (BLACKOUT / STAGE FREEZE OVERLAY) ══ */}
+            {/* ══ 4. TAHTAYI KARART (SERENE ODAK SAHNESİ) ══ */}
             <AnimatePresence>
                 {isBlackout && (
                     <motion.div 
@@ -2139,72 +2291,187 @@ function PresentationPageContent() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => setIsBlackout(false)}
-                        className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center cursor-pointer select-none"
+                        className="fixed inset-0 z-[100] bg-gradient-to-b from-[#040711] via-[#02040a] to-black flex flex-col items-center justify-between p-6 sm:p-10 cursor-pointer select-none"
                     >
-                        <div className="flex flex-col items-center gap-6 p-8 text-center animate-pulse">
-                            <div className="w-24 h-24 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400">
-                                <EyeOff className="w-12 h-12" />
+                        <div className="flex items-center gap-3 text-xs font-mono font-bold text-slate-400 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full">
+                            <Clock className="w-3.5 h-3.5 text-amber-400" />
+                            <span>{currentTime}</span>
+                            {content?.steps?.[currentStepIndex]?.title && (
+                                <>
+                                    <span className="opacity-40">•</span>
+                                    <span className="font-sans truncate max-w-[260px] text-slate-300">
+                                        {content.steps[currentStepIndex].title}
+                                    </span>
+                                </>
+                            )}
+                        </div>
+
+                        <div className="flex flex-col items-center gap-5 text-center max-w-2xl">
+                            <div className="w-20 h-20 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-300">
+                                <EyeOff className="w-10 h-10" />
                             </div>
-                            <div>
-                                <h2 className="text-3xl md:text-4xl font-black text-white mb-2">Tahta Duraklatıldı</h2>
-                                <p className="text-lg text-slate-400 font-medium">Dikkat Öğretmende 👨‍🏫</p>
-                            </div>
-                            <p className="text-xs text-slate-600 uppercase tracking-widest mt-4">
-                                Devam etmek için ekrana tıklayın veya 'B' tuşuna basın
+                            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+                                {blackoutMessage}
+                            </h2>
+                            <p className="text-xs sm:text-sm text-slate-500 uppercase tracking-widest">
+                                Devam etmek için boşluğa dokunun veya &apos;B&apos; tuşuna basın
                             </p>
+                        </div>
+
+                        <div
+                            className="flex flex-wrap items-center justify-center gap-2"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            {[
+                                'Dikkat Öğretmende 👨‍🏫',
+                                'Sessiz Düşünme & Dinleme 🤫',
+                                'Deftere Not Alalım ✏️',
+                            ].map(cue => (
+                                <button
+                                    key={cue}
+                                    type="button"
+                                    onClick={() => setBlackoutMessage(cue)}
+                                    className={cn(
+                                        "px-3.5 py-1.5 rounded-full text-xs font-bold border transition-all cursor-pointer",
+                                        blackoutMessage === cue
+                                            ? "bg-amber-400/20 border-amber-400/60 text-amber-200"
+                                            : "bg-white/5 border-white/10 text-slate-400 hover:text-white hover:bg-white/10"
+                                    )}
+                                >
+                                    {cue}
+                                </button>
+                            ))}
                         </div>
                     </motion.div>
                 )}
             </AnimatePresence>
 
-            {/* ══ 6. KAYNAK METİN & ÖZET ÇEKMECESİ (K) ══ */}
+            {/* ══ 6. KAYNAK METİN & ÖZET ÇEKMECESİ (K) — ARAMA, SESLİ OKUMA & OKUMA BOYUTU ══ */}
             <AnimatePresence>
-                {isSourceTextOpen && (
+                {isSourceTextOpen && (() => {
+                    const isLightUi = presentationTheme === 'clean-light' || presentationTheme === 'sketchnote';
+                    const wordsCount = sourceText ? sourceText.trim().split(/\s+/).filter(Boolean).length : 0;
+                    const readMinutes = Math.max(1, Math.ceil(wordsCount / 140));
+                    const sizeClassMap = {
+                        sm: 'text-sm leading-relaxed',
+                        md: 'text-base md:text-lg leading-relaxed',
+                        lg: 'text-lg md:text-xl leading-relaxed',
+                        xl: 'text-xl md:text-2xl leading-loose',
+                    };
+                    const sizeOrder: ('sm' | 'md' | 'lg' | 'xl')[] = ['sm', 'md', 'lg', 'xl'];
+
+                    const renderHighlightedSource = (text: string, queryStr: string) => {
+                        const qTrim = queryStr.trim();
+                        if (!qTrim) return text;
+                        const escaped = qTrim.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                        const parts = text.split(new RegExp(`(${escaped})`, 'gi'));
+                        return parts.map((part, idx) =>
+                            part.toLowerCase() === qTrim.toLowerCase() ? (
+                                <mark key={idx} className="bg-amber-300 text-slate-950 px-1 rounded font-bold">
+                                    {part}
+                                </mark>
+                            ) : (
+                                <span key={idx}>{part}</span>
+                            )
+                        );
+                    };
+
+                    return (
                     <div 
-                        className="fixed inset-0 z-50 flex items-center justify-end bg-slate-900/60 backdrop-blur-xl" 
+                        className="fixed inset-0 z-50 flex items-center justify-end bg-slate-950/50 backdrop-blur-sm" 
                         onClick={() => setIsSourceTextOpen(false)}
                     >
                         <motion.div 
                             initial={{ x: '100%' }}
                             animate={{ x: 0 }}
                             exit={{ x: '100%' }}
-                            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                            className="relative w-full max-w-xl h-full bg-slate-900/95 border-l border-white/10 p-6 flex flex-col text-slate-100 shadow-2xl overflow-hidden"
+                            transition={{ type: 'spring', damping: 26, stiffness: 240 }}
+                            className={cn(
+                                "relative w-full max-w-xl h-full border-l p-5 sm:p-6 flex flex-col shadow-2xl overflow-hidden",
+                                isLightUi ? "bg-[#fffdf9] border-slate-200 text-slate-900" : "bg-slate-950 border-white/15 text-slate-100"
+                            )}
                             onClick={e => e.stopPropagation()}
                         >
-                            <div className="flex items-center justify-between pb-4 border-b border-white/10">
-                                <div className="flex items-center gap-2.5">
-                                    <div className="p-2.5 rounded-xl bg-teal-500/20 text-teal-400 border border-teal-500/30">
+                            <div className={cn("flex items-center justify-between pb-3.5 border-b", isLightUi ? "border-slate-200" : "border-white/10")}>
+                                <div className="flex items-center gap-2.5 min-w-0">
+                                    <div className={cn("p-2 rounded-xl border shrink-0", isLightUi ? "bg-teal-50 text-teal-700 border-teal-200" : "bg-teal-500/20 text-teal-400 border-teal-500/30")}>
                                         <BookOpen className="w-5 h-5" />
                                     </div>
-                                    <div>
-                                        <h3 className="font-black text-base text-white">Kaynak Metin & Özet (K)</h3>
-                                        <p className="text-xs text-slate-400 line-clamp-1">{content?.title || topicName || 'Konu'}</p>
+                                    <div className="min-w-0">
+                                        <h3 className="font-black text-base leading-tight">Kaynak Metin & Özet (K)</h3>
+                                        <p className={cn("text-xs line-clamp-1", isLightUi ? "text-slate-500" : "text-slate-400")}>
+                                            {content?.title || topicName || 'Konu'}
+                                        </p>
                                     </div>
                                 </div>
                                 <button 
                                     onClick={() => setIsSourceTextOpen(false)} 
-                                    className="p-2 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition-colors"
+                                    className={cn("p-2 rounded-xl transition-colors cursor-pointer", isLightUi ? "hover:bg-slate-100 text-slate-500" : "hover:bg-white/10 text-slate-400 hover:text-white")}
                                 >
                                     <X className="w-5 h-5" />
                                 </button>
                             </div>
 
-                            {/* Araç Çubuğu */}
-                            <div className="flex items-center justify-between py-3 border-b border-white/5 text-xs text-slate-400">
-                                <span className="font-semibold text-teal-300">
-                                    {sourceText ? `${sourceText.trim().split(/\s+/).filter(Boolean).length} kelime` : 'Metin yok'}
+                            {/* Okuma Kontrolleri Barı */}
+                            <div className={cn("flex flex-wrap items-center justify-between gap-2 py-3 border-b text-xs", isLightUi ? "border-slate-200 text-slate-600" : "border-white/10 text-slate-400")}>
+                                <span className={cn("font-bold", isLightUi ? "text-teal-700" : "text-teal-300")}>
+                                    {wordsCount > 0 ? `${wordsCount} kelime • ~${readMinutes} dk okuma` : 'Metin yok'}
                                 </span>
-                                <div className="flex items-center gap-2">
-                                    {sourceText && (
-                                        <Button
-                                            size="sm"
-                                            variant="ghost"
-                                            onClick={handleCopySourceText}
-                                            className="h-7 px-2 text-xs text-slate-300 hover:text-white hover:bg-white/10"
-                                        >
-                                            <Copy className="w-3.5 h-3.5 mr-1 text-teal-400" /> Kopyala
-                                        </Button>
+
+                                <div className="flex flex-wrap items-center gap-1.5">
+                                    {!isEditingSourceText && sourceText && (
+                                        <>
+                                            <div className={cn("flex items-center rounded-lg border p-0.5", isLightUi ? "bg-slate-100 border-slate-200" : "bg-white/5 border-white/15")}>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        const i = sizeOrder.indexOf(sourceTextSize);
+                                                        if (i > 0) setSourceTextSize(sizeOrder[i - 1]);
+                                                    }}
+                                                    disabled={sourceTextSize === 'sm'}
+                                                    className="px-2 py-0.5 font-black disabled:opacity-30 cursor-pointer"
+                                                    title="Küçült"
+                                                >
+                                                    A-
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        const i = sizeOrder.indexOf(sourceTextSize);
+                                                        if (i < sizeOrder.length - 1) setSourceTextSize(sizeOrder[i + 1]);
+                                                    }}
+                                                    disabled={sourceTextSize === 'xl'}
+                                                    className="px-2 py-0.5 font-black disabled:opacity-30 cursor-pointer"
+                                                    title="Büyüt"
+                                                >
+                                                    A+
+                                                </button>
+                                            </div>
+
+                                            <Button
+                                                size="sm"
+                                                variant="ghost"
+                                                onClick={toggleSpeakSourceText}
+                                                className={cn(
+                                                    "h-7 px-2.5 text-xs font-bold rounded-lg cursor-pointer",
+                                                    isSpeakingSource
+                                                        ? "bg-amber-500/20 text-amber-500"
+                                                        : (isLightUi ? "hover:bg-slate-100 text-slate-700" : "hover:bg-white/10 text-slate-200")
+                                                )}
+                                            >
+                                                {isSpeakingSource ? <VolumeX className="w-3.5 h-3.5 mr-1" /> : <Volume2 className="w-3.5 h-3.5 mr-1 text-violet-500" />}
+                                                {isSpeakingSource ? 'Durdur' : 'Sesli Oku'}
+                                            </Button>
+
+                                            <Button
+                                                size="sm"
+                                                variant="ghost"
+                                                onClick={handleCopySourceText}
+                                                className={cn("h-7 px-2 text-xs rounded-lg cursor-pointer", isLightUi ? "hover:bg-slate-100 text-slate-700" : "hover:bg-white/10 text-slate-300")}
+                                            >
+                                                <Copy className="w-3.5 h-3.5 mr-1 text-teal-500" /> Kopyala
+                                            </Button>
+                                        </>
                                     )}
                                     <Button
                                         size="sm"
@@ -2213,27 +2480,58 @@ function PresentationPageContent() {
                                             if (!isEditingSourceText) setEditableSourceText(sourceText);
                                             setIsEditingSourceText(prev => !prev);
                                         }}
-                                        className="h-7 px-2.5 text-xs border-white/10 text-teal-300 hover:text-white hover:bg-teal-500/20"
+                                        className={cn("h-7 px-2.5 text-xs rounded-lg font-bold cursor-pointer", isLightUi ? "border-teal-300 text-teal-700 hover:bg-teal-50" : "border-white/15 text-teal-300 hover:bg-teal-500/20")}
                                     >
                                         {isEditingSourceText ? 'Okuma Modu' : 'Düzenle'}
                                     </Button>
                                 </div>
                             </div>
 
+                            {/* Metin İçi Arama */}
+                            {!isEditingSourceText && sourceText && (
+                                <div className="pt-2.5">
+                                    <div className="relative">
+                                        <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                                        <input
+                                            type="text"
+                                            value={sourceSearchQuery}
+                                            onChange={e => setSourceSearchQuery(e.target.value)}
+                                            placeholder="Metin içinde kelime ara ve vurgula..."
+                                            className={cn(
+                                                "w-full h-8 pl-8 pr-8 rounded-xl border text-xs font-medium focus:outline-none focus:ring-2 focus:ring-teal-500/40",
+                                                isLightUi ? "bg-white border-slate-200 text-slate-900" : "bg-white/5 border-white/15 text-white placeholder:text-slate-500"
+                                            )}
+                                        />
+                                        {sourceSearchQuery && (
+                                            <button
+                                                type="button"
+                                                onClick={() => setSourceSearchQuery('')}
+                                                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                                            >
+                                                <X className="w-3.5 h-3.5" />
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+
                             {/* İçerik */}
-                            <div className="flex-grow overflow-y-auto my-3 pr-2 scrollbar-thin">
+                            <div className="flex-grow overflow-y-auto my-3 pr-1 scrollbar-thin">
                                 {isEditingSourceText ? (
                                     <div className="space-y-3 h-full flex flex-col">
                                         <Textarea
                                             value={editableSourceText}
                                             onChange={(e) => setEditableSourceText(e.target.value)}
                                             placeholder="Bu konuya ait ders kitabı veya kaynak metnini buraya yapıştırın..."
-                                            className="min-h-[360px] flex-grow bg-slate-950 border-white/10 text-white font-sans text-sm leading-relaxed p-4 rounded-xl resize-y"
+                                            className={cn(
+                                                "min-h-[360px] flex-grow font-sans text-sm leading-relaxed p-4 rounded-xl resize-y",
+                                                isLightUi ? "bg-white border-slate-200 text-slate-900" : "bg-slate-900 border-white/15 text-white"
+                                            )}
                                         />
                                         <Button
                                             onClick={handleSaveSourceText}
                                             disabled={isSavingSourceText}
-                                            className="w-full bg-teal-600 hover:bg-teal-500 text-white font-bold h-10 shadow-lg shadow-teal-950/40"
+                                            className="w-full bg-teal-600 hover:bg-teal-500 text-white font-bold h-10 rounded-xl cursor-pointer"
                                         >
                                             {isSavingSourceText ? (
                                                 <>
@@ -2247,20 +2545,26 @@ function PresentationPageContent() {
                                         </Button>
                                     </div>
                                 ) : sourceText ? (
-                                    <div className="p-5 rounded-2xl bg-black/30 border border-white/5 text-sm md:text-base leading-relaxed whitespace-pre-wrap font-sans text-slate-200 selection:bg-teal-500/30">
-                                        {sourceText}
+                                    <div className={cn(
+                                        "p-5 rounded-2xl border whitespace-pre-wrap font-sans selection:bg-teal-500/30",
+                                        sizeClassMap[sourceTextSize],
+                                        isLightUi ? "bg-white border-slate-200 text-slate-800 shadow-xs" : "bg-white/[0.03] border-white/10 text-slate-200"
+                                    )}>
+                                        {renderHighlightedSource(sourceText, sourceSearchQuery)}
                                     </div>
                                 ) : (
                                     <div className="flex flex-col items-center justify-center py-20 text-center space-y-3">
-                                        <BookOpen className="w-12 h-12 text-slate-600" />
-                                        <p className="text-sm font-medium text-slate-400">Bu konuya ait kayıtlı kaynak metin bulunamadı.</p>
+                                        <BookOpen className="w-12 h-12 text-slate-500" />
+                                        <p className={cn("text-sm font-medium", isLightUi ? "text-slate-600" : "text-slate-400")}>
+                                            Bu konuya ait kayıtlı kaynak metin bulunamadı.
+                                        </p>
                                         <Button
                                             size="sm"
                                             onClick={() => {
                                                 setEditableSourceText('');
                                                 setIsEditingSourceText(true);
                                             }}
-                                            className="bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs"
+                                            className="bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs cursor-pointer"
                                         >
                                             + Kaynak Metin Ekle
                                         </Button>
@@ -2269,14 +2573,15 @@ function PresentationPageContent() {
                             </div>
                         </motion.div>
                     </div>
-                )}
+                    );
+                })()}
             </AnimatePresence>
 
             {/* ══ 5. CANLI ÇİZİM, BEYAZ TAHTA & NOT ALMA ARACI ══ */}
             <PresentationDrawingBoard
                 isOpen={isDrawingOpen}
                 onClose={() => setIsDrawingOpen(false)}
-                isDarkMode={isDarkMode}
+                isDarkMode={presentationTheme !== 'sketchnote' && presentationTheme !== 'clean-light'}
             />
 
             {/* ══ 6. MOBİL KUMANDA & QR KOD MODALI ══ */}
@@ -2301,6 +2606,7 @@ function PresentationPageContent() {
                     setIsTimerRunning(true);
                     setIsTimerOpen(true);
                 }}
+                presentationTheme={presentationTheme}
             />
         </main>
     );

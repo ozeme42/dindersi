@@ -31,6 +31,7 @@ export interface PresentationRemoteModalProps {
     onToggleBlackout: () => void;
     onToggleMenu?: () => void;
     onStartTimer?: (seconds: number) => void;
+    presentationTheme?: string;
 }
 
 function generateSessionCode(): string {
@@ -58,8 +59,10 @@ export function PresentationRemoteModal({
     isBlackout,
     onToggleBlackout,
     onToggleMenu,
-    onStartTimer
+    onStartTimer,
+    presentationTheme = 'sketchnote'
 }: PresentationRemoteModalProps) {
+    const isLightUi = presentationTheme === 'clean-light' || presentationTheme === 'sketchnote';
     const { toast } = useToast();
     const [sessionCode, setSessionCode] = useState<string>('');
     const [qrDataUrl, setQrDataUrl] = useState<string>('');
@@ -294,69 +297,73 @@ export function PresentationRemoteModal({
 
     return (
         <div 
-            className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-4 animate-in fade-in duration-200"
+            className={cn(
+                "fixed inset-0 z-[200] flex items-center justify-center p-4 animate-in fade-in duration-200",
+                isLightUi ? "bg-slate-900/50 backdrop-blur-sm" : "bg-slate-950/85 backdrop-blur-md"
+            )}
             onClick={onClose}
         >
             <div 
-                className="relative w-full max-w-lg bg-slate-900 border border-white/20 rounded-3xl p-6 sm:p-8 shadow-2xl overflow-hidden"
+                className={cn(
+                    "relative w-full max-w-lg border rounded-3xl p-6 sm:p-7 shadow-2xl overflow-hidden transition-colors",
+                    isLightUi
+                        ? "bg-white border-slate-200 text-slate-900"
+                        : "bg-slate-900 border-white/20 text-white"
+                )}
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-rose-500 to-amber-500" />
 
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center justify-between mb-5">
                     <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-2xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-400">
-                            <Smartphone className="w-6 h-6" />
+                        <div className={cn("w-11 h-11 rounded-2xl border flex items-center justify-center", isLightUi ? "bg-indigo-50 border-indigo-200 text-indigo-600" : "bg-indigo-500/20 border-indigo-400/30 text-indigo-400")}>
+                            <Smartphone className="w-5 h-5" />
                         </div>
                         <div>
-                            <h3 className="text-xl font-black text-white flex items-center gap-2">
+                            <h3 className={cn("text-lg sm:text-xl font-black flex items-center gap-2", isLightUi ? "text-slate-900" : "text-white")}>
                                 Mobil Sunum Kumandası
-                                <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/30 text-indigo-300 font-bold border border-indigo-400/40">
+                                <span className={cn("text-[10px] px-2 py-0.5 rounded-full font-bold border", isLightUi ? "bg-indigo-50 text-indigo-700 border-indigo-200" : "bg-indigo-500/30 text-indigo-300 border-indigo-400/40")}>
                                     Canlı
                                 </span>
                             </h3>
-                            <p className="text-xs text-slate-400">Telefondan sunumu uzaktan yönetin</p>
+                            <p className={cn("text-xs", isLightUi ? "text-slate-500" : "text-slate-400")}>
+                                Telefondan sunumu uzaktan yönetin
+                            </p>
                         </div>
                     </div>
 
                     <button 
                         onClick={onClose}
-                        className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+                        className={cn("w-9 h-9 rounded-full flex items-center justify-center transition-colors cursor-pointer", isLightUi ? "bg-slate-100 hover:bg-slate-200 text-slate-600" : "bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white")}
                         title="Kapat"
                     >
                         <X className="w-5 h-5" />
                     </button>
                 </div>
 
-                {/* Bağlantı Durumu Rozeti */}
-                <div className="mb-6">
+                {/* Bağlantı Durumu ve Aktif Slayt Özeti */}
+                <div className="space-y-2.5 mb-5">
                     {isPhoneConnected ? (
-                        <div className="flex items-center justify-between px-4 py-3 rounded-2xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+                        <div className={cn("flex items-center justify-between px-4 py-2.5 rounded-2xl border", isLightUi ? "bg-emerald-50 border-emerald-200 text-emerald-800" : "bg-emerald-950/60 border-emerald-500/40 text-emerald-300")}>
                             <div className="flex items-center gap-2.5">
-                                <span className="relative flex h-3 w-3">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-                                </span>
-                                <span className="text-sm font-bold">Telefon Bağlandı! Kumanda Aktif</span>
+                                <span className="inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+                                <span className="text-xs sm:text-sm font-bold">Telefon Bağlandı • Kumanda Aktif</span>
                             </div>
                             {lastActionName && (
-                                <span className="text-xs bg-emerald-500/20 px-2 py-0.5 rounded-md font-mono font-bold text-emerald-200">
+                                <span className={cn("text-xs px-2 py-0.5 rounded-md font-mono font-bold", isLightUi ? "bg-emerald-200/70 text-emerald-900" : "bg-emerald-500/20 text-emerald-200")}>
                                     {lastActionName}
                                 </span>
                             )}
                         </div>
                     ) : (
-                        <div className="flex items-center justify-between px-4 py-3 rounded-2xl bg-amber-950/40 border border-amber-500/30 text-amber-300">
+                        <div className={cn("flex items-center justify-between px-4 py-2.5 rounded-2xl border", isLightUi ? "bg-amber-50 border-amber-200 text-amber-800" : "bg-amber-950/40 border-amber-500/30 text-amber-300")}>
                             <div className="flex items-center gap-2.5">
-                                <span className="relative flex h-2.5 w-2.5">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
-                                </span>
+                                <span className="inline-flex rounded-full h-2.5 w-2.5 bg-amber-500" />
                                 <span className="text-xs sm:text-sm font-semibold">Telefon Bekleniyor... QR kodu okutun</span>
                             </div>
                             <button
                                 onClick={handleRegenerateCode}
-                                className="text-xs text-amber-400/80 hover:text-amber-200 flex items-center gap-1 cursor-pointer"
+                                className={cn("text-xs flex items-center gap-1 font-bold cursor-pointer", isLightUi ? "text-amber-700 hover:text-amber-900" : "text-amber-400 hover:text-amber-200")}
                                 title="Yeni Kod Üret"
                             >
                                 <RefreshCw className="w-3 h-3" />
@@ -364,36 +371,48 @@ export function PresentationRemoteModal({
                             </button>
                         </div>
                     )}
+
+                    {totalStepsCount > 0 && (
+                        <div className={cn("flex items-center justify-between gap-2 px-3.5 py-2 rounded-xl border text-xs", isLightUi ? "bg-slate-50 border-slate-200 text-slate-700" : "bg-white/5 border-white/10 text-slate-300")}>
+                            <span className="truncate font-bold">
+                                <strong className={isLightUi ? "text-indigo-700" : "text-indigo-300"}>Adım {currentStepIndex + 1}/{totalStepsCount}:</strong>{' '}
+                                {currentStepTitle || topicTitle || 'Sunum Akışı'}
+                            </span>
+                            <span className="text-[10px] font-mono opacity-75 shrink-0">
+                                %{Math.round(((currentStepIndex + 1) / totalStepsCount) * 100)}
+                            </span>
+                        </div>
+                    )}
                 </div>
 
                 {/* QR Kod & Kod Alanı */}
-                <div className="flex flex-col sm:flex-row items-center gap-6 bg-slate-950/60 p-5 rounded-2xl border border-white/10 mb-6">
-                    <div className="relative p-2.5 bg-white rounded-2xl shadow-xl flex-shrink-0 flex items-center justify-center">
+                <div className={cn("flex flex-col sm:flex-row items-center gap-5 p-4 sm:p-5 rounded-2xl border mb-5", isLightUi ? "bg-slate-50 border-slate-200" : "bg-slate-950/60 border-white/10")}>
+                    <div className="relative p-2.5 bg-white rounded-2xl border border-slate-200 shadow-md flex-shrink-0 flex items-center justify-center">
                         {qrDataUrl ? (
                             <img 
                                 src={qrDataUrl} 
                                 alt="Kumanda QR Kodu" 
-                                className="w-44 h-44 sm:w-48 sm:h-48 object-contain rounded-lg"
+                                className="w-40 h-40 sm:w-44 sm:h-44 object-contain rounded-lg"
                             />
                         ) : (
-                            <div className="w-44 h-44 sm:w-48 sm:h-48 flex items-center justify-center text-slate-400 text-xs">
+                            <div className="w-40 h-40 sm:w-44 sm:h-44 flex items-center justify-center text-slate-400 text-xs">
                                 QR Kod Hazırlanıyor...
                             </div>
                         )}
                     </div>
 
-                    <div className="flex-1 flex flex-col gap-3 text-center sm:text-left w-full">
+                    <div className="flex-1 flex flex-col gap-2.5 text-center sm:text-left w-full">
                         <div>
-                            <span className="text-[11px] uppercase tracking-wider text-slate-400 font-bold">Oturum Kodu</span>
-                            <div className="mt-1 flex items-center justify-center sm:justify-start gap-2">
-                                <span className="font-mono text-3xl sm:text-4xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-rose-300 to-amber-300">
+                            <span className={cn("text-[11px] uppercase tracking-wider font-bold", isLightUi ? "text-slate-500" : "text-slate-400")}>Oturum Kodu</span>
+                            <div className="mt-0.5 flex items-center justify-center sm:justify-start gap-2">
+                                <span className={cn("font-mono text-3xl font-black tracking-widest", isLightUi ? "text-indigo-700" : "text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-rose-300 to-amber-300")}>
                                     {sessionCode}
                                 </span>
                             </div>
                         </div>
 
-                        <p className="text-xs text-slate-300 leading-relaxed">
-                            Telefonunuzun kamerasını QR koda tutarak anında bağlanabilirsiniz. İleri/geri slayt geçişleri ve akıllı araçlar hazır olacaktır.
+                        <p className={cn("text-xs leading-relaxed", isLightUi ? "text-slate-600" : "text-slate-300")}>
+                            Kamerayı QR koda tutun; slayt geçişleri, karartma ve zamanlayıcı telefonunuzda anında açılır.
                         </p>
 
                         <div className="flex flex-wrap items-center gap-2 pt-1 justify-center sm:justify-start">
@@ -401,9 +420,9 @@ export function PresentationRemoteModal({
                                 size="sm"
                                 variant="outline"
                                 onClick={handleCopyLink}
-                                className="h-8 px-3 rounded-xl border-white/20 bg-white/5 hover:bg-white/10 text-white text-xs font-bold gap-1.5 cursor-pointer"
+                                className={cn("h-8 px-3 rounded-xl text-xs font-bold gap-1.5 cursor-pointer", isLightUi ? "border-slate-300 bg-white hover:bg-slate-100 text-slate-800" : "border-white/20 bg-white/5 hover:bg-white/10 text-white")}
                             >
-                                {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                                {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
                                 {copied ? 'Kopyalandı' : 'Linki Kopyala'}
                             </Button>
 
@@ -411,7 +430,7 @@ export function PresentationRemoteModal({
                                 href={remoteUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="h-8 px-3 rounded-xl border border-indigo-500/40 bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-200 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                                className={cn("h-8 px-3 rounded-xl border text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer", isLightUi ? "border-indigo-300 bg-indigo-50 hover:bg-indigo-100 text-indigo-700" : "border-indigo-500/40 bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-200")}
                                 title="Bu Cihazda Kumandayı Test Et"
                             >
                                 <ExternalLink className="w-3.5 h-3.5" />
@@ -423,22 +442,22 @@ export function PresentationRemoteModal({
 
                 {/* Özellikler Özeti */}
                 <div className="grid grid-cols-3 gap-2 text-center">
-                    <div className="p-2.5 rounded-xl bg-white/5 border border-white/5 flex flex-col items-center gap-1">
-                        <ChevronRight className="w-4 h-4 text-indigo-400" />
-                        <span className="text-[11px] font-bold text-slate-200">Slayt Geçişi</span>
-                        <span className="text-[9px] text-slate-400">Büyük İleri / Geri tuşları</span>
+                    <div className={cn("p-2.5 rounded-xl border flex flex-col items-center gap-1", isLightUi ? "bg-slate-50 border-slate-200" : "bg-white/5 border-white/5")}>
+                        <ChevronRight className="w-4 h-4 text-indigo-500" />
+                        <span className={cn("text-[11px] font-bold", isLightUi ? "text-slate-800" : "text-slate-200")}>Slayt Geçişi</span>
+                        <span className={cn("text-[9px]", isLightUi ? "text-slate-500" : "text-slate-400")}>İleri / Geri tuşları</span>
                     </div>
 
-                    <div className="p-2.5 rounded-xl bg-white/5 border border-white/5 flex flex-col items-center gap-1">
-                        <Moon className="w-4 h-4 text-amber-400" />
-                        <span className="text-[11px] font-bold text-slate-200">Tahtayı Karart</span>
-                        <span className="text-[9px] text-slate-400">Dikkat çekme modu</span>
+                    <div className={cn("p-2.5 rounded-xl border flex flex-col items-center gap-1", isLightUi ? "bg-slate-50 border-slate-200" : "bg-white/5 border-white/5")}>
+                        <Moon className="w-4 h-4 text-amber-500" />
+                        <span className={cn("text-[11px] font-bold", isLightUi ? "text-slate-800" : "text-slate-200")}>Tahtayı Karart</span>
+                        <span className={cn("text-[9px]", isLightUi ? "text-slate-500" : "text-slate-400")}>Odak modu</span>
                     </div>
 
-                    <div className="p-2.5 rounded-xl bg-white/5 border border-white/5 flex flex-col items-center gap-1">
-                        <ListFilter className="w-4 h-4 text-emerald-400" />
-                        <span className="text-[11px] font-bold text-slate-200">Adım Listesi</span>
-                        <span className="text-[9px] text-slate-400">Doğrudan slayta atla</span>
+                    <div className={cn("p-2.5 rounded-xl border flex flex-col items-center gap-1", isLightUi ? "bg-slate-50 border-slate-200" : "bg-white/5 border-white/5")}>
+                        <ListFilter className="w-4 h-4 text-emerald-500" />
+                        <span className={cn("text-[11px] font-bold", isLightUi ? "text-slate-800" : "text-slate-200")}>Adım Listesi</span>
+                        <span className={cn("text-[9px]", isLightUi ? "text-slate-500" : "text-slate-400")}>Slayta atla</span>
                     </div>
                 </div>
             </div>
