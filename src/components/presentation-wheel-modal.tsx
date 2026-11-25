@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import {
     X, Users, RotateCcw, UserMinus, Trophy,
-    Check, Maximize2, Minimize2, Volume2, VolumeX, Flame, Zap,
+    Check, Maximize2, Minimize2, Volume2, VolumeX, Flame,
     Shuffle, Clock, Award, History, Trash2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -27,27 +27,40 @@ let lastPickerSource: 'registered' | 'custom' = 'registered';
 let lastCustomNamesText: string = 'Ahmet\nMehmet\nAyşe\nFatma\nAli\nZeynep\nMustafa\nElif\nBurak\nCeren';
 let lastRemovedStudentIds: Set<string> = new Set();
 
-// ══ ZENGİN STÜDYO ÇARK RENK PALETİ ══
-const SLICE_COLORS = [
-    { bg: '#2563eb', dark: '#1e3a8a', text: '#ffffff' },
-    { bg: '#db2777', dark: '#831843', text: '#ffffff' },
-    { bg: '#059669', dark: '#064e3b', text: '#ffffff' },
-    { bg: '#d97706', dark: '#78350f', text: '#ffffff' },
-    { bg: '#7c3aed', dark: '#4c1d95', text: '#ffffff' },
-    { bg: '#0891b2', dark: '#164e63', text: '#ffffff' },
-    { bg: '#dc2626', dark: '#7f1d1d', text: '#ffffff' },
-    { bg: '#0d9488', dark: '#134e4a', text: '#ffffff' },
-    { bg: '#ea580c', dark: '#7c2d12', text: '#ffffff' },
-    { bg: '#4f46e5', dark: '#312e81', text: '#ffffff' },
-    { bg: '#65a30d', dark: '#365314', text: '#ffffff' },
-    { bg: '#c026d3', dark: '#701a75', text: '#ffffff' },
+// ══ WHEEL OF NAMES (frz-hcm) PASTEL-CANLI ÇARK PALETİ ══
+interface WheelSliceColor {
+    bg: string;
+    bevelTop: string;
+    bevelDark: string;
+    text: string;
+}
+
+const SLICE_COLORS: WheelSliceColor[] = [
+    { bg: '#63B3ED', bevelTop: '#90CCF6', bevelDark: '#3582C4', text: '#111827' }, // Gök Mavisi
+    { bg: '#74E09F', bevelTop: '#A4EFC2', bevelDark: '#3EB46F', text: '#111827' }, // Nane Yeşili
+    { bg: '#F7E06D', bevelTop: '#FBEB9E', bevelDark: '#CFAF2E', text: '#111827' }, // Pastel Sarı
+    { bg: '#B47EC8', bevelTop: '#D0A6E0', bevelDark: '#854E9B', text: '#111827' }, // Lavanta Moru
 ];
+
+const EXTRA_NON_ADJACENT_COLOR: WheelSliceColor = {
+    bg: '#F48FB1',
+    bevelTop: '#F9BCD2',
+    bevelDark: '#C25B7E',
+    text: '#111827',
+};
+
+function getSliceColor(index: number, totalSlices: number): WheelSliceColor {
+    if (totalSlices > 1 && totalSlices % SLICE_COLORS.length === 1 && index === totalSlices - 1) {
+        return EXTRA_NON_ADJACENT_COLOR;
+    }
+    return SLICE_COLORS[index % SLICE_COLORS.length];
+}
 
 type SpinDurationMode = 'fast' | 'normal' | 'dramatic';
 const DURATION_SECONDS: Record<SpinDurationMode, number> = {
-    fast: 4.6,
-    normal: 7.4,
-    dramatic: 10.6,
+    fast: 4.5,
+    normal: 7.5,
+    dramatic: 10.5,
 };
 
 interface WheelCandidate {
@@ -197,21 +210,39 @@ function formatSliceLabel(fullName: string): string {
 }
 
 /**
- * Fiziksel hızlanma -> süzülme -> mandal sürtünme direnci -> mikro yerleşme eğrisi
+ * Wheel of Names tarzı C1-sürekli fiziksel hızlanma + uzun ipeksi süzülme/yavaşlama eğrisi.
+ * Anlık açısal hız hızlıca tepeye çıkıp, sonda geriye sekme yapmadan sıfıra pürüzsüz sönümlenir.
  */
+const WHEEL_CURVE_SAMPLES = 256;
+const WHEEL_CURVE_LUT: number[] = (() => {
+    const lut = new Array<number>(WHEEL_CURVE_SAMPLES + 1).fill(0);
+    let acc = 0;
+    for (let i = 1; i <= WHEEL_CURVE_SAMPLES; i++) {
+        const uPrev = (i - 1) / WHEEL_CURVE_SAMPLES;
+        const uCurr = i / WHEEL_CURVE_SAMPLES;
+        const uMid = (uPrev + uCurr) * 0.5;
+        // Yumuşak başlangıç rampası (t≈0.06'da tepe) * uzun sönümleme (son dilimler nefes kesici yavaşlıkta)
+        const vMid = (0.12 + 0.88 * (1 - Math.exp(-uMid / 0.032))) * Math.pow(1 - uMid, 3.25);
+        acc += vMid;
+        lut[i] = acc;
+    }
+    const total = acc || 1;
+    for (let i = 0; i <= WHEEL_CURVE_SAMPLES; i++) {
+        lut[i] /= total;
+    }
+    lut[WHEEL_CURVE_SAMPLES] = 1;
+    return lut;
+})();
+
 function evaluateRealisticWheelCurve(t: number): number {
-    // 1. Kısa el savurma ivmelenmesi + eksponansiyel rulman ve hava direnci yavaşlaması
-    // t in [0, 1] -> p in [0, 1], türevi t=0'da yumuşak artışa, ardından uzun doğal yavaşlamaya sahip
-    const ramp = t < 0.045 ? Math.pow(t / 0.045, 1.55) * 0.015 : 0.015;
-    const coastT = t < 0.045 ? 0 : (t - 0.045) / 0.955;
-    const expDecay = 1 - Math.exp(-5.1 * coastT);
-    const expNorm = 1 - Math.exp(-5.1);
-    const tailDrop = Math.pow(coastT, 5);
-    const smoothCoast = ((expDecay / expNorm) * (1 - 0.025 * tailDrop) + 0.025 * tailDrop);
-    // Ayrıca sonda ağır teker hissiyatı için kuartik sönümleme ile harmanla
-    const quartic = 1 - Math.pow(1 - coastT, 4.4);
-    const blended = smoothCoast * 0.35 + quartic * 0.65;
-    return Math.min(1, ramp + blended * 0.985);
+    if (t <= 0) return 0;
+    if (t >= 1) return 1;
+    const scaled = t * WHEEL_CURVE_SAMPLES;
+    const idx = Math.floor(scaled);
+    const frac = scaled - idx;
+    const a = WHEEL_CURVE_LUT[idx];
+    const b = WHEEL_CURVE_LUT[Math.min(WHEEL_CURVE_SAMPLES, idx + 1)];
+    return a + (b - a) * frac;
 }
 
 interface PresentationWheelModalProps {
@@ -248,16 +279,19 @@ export function PresentationWheelModal({
     // Çark Durumları
     const [isRolling, setIsRolling] = useState(false);
     const [winner, setWinner] = useState<WheelCandidate | null>(null);
+    const [winnerColor, setWinnerColor] = useState<WheelSliceColor | null>(null);
     const [removedStudentIds, setRemovedStudentIds] = useState<Set<string>>(() => new Set(lastRemovedStudentIds));
     const [recentWinners, setRecentWinners] = useState<WheelCandidate[]>([]);
-    const [ledStep, setLedStep] = useState(0);
 
     // 60fps Animasyon & DOM Referansları
     const wheelContainerRef = useRef<HTMLDivElement | null>(null);
     const needleRef = useRef<HTMLDivElement | null>(null);
+    const pointerTopPolyRef = useRef<SVGPolygonElement | null>(null);
+    const pointerBottomPolyRef = useRef<SVGPolygonElement | null>(null);
     const currentRotationRef = useRef<number>(0);
     const isRollingRef = useRef<boolean>(false);
     const rafIdRef = useRef<number | null>(null);
+    const idleRafIdRef = useRef<number | null>(null);
 
     // Sınıf & Öğrenci Yükle
     useEffect(() => {
@@ -362,14 +396,14 @@ export function PresentationWheelModal({
     const totalSlices = wheelItems.length;
     const sliceAngle = 360 / (totalSlices || 1);
 
-    // Kayan marquee ampul ışıkları
-    useEffect(() => {
-        if (!isOpen) return;
-        const interval = setInterval(() => {
-            setLedStep(prev => (prev + 1) % 24);
-        }, isRolling ? 55 : 260);
-        return () => clearInterval(interval);
-    }, [isOpen, isRolling]);
+    const syncPointerColor = useCallback((rotDeg: number) => {
+        if (totalSlices < 1) return;
+        const localDeg = ((-rotDeg % 360) + 360) % 360;
+        const idx = Math.floor(localDeg / sliceAngle) % totalSlices;
+        const c = getSliceColor(idx, totalSlices);
+        if (pointerTopPolyRef.current) pointerTopPolyRef.current.setAttribute('fill', c.bevelTop);
+        if (pointerBottomPolyRef.current) pointerBottomPolyRef.current.setAttribute('fill', c.bevelDark);
+    }, [totalSlices, sliceAngle]);
 
     // Temizleme
     useEffect(() => {
@@ -378,37 +412,101 @@ export function PresentationWheelModal({
                 cancelAnimationFrame(rafIdRef.current);
                 rafIdRef.current = null;
             }
+            if (idleRafIdRef.current) {
+                cancelAnimationFrame(idleRafIdRef.current);
+                idleRafIdRef.current = null;
+            }
             isRollingRef.current = false;
             setIsRolling(false);
         }
         return () => {
             if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
+            if (idleRafIdRef.current) cancelAnimationFrame(idleRafIdRef.current);
             isRollingRef.current = false;
         };
     }, [isOpen]);
 
-    // Başlangıç açısını DOM'a yansıt
+    // Başlangıç açısını ve ibre rengini DOM'a yansıt
     useEffect(() => {
         if (wheelContainerRef.current && !isRollingRef.current) {
             wheelContainerRef.current.style.transform = `rotate(${currentRotationRef.current}deg)`;
+            syncPointerColor(currentRotationRef.current);
         }
-    }, [isOpen, wheelItems.length, isWheelFullscreen]);
+    }, [isOpen, wheelItems.length, isWheelFullscreen, syncPointerColor]);
 
-    // ══ GERÇEKÇİ 60FPS FİZİK, MANDAL DİRENCİ VE YAYLI İBRE MOTORU ══
+    // Wheel of Names tarzı bekleme (idle) halinde saat yönünde yavaş sürekli dönüş ve sessiz ibre esnemesi
+    useEffect(() => {
+        if (!isOpen || isRolling || winner || totalSlices < 2) {
+            if (idleRafIdRef.current) {
+                cancelAnimationFrame(idleRafIdRef.current);
+                idleRafIdRef.current = null;
+            }
+            return;
+        }
+
+        let lastTime = performance.now();
+        let lastPegStep = Math.floor(currentRotationRef.current / sliceAngle);
+        let needleAngle = 0;
+        let needleVel = 0;
+
+        const tickIdle = (now: number) => {
+            if (isRollingRef.current || !wheelContainerRef.current) return;
+            const dt = Math.min(0.05, Math.max(0.001, (now - lastTime) / 1000));
+            lastTime = now;
+
+            const nextRot = currentRotationRef.current + 13.5 * dt;
+            currentRotationRef.current = nextRot;
+            wheelContainerRef.current.style.transform = `rotate(${nextRot}deg)`;
+            syncPointerColor(nextRot);
+
+            const pegStep = Math.floor(nextRot / sliceAngle);
+            if (pegStep > lastPegStep) {
+                lastPegStep = pegStep;
+                needleAngle = Math.min(needleAngle, -7.5);
+                needleVel = -45;
+            }
+
+            const accel = -280 * needleAngle - 18 * needleVel;
+            needleVel += accel * dt;
+            needleAngle += needleVel * dt;
+            needleAngle = Math.max(-14, Math.min(4, needleAngle));
+
+            if (needleRef.current) {
+                needleRef.current.style.transform = `rotate(${needleAngle.toFixed(2)}deg)`;
+            }
+
+            idleRafIdRef.current = requestAnimationFrame(tickIdle);
+        };
+
+        idleRafIdRef.current = requestAnimationFrame(tickIdle);
+        return () => {
+            if (idleRafIdRef.current) {
+                cancelAnimationFrame(idleRafIdRef.current);
+                idleRafIdRef.current = null;
+            }
+        };
+    }, [isOpen, isRolling, winner, totalSlices, sliceAngle, syncPointerColor]);
+
+    // ══ WHEEL OF NAMES 60FPS FİZİK, RENK UYUMLU İBRE VE SES MOTORU ══
     const spinWheel = useCallback(() => {
         if (totalSlices < 2 || !wheelContainerRef.current) return;
         if (isRollingRef.current) return;
 
         if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
+        if (idleRafIdRef.current) {
+            cancelAnimationFrame(idleRafIdRef.current);
+            idleRafIdRef.current = null;
+        }
 
         isRollingRef.current = true;
         setIsRolling(true);
         setWinner(null);
+        setWinnerColor(null);
         audioEngine.playSpinLaunch();
 
         const winningIndex = Math.floor(Math.random() * totalSlices);
-        // Güvenli orta alan: pimlere fazla yakın durup yanılgı oluşturmaz (0.20..0.80)
-        const offsetInSlice = (0.20 + Math.random() * 0.60) * sliceAngle;
+        // Güvenli iç bölge (0.16..0.84) ile çizgi üstü tereddüt olmaz
+        const offsetInSlice = (0.16 + Math.random() * 0.68) * sliceAngle;
         const targetNormalized = (360 - (winningIndex * sliceAngle + offsetInSlice) + 360) % 360;
 
         const startRot = currentRotationRef.current;
@@ -435,48 +533,32 @@ export function PresentationWheelModal({
 
             const t = Math.min(1, elapsed / durationMs);
             const progress = evaluateRealisticWheelCurve(t);
-
-            // Kısa başlangıç geri gerilme hissi (0..2.2% sürede minik yaylanma) + ana dönme
-            const windupOffset = t < 0.025 ? -Math.sin((t / 0.025) * Math.PI) * 3.2 : 0;
-            let baseRot = startRot + totalDelta * progress + windupOffset;
-
-            // Sona doğru pime çarpma direnci + kurtulma ivmesi ve mikro yerleşme sekmesi
-            if (t > 0.68 && t < 0.975) {
-                const detentFade = (t - 0.68) / (0.975 - 0.68);
-                const envelope = Math.sin(detentFade * Math.PI) * 0.45;
-                const phase = ((baseRot % sliceAngle) / sliceAngle) * 2 * Math.PI;
-                baseRot -= Math.sin(phase) * Math.min(2.2, sliceAngle * 0.09) * envelope;
-            } else if (t >= 0.975 && t < 1) {
-                // Ağır çarkın yerçekimiyle iki pim arasında son hafif salınımla oturması
-                const settleT = (t - 0.975) / 0.025;
-                baseRot += Math.sin(settleT * Math.PI * 1.6) * (1 - settleT) * 0.95;
-            }
+            const baseRot = startRot + totalDelta * progress;
 
             currentRotationRef.current = baseRot;
             wheelContainerRef.current.style.transform = `rotate(${baseRot}deg)`;
+            syncPointerColor(baseRot);
 
-            // Anlık açısal hız (deg/sec -> 0..1 normalize)
             const degPerSec = Math.max(0, (baseRot - lastRot) / dt);
             lastRot = baseRot;
             const speedNorm = Math.max(0, Math.min(1, degPerSec / 950));
 
-            // Gerçek pim geçişi anı: t >= 0.025 sonrası her pim çarpışında mandal sekmesi
             const pegStep = Math.floor(baseRot / sliceAngle);
-            if (t > 0.025 && pegStep > lastPegStep) {
+            if (pegStep > lastPegStep) {
                 lastPegStep = pegStep;
                 audioEngine.playPegTick(speedNorm);
-                const kick = -(15 + speedNorm * 23);
+                const kick = -(13 + speedNorm * 24);
                 needleAngle = Math.min(needleAngle, kick);
-                needleVel = -140 - speedNorm * 90;
+                needleVel = -145 - speedNorm * 95;
             }
 
-            // Yay-sönümlemeli mekanik ibre hareketi
-            const springK = 310;
-            const damping = 17;
+            // Yay-sönümlemeli pürüzsüz mekanik ibre
+            const springK = 360;
+            const damping = 18.5;
             const accel = -springK * needleAngle - damping * needleVel;
             needleVel += accel * dt;
             needleAngle += needleVel * dt;
-            needleAngle = Math.max(-40, Math.min(12, needleAngle));
+            needleAngle = Math.max(-40, Math.min(10, needleAngle));
 
             if (needleRef.current) {
                 needleRef.current.style.transform = `rotate(${needleAngle.toFixed(2)}deg)`;
@@ -488,6 +570,7 @@ export function PresentationWheelModal({
                 const exactFinal = startRot + totalDelta;
                 currentRotationRef.current = exactFinal;
                 wheelContainerRef.current.style.transform = `rotate(${exactFinal}deg)`;
+                syncPointerColor(exactFinal);
                 if (needleRef.current) needleRef.current.style.transform = 'rotate(0deg)';
 
                 isRollingRef.current = false;
@@ -497,6 +580,7 @@ export function PresentationWheelModal({
                 const chosen = wheelItems[winningIndex];
                 if (chosen) {
                     setWinner(chosen);
+                    setWinnerColor(getSliceColor(winningIndex, totalSlices));
                     setRecentWinners(prev => [chosen, ...prev.filter(w => w.id !== chosen.id)].slice(0, 6));
                 }
 
@@ -506,21 +590,22 @@ export function PresentationWheelModal({
                         particleCount: 160,
                         spread: 95,
                         origin: { y: 0.5 },
-                        colors: ['#f59e0b', '#ec4899', '#3b82f6', '#10b981', '#ffffff']
+                        colors: ['#63B3ED', '#74E09F', '#F7E06D', '#B47EC8', '#F48FB1']
                     });
                 } catch {}
             }
         };
 
         rafIdRef.current = requestAnimationFrame(stepFrame);
-    }, [totalSlices, sliceAngle, spinMode, wheelItems]);
+    }, [totalSlices, sliceAngle, spinMode, wheelItems, syncPointerColor]);
 
-    // Boşluk (Space) tuşu ile hızlı çevir
+    // Boşluk (Space) veya Ctrl+Enter ile çevir
     useEffect(() => {
         if (!isOpen) return;
         const onKey = (e: KeyboardEvent) => {
             if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) return;
-            if (e.code === 'Space' && !winner && !isRollingRef.current && totalSlices >= 2) {
+            const isCtrlEnter = (e.ctrlKey || e.metaKey) && e.key === 'Enter';
+            if ((e.code === 'Space' || isCtrlEnter) && !winner && !isRollingRef.current && totalSlices >= 2) {
                 e.preventDefault();
                 spinWheel();
             }
@@ -966,13 +1051,18 @@ export function PresentationWheelModal({
                             </div>
                         )}
 
-                        {/* SAĞ / TAM EKRAN SAHNE: GERÇEKÇİ 60FPS METALİK STÜDYO ÇARKI (ÜSTTE İSİM YOK) */}
-                        <div className={cn(
-                            'flex-1 flex flex-col items-center justify-center relative overflow-hidden',
-                            isWheelFullscreen
-                                ? 'w-full h-full bg-radial from-slate-900/50 via-[#060b18] to-[#02040a] p-2 sm:p-4'
-                                : 'bg-gradient-to-b from-slate-900/70 to-slate-950/90 rounded-3xl border border-white/10 p-3 sm:p-5 min-h-[360px]'
-                        )}>
+                        {/* SAĞ / TAM EKRAN SAHNE: WHEEL OF NAMES TARZI STÜDYO ÇARKI */}
+                        <div
+                            className={cn(
+                                'flex-1 flex flex-col items-center justify-center relative overflow-hidden',
+                                isWheelFullscreen
+                                    ? 'w-full h-full p-2 sm:p-4'
+                                    : 'rounded-3xl border border-white/10 p-3 sm:p-5 min-h-[380px]'
+                            )}
+                            style={{
+                                background: 'radial-gradient(circle at 18% 12%, rgba(28, 72, 86, 0.42) 0%, transparent 48%), radial-gradient(circle at 86% 18%, rgba(74, 34, 72, 0.38) 0%, transparent 45%), #0c0e14',
+                            }}
+                        >
                             {totalSlices === 0 ? (
                                 <div className="flex flex-col items-center justify-center text-center p-8 text-slate-400 gap-4 max-w-md">
                                     <div className="w-16 h-16 rounded-3xl bg-indigo-600/20 text-indigo-300 border border-indigo-500/30 flex items-center justify-center">
@@ -989,64 +1079,23 @@ export function PresentationWheelModal({
                                         'relative aspect-square flex items-center justify-center my-auto',
                                         isWheelFullscreen
                                             ? 'w-[min(86vh,88vw)] h-[min(86vh,88vw)]'
-                                            : 'w-full max-w-[360px] sm:max-w-[440px] md:max-w-[480px]'
+                                            : 'w-full max-w-[390px] sm:max-w-[460px] md:max-w-[500px]'
                                     )}
                                 >
-                                    {/* Arka Sahne Hareli Derinlik Işığı */}
-                                    <div className="absolute inset-[-8%] rounded-full bg-gradient-to-tr from-indigo-950/40 via-amber-500/5 to-purple-950/30 pointer-events-none" />
-
-                                    {/* Dış Metalik Pirinç Çerçeve & 24 Stüdyo Ampulü */}
-                                    <div className={cn(
-                                        'absolute rounded-full bg-gradient-to-b from-slate-600 via-slate-900 to-black border-2 border-amber-400/60 shadow-2xl pointer-events-none z-0',
-                                        isWheelFullscreen ? 'inset-[-20px] sm:inset-[-26px]' : 'inset-[-14px] sm:inset-[-18px]'
-                                    )} />
-                                    <div className={cn(
-                                        'absolute rounded-full pointer-events-none z-10',
-                                        isWheelFullscreen ? 'inset-[-20px] sm:inset-[-26px]' : 'inset-[-14px] sm:inset-[-18px]'
-                                    )}>
-                                        {Array.from({ length: 24 }).map((_, i) => {
-                                            const angle = (i / 24) * 2 * Math.PI;
-                                            const x = 50 + 48.3 * Math.cos(angle);
-                                            const y = 50 + 48.3 * Math.sin(angle);
-                                            const isActive = (i + ledStep) % 3 === 0;
-                                            return (
-                                                <div
-                                                    key={i}
-                                                    style={{ left: `${x}%`, top: `${y}%` }}
-                                                    className={cn(
-                                                        'absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition-colors duration-100',
-                                                        isWheelFullscreen ? 'w-3.5 h-3.5 sm:w-4 sm:h-4' : 'w-2.5 h-2.5 sm:w-3 sm:h-3',
-                                                        isActive
-                                                            ? 'bg-amber-300 ring-2 ring-amber-400/60'
-                                                            : 'bg-slate-700/80'
-                                                    )}
-                                                />
-                                            );
-                                        })}
-                                    </div>
-
-                                    {/* DÖNEN SVG ÇARK (60FPS Gerçek Fizik Transformu) */}
+                                    {/* DÖNEN WHEEL OF NAMES SVG ÇARK (60FPS Pürüzsüz Fizik & Yavaş Bekleme Dönüşü) */}
                                     <div
                                         ref={wheelContainerRef}
                                         onClick={spinWheel}
-                                        className={cn(
-                                            'w-full h-full rounded-full relative overflow-hidden bg-slate-950 border-slate-900 shadow-inner will-change-transform z-10 cursor-pointer',
-                                            isWheelFullscreen ? 'border-[12px]' : 'border-[8px]'
-                                        )}
+                                        className="w-full h-full rounded-full relative overflow-hidden shadow-[0_18px_55px_rgba(0,0,0,0.65)] will-change-transform z-10 cursor-pointer"
                                         style={{ transform: 'rotate(0deg)' }}
-                                        title={isRolling ? 'Dönüyor...' : 'Çevirmek için tıklayın (Boşluk)'}
+                                        title={isRolling ? 'Dönüyor...' : 'Çevirmek için tıklayın (Boşluk veya Ctrl+Enter)'}
                                     >
                                         <svg viewBox="-1 -1 2 2" className="w-full h-full block">
                                             <defs>
-                                                <radialGradient id="brassPegGrad" cx="35%" cy="30%" r="65%">
-                                                    <stop offset="0%" stopColor="#fef9c3" />
-                                                    <stop offset="50%" stopColor="#f59e0b" />
-                                                    <stop offset="100%" stopColor="#78350f" />
-                                                </radialGradient>
-                                                <radialGradient id="sliceRimDepth" cx="50%" cy="50%" r="50%">
-                                                    <stop offset="55%" stopColor="rgba(0,0,0,0)" />
-                                                    <stop offset="92%" stopColor="rgba(0,0,0,0.22)" />
-                                                    <stop offset="100%" stopColor="rgba(0,0,0,0.42)" />
+                                                <radialGradient id="wheelEdgeVignette" cx="50%" cy="50%" r="50%">
+                                                    <stop offset="86%" stopColor="rgba(0,0,0,0)" />
+                                                    <stop offset="97%" stopColor="rgba(0,0,0,0.08)" />
+                                                    <stop offset="100%" stopColor="rgba(0,0,0,0.22)" />
                                                 </radialGradient>
                                             </defs>
 
@@ -1059,209 +1108,221 @@ export function PresentationWheelModal({
                                                 const largeArcFlag = endPercent - startPercent > 0.5 ? 1 : 0;
                                                 const pathData = `M 0 0 L ${startX} ${startY} A 1 1 0 ${largeArcFlag} 1 ${endX} ${endY} Z`;
 
-                                                const theme = SLICE_COLORS[index % SLICE_COLORS.length];
+                                                const theme = getSliceColor(index, totalSlices);
                                                 const midAngle = (startPercent + endPercent) * Math.PI;
-                                                const textRadius = totalSlices > 16 ? 0.67 : 0.62;
+                                                const textRadius = totalSlices > 16 ? 0.65 : 0.60;
                                                 const textX = Math.cos(midAngle) * textRadius;
                                                 const textY = Math.sin(midAngle) * textRadius;
                                                 const rotationDeg = (midAngle * 180) / Math.PI;
 
-                                                const fontSize = Math.max(0.044, Math.min(0.092, 0.58 / Math.max(4, totalSlices)));
+                                                const fontSize = Math.max(0.045, Math.min(0.115, 0.72 / Math.max(5, totalSlices)));
                                                 const displayName = formatSliceLabel(item.name);
-
-                                                const pegRadius = 0.942;
-                                                const pegX = Math.cos(startPercent * 2 * Math.PI) * pegRadius;
-                                                const pegY = Math.sin(startPercent * 2 * Math.PI) * pegRadius;
 
                                                 return (
                                                     <g key={item.id}>
                                                         <path
                                                             d={pathData}
                                                             fill={theme.bg}
-                                                            stroke="rgba(15,23,42,0.9)"
-                                                            strokeWidth="0.008"
+                                                            stroke="rgba(17,24,39,0.16)"
+                                                            strokeWidth="0.003"
                                                         />
                                                         <text
                                                             x={textX}
                                                             y={textY}
                                                             fill={theme.text}
                                                             fontSize={fontSize}
-                                                            fontWeight="900"
-                                                            fontFamily="system-ui, -apple-system, sans-serif"
+                                                            fontWeight="600"
+                                                            fontFamily="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
                                                             textAnchor="middle"
                                                             dominantBaseline="central"
                                                             transform={`rotate(${rotationDeg}, ${textX}, ${textY})`}
-                                                            stroke="rgba(0,0,0,0.78)"
-                                                            strokeWidth="0.0045"
-                                                            paintOrder="stroke fill"
                                                         >
                                                             {displayName}
                                                         </text>
-                                                        {/* Pirinç Pim */}
-                                                        <circle
-                                                            cx={pegX}
-                                                            cy={pegY}
-                                                            r="0.025"
-                                                            fill="url(#brassPegGrad)"
-                                                            stroke="#451a03"
-                                                            strokeWidth="0.005"
-                                                        />
                                                     </g>
                                                 );
                                             })}
 
-                                            {/* Kenar Gölgeli Derinlik Halkası */}
-                                            <circle cx="0" cy="0" r="1" fill="url(#sliceRimDepth)" pointerEvents="none" />
-                                            <circle cx="0" cy="0" r="0.985" fill="none" stroke="rgba(255,255,255,0.16)" strokeWidth="0.012" />
+                                            {/* Yumuşak Dış Kenar Derinlik Gölgesi */}
+                                            <circle cx="0" cy="0" r="1" fill="url(#wheelEdgeVignette)" pointerEvents="none" />
                                         </svg>
                                     </div>
 
-                                    {/* SABİT STÜDYO ÜST IŞIK YANSIMASI (Çark Altında Dönerken Işık Sabit Kalır!) */}
-                                    <div
-                                        className="w-full h-full rounded-full absolute inset-0 pointer-events-none z-10 overflow-hidden"
-                                        style={{
-                                            background: 'linear-gradient(145deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.03) 34%, rgba(0,0,0,0) 58%, rgba(0,0,0,0.22) 100%)',
-                                        }}
-                                    />
+                                    {/* SABİT KAVİSLİ REHBER YAZI (Yalnızca Dönüş Başlamadan Önce Görünür) */}
+                                    <svg
+                                        viewBox="-1 -1 2 2"
+                                        className={cn(
+                                            'w-full h-full absolute inset-0 pointer-events-none z-20 transition-opacity duration-200',
+                                            !isRolling && !winner && totalSlices >= 2 ? 'opacity-100' : 'opacity-0'
+                                        )}
+                                    >
+                                        <defs>
+                                            <path
+                                                id="wheelTopHintArc"
+                                                d="M -0.502 -0.290 A 0.58 0.58 0 0 1 0.502 -0.290"
+                                            />
+                                            <path
+                                                id="wheelBottomHintArc"
+                                                d="M -0.616 0.287 A 0.68 0.68 0 0 0 0.616 0.287"
+                                            />
+                                            <filter id="wheelHintShadow" x="-20%" y="-20%" width="140%" height="140%">
+                                                <feDropShadow dx="0" dy="0.014" stdDeviation="0.018" floodColor="#000000" floodOpacity="0.82" />
+                                            </filter>
+                                        </defs>
+                                        <text
+                                            fill="#ffffff"
+                                            fontSize="0.112"
+                                            fontWeight="800"
+                                            fontFamily="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
+                                            filter="url(#wheelHintShadow)"
+                                        >
+                                            <textPath href="#wheelTopHintArc" startOffset="50%" textAnchor="middle">
+                                                Çevirmek için tıkla
+                                            </textPath>
+                                        </text>
+                                        <text
+                                            fill="#ffffff"
+                                            fontSize="0.088"
+                                            fontWeight="800"
+                                            fontFamily="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
+                                            filter="url(#wheelHintShadow)"
+                                        >
+                                            <textPath href="#wheelBottomHintArc" startOffset="50%" textAnchor="middle">
+                                                veya Boşluk / Ctrl+Enter
+                                            </textPath>
+                                        </text>
+                                    </svg>
 
-                                    {/* YAYLI MEKANİK SVG İBRE (SAAT 3 KONUMU - FİZİKSEL GERİ TEPME) */}
+                                    {/* 3 O'CLOCK CANLI RENK UYUMLU 3D EĞİMLİ İBRE (SAĞ KONUM) */}
                                     <div
                                         ref={needleRef}
                                         className={cn(
                                             'absolute top-1/2 -translate-y-1/2 z-30 pointer-events-none',
-                                            isWheelFullscreen ? 'right-[-34px] sm:right-[-42px]' : 'right-[-22px] sm:right-[-28px]'
+                                            isWheelFullscreen ? 'right-[-22px] sm:right-[-28px]' : 'right-[-16px] sm:right-[-20px]'
                                         )}
-                                        style={{ transformOrigin: '78% 50%' }}
+                                        style={{ transformOrigin: '86% 50%' }}
                                     >
                                         <svg
-                                            width={isWheelFullscreen ? '86' : '60'}
-                                            height={isWheelFullscreen ? '68' : '48'}
-                                            viewBox="0 0 72 56"
-                                            className="drop-shadow-xl"
+                                            width={isWheelFullscreen ? '64' : '48'}
+                                            height={isWheelFullscreen ? '48' : '36'}
+                                            viewBox="0 0 64 48"
+                                            className="drop-shadow-[0_4px_10px_rgba(0,0,0,0.65)]"
                                         >
-                                            <defs>
-                                                <linearGradient id="needleMetal" x1="0" y1="0" x2="1" y2="1">
-                                                    <stop offset="0%" stopColor="#fef08a" />
-                                                    <stop offset="45%" stopColor="#f59e0b" />
-                                                    <stop offset="100%" stopColor="#92400e" />
-                                                </linearGradient>
-                                            </defs>
-                                            <path
-                                                d="M 4 28 L 54 8 C 62 12 66 20 66 28 C 66 36 62 44 54 48 Z"
-                                                fill="url(#needleMetal)"
-                                                stroke="#0f172a"
-                                                strokeWidth="3.2"
-                                                strokeLinejoin="round"
+                                            <polygon
+                                                ref={pointerTopPolyRef}
+                                                points="2,24 58,5 58,24"
+                                                fill={getSliceColor(0, totalSlices).bevelTop}
                                             />
-                                            <path
-                                                d="M 14 28 L 48 16 L 48 40 Z"
-                                                fill="#fef9c3"
-                                                opacity="0.58"
+                                            <polygon
+                                                ref={pointerBottomPolyRef}
+                                                points="2,24 58,24 58,43"
+                                                fill={getSliceColor(0, totalSlices).bevelDark}
                                             />
-                                            <circle cx="54" cy="28" r="8" fill="#1e293b" stroke="#fde047" strokeWidth="2.5" />
-                                            <circle cx="54" cy="28" r="2.8" fill="#fde047" />
                                         </svg>
                                     </div>
 
-                                    {/* MERKEZ METALİK GÖBEK & BUTON */}
+                                    {/* MERKEZ SAF BEYAZ DAİRE GÖBEK (Wheel of Names Tarzı Tıklanabilir) */}
                                     <button
                                         type="button"
                                         onClick={spinWheel}
                                         disabled={isRolling || totalSlices < 2}
-                                        className={cn(
-                                            'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border-slate-900 shadow-2xl flex items-center justify-center z-20 cursor-pointer hover:scale-105 active:scale-95 transition-transform overflow-hidden disabled:cursor-not-allowed',
-                                            isWheelFullscreen ? 'w-28 h-28 sm:w-32 sm:h-32 border-[8px]' : 'w-20 h-20 border-[6px]'
-                                        )}
-                                    >
-                                        <div className="absolute inset-0 bg-gradient-to-br from-amber-200 via-amber-400 to-orange-600" />
-                                        <div className="relative flex flex-col items-center justify-center leading-none text-slate-950 font-black">
-                                            <Zap className={cn('mb-0.5 fill-current', isWheelFullscreen ? 'w-5 h-5' : 'w-4 h-4', isRolling && 'opacity-60')} />
-                                            <span className={cn('tracking-tight uppercase', isWheelFullscreen ? 'text-sm sm:text-base' : 'text-[11px]')}>
-                                                {isRolling ? 'DÖNÜYOR' : 'ÇEVİR'}
-                                            </span>
-                                        </div>
-                                    </button>
+                                        aria-label={isRolling ? 'Çark dönüyor' : 'Çarkı çevir'}
+                                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[21%] h-[21%] rounded-full bg-white shadow-[0_4px_16px_rgba(0,0,0,0.35)] z-20 cursor-pointer hover:scale-[1.03] active:scale-95 transition-transform disabled:cursor-not-allowed"
+                                    />
                                 </div>
                             )}
 
-                            {/* ══ KAZANAN EKRANI ══ */}
+                            {/* ══ KAZANAN EKRANI (Wheel of Names Tarzı Renkli Başlık Penceresi) ══ */}
                             {winner && !isRolling && (
                                 <motion.div
-                                    initial={{ opacity: 0, scale: 0.72, y: 24 }}
+                                    initial={{ opacity: 0, scale: 0.78, y: 18 }}
                                     animate={{ opacity: 1, scale: 1, y: 0 }}
-                                    exit={{ opacity: 0, scale: 0.72, y: 24 }}
-                                    transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-                                    className="absolute inset-0 z-40 flex items-center justify-center bg-slate-950/92 p-4"
+                                    exit={{ opacity: 0, scale: 0.78, y: 18 }}
+                                    transition={{ type: 'spring', damping: 22, stiffness: 320 }}
+                                    className="absolute inset-0 z-40 flex items-center justify-center bg-slate-950/75 backdrop-blur-sm p-4"
                                 >
                                     <div
                                         className={cn(
-                                            'relative text-center bg-gradient-to-b from-slate-900 via-[#101935] to-slate-950 border-4 border-amber-400 rounded-[2.25rem] shadow-2xl w-full overflow-hidden',
-                                            isWheelFullscreen ? 'p-8 sm:p-10 max-w-lg' : 'p-6 max-w-md'
+                                            'relative bg-slate-900 border border-white/15 rounded-3xl shadow-[0_25px_70px_rgba(0,0,0,0.75)] w-full overflow-hidden',
+                                            isWheelFullscreen ? 'max-w-lg' : 'max-w-md'
                                         )}
                                     >
-                                        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-300 to-orange-500 text-slate-950 flex items-center justify-center mx-auto mb-3 shadow-lg border-2 border-white/40">
-                                            <Trophy className="w-8 h-8 fill-current" />
+                                        {/* Üst Renkli Başlık Şeridi (Kazanan Dilimin Rengi) */}
+                                        <div
+                                            className="px-6 py-4 flex items-center justify-between"
+                                            style={{ backgroundColor: winnerColor?.bg || '#63B3ED' }}
+                                        >
+                                            <div className="flex items-center gap-2 text-slate-950 font-black text-base sm:text-lg">
+                                                <Trophy className="w-5 h-5" />
+                                                <span>Kazanan Seçildi!</span>
+                                            </div>
+                                            <span className="text-xs font-black text-slate-950/80 bg-white/45 px-2.5 py-0.5 rounded-full">
+                                                #{recentWinners.length}
+                                            </span>
                                         </div>
 
-                                        <span className="text-[11px] font-black text-amber-300 uppercase tracking-widest bg-amber-400/15 px-3 py-1 rounded-full border border-amber-400/30">
-                                            GÜNÜN ŞANSLISI • #{recentWinners.length}
-                                        </span>
+                                        <div className={cn('text-center', isWheelFullscreen ? 'p-7 sm:p-9' : 'p-6')}>
+                                            <h3
+                                                className={cn(
+                                                    'font-black text-white mb-1.5 tracking-tight leading-tight break-words',
+                                                    isWheelFullscreen ? 'text-4xl sm:text-5xl' : 'text-3xl sm:text-4xl'
+                                                )}
+                                            >
+                                                {winner.name}
+                                            </h3>
 
-                                        <h3
-                                            className={cn(
-                                                'font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-white to-amber-400 my-3 uppercase tracking-tight leading-tight break-words',
-                                                isWheelFullscreen ? 'text-4xl sm:text-5xl' : 'text-3xl sm:text-4xl'
-                                            )}
-                                        >
-                                            {winner.name}
-                                        </h3>
+                                            <p className="text-sm text-slate-400 font-semibold mb-6">
+                                                {winner.className || 'Öğrenci'}
+                                            </p>
 
-                                        <p className="text-sm text-slate-300 font-bold mb-5">
-                                            {winner.className || 'Öğrenci'}
-                                        </p>
-
-                                        <div className="flex flex-col gap-2 w-full">
-                                            <div className="grid grid-cols-2 gap-2">
-                                                <Button
-                                                    onClick={() => handleAfterWinAction('remove-close')}
-                                                    className="h-11 text-xs font-black bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 rounded-xl cursor-pointer"
-                                                >
-                                                    <UserMinus className="w-4 h-4 mr-1.5" /> Çıkar & Sunuma Dön
-                                                </Button>
-                                                <Button
-                                                    onClick={() => handleAfterWinAction('stay-close')}
-                                                    className="h-11 text-xs font-black bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white rounded-xl cursor-pointer"
-                                                >
-                                                    <Check className="w-4 h-4 mr-1.5" /> Sunuma Dön
-                                                </Button>
-                                            </div>
-                                            <div className="grid grid-cols-3 gap-2">
-                                                <Button
-                                                    onClick={() => {
-                                                        try { playSound('applause'); } catch {}
-                                                        try {
-                                                            confetti({ particleCount: 90, spread: 80, origin: { y: 0.6 } });
-                                                        } catch {}
-                                                    }}
-                                                    variant="outline"
-                                                    className="h-9 text-xs font-bold border-amber-400/40 bg-amber-400/10 text-amber-300 hover:bg-amber-400/20 rounded-xl cursor-pointer"
-                                                >
-                                                    <Award className="w-3.5 h-3.5 mr-1" /> Alkışla
-                                                </Button>
-                                                <Button
-                                                    onClick={() => handleAfterWinAction('remove-stay')}
-                                                    variant="outline"
-                                                    className="h-9 text-xs font-bold border-rose-500/40 text-rose-300 hover:bg-rose-500/15 rounded-xl cursor-pointer"
-                                                >
-                                                    <UserMinus className="w-3.5 h-3.5 mr-1" /> Çıkar
-                                                </Button>
-                                                <Button
-                                                    onClick={() => handleAfterWinAction('respin')}
-                                                    variant="outline"
-                                                    className="h-9 text-xs font-bold border-white/20 text-slate-200 hover:bg-white/10 rounded-xl cursor-pointer"
-                                                >
-                                                    <RotateCcw className="w-3.5 h-3.5 mr-1" /> Tekrar
-                                                </Button>
+                                            <div className="flex flex-col gap-2 w-full">
+                                                <div className="grid grid-cols-2 gap-2">
+                                                    <Button
+                                                        onClick={() => handleAfterWinAction('remove-close')}
+                                                        className="h-11 text-xs font-black bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-xl cursor-pointer"
+                                                    >
+                                                        <UserMinus className="w-4 h-4 mr-1.5" /> Çıkar & Sunuma Dön
+                                                    </Button>
+                                                    <Button
+                                                        onClick={() => handleAfterWinAction('stay-close')}
+                                                        className="h-11 text-xs font-black bg-emerald-500 hover:bg-emerald-400 text-white rounded-xl cursor-pointer"
+                                                    >
+                                                        <Check className="w-4 h-4 mr-1.5" /> Sunuma Dön
+                                                    </Button>
+                                                </div>
+                                                <div className="grid grid-cols-3 gap-2">
+                                                    <Button
+                                                        onClick={() => {
+                                                            try { playSound('applause'); } catch {}
+                                                            try {
+                                                                confetti({
+                                                                    particleCount: 90,
+                                                                    spread: 80,
+                                                                    origin: { y: 0.6 },
+                                                                    colors: ['#63B3ED', '#74E09F', '#F7E06D', '#B47EC8', '#F48FB1']
+                                                                });
+                                                            } catch {}
+                                                        }}
+                                                        variant="outline"
+                                                        className="h-9 text-xs font-bold border-amber-400/40 bg-amber-400/10 text-amber-300 hover:bg-amber-400/20 rounded-xl cursor-pointer"
+                                                    >
+                                                        <Award className="w-3.5 h-3.5 mr-1" /> Alkışla
+                                                    </Button>
+                                                    <Button
+                                                        onClick={() => handleAfterWinAction('remove-stay')}
+                                                        variant="outline"
+                                                        className="h-9 text-xs font-bold border-rose-500/40 text-rose-300 hover:bg-rose-500/15 rounded-xl cursor-pointer"
+                                                    >
+                                                        <UserMinus className="w-3.5 h-3.5 mr-1" /> Kaldır
+                                                    </Button>
+                                                    <Button
+                                                        onClick={() => handleAfterWinAction('respin')}
+                                                        variant="outline"
+                                                        className="h-9 text-xs font-bold border-white/20 text-slate-200 hover:bg-white/10 rounded-xl cursor-pointer"
+                                                    >
+                                                        <RotateCcw className="w-3.5 h-3.5 mr-1" /> Kapat
+                                                    </Button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
