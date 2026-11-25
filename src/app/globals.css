@@ -684,6 +684,33 @@ mark, .mark-phosphor, .hl-yellow {
   -webkit-box-decoration-break: clone;
 }
 
+/* Akıllı Tahta Defter Notu / Kavram Panosu (Koyu Yüksek Kontrast Modülü) */
+div.smartboard-clean-font,
+div.smartboard-clean-font *,
+div.smartboard-clean-font h1,
+div.smartboard-clean-font h2,
+div.smartboard-clean-font h3 {
+  font-family: var(--font-outfit), 'Outfit', system-ui, -apple-system, sans-serif !important;
+}
+
+div.smartboard-clean-font strong,
+div.smartboard-clean-font b {
+  color: #fde047 !important;
+  background-color: transparent !important;
+  padding: 0 !important;
+  font-weight: 800 !important;
+}
+
+div.smartboard-clean-font mark,
+div.smartboard-clean-font .mark-phosphor,
+div.smartboard-clean-font .hl-yellow {
+  background-color: rgba(250, 204, 21, 0.22) !important;
+  color: #fef08a !important;
+  padding: 0 5px !important;
+  border-radius: 4px !important;
+  font-weight: 700 !important;
+}
+
 /* Sketchnote Rozet ve Numaratörler */
 .bullet-num {
   width: 28px;
