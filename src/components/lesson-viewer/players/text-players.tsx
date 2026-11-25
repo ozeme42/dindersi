@@ -509,7 +509,7 @@ function SmartboardRichText({ text }: { text: string }) {
     if (labelMatch) {
         return (
             <>
-                <span className="text-amber-300 font-black mr-1">{labelMatch[1]}</span>
+                <span className="text-amber-300 font-black mr-1 text-[1.06em]">{labelMatch[1]}</span>
                 <span>{labelMatch[2]}</span>
             </>
         );
@@ -582,6 +582,10 @@ export function NotebookNotePlayer({
         setViewMode(cExist ? 'concepts' : 'notes');
         setManualFontSize(null);
     }, [step]);
+
+    useEffect(() => {
+        setManualFontSize(null);
+    }, [fontSizeScale]);
 
     const getAutoFontSize = (mode: 'concepts' | 'notes' | 'split', scale: string) => {
         const mult =
@@ -763,7 +767,10 @@ export function NotebookNotePlayer({
                     return (
                         <div key={`c-${index}`} className="col-span-full my-1 flex items-center gap-2">
                             <div className="h-px bg-cyan-500/30 flex-1" />
-                            <span className="text-xs sm:text-sm font-black uppercase tracking-wider text-cyan-300 bg-cyan-950/80 border border-cyan-500/40 px-3 py-0.5 rounded-full">
+                            <span
+                                className="font-black uppercase tracking-wider text-cyan-300 bg-cyan-950/80 border border-cyan-500/40 px-3 py-0.5 rounded-full"
+                                style={{ fontSize: `${Math.max(effectiveFontSize * 0.92, 0.85)}rem` }}
+                            >
                                 {item.definition}
                             </span>
                             <div className="h-px bg-cyan-500/30 flex-1" />
@@ -789,7 +796,7 @@ export function NotebookNotePlayer({
                             <div className="flex items-start justify-between gap-1 mb-1 border-b border-white/15 pb-1 pr-5">
                                 <h3
                                     className="font-black text-white uppercase tracking-tight leading-tight"
-                                    style={{ fontSize: `${Math.min(effectiveFontSize * 1.12, 2.3)}rem` }}
+                                    style={{ fontSize: `${Number((effectiveFontSize * 1.15).toFixed(2))}rem` }}
                                 >
                                     {item.concept}
                                 </h3>
@@ -819,7 +826,10 @@ export function NotebookNotePlayer({
                     return (
                         <div key={`n-${index}`} className="col-span-full my-1 flex items-center gap-2">
                             <div className="h-px bg-amber-500/30 flex-1" />
-                            <span className="text-xs sm:text-sm font-black uppercase tracking-wider text-amber-300 bg-amber-950/80 border border-amber-500/40 px-3 py-0.5 rounded-full">
+                            <span
+                                className="font-black uppercase tracking-wider text-amber-300 bg-amber-950/80 border border-amber-500/40 px-3 py-0.5 rounded-full"
+                                style={{ fontSize: `${Math.max(effectiveFontSize * 0.92, 0.85)}rem` }}
+                            >
                                 {headingText}
                             </span>
                             <div className="h-px bg-amber-500/30 flex-1" />
@@ -839,12 +849,19 @@ export function NotebookNotePlayer({
                             isChecked ? "opacity-50 border-dashed" : ""
                         )}
                     >
-                        <div className={cn(
-                            "flex-shrink-0 flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg font-black text-sm sm:text-base shadow border mt-0.5 transition-colors relative z-10",
-                            isChecked
-                                ? "bg-emerald-600 border-emerald-400/50 text-white"
-                                : cn("bg-gradient-to-br text-white", NOTE_BADGE_COLORS[index % NOTE_BADGE_COLORS.length])
-                        )}>
+                        <div
+                            className={cn(
+                                "flex-shrink-0 flex items-center justify-center rounded-lg font-black shadow border mt-0.5 transition-colors relative z-10",
+                                isChecked
+                                    ? "bg-emerald-600 border-emerald-400/50 text-white"
+                                    : cn("bg-gradient-to-br text-white", NOTE_BADGE_COLORS[index % NOTE_BADGE_COLORS.length])
+                            )}
+                            style={{
+                                width: `${Math.max(effectiveFontSize * 1.9, 1.75)}rem`,
+                                height: `${Math.max(effectiveFontSize * 1.9, 1.75)}rem`,
+                                fontSize: `${Math.max(effectiveFontSize * 0.95, 0.9)}rem`
+                            }}
+                        >
                             {isChecked ? <Check className="w-4 h-4 stroke-[3]" /> : index + 1}
                         </div>
 
@@ -889,8 +906,11 @@ export function NotebookNotePlayer({
             {/* ══ ULTRA-KOMPAKT ÜST KONTROL & SEKME BARI (SIFIR BOŞLUK) ══ */}
             <div className="flex-shrink-0 z-20 px-2 sm:px-3 py-1.5 border-b border-white/10 bg-slate-900/90 backdrop-blur-md flex flex-wrap items-center justify-between gap-2">
                 {/* Sol: Kompakt Başlık */}
-                <div className="hidden lg:flex items-center gap-2 min-w-0 max-w-[260px]">
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-xs font-bold text-cyan-300 truncate">
+                <div className="hidden lg:flex items-center gap-2 min-w-0 max-w-md">
+                    <span
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 font-bold text-cyan-300 truncate leading-tight"
+                        style={{ fontSize: `${Math.min(Math.max(effectiveFontSize * 0.85, 0.85), 1.45)}rem` }}
+                    >
                         <span>✏️</span>
                         <span className="truncate">{compactHeaderLabel}</span>
                     </span>
