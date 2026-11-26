@@ -22,6 +22,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
+import { playSound as playAppSound } from '@/lib/audio-service';
 import { cn } from '@/lib/utils';
 import confetti from 'canvas-confetti';
 import Link from 'next/link';
@@ -157,40 +158,30 @@ export default function SmartboardTopluTestPage() {
         let interval: any = null;
         if (viewMode === 'presenter' && isTimerRunning && !isTestFinished && !isReviewMode && timeLeft > 0) {
             interval = setInterval(() => {
-                setTimeLeft(prev => {
-                    if (prev <= 1) {
-                        // Play gentle beep/ding
-                        try {
-                            const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3");
-                            audio.volume = 0.4;
-                            audio.play().catch(() => {});
-                        } catch {}
-
-                        if (isAutoNext && activeTest && currentQuestionIndex < activeTest.questions.length - 1) {
-                            setCurrentQuestionIndex(i => i + 1);
-                            return activeTest.defaultDurationSeconds || 60;
-                        } else {
-                            setIsTimerRunning(false);
-                            return 0;
-                        }
-                    }
-                    return prev - 1;
-                });
+                setTimeLeft(prev => (prev <= 1 ? 0 : prev - 1));
             }, 1000);
         }
         return () => clearInterval(interval);
-    }, [viewMode, isTimerRunning, isTestFinished, isReviewMode, timeLeft, isAutoNext, activeTest, currentQuestionIndex]);
+    }, [viewMode, isTimerRunning, isTestFinished, isReviewMode, timeLeft]);
+
+    useEffect(() => {
+        if (viewMode !== 'presenter' || !isTimerRunning || isTestFinished || isReviewMode || timeLeft > 0) {
+            return;
+        }
+        if (!isMuted) {
+            playAppSound('timeUp');
+        }
+        if (isAutoNext && activeTest && currentQuestionIndex < activeTest.questions.length - 1) {
+            setCurrentQuestionIndex(i => i + 1);
+            setTimeLeft(activeTest.defaultDurationSeconds || 60);
+        } else {
+            setIsTimerRunning(false);
+        }
+    }, [viewMode, isTimerRunning, isTestFinished, isReviewMode, timeLeft, isAutoNext, activeTest, currentQuestionIndex, isMuted]);
 
     const playSound = useCallback((type: 'ding' | 'correct' | 'click') => {
         if (isMuted) return;
-        try {
-            let url = "https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3";
-            if (type === 'ding') url = "https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3";
-            if (type === 'correct') url = "https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3";
-            const audio = new Audio(url);
-            audio.volume = 0.35;
-            audio.play().catch(() => {});
-        } catch {}
+        playAppSound(type === 'correct' ? 'correct' : type === 'ding' ? 'timer' : 'click');
     }, [isMuted]);
 
     // Keyboard navigation (Arrow keys, space, F for fullscreen, M for menu)

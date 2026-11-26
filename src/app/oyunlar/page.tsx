@@ -85,7 +85,7 @@ const GameCard = ({ activity, index }: { activity: typeof activityTypes[0], inde
 
     return (
         <Link 
-            href={`${activity.href}?gameName=${encodeURIComponent(activity.label)}&gamePath=${activity.href.substring(8)}`} 
+            href={`${activity.href}?gameName=${encodeURIComponent(activity.label)}&gamePath=${encodeURIComponent(activity.href.replace('/oyunlar/', ''))}`} 
             className={cn(
                 "group relative block h-full animate-in fade-in zoom-in-50 duration-500 fill-mode-backwards outline-none focus-visible:ring-4 focus-visible:ring-white/50 rounded-[2rem]",
                 isPopular ? "col-span-2 sm:col-span-2" : "col-span-1"
@@ -156,7 +156,7 @@ export default function StudentActivitiesPage() {
   const backUrl = user ? (user.role === 'teacher' || user.role === 'superadmin' ? '/teacher' : '/student') : '/';
 
   const filteredActivities = activityTypes.filter(act => {
-    const matchesSearch = act.label.toLowerCase().includes(searchQuery.toLowerCase().trim());
+    const matchesSearch = act.label.toLocaleLowerCase('tr-TR').includes(searchQuery.toLocaleLowerCase('tr-TR').trim());
     if (!matchesSearch) return false;
     if (activeFilter === 'popular') return act.badge === 'POPÜLER';
     if (activeFilter === 'new') return act.badge === 'YENİ';

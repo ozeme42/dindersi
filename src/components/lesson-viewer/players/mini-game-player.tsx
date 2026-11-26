@@ -451,9 +451,9 @@ export const MiniGamePlayer: React.FC<MiniGamePlayerProps> = ({
               className
             )
       }`}
-      style={{
-        height: isFullscreen ? '100vh' : (isStandalone ? 'calc(100dvh - 72px)' : 'calc(100vh - 220px)'),
-        minHeight: isFullscreen ? '100vh' : (isStandalone ? 'calc(100dvh - 72px)' : '580px')
+      style={isStandalone && !isFullscreen ? undefined : {
+        height: isFullscreen ? '100vh' : 'calc(100vh - 220px)',
+        minHeight: isFullscreen ? '100vh' : '580px'
       }}
     >
       {/* Oyun Üst Başlık & Kontrol Çubuğu */}

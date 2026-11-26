@@ -264,6 +264,9 @@ function Game() {
 
     const requestRef = useRef<number>();
     const lastSpawnTime = useRef(0);
+    const balloonsRef = useRef<any[]>([]);
+    const projectilesRef = useRef<any[]>([]);
+    const isAdvancingLevelRef = useRef(false);
     const gameAreaRef = useRef<HTMLDivElement>(null);
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     
@@ -319,6 +322,9 @@ function Game() {
         setLevelIndex(0);
         setBalloons([]);
         setProjectiles([]);
+        balloonsRef.current = [];
+        projectilesRef.current = [];
+        isAdvancingLevelRef.current = false;
         setEffects([]);
         setAngle(0);
         setGameState('playing');
@@ -353,42 +359,46 @@ function Game() {
                 color: BALLOON_COLORS[Math.floor(Math.random() * BALLOON_COLORS.length)],
                 isCorrect: text === currentLevel.a,
             };
-            setBalloons(prev => [...prev, newBalloon]);
+            balloonsRef.current = [...balloonsRef.current, newBalloon];
             lastSpawnTime.current = time;
         }
 
-        // Move balloons & projectiles
-        setBalloons(prev => prev.map(b => ({ ...b, y: b.y - b.speed })).filter(b => b.y > -100));
-        setProjectiles(prev => prev.map(p => ({
-            ...p,
-            x: p.x + Math.sin(p.angle * Math.PI / 180) * 12,
-            y: p.y - Math.cos(p.angle * Math.PI / 180) * 12,
-        })).filter(p => p.x > -10 && p.x < dimensions.width + 10 && p.y > -10));
+        // Move balloons & projectiles synchronously on refs before committing React state
+        const nextBalloons = balloonsRef.current
+            .map(b => ({ ...b, y: b.y - b.speed }))
+            .filter(b => b.y > -100);
+        const nextProjectiles = projectilesRef.current
+            .map(p => ({
+                ...p,
+                x: p.x + Math.sin(p.angle * Math.PI / 180) * 12,
+                y: p.y - Math.cos(p.angle * Math.PI / 180) * 12,
+            }))
+            .filter(p => p.x > -10 && p.x < dimensions.width + 10 && p.y > -10);
 
-        // Collision detection
-        setProjectiles(currentProjectiles => {
-            const nextProjectiles = [...currentProjectiles];
-            setBalloons(currentBalloons => {
-                const nextBalloons = [...currentBalloons];
-                for (let pIdx = nextProjectiles.length - 1; pIdx >= 0; pIdx--) {
-                    const p = nextProjectiles[pIdx];
-                    let hit = false;
-                    for (let bIdx = nextBalloons.length - 1; bIdx >= 0; bIdx--) {
-                        const b = nextBalloons[bIdx];
-                        const dx = p.x - b.x; const dy = p.y - b.y;
-                        if (Math.sqrt(dx * dx + dy * dy) < 45) {
-                            nextProjectiles.splice(pIdx, 1);
-                            nextBalloons.splice(bIdx, 1);
-                            if (b.isCorrect) handleCorrectHit(b.x, b.y); else handleWrongHit(b.x, b.y);
-                            hit = true;
-                            break;
-                        }
-                    }
-                    if (hit) break;
+        const hits: { isCorrect: boolean; x: number; y: number }[] = [];
+        for (let pIdx = nextProjectiles.length - 1; pIdx >= 0; pIdx--) {
+            const p = nextProjectiles[pIdx];
+            for (let bIdx = nextBalloons.length - 1; bIdx >= 0; bIdx--) {
+                const b = nextBalloons[bIdx];
+                const dx = p.x - b.x;
+                const dy = p.y - b.y;
+                if (Math.sqrt(dx * dx + dy * dy) < 45) {
+                    nextProjectiles.splice(pIdx, 1);
+                    nextBalloons.splice(bIdx, 1);
+                    hits.push({ isCorrect: b.isCorrect, x: b.x, y: b.y });
+                    break;
                 }
-                return nextBalloons;
-            });
-            return nextProjectiles;
+            }
+        }
+
+        balloonsRef.current = nextBalloons;
+        projectilesRef.current = nextProjectiles;
+        setBalloons(nextBalloons);
+        setProjectiles(nextProjectiles);
+
+        hits.forEach(hit => {
+            if (hit.isCorrect) handleCorrectHit(hit.x, hit.y);
+            else handleWrongHit(hit.x, hit.y);
         });
 
         requestRef.current = requestAnimationFrame(updateGame);
@@ -402,10 +412,15 @@ function Game() {
     }, [gameState, updateGame]);
     
     const handleCorrectHit = (x: number, y: number) => {
+        if (isAdvancingLevelRef.current) return;
+        isAdvancingLevelRef.current = true;
         playSound('correct');
         setScore(s => s + 10);
         addEffect(x, y, "+10", "#22c55e");
+        balloonsRef.current = balloonsRef.current.filter(b => !b.isCorrect);
+        setBalloons(balloonsRef.current);
         setTimeout(() => {
+            isAdvancingLevelRef.current = false;
             setLevelIndex(prev => {
                 const next = prev + 1;
                 if (next >= levels.length) {
@@ -413,7 +428,6 @@ function Game() {
                 }
                 return next;
             });
-            setBalloons(prev => prev.filter(b => !b.isCorrect));
         }, 300);
     };
 
@@ -436,10 +450,11 @@ function Game() {
         const rect = gameAreaRef.current?.getBoundingClientRect();
         if (!rect) return;
         const targetX = clientX - rect.left;
+        const targetY = clientY - rect.top;
         const centerX = dimensions.width / 2;
         const centerY = dimensions.height - 40;
         const dx = targetX - centerX;
-        const dy = clientY - centerY;
+        const dy = targetY - centerY;
         const deg = Math.atan2(dx, -dy) * (180 / Math.PI);
         const clampedAngle = Math.max(-70, Math.min(70, deg));
         setAngle(clampedAngle);
@@ -449,12 +464,14 @@ function Game() {
     const shoot = (fireAngle: number) => {
         playSound('pop');
         const radian = fireAngle * Math.PI / 180;
-        setProjectiles(prev => [...prev, {
-            id: Date.now(),
+        const newProjectile = {
+            id: Date.now() + Math.random(),
             x: dimensions.width / 2 + Math.sin(radian) * 60,
             y: dimensions.height - 40 - Math.cos(radian) * 60,
             angle: fireAngle
-        }]);
+        };
+        projectilesRef.current = [...projectilesRef.current, newProjectile];
+        setProjectiles(projectilesRef.current);
     };
     
     const handleSaveAndExit = async () => {
@@ -493,7 +510,7 @@ function Game() {
         <WordwallShell
             title="Balon Avcısı"
             subtitle={topicName}
-            currentQuestionIndex={levelIndex + 1}
+            currentQuestionIndex={levelIndex}
             totalQuestions={levels.length}
             score={score}
             lives={lives}

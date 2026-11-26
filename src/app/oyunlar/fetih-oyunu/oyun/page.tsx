@@ -230,7 +230,7 @@ function FetihGameBoard({
                             territory={t}
                             activeTeamId={activeTeamId}
                             teams={teams}
-                            canAttack={t.ownerId === null && activeTeamId !== null && isAdjacent(t.id, activeTeamId)}
+                            canAttack={activeTeamId !== null && (t.ownerId === null || (t.isBase && t.ownerId !== activeTeamId)) && isAdjacent(t.id, activeTeamId)}
                             onClick={() => setOpenedQuestion({ territoryId: t.id, question: t.question })}
                         />
                     ))}
@@ -369,14 +369,44 @@ function FetihGameComponent() {
                 const opponentTeam = teams.find(t => t.id !== activeTeamId);
                 if (targetTerritory.isBase && targetTerritory.ownerId === opponentTeam?.id) {
                      targetTerritory.ownerId = activeTeamId;
+                     setTerritories(newTerritories);
+                     setTeams(prev => prev.map(t => t.id === activeTeamId ? { ...t, score: t.score + 1 } : t));
+                     setOpenedQuestion(null);
                      setWinner(teams.find(t => t.id === activeTeamId) || null);
                      setGameState('finished');
                      return;
                 }
 
                 targetTerritory.ownerId = activeTeamId;
+                const updatedTeams = teams.map(t => t.id === activeTeamId ? { ...t, score: t.score + 1 } : t);
                 setTerritories(newTerritories);
-                setTeams(prev => prev.map(t => t.id === activeTeamId ? { ...t, score: t.score + 1 } : t));
+                setTeams(updatedTeams);
+
+                const allClaimed = newTerritories.every(t => t.ownerId !== null);
+                const gridSize = 5;
+                const isMapAdjacent = (territoryId: number, teamId: number) => {
+                    const row = Math.floor(territoryId / gridSize);
+                    const col = territoryId % gridSize;
+                    const dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+                    return dirs.some(([dr, dc]) => {
+                        const nr = row + dr;
+                        const nc = col + dc;
+                        if (nr < 0 || nr >= gridSize || nc < 0 || nc >= gridSize) return false;
+                        return newTerritories[nr * gridSize + nc]?.ownerId === teamId;
+                    });
+                };
+                const anyMovesLeft = newTerritories.some(t =>
+                    (t.ownerId === null && updatedTeams.some(tm => isMapAdjacent(t.id, tm.id))) ||
+                    (t.isBase && updatedTeams.some(tm => t.ownerId !== tm.id && isMapAdjacent(t.id, tm.id)))
+                );
+
+                if (allClaimed && !anyMovesLeft) {
+                    const topTeam = [...updatedTeams].sort((a, b) => b.score - a.score)[0] || null;
+                    setOpenedQuestion(null);
+                    setWinner(topTeam);
+                    setGameState('finished');
+                    return;
+                }
             }
         } else {
             playSound('error');
@@ -405,7 +435,7 @@ function FetihGameComponent() {
                 <Alert variant="destructive" className="max-w-md bg-red-950/50 border-red-900 text-white">
                     <AlertTitle>Hata Oluştu</AlertTitle>
                     <AlertDescription>{error}</AlertDescription>
-                    <Button asChild variant="outline" className="mt-4 border-white/20 text-white hover:bg-white/10">
+                    <Button asChild variant="outline" className="mt-4 bg-transparent border-white/20 text-white hover:bg-white/10">
                         <Link href={backUrl}><Home className="mr-2 h-4 w-4"/> Geri Dön</Link>
                     </Button>
                 </Alert>

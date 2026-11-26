@@ -113,7 +113,13 @@ export function QuestionDialog({
     const isOpenEnded = question.type === 'Açık Uçlu' || (!options || options.length === 0);
 
     const typeMap: { [key in Question['type'] | string]: string } = {
-        'Çoktan Seçmeli': 'mcq', 'Doğru/Yanlış': 'tf', 'Boşluk Doldurma': 'fitb',
+        'Çoktan Seçmeli': 'mcq',
+        'Doğru/Yanlış': 'tf',
+        'Boşluk Doldurma': 'fitb',
+        'Açık Uçlu': 'fitb',
+        'mcq': 'mcq',
+        'tf': 'tf',
+        'fitb': 'fitb',
     };
 
     const getScoreValues = useCallback(() => {
@@ -142,7 +148,11 @@ export function QuestionDialog({
 
         let isCorrectCheck = false;
         if (!isTimeout) {
-            if (isTrueFalse) {
+            if (answerToCheck === '__manual_correct__') {
+                isCorrectCheck = true;
+            } else if (answerToCheck === '__wrong__') {
+                isCorrectCheck = false;
+            } else if (isTrueFalse) {
                 const correctAnswerBool = (correctAnswer.toLowerCase() === 'doğru');
                 isCorrectCheck = (answerToCheck.trim().toLowerCase() === 'doğru') === correctAnswerBool;
             } else {
@@ -205,16 +215,10 @@ export function QuestionDialog({
             intervalRef.current = setInterval(() => {
                 setTimeLeft(prev => {
                     if (prev <= 1) {
-                        clearInterval(intervalRef.current!);
-                        if (!isMuted) stopSound('timer');
-                        revealAnswer("", true);
+                        if (intervalRef.current) clearInterval(intervalRef.current);
                         return 0;
                     }
-                    const newTime = prev - 1;
-                    if (newTime <= 5 && newTime > 0 && !isMuted) {
-                        playSound('timer');
-                    }
-                    return newTime;
+                    return prev - 1;
                 });
             }, 1000);
         }
@@ -222,7 +226,23 @@ export function QuestionDialog({
             if (intervalRef.current) clearInterval(intervalRef.current);
             stopSound('timer');
         };
-    }, [isOpen, isRevealed, timerDuration, isTimerRunning, isMuted, revealAnswer]);
+    }, [isOpen, isRevealed, timerDuration, isTimerRunning]);
+
+    useEffect(() => {
+        if (!isOpen || isRevealed || timerDuration <= 0) return;
+        if (timeLeft <= 0) {
+            if (!isMuted) stopSound('timer');
+            revealAnswer("", true);
+        } else if (timeLeft <= 5 && isTimerRunning && !isMuted) {
+            playSound('timer');
+        }
+    }, [isOpen, isRevealed, timerDuration, timeLeft, isTimerRunning, isMuted, revealAnswer]);
+
+    useEffect(() => {
+        const handleFsChange = () => setIsFullscreen(Boolean(document.fullscreenElement));
+        document.addEventListener('fullscreenchange', handleFsChange);
+        return () => document.removeEventListener('fullscreenchange', handleFsChange);
+    }, []);
 
     const toggleFullscreen = () => {
         if (!document.fullscreenElement) {
@@ -320,7 +340,7 @@ export function QuestionDialog({
             </header>
 
             {/* ─── 2. ANA ALAN: DEV SORU & 4 RENKLİ 3D ŞIKLAR (BİREBİR TOPLU TEST) ─── */}
-            <main className="flex-1 flex flex-col justify-between items-center px-4 sm:px-8 py-2 max-w-7xl mx-auto w-full overflow-hidden">
+            <main className="flex-1 flex flex-col justify-between items-center px-4 sm:px-8 py-2 max-w-7xl mx-auto w-full overflow-y-auto">
                 <div className="w-full flex-1 flex flex-col justify-between items-center max-w-6xl mx-auto py-2">
                     {/* DEV SORU METNİ - EKRANIN ODAK NOKTASI */}
                     <div className="flex-1 flex flex-col items-center justify-center max-w-5xl mx-auto w-full px-4 text-center my-auto min-h-[160px] sm:min-h-[200px]">
@@ -378,7 +398,12 @@ export function QuestionDialog({
                                     <Button
                                         variant="outline"
                                         onClick={() => setShowOpenAnswer(true)}
-                                        className="mt-2 rounded-xl font-black border-2 border-amber-500/40 text-amber-700 hover:bg-amber-50 h-12 px-6 text-base"
+                                        className={cn(
+                                            "mt-2 rounded-xl font-black border-2 h-12 px-6 text-base bg-transparent",
+                                            presenterTheme === 'light'
+                                                ? "border-amber-500/40 text-amber-700 hover:bg-amber-50"
+                                                : "border-amber-400/50 text-amber-300 hover:bg-amber-500/20"
+                                        )}
                                     >
                                         <Eye className="w-5 h-5 mr-2" /> Model Cevabı Tahtada Aç
                                     </Button>
@@ -414,6 +439,24 @@ export function QuestionDialog({
                                     )}>
                                         {correctAnswer || 'Model cevap belirtilmemiş.'}
                                     </div>
+                                    {!isRevealed && (
+                                        <div className="mt-5 flex flex-col sm:flex-row gap-3 justify-end">
+                                            <Button
+                                                type="button"
+                                                onClick={() => revealAnswer('__wrong__', false)}
+                                                className="h-12 px-6 rounded-xl font-black text-base bg-rose-600 hover:bg-rose-500 text-white shadow-md"
+                                            >
+                                                <X className="w-5 h-5 mr-2" /> Yanlış Bildi {penaltyValue > 0 ? `(-${penaltyValue})` : ''}
+                                            </Button>
+                                            <Button
+                                                type="button"
+                                                onClick={() => revealAnswer('__manual_correct__', false)}
+                                                className="h-12 px-6 rounded-xl font-black text-base bg-emerald-600 hover:bg-emerald-500 text-white shadow-md"
+                                            >
+                                                <CheckCircle2 className="w-5 h-5 mr-2" /> Doğru Bildi (+{pointsValue})
+                                            </Button>
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>

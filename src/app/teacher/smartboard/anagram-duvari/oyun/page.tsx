@@ -46,16 +46,24 @@ function scrambleWord(word: string): string {
             .map(part => scrambleWord(part))
             .join(' ');
     }
-    const arr = word.split('');
-    let currentIndex = arr.length, randomIndex;
-    while (currentIndex > 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex--;
-        [arr[currentIndex], arr[randomIndex]] = [arr[randomIndex], arr[currentIndex]];
+    const uniqueChars = new Set(word.split(''));
+    if (word.length <= 1 || uniqueChars.size <= 1) {
+        return word;
     }
-    const scrambled = arr.join('');
-    if (scrambled === word && word.length > 1) return scrambleWord(word);
-    return scrambled;
+
+    for (let attempt = 0; attempt < 15; attempt++) {
+        const arr = word.split('');
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        const scrambled = arr.join('');
+        if (scrambled !== word) {
+            return scrambled;
+        }
+    }
+
+    return word.slice(1) + word[0];
 }
 
 function AnagramWallComponent() {
@@ -151,10 +159,11 @@ function AnagramWallComponent() {
 
     const resetGame = () => {
         setIsAllSolved(false);
+        setGameState('playing');
         setCards(prev => prev.map(c => ({
             ...c,
             isSolved: false,
-            scrambled: scrambleWord(c.original)
+            scrambled: scrambleWord(c.original.toLocaleUpperCase('tr-TR'))
         })).sort(() => Math.random() - 0.5));
     };
 
@@ -183,7 +192,7 @@ function AnagramWallComponent() {
                             Tekrar Dene
                         </Button>
                         <Link href={backUrl}>
-                            <Button variant="outline" className="border-white/10 text-slate-300 hover:bg-white/10">
+                            <Button variant="outline" className="bg-transparent border-white/10 text-slate-300 hover:bg-white/10">
                                 <ArrowLeft className="mr-2 w-4 h-4" /> Geri Dön
                             </Button>
                         </Link>
@@ -370,7 +379,7 @@ function AnagramWallComponent() {
                                 <RotateCcw className="mr-2 h-5 w-5" /> Yeniden Oyna
                             </Button>
                             <Link href={backUrl}>
-                                <Button variant="outline" size="lg" className="w-full h-14 text-base font-bold border-white/10 text-slate-300 hover:bg-white/10 rounded-xl">
+                                <Button variant="outline" size="lg" className="w-full h-14 text-base font-bold bg-transparent border-white/10 text-slate-300 hover:bg-white/10 rounded-xl">
                                     <Home className="mr-2 h-5 w-5" /> Kuruluma Dön
                                 </Button>
                             </Link>

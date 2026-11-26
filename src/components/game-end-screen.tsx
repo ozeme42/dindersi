@@ -69,7 +69,8 @@ export function GameEndScreen({
     const fromParam = searchParams?.get('from') || searchParams?.get('source');
     const classIdParam = searchParams?.get('classId');
     const isClassroomSession = Boolean(classIdParam && (isTeacher || isStudent));
-    const isFromHome = !isClassroomSession && !isMissionMode;
+    const isStudentPortalEntry = isStudent && fromParam !== 'home' && fromParam !== 'student';
+    const isFromHome = !isClassroomSession && !isMissionMode && !isStudentPortalEntry;
     const resolvedHomeBackUrl = (backUrl && !backUrl.startsWith('/oyunlar')) ? backUrl : '/';
 
     // Hedef URL'ler

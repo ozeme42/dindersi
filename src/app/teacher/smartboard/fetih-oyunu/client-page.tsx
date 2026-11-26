@@ -217,13 +217,19 @@ export function FetihOyunuSetupClientPage({ gameConfig }: { gameConfig: any }) {
     }
 
     setIsDataLoading(true);
-    const unitsRef = collection(db, `courses/${courseId}/units`);
-    const q = query(unitsRef, orderBy("title"));
-    const unitsSnapshot = await getDocs(q);
-    setUnits(unitsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Unit)));
-    setTopics([]);
-    setIsDataLoading(false);
-    handleNext();
+    try {
+      const unitsRef = collection(db, `courses/${courseId}/units`);
+      const q = query(unitsRef, orderBy("title"));
+      const unitsSnapshot = await getDocs(q);
+      setUnits(unitsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Unit)));
+      setTopics([]);
+      handleNext();
+    } catch (err) {
+      console.error("Failed to load units:", err);
+      toast({ title: "Hata", description: "Üniteler yüklenemedi.", variant: "destructive" });
+    } finally {
+      setIsDataLoading(false);
+    }
   };
   
   const handleSelectUnit = async (unitId: string, unitName: string) => {
@@ -232,15 +238,22 @@ export function FetihOyunuSetupClientPage({ gameConfig }: { gameConfig: any }) {
     if (foundUnit?.topics && foundUnit.topics.length > 0) {
       setTopics(foundUnit.topics);
       setIsDataLoading(false);
+      handleNext();
     } else {
       setIsDataLoading(true);
-      const topicsRef = collection(db, `courses/${selection.courseId}/units/${unitId}/topics`);
-      const q = query(topicsRef, orderBy("title"));
-      const topicsSnapshot = await getDocs(q);
-      setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
-      setIsDataLoading(false);
+      try {
+        const topicsRef = collection(db, `courses/${selection.courseId}/units/${unitId}/topics`);
+        const q = query(topicsRef, orderBy("title"));
+        const topicsSnapshot = await getDocs(q);
+        setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
+        handleNext();
+      } catch (err) {
+        console.error("Failed to load topics:", err);
+        toast({ title: "Hata", description: "Konular yüklenemedi.", variant: "destructive" });
+      } finally {
+        setIsDataLoading(false);
+      }
     }
-    handleNext();
   };
   
   const handleSelectTopic = (topicId: string, topicName: string) => {
@@ -258,15 +271,21 @@ export function FetihOyunuSetupClientPage({ gameConfig }: { gameConfig: any }) {
       const gradeVal = targetClassName.match(/\d+/)?.[0] || '';
       let list = allStudents.filter(u => {
         const sc = (u.class || '').trim().toLowerCase();
-        return sc.includes(targetClassName) || (gradeVal && sc.startsWith(gradeVal));
+        const sGrade = sc.match(/\d+/)?.[0] || '';
+        return gradeVal ? sGrade === gradeVal : sc.includes(targetClassName);
       });
       if (list.length === 0) list = allStudents;
       setFilteredStudents(list);
     } else {
+      const targetClassName = (selectedClass.name || '').trim().toLowerCase();
+      const gradeVal = targetClassName.match(/\d+/)?.[0] || '';
       const branchLower = branch.trim().toLowerCase();
       let list = allStudents.filter(s => {
-        const sc = (s.class || '').toLowerCase();
-        return sc.includes(branchLower);
+        const sc = (s.class || '').trim().toLowerCase();
+        const sGrade = sc.match(/\d+/)?.[0] || '';
+        if (gradeVal && sGrade && sGrade !== gradeVal) return false;
+        const tokens = sc.split(/[-/\s.]+/).map(p => p.trim()).filter(Boolean);
+        return tokens[1] === branchLower || tokens[tokens.length - 1] === branchLower || sc === branchLower;
       });
       if (list.length === 0) list = allStudents;
       setFilteredStudents(list);
@@ -354,7 +373,7 @@ export function FetihOyunuSetupClientPage({ gameConfig }: { gameConfig: any }) {
                         <p className="text-sm text-slate-400">Sanal öğrencileri takımlara yerleştirin.</p>
                     </div>
                     <div className="flex gap-3">
-                        <Button onClick={distributeStudents} variant="outline" size="sm" disabled={teams.length === 0 || filteredStudents.length === 0} className="border-emerald-500/30 text-emerald-300 hover:text-emerald-200 hover:bg-emerald-500/10"><Shuffle className="mr-2 h-4 w-4"/>Rastgele Dağıt</Button>
+                        <Button onClick={distributeStudents} variant="outline" size="sm" disabled={teams.length === 0 || filteredStudents.length === 0} className="bg-transparent border-emerald-500/30 text-emerald-300 hover:text-emerald-200 hover:bg-emerald-500/10"><Shuffle className="mr-2 h-4 w-4"/>Rastgele Dağıt</Button>
                     </div>
                 </div>
  

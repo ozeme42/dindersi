@@ -1,9 +1,19 @@
-import { getGameSettings } from "@/app/teacher/game-settings/actions";
-import { SmartboardDuelloSetupClientPage } from "./client-page";
+'use client';
 
-export const dynamic = 'force-dynamic';
+import { Suspense } from 'react';
+import { Loader2, Mountain } from 'lucide-react';
+import { OyunKurulum } from '@/components/oyun-kurulum';
 
-export default async function SmartboardDuelloSetupPage() {
-    const settings = await getGameSettings();
-    return <SmartboardDuelloSetupClientPage gameConfig={settings.teacherDuello} />;
+export default function TirmanmaYarisiSetupPage() {
+    return (
+        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-[#0f172a]"><Loader2 className="h-12 w-12 animate-spin text-white" /></div>}>
+            <OyunKurulum
+                gameName="Tırmanma Yarışı"
+                gameIcon={Mountain}
+                gamePath="tirmanma-yarisi"
+                dataType="games"
+                isStatic={true}
+            />
+        </Suspense>
+    );
 }

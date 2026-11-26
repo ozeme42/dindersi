@@ -15,6 +15,39 @@ import Confetti from 'react-dom-confetti';
 
 type GameQuestion = KavramDuellosuQuestion;
 
+interface OptionButtonProps {
+    player: 'p1' | 'p2';
+    option: string;
+    showNextButton: boolean;
+    correctAnswer: string | null;
+    disabled?: boolean;
+    onAnswer: (player: 'p1' | 'p2', answer: string) => void;
+}
+
+function DuelOptionButton({ player, option, showNextButton, correctAnswer, disabled, onAnswer }: OptionButtonProps) {
+    const isP1 = player === 'p1';
+    const baseClass = isP1
+        ? 'bg-blue-100 text-blue-900 hover:bg-blue-50 border-b-4 border-blue-300 active:border-b-0 active:translate-y-1'
+        : 'bg-red-100 text-red-900 hover:bg-red-50 border-b-4 border-red-300 active:border-b-0 active:translate-y-1';
+
+    const isCorrect = correctAnswer === option;
+    let dynamicClass = baseClass;
+    if (showNextButton && isCorrect) {
+        dynamicClass = 'bg-green-500 text-white border-green-700 correct-blink';
+    }
+
+    return (
+        <button
+            type="button"
+            disabled={disabled}
+            onClick={() => onAnswer(player, option)}
+            className={`w-full h-full px-3 py-2 text-base sm:text-xl md:text-2xl font-bold rounded-xl shadow-md transition-all break-words leading-snug flex items-center justify-center text-center ${dynamicClass}`}
+        >
+            {option}
+        </button>
+    );
+}
+
 // Fisher-Yates Karıştırma Algoritması
 function shuffleArray<T>(array: T[]): T[] {
     const newArr = [...array];
@@ -130,7 +163,6 @@ function DuelGameComponent() {
             timerRef.current = setInterval(() => {
                 setTimeLeft(prev => {
                     if (prev <= 1) {
-                        handleTimeUp();
                         return 0;
                     }
                     if (prev <= 6 && prev > 1) {
@@ -149,7 +181,13 @@ function DuelGameComponent() {
             if (timerRef.current) clearInterval(timerRef.current);
             stopSound('timer');
         };
-    }, [state.gameState, state.showNextButton, handleTimeUp]);
+    }, [state.gameState, state.showNextButton]);
+
+    useEffect(() => {
+        if (state.gameState === 'playing' && !state.showNextButton && timeLeft <= 0) {
+            handleTimeUp();
+        }
+    }, [state.gameState, state.showNextButton, timeLeft, handleTimeUp]);
 
     const handleAnswer = (player: 'p1' | 'p2', answer: string) => {
         if (!currentQ || state.showNextButton) return;
@@ -242,7 +280,7 @@ function DuelGameComponent() {
                                 <ArrowLeft className="mr-2 h-4 w-4" /> Kuruluma Dön
                             </Link>
                         </Button>
-                        <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white">
+                        <Button asChild variant="outline" className="bg-transparent border-white/10 text-slate-300 hover:text-white hover:bg-white/10">
                             <Link href="/teacher/smartboard">
                                 <Home className="mr-2 h-4 w-4" /> Akıllı Tahta Menüsü
                             </Link>
@@ -297,21 +335,9 @@ function DuelGameComponent() {
     
     if (!currentQ) return <div className="h-screen w-screen flex items-center justify-center bg-slate-900"><Loader2 className="w-16 h-16 animate-spin text-cyan-400" /></div>;
     
-    const OptionButton = ({ player, option, ...props }: { player: 'p1' | 'p2', option: string, [key: string]: any }) => {
-        const isP1 = player === 'p1';
-        const baseClass = isP1
-            ? 'bg-blue-100 text-blue-900 hover:bg-blue-50 border-b-4 border-blue-300 active:border-b-0 active:translate-y-1'
-            : 'bg-red-100 text-red-900 hover:bg-red-50 border-b-4 border-red-300 active:border-b-0 active:translate-y-1';
-        
-        const isCorrect = state.correctAnswer === option;
-        
-        let dynamicClass = baseClass;
-        if(state.showNextButton && isCorrect) {
-            dynamicClass = 'bg-green-500 text-white border-green-700 correct-blink';
-        }
-
-        return <button onClick={() => handleAnswer(player, option)} className={`w-full h-full text-2xl font-bold rounded-xl shadow-md transition-all ${dynamicClass}`} {...props}>{option}</button>;
-    }
+    const optionsGridClass = (currentQ?.options?.length || 0) === 3
+        ? "grid grid-cols-1 sm:grid-cols-3 gap-4 h-64"
+        : "grid grid-cols-2 gap-4 h-64";
     
     return (
         <div className="h-screen w-screen bg-slate-900 text-white flex">
@@ -342,8 +368,18 @@ function DuelGameComponent() {
                     <div className="bg-white/10 p-6 rounded-2xl mb-4 min-h-[160px] flex items-center justify-center backdrop-blur-sm border border-white/5 shadow-xl">
                         <p id="p1-question" className="text-3xl font-semibold text-center text-blue-50 leading-relaxed">{currentQ.q}</p>
                     </div>
-                    <div id="p1-options" className="grid grid-cols-2 gap-4 h-64">
-                        {currentQ?.options.map(opt => <OptionButton key={`p1-${opt}`} player="p1" option={opt} />)}
+                    <div id="p1-options" className={optionsGridClass}>
+                        {currentQ?.options.map(opt => (
+                            <DuelOptionButton
+                                key={`p1-${opt}`}
+                                player="p1"
+                                option={opt}
+                                showNextButton={state.showNextButton}
+                                correctAnswer={state.correctAnswer}
+                                disabled={p1Lock || state.showNextButton}
+                                onAnswer={handleAnswer}
+                            />
+                        ))}
                     </div>
                 </div>
                 
@@ -366,7 +402,19 @@ function DuelGameComponent() {
 
                 <div className="flex-1 flex flex-col justify-center p-8 gap-6 relative z-0" id="p2-controls">
                     <div className="bg-white/10 p-6 rounded-2xl mb-4 min-h-[160px] flex items-center justify-center backdrop-blur-sm border border-white/5 shadow-xl"><p id="p2-question" className="text-3xl font-semibold text-center text-red-50 leading-relaxed">{currentQ.q}</p></div>
-                    <div id="p2-options" className="grid grid-cols-2 gap-4 h-64">{currentQ?.options.map(opt => <OptionButton key={`p2-${opt}`} player="p2" option={opt} />)}</div>
+                    <div id="p2-options" className={optionsGridClass}>
+                        {currentQ?.options.map(opt => (
+                            <DuelOptionButton
+                                key={`p2-${opt}`}
+                                player="p2"
+                                option={opt}
+                                showNextButton={state.showNextButton}
+                                correctAnswer={state.correctAnswer}
+                                disabled={p2Lock || state.showNextButton}
+                                onAnswer={handleAnswer}
+                            />
+                        ))}
+                    </div>
                 </div>
                 
                 {p2Lock && <div id="p2-lock" className="absolute inset-0 bg-black/80 backdrop-blur-md flex flex-col items-center justify-center z-50 animate-fade-in"><Lock className="w-32 h-32 text-red-500 mb-4 animate-bounce" /><span className="text-2xl font-bold text-red-400">KİLİTLENDİ!</span></div>}

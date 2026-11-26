@@ -357,7 +357,7 @@ function FetihGameComponent() {
             <Alert variant="destructive" className="max-w-md bg-red-950/50 border-red-900 text-white">
                 <AlertTitle>Hata Oluştu</AlertTitle>
                 <AlertDescription>{error}</AlertDescription>
-                <Button asChild variant="outline" className="mt-4 border-white/20 text-white hover:bg-white/10">
+                <Button asChild variant="outline" className="mt-4 bg-transparent border-white/20 text-white hover:bg-white/10">
                     <Link href="/teacher/smartboard/fetih-oyunu"><ArrowLeft className="mr-2 h-4 w-4"/> Kuruluma Dön</Link>
                 </Button>
             </Alert>
@@ -387,10 +387,10 @@ function FetihGameComponent() {
                          <Button onClick={() => window.location.reload()} size="lg" className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold">
                              <Repeat className="mr-2 h-5 w-5"/> Yeni Savaş
                          </Button>
-                         <Button asChild variant="outline" size="lg" className="border-white/10 text-slate-300 hover:text-white">
+                         <Button asChild variant="outline" size="lg" className="bg-transparent border-white/10 text-slate-300 hover:text-white hover:bg-white/10">
                              <Link href="/teacher/smartboard/fetih-oyunu"><ArrowLeft className="mr-2 h-4 w-4"/> Kuruluma Dön</Link>
                          </Button>
-                         <Button asChild variant="outline" size="lg" className="border-white/10 text-slate-300 hover:text-white">
+                         <Button asChild variant="outline" size="lg" className="bg-transparent border-white/10 text-slate-300 hover:text-white hover:bg-white/10">
                              <Link href="/teacher/smartboard"><Home className="mr-2 h-5 w-5"/> Menü</Link>
                          </Button>
                     </CardFooter>

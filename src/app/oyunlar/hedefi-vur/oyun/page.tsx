@@ -578,7 +578,7 @@ function HitTheTargetGame() {
         <WordwallShell
             title="Hedefi Vur"
             subtitle={topicName}
-            currentQuestionIndex={currentRoundIndex + 1}
+            currentQuestionIndex={currentRoundIndex}
             totalQuestions={rounds.length}
             score={score}
             backUrl={backUrl}

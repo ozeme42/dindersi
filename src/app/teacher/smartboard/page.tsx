@@ -117,7 +117,7 @@ export default function SmartboardPage() {
         },
         {
             key: 'saatli_bomba',
-            href: "/oyunlar/saatli-bomba",
+            href: "/oyunlar/saatli-bomba?from=smartboard&returnUrl=/teacher/smartboard",
             title: "Saatli Bomba",
             description: "Doğru kabloyu kes, bombayı patlamadan imha et.",
             icon: <Bomb />,

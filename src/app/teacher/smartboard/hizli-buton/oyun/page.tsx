@@ -120,7 +120,6 @@ function SpeedBuzzerGameComponent() {
             timerRef.current = setInterval(() => {
                 setTimeLeft(prev => {
                     if (prev <= 1) {
-                        handleTimeUp();
                         return 0;
                     }
                     if (prev <= 6 && prev > 1) {
@@ -133,7 +132,13 @@ function SpeedBuzzerGameComponent() {
             stopTimer();
         }
         return () => stopTimer();
-    }, [state.gameState, state.roundEnded, state.buzzerOwner, handleTimeUp]);
+    }, [state.gameState, state.roundEnded, state.buzzerOwner]);
+
+    useEffect(() => {
+        if (state.gameState === 'playing' && !state.roundEnded && !state.buzzerOwner && timeLeft <= 0) {
+            handleTimeUp();
+        }
+    }, [state.gameState, state.roundEnded, state.buzzerOwner, timeLeft, handleTimeUp]);
 
     const handleBuzzerPress = (player: 'p1' | 'p2') => {
         if (state.roundEnded || state.buzzerOwner) return;
@@ -216,7 +221,7 @@ function SpeedBuzzerGameComponent() {
                                 <ArrowLeft className="mr-2 h-4 w-4" /> Kuruluma Dön
                             </Link>
                         </Button>
-                        <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white">
+                        <Button asChild variant="outline" className="bg-transparent border-white/10 text-slate-300 hover:text-white hover:bg-white/10">
                             <Link href="/teacher/smartboard">
                                 <Home className="mr-2 h-4 w-4" /> Akıllı Tahta Menüsü
                             </Link>

@@ -441,12 +441,12 @@ function ClimbingDuelGameContent() {
                         <Button onClick={() => window.location.reload()} className="bg-rose-600 hover:bg-rose-500 text-white font-bold">
                             <RefreshCw className="mr-2 h-4 w-4" /> Yeniden Dene
                         </Button>
-                        <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white">
+                        <Button asChild variant="outline" className="bg-transparent border-white/10 text-slate-300 hover:text-white hover:bg-white/10">
                             <Link href="/teacher/smartboard/duello">
                                 <ArrowLeft className="mr-2 h-4 w-4" /> Kuruluma Dön
                             </Link>
                         </Button>
-                        <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white">
+                        <Button asChild variant="outline" className="bg-transparent border-white/10 text-slate-300 hover:text-white hover:bg-white/10">
                             <Link href="/teacher/smartboard">
                                 <Home className="mr-2 h-4 w-4" /> Akıllı Tahta Menüsü
                             </Link>

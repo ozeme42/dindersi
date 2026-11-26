@@ -63,7 +63,7 @@ function IlimHazinesiBoard({
     const wheelRef = useRef<HTMLDivElement>(null);
 
     const getLetterPosition = (index: number, total: number) => {
-        const radius = 110; 
+        const radius = total <= 7 ? 105 : total <= 10 ? 116 : Math.min(138, 108 + (total - 7) * 4);
         const angle = (index * (360 / total)) - 90;
         const radian = (angle * Math.PI) / 180;
         const x = radius * Math.cos(radian);
@@ -232,6 +232,7 @@ function GameComponent() {
     const [shuffledLetters, setShuffledLetters] = useState<string[]>([]);
     const [score, setScore] = useState(0); 
     const [showInfo, setShowInfo] = useState(false);
+    const [completedAllLevels, setCompletedAllLevels] = useState(false);
     
     const [hintIndex, setHintIndex] = useState(0);
 
@@ -358,7 +359,7 @@ function GameComponent() {
         }
     };
     
-    const isSuccess = levelIndex === levels.length - 1 && showInfo; 
+    const isSuccess = completedAllLevels; 
 
     const handleSaveAndExit = async () => {
         if (!user || isSaving || isScoreSaved) {
@@ -412,9 +413,11 @@ function GameComponent() {
     };
 
     const nextLevel = () => {
+        setShowInfo(false);
         if (levelIndex < levels.length - 1) {
             setLevelIndex(prev => prev + 1);
         } else {
+            setCompletedAllLevels(true);
             setIsFinished(true);
             playSound('win');
         }
@@ -423,6 +426,8 @@ function GameComponent() {
     const handleRestart = () => {
         setLevelIndex(0);
         setScore(0);
+        setCompletedAllLevels(false);
+        setShowInfo(false);
         setIsFinished(false);
         setIsScoreSaved(false);
         setIsSaving(false);
@@ -455,7 +460,7 @@ function GameComponent() {
             title="İlim Hazinesi"
             subtitle={topicName || "Kelimeleri Birleştir, Hazineleri Aç"}
             score={score}
-            currentQuestionIndex={levelIndex + 1}
+            currentQuestionIndex={levelIndex}
             totalQuestions={levels.length}
             backUrl={backUrl}
             isFinished={isFinished}

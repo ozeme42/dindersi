@@ -1,12 +1,19 @@
+'use client';
 
-import { getGameSettings } from "@/app/teacher/game-settings/actions";
-import { FetihOyunuSetupClientPage } from "./client-page";
+import { Suspense } from 'react';
+import { Loader2, Flag } from 'lucide-react';
+import { OyunKurulum } from '@/components/oyun-kurulum';
 
-export const dynamic = 'force-dynamic';
-
-export default async function FetihOyunuSetupPage() {
-    // For now, we can use the Bireysel Yarışma settings as a base.
-    // This can be customized later if needed.
-    const settings = await getGameSettings();
-    return <FetihOyunuSetupClientPage gameConfig={settings.teacherBireysel} />;
+export default function FetihOyunuSetupPage() {
+    return (
+        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-[#0f172a]"><Loader2 className="h-12 w-12 animate-spin text-white" /></div>}>
+            <OyunKurulum
+                gameName="Fetih Oyunu"
+                gameIcon={Flag}
+                gamePath="fetih-oyunu"
+                dataType="games"
+                isStatic={true}
+            />
+        </Suspense>
+    );
 }

@@ -160,7 +160,7 @@ function GeneralOyunKurulum({
     const [searchQuery, setSearchQuery] = useState("");
   
     const pageTitle = initialPageTitle || gameName || searchParams.get('gameName') || "Etkinlik Kurulumu";
-    const finalGamePath = gamePath || searchParams.get('gamePath') || "";
+    const finalGamePath = (gamePath || searchParams.get('gamePath') || "").replace(/^\/+/, "");
   
     const [selection, setSelection] = useState({
       classId: "", className: "", courseId: "", courseName: "", courseColor: "from-slate-700 to-slate-800", unitId: "", unitName: "", topicName: ""

@@ -28,16 +28,25 @@ function scrambleWord(word: string): string {
             .map(part => scrambleWord(part))
             .join(' ');
     }
-    const arr = word.split('');
-    let currentIndex = arr.length, randomIndex;
-    while (currentIndex > 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex--;
-        [arr[currentIndex], arr[randomIndex]] = [arr[randomIndex], arr[currentIndex]];
+    const uniqueChars = new Set(word.split(''));
+    if (word.length <= 1 || uniqueChars.size <= 1) {
+        return word;
     }
-    const scrambled = arr.join('');
-    if (scrambled === word && word.length > 1) return scrambleWord(word);
-    return scrambled;
+
+    for (let attempt = 0; attempt < 15; attempt++) {
+        const arr = word.split('');
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        const scrambled = arr.join('');
+        if (scrambled !== word) {
+            return scrambled;
+        }
+    }
+
+    // Deterministic rotation fallback if all shuffles matched
+    return word.slice(1) + word[0];
 }
 
 function AnagramWallBoard({
@@ -348,6 +357,7 @@ function AnagramWallComponent() {
         <WordwallShell
             title="Anagram Duvarı"
             subtitle={topicName}
+            timerMode="countup"
             currentQuestionIndex={solvedCount}
             totalQuestions={cards.length}
             score={score}

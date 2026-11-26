@@ -160,13 +160,19 @@ export function SmartboardDuelloSetupClientPage({ gameConfig }: { gameConfig: an
     }
 
     setIsDataLoading(true);
-    const unitsRef = collection(db, `courses/${courseId}/units`);
-    const q = query(unitsRef, orderBy("title"));
-    const unitsSnapshot = await getDocs(q);
-    setUnits(unitsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Unit)));
-    setTopics([]);
-    setIsDataLoading(false);
-    handleNext();
+    try {
+      const unitsRef = collection(db, `courses/${courseId}/units`);
+      const q = query(unitsRef, orderBy("title"));
+      const unitsSnapshot = await getDocs(q);
+      setUnits(unitsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Unit)));
+      setTopics([]);
+      handleNext();
+    } catch (err) {
+      console.error("Failed to load units:", err);
+      toast({ title: "Hata", description: "Üniteler yüklenemedi.", variant: "destructive" });
+    } finally {
+      setIsDataLoading(false);
+    }
   };
 
   const handleSelectUnit = async (unitId: string, unitName: string) => {
@@ -181,11 +187,17 @@ export function SmartboardDuelloSetupClientPage({ gameConfig }: { gameConfig: an
         setIsDataLoading(false);
       } else {
         setIsDataLoading(true);
-        const topicsRef = collection(db, `courses/${selection.courseId}/units/${unitId}/topics`);
-        const q = query(topicsRef, orderBy("title"));
-        const topicsSnapshot = await getDocs(q);
-        setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
-        setIsDataLoading(false);
+        try {
+          const topicsRef = collection(db, `courses/${selection.courseId}/units/${unitId}/topics`);
+          const q = query(topicsRef, orderBy("title"));
+          const topicsSnapshot = await getDocs(q);
+          setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
+        } catch (err) {
+          console.error("Failed to load topics:", err);
+          toast({ title: "Hata", description: "Konular yüklenemedi.", variant: "destructive" });
+        } finally {
+          setIsDataLoading(false);
+        }
       }
     }
     handleNext();

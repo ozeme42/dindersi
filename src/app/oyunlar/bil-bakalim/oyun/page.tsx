@@ -87,6 +87,14 @@ function BilBakalimInnerGame() {
         return () => clearInterval(interval);
     }, [gameState]);
 
+    useEffect(() => {
+        if (gameState === 'playing' && allCards.length > 0 && eliminatedTerms.size >= allCards.length) {
+            setGameState('won');
+            if (soundEnabled) playSound('win');
+            setShowConfetti(true);
+        }
+    }, [gameState, eliminatedTerms, allCards.length, soundEnabled]);
+
     // Veri Çekme
     const fetchGameData = useCallback(async () => {
         setGameState('loading');
@@ -156,16 +164,7 @@ function BilBakalimInnerGame() {
 
             setTimeout(() => {
                 // Kartı elenenler listesine ekle
-                setEliminatedTerms(prev => {
-                    const next = new Set(prev).add(term);
-                    // Tüm kartlar elendi mi?
-                    if (next.size === allCards.length) {
-                        setGameState('won');
-                        if (soundEnabled) playSound('win');
-                        setShowConfetti(true);
-                    }
-                    return next;
-                });
+                setEliminatedTerms(prev => new Set(prev).add(term));
 
                 // Sıradaki soruya geç
                 setCurrentQuestionIndex(prev => prev + 1);
@@ -280,7 +279,8 @@ function BilBakalimInnerGame() {
         <WordwallShell
             title="Bil Bakalım"
             subtitle={topicName}
-            currentQuestionIndex={allCards.length - remainingCardsCount + 1}
+            timerMode="countup"
+            currentQuestionIndex={allCards.length - remainingCardsCount}
             totalQuestions={allCards.length}
             score={score}
             timeLeft={elapsedSeconds}

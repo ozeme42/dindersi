@@ -215,7 +215,7 @@ function MultiTeamTabooComponent() {
                             Tekrar Dene
                         </Button>
                         <Link href={backUrl}>
-                            <Button variant="outline" className="border-white/10 hover:bg-white/10 text-slate-300">
+                            <Button variant="outline" className="bg-transparent border-white/10 hover:bg-white/10 text-slate-300">
                                 Geri Dön
                             </Button>
                         </Link>
@@ -566,7 +566,7 @@ function MultiTeamTabooComponent() {
                             <Repeat className="mr-2 h-5 w-5" /> Yeniden Oyna
                         </Button>
                         <Link href={backUrl}>
-                            <Button variant="outline" size="lg" className="h-14 px-8 text-lg font-bold border-white/10 text-slate-300 hover:bg-white/10 rounded-xl">
+                            <Button variant="outline" size="lg" className="h-14 px-8 text-lg font-bold bg-transparent border-white/10 text-slate-300 hover:bg-white/10 rounded-xl">
                                 <Home className="mr-2 h-5 w-5" /> Ana Menü
                             </Button>
                         </Link>

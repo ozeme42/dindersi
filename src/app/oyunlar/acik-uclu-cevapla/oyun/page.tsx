@@ -316,7 +316,7 @@ const OpenEndedGame = () => {
         <WordwallShell
             title="Açık Uçlu Cevaplama"
             subtitle={gameContext.topicName}
-            currentQuestionIndex={currentQuestionIndex + 1}
+            currentQuestionIndex={currentQuestionIndex}
             totalQuestions={questions.length}
             score={score}
             backUrl={backUrl}

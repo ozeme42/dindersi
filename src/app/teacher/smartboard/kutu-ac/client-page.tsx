@@ -79,13 +79,18 @@ export function SmartboardBireyselClientPage({ gameConfig }: { gameConfig: any }
   const handleSelectCourse = async (courseId: string, courseName: string) => {
     setSelection(prev => ({ ...prev, courseId, courseName, unitId: '', unitName: '', topicId: '', topicName: '' }));
     setIsLoading(true);
-    const unitsRef = collection(db, `courses/${courseId}/units`);
-    const q = query(unitsRef, orderBy("title"));
-    const unitsSnapshot = await getDocs(q);
-    setUnits(unitsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Unit)));
-    setTopics([]);
-    setIsLoading(false);
-    handleNext();
+    try {
+      const unitsRef = collection(db, `courses/${courseId}/units`);
+      const q = query(unitsRef, orderBy("title"));
+      const unitsSnapshot = await getDocs(q);
+      setUnits(unitsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Unit)));
+      setTopics([]);
+      handleNext();
+    } catch (err) {
+      console.error("Error loading units:", err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSelectUnit = async (unitId: string, unitName: string) => {
@@ -93,15 +98,21 @@ export function SmartboardBireyselClientPage({ gameConfig }: { gameConfig: any }
     if (unitId === 'all') {
       setSelection(prev => ({ ...prev, topicId: 'all', topicName: 'Tüm Konular' }));
       setTopics([]);
+      handleNext();
     } else {
       setIsLoading(true);
-      const topicsRef = collection(db, `courses/${selection.courseId}/units/${unitId}/topics`);
-      const q = query(topicsRef, orderBy("title"));
-      const topicsSnapshot = await getDocs(q);
-      setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
-      setIsLoading(false);
+      try {
+        const topicsRef = collection(db, `courses/${selection.courseId}/units/${unitId}/topics`);
+        const q = query(topicsRef, orderBy("title"));
+        const topicsSnapshot = await getDocs(q);
+        setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
+        handleNext();
+      } catch (err) {
+        console.error("Error loading topics:", err);
+      } finally {
+        setIsLoading(false);
+      }
     }
-    handleNext();
   };
   
   const handleSelectTopic = (topicId: string, topicName: string) => {

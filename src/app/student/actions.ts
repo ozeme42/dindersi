@@ -172,8 +172,18 @@ export async function getUserGamePlayCounts(userId: string, gameType: string, ga
     try {
         // gameType ve gamePath varyasyonlarını belirle (Örn: Gol Kralı / Yazı Tura eşleşmesi için)
         const typesToSearch = [gameType];
-        if (gamePath === 'yazi-tura' && !typesToSearch.includes('Yazı Tura')) typesToSearch.push('Yazı Tura');
-        if (gamePath === 'hedefi-vur' && !typesToSearch.includes('Hedefi Vur')) typesToSearch.push('Hedefi Vur');
+        const aliasMap: Record<string, string[]> = {
+            'yazi-tura': ['Yazı Tura'],
+            'hedefi-vur': ['Hedefi Vur'],
+            'acik-uclu-cevapla': ['Açık Uçlu Cevaplama', 'Açık Uçlu Cevapla'],
+            'dogru-yanlis-zinciri': ['Doğru/Yanlış Zinciri', 'Seri (Doğru / Yanlış)'],
+            'kelime-avi': ['Kavram Avı', 'Kelime Avı'],
+            'milyoner-yarismasi': ['milyoner-yarismasi', 'Kim Milyoner?'],
+        };
+        const aliases = aliasMap[gamePath] || [];
+        aliases.forEach((alias) => {
+            if (!typesToSearch.includes(alias)) typesToSearch.push(alias);
+        });
         
         let allDocs: any[] = [];
         

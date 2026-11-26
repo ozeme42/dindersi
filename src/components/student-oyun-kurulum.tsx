@@ -126,6 +126,9 @@ export function StudentOyunKurulum({
             <div className="flex h-screen w-full bg-[#09071a] items-center justify-center flex-col gap-4">
                 <IconComponent className="w-16 h-16 text-slate-500 opacity-50" />
                 <h2 className="text-xl font-bold text-slate-400">Sınıfınıza ait konu bulunamadı.</h2>
+                <Link href="/student" className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-semibold border border-white/15 transition-colors">
+                    Öğrenci Paneline Dön
+                </Link>
             </div>
         );
     }
@@ -202,10 +205,16 @@ export function StudentOyunKurulum({
                                     <>
                                         {/* KARMA: TÜM ÜNİTE KONULARI SEÇENEĞİ */}
                                         {(() => {
+                                            const otherUnitTitles = activeCourseData.units
+                                                .filter((u) => u.id !== unit.id)
+                                                .map((u) => u.title)
+                                                .filter(Boolean);
                                             const karmaCount = Object.entries(playCounts).reduce((acc, [contextStr, c]) => {
-                                                if (contextStr.includes('Karma') || contextStr.includes('Genel')) {
-                                                    // Sadece o üniteye ait karmaları mı sayıyoruz? Karma genellikle tek.
-                                                    // Eşleşmeyi "Karma" kelimesine göre yapıyoruz
+                                                const isKarmaContext = contextStr.includes('Karma') || contextStr.includes('Genel');
+                                                if (!isKarmaContext) return acc;
+                                                const matchesThisUnit = contextStr.includes(unit.title) || contextStr.includes(unit.id);
+                                                const mentionsOtherUnit = otherUnitTitles.some((t) => contextStr.includes(t));
+                                                if (matchesThisUnit || !mentionsOtherUnit) {
                                                     return acc + c;
                                                 }
                                                 return acc;

@@ -23,7 +23,7 @@ const WIRE_STYLES = [
         id: 'red',
         name: 'KIRMIZI',
         border: 'border-red-400 border-b-red-800',
-        bg: 'from-red-600 via-rose-600 to-red-800',
+        bg: 'bg-gradient-to-r from-red-600 via-rose-600 to-red-800',
         glow: 'shadow-[0_0_25px_rgba(239,68,68,0.5)]',
         accent: 'bg-red-500',
         text: 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]',
@@ -34,7 +34,7 @@ const WIRE_STYLES = [
         id: 'blue',
         name: 'MAVİ',
         border: 'border-blue-400 border-b-blue-800',
-        bg: 'from-blue-600 via-sky-600 to-blue-800',
+        bg: 'bg-gradient-to-r from-blue-600 via-sky-600 to-blue-800',
         glow: 'shadow-[0_0_25px_rgba(59,130,246,0.5)]',
         accent: 'bg-blue-500',
         text: 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]',
@@ -45,7 +45,7 @@ const WIRE_STYLES = [
         id: 'purple',
         name: 'MOR',
         border: 'border-purple-400 border-b-purple-800',
-        bg: 'from-purple-600 via-violet-600 to-purple-800',
+        bg: 'bg-gradient-to-r from-purple-600 via-violet-600 to-purple-800',
         glow: 'shadow-[0_0_25px_rgba(168,85,247,0.5)]',
         accent: 'bg-purple-500',
         text: 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]',
@@ -56,7 +56,7 @@ const WIRE_STYLES = [
         id: 'green',
         name: 'YEŞİL',
         border: 'border-emerald-400 border-b-emerald-800',
-        bg: 'from-emerald-600 via-green-600 to-emerald-800',
+        bg: 'bg-gradient-to-r from-emerald-600 via-green-600 to-emerald-800',
         glow: 'shadow-[0_0_25px_rgba(16,185,129,0.5)]',
         accent: 'bg-emerald-500',
         text: 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]',
@@ -94,6 +94,9 @@ function SaatliBombaContent() {
     const courseId = searchParams.get('courseId') || undefined;
     const unitId = searchParams.get('unitId') || undefined;
     const topicId = searchParams.get('topicId') || undefined;
+    const topicName = searchParams.get('topicName') || searchParams.get('unitName') || searchParams.get('courseName') || 'Genel Kavramlar';
+    const courseName = searchParams.get('courseName') || '';
+    const gameContext = courseName ? `Saatli Bomba - ${courseName} > ${topicName}` : `Saatli Bomba - ${topicName}`;
     const gameName = searchParams.get('gameName') || 'Saatli Bomba';
 
     // Game Mode State: 'solo' | 'team' | 'duel'
@@ -114,7 +117,10 @@ function SaatliBombaContent() {
     const [roundWinner, setRoundWinner] = useState<'p1' | 'p2' | 'timeout' | null>(null);
 
     // Genel Oyun Durumları
-    const [gameState, setGameState] = useState<'loading' | 'start' | 'playing' | 'defused' | 'exploded' | 'gameover'>('loading');
+    const [gameState, setGameState] = useState<'loading' | 'start' | 'playing' | 'defused' | 'exploded' | 'gameover' | 'error'>('loading');
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [isSaving, setIsSaving] = useState(false);
+    const [isScoreSaved, setIsScoreSaved] = useState(false);
     const [questions, setQuestions] = useState<BombQuestion[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [score, setScore] = useState(0);
@@ -157,19 +163,23 @@ function SaatliBombaContent() {
         try {
             const res = await getSaatliBombaQuestionsAction({ courseId, unitId, topicId });
             if (res.questions && res.questions.length > 0) {
+                setErrorMessage(null);
                 setQuestions(res.questions);
                 setGameState('start');
             } else {
+                const msg = res.error || "Bu konu için uygun soru veya kavram verisi bulunamadı.";
+                setErrorMessage(msg);
                 toast({
                     title: "Soru Bulunamadı",
-                    description: res.error || "Bu konu için uygun soru veya kavram verisi bulunamadı.",
+                    description: msg,
                     variant: "destructive"
                 });
-                setGameState('start');
+                setGameState('error');
             }
         } catch (err) {
             console.error("Saatli bomba soru yükleme hatası:", err);
-            setGameState('start');
+            setErrorMessage("Sorular yüklenirken beklenmeyen bir hata oluştu.");
+            setGameState('error');
         }
     }, [courseId, unitId, topicId, toast]);
 
@@ -211,6 +221,8 @@ function SaatliBombaContent() {
         setCurrentIndex(0);
         setCutWireIndex(null);
         setTimeLeft(QUESTION_TIME_SECONDS);
+        setIsScoreSaved(false);
+        setIsSaving(false);
         isProcessingRef.current = false;
         setGameState('playing');
         playSound('start');
@@ -227,7 +239,6 @@ function SaatliBombaContent() {
             setTimeLeft(prev => {
                 if (prev <= 1) {
                     if (timerRef.current) clearInterval(timerRef.current);
-                    handleTimeOut();
                     return 0;
                 }
                 if (prev <= 6) {
@@ -241,6 +252,13 @@ function SaatliBombaContent() {
             if (timerRef.current) clearInterval(timerRef.current);
         };
     }, [gameState, currentIndex]);
+
+    useEffect(() => {
+        if (gameState === 'playing' && timeLeft <= 0 && !isProcessingRef.current) {
+            handleTimeOut();
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [gameState, timeLeft]);
 
     // Süre Bittiğinde Patlama
     const handleTimeOut = () => {
@@ -428,6 +446,8 @@ function SaatliBombaContent() {
         setCurrentIndex(prev => prev + 1);
         setCutWireIndex(null);
         setTimeLeft(QUESTION_TIME_SECONDS);
+        setIsScoreSaved(false);
+        setIsSaving(false);
         isProcessingRef.current = false;
         
         if (gameMode === 'team') {
@@ -444,16 +464,52 @@ function SaatliBombaContent() {
         playSound('win');
 
         if (user && score > 0 && gameMode === 'solo') {
+            setIsSaving(true);
             try {
-                const context = topicId || unitId || courseId || 'Genel Kavramlar';
-                await submitSaatliBombaScoreAction(user.uid, score, context);
+                const res = await submitSaatliBombaScoreAction(user.uid, score, gameContext);
+                if (res.success) {
+                    setIsScoreSaved(true);
+                } else if (res.error) {
+                    toast({ title: "Bilgi", description: res.error, variant: "destructive" });
+                }
             } catch (e) {
                 console.error("Skor kaydedilemedi:", e);
+            } finally {
+                setIsSaving(false);
             }
         }
     };
 
-    const backUrl = getGameBackUrl({ user, searchParams, defaultBackUrl: '/oyunlar' });
+    const returnUrlParam = searchParams.get('returnUrl');
+    const fromParam = searchParams.get('from');
+    const backUrl = getGameBackUrl({
+        user,
+        searchParams,
+        defaultBackUrl: fromParam === 'smartboard' ? (returnUrlParam || '/teacher/smartboard') : '/oyunlar/saatli-bomba'
+    });
+
+    const renderStage = () => {
+    if (gameState === 'error') {
+        return (
+            <div className="w-full h-full flex items-center justify-center p-4">
+                <div className="w-full max-w-md bg-slate-900/95 border-2 border-rose-500/40 rounded-3xl p-6 sm:p-8 text-center text-white shadow-2xl space-y-4">
+                    <div className="mx-auto w-14 h-14 rounded-2xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center">
+                        <Bomb className="w-7 h-7 text-rose-400" />
+                    </div>
+                    <h2 className="text-xl font-black">İçerik Yüklenemedi</h2>
+                    <p className="text-sm text-slate-300">{errorMessage || 'Bu konu için yeterli soru veya kavram bulunamadı.'}</p>
+                    <div className="flex flex-col sm:flex-row gap-2.5 justify-center pt-2">
+                        <button type="button" onClick={loadQuestions} className="inline-flex items-center justify-center rounded-xl px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black transition-colors">
+                            <RotateCcw className="w-4 h-4 mr-2" /> Tekrar Dene
+                        </button>
+                        <button type="button" onClick={() => router.push(backUrl)} className="inline-flex items-center justify-center rounded-xl px-4 py-2.5 border border-white/20 bg-transparent text-white hover:bg-white/10 font-bold transition-colors">
+                            Geri Dön
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     // =========================================================================
     // 1. GİRİŞ & MOD SEÇİM EKRANI
@@ -745,6 +801,9 @@ function SaatliBombaContent() {
         return (
             <GameEndScreen
                 score={score}
+                isSaving={isSaving}
+                scoreSaved={isScoreSaved}
+                onSave={() => router.push(backUrl)}
                 onRestart={startGame}
                 onPlayAgain={startGame}
                 backUrl={backUrl}
@@ -1173,6 +1232,32 @@ function SaatliBombaContent() {
             </div>
         </div>
     );
+    };
+
+    const activeScore = gameMode === 'solo'
+        ? score
+        : gameMode === 'team'
+            ? (teamScores[activeTeamIndex] ?? 0)
+            : Math.max(p1Score, p2Score);
+
+    return (
+        <WordwallShell
+            title={gameName}
+            subtitle={topicName}
+            score={activeScore}
+            lives={gameMode === 'solo' ? lives : undefined}
+            maxLives={3}
+            currentQuestionIndex={gameState === 'playing' || gameState === 'defused' || gameState === 'exploded' ? currentIndex : undefined}
+            totalQuestions={questions.length > 0 ? questions.length : undefined}
+            backUrl={backUrl}
+            isFinished={gameState === 'gameover'}
+            showTimer={false}
+            fitToScreen={true}
+            contentClassName="w-full h-full min-h-0 flex flex-col items-center justify-center p-1 sm:p-2.5 overflow-hidden"
+        >
+            {renderStage()}
+        </WordwallShell>
+    );
 }
 
 export default function SaatliBombaOyunPage() {
@@ -1183,15 +1268,7 @@ export default function SaatliBombaOyunPage() {
                 <span className="text-lg font-bold">Saatli Bomba Açılıyor...</span>
             </div>
         }>
-            <WordwallShell
-                title="Saatli Bomba"
-                subtitle="Kablo Kes • Bombayı İmha Et"
-                showTimer={false}
-                fitToScreen={true}
-                contentClassName="w-full h-full min-h-0 flex flex-col items-center justify-center p-1 sm:p-2.5 overflow-hidden"
-            >
-                <SaatliBombaContent />
-            </WordwallShell>
+            <SaatliBombaContent />
         </Suspense>
     );
 }

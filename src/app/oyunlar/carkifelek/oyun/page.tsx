@@ -702,7 +702,7 @@ function CarkifelekGameClient() {
 
     const [score, setScore] = useState(0);
     const [rotation, setRotation] = useState(0);
-    const [gameState, setGameState] = useState<'loading' | 'setup' | 'idle' | 'spinning' | 'result' | 'question' | 'feedback' | 'finished' | 'sabotage_select'>('loading');
+    const [gameState, setGameState] = useState<'loading' | 'setup' | 'idle' | 'spinning' | 'result' | 'question' | 'feedback' | 'finished' | 'sabotage_select' | 'error'>('loading');
     
     const [questionsEasy, setQuestionsEasy] = useState<Question[]>([]);
     const [questionsHard, setQuestionsHard] = useState<Question[]>([]);
@@ -749,7 +749,7 @@ function CarkifelekGameClient() {
             const { questions, error } = await getCarkifelekQuestions(params);
             if (error || !questions) {
                 setError(error || "Sorular yüklenemedi.");
-                setGameState('finished');
+                setGameState('error');
             } else {
                 setQuestionsEasy(questions.easy);
                 setQuestionsHard(questions.hard);
@@ -785,9 +785,8 @@ function CarkifelekGameClient() {
 
         const timer = setInterval(() => {
             setTimeLeft((prev) => {
-                if (prev === null || prev <= 0) {
+                if (prev === null || prev <= 1) {
                     clearInterval(timer);
-                    handleTimeout();
                     return 0;
                 }
                 return prev - 1;
@@ -796,6 +795,13 @@ function CarkifelekGameClient() {
 
         return () => clearInterval(timer);
     }, [gameState, currentQuestion]);
+
+    useEffect(() => {
+        if (gameState === 'question' && timeLeft === 0 && !feedback) {
+            handleTimeout();
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [gameState, timeLeft, feedback]);
 
     const handleStartGame = (mode: 'single' | 'team', count: number = 2) => {
         setGameMode(mode);
@@ -1015,6 +1021,28 @@ function CarkifelekGameClient() {
         return (
             <div className="flex h-screen items-center justify-center bg-slate-950 text-white">
                 <Loader2 className="h-14 w-14 animate-spin text-purple-500" />
+            </div>
+        );
+    }
+
+    if (gameState === 'error') {
+        return (
+            <div className="flex h-screen items-center justify-center bg-slate-950 text-white p-4">
+                <div className="max-w-md w-full rounded-3xl bg-slate-900 border border-white/10 p-6 sm:p-8 text-center shadow-2xl space-y-4">
+                    <div className="mx-auto w-14 h-14 rounded-2xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center">
+                        <X className="w-7 h-7 text-rose-400" />
+                    </div>
+                    <h2 className="text-xl font-black">Sorular Yüklenemedi</h2>
+                    <p className="text-sm text-slate-300">{error || 'Bu konu için uygun soru bulunamadı.'}</p>
+                    <div className="flex flex-col sm:flex-row gap-2.5 pt-2 justify-center">
+                        <Button onClick={() => window.location.reload()} className="bg-purple-600 hover:bg-purple-500 text-white font-bold">
+                            Tekrar Dene
+                        </Button>
+                        <Button variant="outline" onClick={() => router.push(backUrl)} className="bg-transparent border-white/20 text-white hover:bg-white/10">
+                            <ArrowLeft className="mr-2 h-4 w-4" /> Geri Dön
+                        </Button>
+                    </div>
+                </div>
             </div>
         );
     }

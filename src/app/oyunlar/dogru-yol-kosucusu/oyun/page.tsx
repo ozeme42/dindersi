@@ -333,7 +333,7 @@ function DoğruYolBoard({
                                 "text-[10px] sm:text-xs font-black uppercase px-2.5 py-0.5 rounded-full border",
                                 lane === 0 ? "bg-white text-slate-950 border-white" : "bg-black/50 text-slate-300 border-slate-700"
                             )}>
-                                [A] SOL ŞERİT
+                                {isPlayer1 ? "[A] SOL ŞERİT" : "[←] SOL ŞERİT"}
                             </span>
                             {lane === 0 && <span className="text-[10px] font-black text-cyan-300">★ SEÇİLDİ</span>}
                         </div>
@@ -364,7 +364,7 @@ function DoğruYolBoard({
                                 "text-[10px] sm:text-xs font-black uppercase px-2.5 py-0.5 rounded-full border",
                                 lane === 1 ? "bg-white text-slate-950 border-white" : "bg-black/50 text-slate-300 border-slate-700"
                             )}>
-                                [B] SAĞ ŞERİT
+                                {isPlayer1 ? "[D] SAĞ ŞERİT" : "[→] SAĞ ŞERİT"}
                             </span>
                             {lane === 1 && <span className="text-[10px] font-black text-cyan-300">★ SEÇİLDİ</span>}
                         </div>
@@ -438,7 +438,9 @@ function DoğruYolBoard({
                             "text-[10px] sm:text-xs font-black uppercase px-2 py-0.5 rounded-md",
                             lane === 0 ? "bg-black/40 text-white" : "bg-slate-800/80 text-slate-300"
                         )}>
-                            {lane === 0 ? "✓ [A] SOL ŞERİT" : "◀ [A] SOL ŞERİT"}
+                            {isPlayer1
+                                ? (lane === 0 ? "✓ [A] SOL ŞERİT" : "◀ [A] SOL ŞERİT")
+                                : (lane === 0 ? "✓ [←] SOL ŞERİT" : "◀ [←] SOL ŞERİT")}
                         </span>
                         <span className="font-extrabold text-xs sm:text-sm md:text-base leading-tight truncate w-full px-1">
                             {currentGate.leftOption}
@@ -476,7 +478,9 @@ function DoğruYolBoard({
                             "text-[10px] sm:text-xs font-black uppercase px-2 py-0.5 rounded-md",
                             lane === 1 ? "bg-black/40 text-white" : "bg-slate-800/80 text-slate-300"
                         )}>
-                            {lane === 1 ? "SAĞ ŞERİT [B] ✓" : "SAĞ ŞERİT [B] ▶"}
+                            {isPlayer1
+                                ? (lane === 1 ? "SAĞ ŞERİT [D] ✓" : "SAĞ ŞERİT [D] ▶")
+                                : (lane === 1 ? "SAĞ ŞERİT [→] ✓" : "SAĞ ŞERİT [→] ▶")}
                         </span>
                         <span className="font-extrabold text-xs sm:text-sm md:text-base leading-tight truncate w-full px-1">
                             {currentGate.rightOption}
@@ -783,8 +787,6 @@ function GameContent() {
         const interval = setInterval(() => {
             setDistanceProgress(prev => {
                 if (prev <= STEP * 1.5) {
-                    clearInterval(interval);
-                    handleGatePass();
                     return 0;
                 }
                 return Math.max(0, prev - STEP);
@@ -792,7 +794,13 @@ function GameContent() {
         }, INTERVAL_MS);
 
         return () => clearInterval(interval);
-    }, [gameState, questionIndex, handleGatePass]);
+    }, [gameState, questionIndex]);
+
+    useEffect(() => {
+        if (gameState === 'playing' && distanceProgress <= 0 && currentGate && !isPassingRef.current) {
+            handleGatePass();
+        }
+    }, [gameState, distanceProgress, currentGate, handleGatePass]);
 
     // Skor Kaydı (Bireysel)
     const handleSaveAndExit = async () => {
@@ -832,7 +840,8 @@ function GameContent() {
         );
     }
 
-    const isFinished = gameState === 'gameover';
+    const isSoloGameOver = gameState === 'gameover';
+    const isFinished = gameState === 'gameover' || gameState === 'win';
 
     return (
         <WordwallShell
@@ -846,7 +855,7 @@ function GameContent() {
             fitToScreen={true}
             contentClassName="w-full h-full min-h-0 overflow-hidden relative select-none touch-none p-0 flex flex-col"
         >
-            {isFinished ? (
+            {isSoloGameOver ? (
                 <div className="w-full max-w-xl mx-auto my-auto animate-in zoom-in-95 duration-300">
                     <GameEndScreen
                         score={p1Scores}

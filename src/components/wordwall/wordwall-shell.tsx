@@ -52,6 +52,7 @@ export function WordwallShell({
     maxLives = 3,
     timeLeft,
     maxTime,
+    timerMode = 'countdown',
     onTimeUp,
     onBack,
     backUrl,
@@ -168,7 +169,7 @@ export function WordwallShell({
         return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
     };
 
-    const isTimeUrgent = timeLeft !== undefined && timeLeft <= 5 && timeLeft > 0;
+    const isTimeUrgent = timerMode !== 'countup' && timeLeft !== undefined && timeLeft <= 5 && timeLeft > 0;
 
     return (
         <WordwallContext.Provider value={{ theme, themeId, setThemeId: handleSelectTheme, soundEnabled, toggleSound, isFullscreen, toggleFullscreen }}>
@@ -227,7 +228,7 @@ export function WordwallShell({
                         )}>
                             <span className="opacity-75 text-[10px] sm:text-xs">Soru</span>
                             <span className={cn("font-mono font-black", isFullscreen ? "text-xs sm:text-sm" : "text-sm sm:text-base")}>
-                                {currentQuestionIndex + 1} / {totalQuestions}
+                                {Math.min(totalQuestions, currentQuestionIndex + 1)} / {totalQuestions}
                             </span>
                         </div>
                     )}
@@ -364,7 +365,7 @@ export function WordwallShell({
                 <div className={cn("w-full overflow-hidden flex-shrink-0", isFullscreen ? "h-0.5 sm:h-1" : "h-1 sm:h-1.5", theme.progressTrack)}>
                     <div
                         className={cn("h-full transition-all duration-300", theme.progressBar)}
-                        style={{ width: `${((currentQuestionIndex + 1) / totalQuestions) * 100}%` }}
+                        style={{ width: `${Math.min(100, ((currentQuestionIndex + 1) / totalQuestions) * 100)}%` }}
                     />
                 </div>
             )}
@@ -410,7 +411,7 @@ export function WordwallShell({
                                         title={t.description}
                                     >
                                         <span>{t.icon}</span>
-                                        <span className="hidden xs:inline">{t.name}</span>
+                                        <span className="hidden sm:inline">{t.name}</span>
                                     </button>
                                 );
                             })}

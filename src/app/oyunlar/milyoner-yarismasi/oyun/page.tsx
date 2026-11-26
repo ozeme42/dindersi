@@ -470,7 +470,9 @@ function MilyonerGame() {
     const usePhone = () => {
         if (!lifelines.phone || !questions[qIndex]) return;
         const currentQ = questions[qIndex];
-        const suggestion = Math.random() < 0.8 ? currentQ.correctAnswer : currentQ.options?.[Math.floor(Math.random() * 4)];
+        const opts = currentQ.options || [];
+        const fallbackOpt = opts.length > 0 ? opts[Math.floor(Math.random() * opts.length)] : currentQ.correctAnswer;
+        const suggestion = Math.random() < 0.8 ? currentQ.correctAnswer : fallbackOpt;
 
         setModalContent({
             title: "Telefon Jokeri",
@@ -483,25 +485,27 @@ function MilyonerGame() {
     const useAudience = () => {
         if (!lifelines.audience || !questions[qIndex]) return;
         const currentQ = questions[qIndex];
-        const correct = currentQ.correctAnswer;
+        const correct = currentQ.correctAnswer || '';
         const options = currentQ.options || [];
         const percentages: { [key: string]: number } = {};
         let remaining = 100;
-        
-        percentages[correct!] = Math.floor(Math.random() * 30) + 40;
-        remaining -= percentages[correct!];
-        
+
         const wrongOptions = options.filter(opt => opt !== correct);
-        const firstWrongShare = Math.floor(Math.random() * remaining);
-        percentages[wrongOptions[0]] = firstWrongShare;
-        remaining -= firstWrongShare;
-        
-        const secondWrongShare = Math.floor(Math.random() * remaining);
-        percentages[wrongOptions[1]] = secondWrongShare;
-        remaining -= secondWrongShare;
-        
-        if (wrongOptions[2]) {
-            percentages[wrongOptions[2]] = remaining;
+        if (wrongOptions.length === 0) {
+            percentages[correct] = 100;
+        } else {
+            percentages[correct] = Math.floor(Math.random() * 30) + 45;
+            remaining -= percentages[correct];
+
+            wrongOptions.forEach((wrongOpt, idx) => {
+                if (idx === wrongOptions.length - 1) {
+                    percentages[wrongOpt] = Math.max(0, remaining);
+                } else {
+                    const share = Math.floor(Math.random() * Math.max(0, remaining + 1));
+                    percentages[wrongOpt] = share;
+                    remaining -= share;
+                }
+            });
         }
 
         setModalContent({
@@ -548,7 +552,7 @@ function MilyonerGame() {
         <WordwallShell
             title="Kim 1000 Puan İster?"
             subtitle={topicName}
-            currentQuestionIndex={qIndex + 1}
+            currentQuestionIndex={qIndex}
             totalQuestions={questions.length}
             score={currentPrize}
             backUrl={backUrl}

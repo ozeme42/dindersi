@@ -521,7 +521,7 @@ function IndividualCompetitionComponent() {
                                 <ArrowLeft className="mr-2 h-4 w-4" /> Kuruluma Dön
                             </Link>
                         </Button>
-                        <Button asChild variant="outline" className="w-full sm:w-auto border-white/10 text-slate-300 hover:text-white rounded-xl px-5 h-11">
+                        <Button asChild variant="outline" className="w-full sm:w-auto bg-transparent border-white/10 text-slate-300 hover:text-white hover:bg-white/10 rounded-xl px-5 h-11">
                             <Link href="/teacher/smartboard">
                                 <Home className="mr-2 h-4 w-4" /> Akıllı Tahta
                             </Link>
@@ -544,7 +544,7 @@ function IndividualCompetitionComponent() {
                         <p className="text-slate-400 mt-1">Sanal öğrencileri seç ve bireysel yarıştır.</p>
                     </div>
                     <div className="flex items-center gap-2">
-                        <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white">
+                        <Button asChild variant="outline" className="bg-transparent border-white/10 text-slate-300 hover:text-white hover:bg-white/10">
                             <Link href="/teacher/smartboard/bireysel"><ArrowLeft className="mr-2 h-4 w-4"/> Kuruluma Dön</Link>
                         </Button>
                         <Button asChild variant="ghost" className="text-slate-400 hover:text-white hover:bg-white/10">
@@ -818,7 +818,7 @@ function IndividualCompetitionComponent() {
                         <Button size="lg" className="h-14 px-8 text-lg font-bold bg-white text-slate-900 hover:bg-slate-200" onClick={() => window.location.reload()}>
                             <Repeat className="mr-2 h-5 w-5"/> Tekrar Oyna
                         </Button>
-                        <Button asChild size="lg" variant="outline" className="h-14 px-8 text-lg border-white/10 text-slate-300 hover:text-white">
+                        <Button asChild size="lg" variant="outline" className="h-14 px-8 text-lg bg-transparent border-white/10 text-slate-300 hover:text-white hover:bg-white/10">
                             <Link href="/teacher/smartboard"><Home className="mr-2 h-5 w-5"/> Çıkış</Link>
                         </Button>
                     </CardFooter>

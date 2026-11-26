@@ -81,11 +81,17 @@ export function SmartboardLeaderboardClientPage() {
             const gradeVal = targetClassName.match(/\d+/)?.[0] || '';
             filtered = filtered.filter(player => {
                 const pc = (player.class || '').trim().toLowerCase();
-                return pc.includes(targetClassName) || (gradeVal && pc.startsWith(gradeVal));
+                const pGrade = pc.match(/\d+/)?.[0] || '';
+                return gradeVal ? pGrade === gradeVal : pc.includes(targetClassName);
             });
         }
         if (branchFilter !== 'all' && classFilter !== 'all' && selectedClassData) {
-            filtered = filtered.filter(player => (player.class || '').toLowerCase().includes(branchFilter.toLowerCase()));
+            const normBranch = branchFilter.trim().toLowerCase();
+            filtered = filtered.filter(player => {
+                const pc = (player.class || '').trim().toLowerCase();
+                const tokens = pc.split(/[-/\s.]+/).map(p => p.trim()).filter(Boolean);
+                return tokens[1] === normBranch || tokens[tokens.length - 1] === normBranch || pc === normBranch;
+            });
         }
         return filtered;
     }, [leaderboardData, classFilter, branchFilter, selectedClassData]);

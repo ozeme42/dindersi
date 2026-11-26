@@ -45,6 +45,7 @@ function TornadoGame() {
     const [isProcessing, setIsProcessing] = useState(false);
     const [cezaliGruplar, setCezaliGruplar] = useState<Set<string>>(new Set());
     const [openedQuestion, setOpenedQuestion] = useState<{ number: number; question: Question; } | null>(null);
+    const answeredQuestionRef = useRef(false);
     const [mesaj, setMesaj] = useState<{metin: string, renk: string} | null>(null);
     const [winner, setWinner] = useState<string | null>(null);
 
@@ -127,6 +128,7 @@ function TornadoGame() {
     }, [GRUPLAR, siraIndeksi, siraDegistir, toast]);
     
      const handleAnswerQuestion = useCallback((questionNumber: number, isCorrect: boolean, scoreChange: number) => {
+        answeredQuestionRef.current = true;
         setOpenedQuestion(null);
         
         setPuanlar(prevPuanlar => {
@@ -150,6 +152,7 @@ function TornadoGame() {
         setAcilanKutular(prev => new Set(prev).add(kutucukNo + 1));
 
         if (icerik.type === 'soru') {
+            answeredQuestionRef.current = false;
             setOpenedQuestion({ number: kutucukNo + 1, question: icerik.data });
         } else {
             ozelKutuEtkisiUygula(icerik);
@@ -183,6 +186,11 @@ function TornadoGame() {
         setSiraIndeksi(0);
         setAcilanKutular(new Set());
         setCezaliGruplar(new Set());
+        setOpenedQuestion(null);
+        setMesaj(null);
+        setWinner(null);
+        setIsProcessing(false);
+        answeredQuestionRef.current = false;
         setGameState('playing');
     }, [soruBankasi, GRUPLAR]);
 
@@ -224,10 +232,11 @@ function TornadoGame() {
     }, [isLoading, error, gameState, soruBankasi, oyunuBaslat]);
     
      useEffect(() => {
-        if (acilanKutular.size >= KUTU_SAYISI) {
+        if (gameState === 'playing' && acilanKutular.size >= KUTU_SAYISI && !openedQuestion && !mesaj && !isProcessing) {
             handleEndGame();
         }
-    }, [acilanKutular, KUTU_SAYISI]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [gameState, acilanKutular, openedQuestion, mesaj, isProcessing]);
     
     const handleEndGame = () => {
         const sortedScores = Object.entries(puanlar).sort(([, a], [, b]) => b - a);
@@ -250,10 +259,10 @@ function TornadoGame() {
                     <AlertTitle>Hata!</AlertTitle>
                     <AlertDescription>{error}</AlertDescription>
                      <div className="mt-4 flex gap-3">
-                        <Button asChild variant="outline">
+                        <Button asChild variant="outline" className="bg-transparent border-white/20 text-slate-200 hover:bg-white/10">
                             <Link href="/teacher/smartboard/tornado"><ArrowLeft className="mr-2 h-4 w-4"/> Kuruluma Dön</Link>
                         </Button>
-                        <Button asChild variant="outline">
+                        <Button asChild variant="outline" className="bg-transparent border-white/20 text-slate-200 hover:bg-white/10">
                             <Link href="/teacher/smartboard"><Home className="mr-2 h-4 w-4"/> Akıllı Tahta Menüsü</Link>
                         </Button>
                     </div>
@@ -285,8 +294,8 @@ function TornadoGame() {
                     </CardContent>
                     <CardFooter className="flex-col sm:flex-row justify-center gap-3">
                         <Button size="lg" onClick={oyunuBaslat} className="bg-cyan-600 hover:bg-cyan-500 font-bold"><Repeat className="mr-2 h-5 w-5"/> Tekrar Oyna</Button>
-                        <Button asChild variant="outline" size="lg"><Link href="/teacher/smartboard/tornado"><ArrowLeft className="mr-2 h-5 w-5"/> Kuruluma Dön</Link></Button>
-                        <Button asChild variant="outline" size="lg"><Link href="/teacher/smartboard"><Home className="mr-2 h-5 w-5"/> Menü</Link></Button>
+                        <Button asChild variant="outline" size="lg" className="bg-transparent border-slate-300 dark:border-white/20"><Link href="/teacher/smartboard/tornado"><ArrowLeft className="mr-2 h-5 w-5"/> Kuruluma Dön</Link></Button>
+                        <Button asChild variant="outline" size="lg" className="bg-transparent border-slate-300 dark:border-white/20"><Link href="/teacher/smartboard"><Home className="mr-2 h-5 w-5"/> Menü</Link></Button>
                     </CardFooter>
                 </Card>
             </div>
@@ -342,7 +351,13 @@ function TornadoGame() {
                 </div>
             </div>
 
-            <div id="puan-durumu-alani" className={`grid grid-cols-2 md:grid-cols-${takimSayisi} gap-2 mb-2`}>
+            <div
+                id="puan-durumu-alani"
+                className={cn(
+                    "grid grid-cols-2 gap-2 mb-2",
+                    takimSayisi === 3 ? "md:grid-cols-3" : takimSayisi >= 4 ? "md:grid-cols-4" : "md:grid-cols-2"
+                )}
+            >
                 {GRUPLAR.map((grup, index) => {
                     const renkler = ['#3182ce', '#e53e3e', '#38a169', '#d69e2e'];
                     const isActive = GRUPLAR[siraIndeksi] === grup && !cezaliGruplar.has(grup);
@@ -398,14 +413,21 @@ function TornadoGame() {
                     isOpen={!!openedQuestion}
                     onClose={() => {
                         setOpenedQuestion(null);
-                        setIsProcessing(false); 
-                        siraDegistir();
+                        setIsProcessing(false);
                     }}
                     questionData={openedQuestion}
                     onAnswer={handleAnswerQuestion}
                     timerDuration={15}
-                    pointsConfig={{ 'Kolay': 10, 'Orta': 20, 'Zor': 30 }}
-                    penaltyConfig={{ 'Kolay': 5, 'Orta': 10, 'Zor': 15 }}
+                    pointsConfig={{
+                        mcq: { Kolay: 10, Orta: 20, Zor: 30 },
+                        tf: { Kolay: 10, Orta: 15, Zor: 20 },
+                        fitb: { Kolay: 15, Orta: 25, Zor: 35 },
+                    }}
+                    penaltyConfig={{
+                        mcq: { Kolay: 5, Orta: 10, Zor: 15 },
+                        tf: { Kolay: 5, Orta: 5, Zor: 10 },
+                        fitb: { Kolay: 5, Orta: 10, Zor: 15 },
+                    }}
                     isFullscreen={false}
                 />
             )}

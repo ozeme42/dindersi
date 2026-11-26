@@ -240,7 +240,7 @@ function YazilacaklarDisplayPage() {
                     <h2 className="text-2xl font-bold text-slate-200">{topic?.title || 'Kavram Panosu'}</h2>
                     <p className="text-slate-400 text-base">Bu konu için henüz kayıtlı kavram veya özet not bulunamadı.</p>
                     <div className="flex justify-center gap-3 pt-2">
-                        <Button asChild variant="outline" className="border-white/10 text-slate-300">
+                        <Button asChild variant="outline" className="bg-transparent border-white/10 text-slate-300 hover:bg-white/10">
                             <Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4" /> Geri</Link>
                         </Button>
                         <Button asChild className="bg-purple-600 hover:bg-purple-500 text-white font-bold">
@@ -370,7 +370,7 @@ function YazilacaklarDisplayPage() {
                         >
                             <ArrowLeft className="mr-2 h-5 w-5"/> Geri
                         </Button>
-                         <Button variant="outline" asChild className="border-white/10 hover:bg-white/10 hover:text-white text-slate-300 hidden sm:flex">
+                         <Button variant="outline" asChild className="bg-transparent border-white/10 hover:bg-white/10 hover:text-white text-slate-300 hidden sm:flex">
                             <Link href={studioUrl}>
                                 <Wand2 className="mr-2 h-5 w-5" /> Stüdyoda Düzenle
                             </Link>

@@ -684,7 +684,7 @@ function TeamCompetitionComponent() {
                                 <ArrowLeft className="mr-2 h-4 w-4" /> Kuruluma Dön
                             </Link>
                         </Button>
-                        <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white">
+                        <Button asChild variant="outline" className="bg-transparent border-white/10 text-slate-300 hover:text-white hover:bg-white/10">
                             <Link href="/teacher/smartboard">
                                 <Home className="mr-2 h-4 w-4" /> Akıllı Tahta Menüsü
                             </Link>
@@ -707,10 +707,10 @@ function TeamCompetitionComponent() {
                         <p className="text-slate-400 mt-1">Sanal öğrencileri seçin ve takımlara dağıtın.</p>
                     </div>
                     <div className="flex gap-3">
-                        <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:bg-white/10">
+                        <Button asChild variant="outline" className="bg-transparent border-white/10 text-slate-300 hover:bg-white/10">
                             <Link href="/teacher/smartboard"><Home className="mr-2 h-4 w-4"/> Akıllı Tahta</Link>
                         </Button>
-                        <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:bg-white/10">
+                        <Button asChild variant="outline" className="bg-transparent border-white/10 text-slate-300 hover:bg-white/10">
                             <Link href="/teacher/smartboard/takim"><ArrowLeft className="mr-2 h-4 w-4"/> Seçime Dön</Link>
                         </Button>
                     </div>
@@ -947,7 +947,7 @@ function TeamCompetitionComponent() {
                     </div>
 
                     <div className="flex gap-2">
-                        <Button variant="outline" size="sm" onClick={handleRandomQuestion} className="border-white/10 text-slate-300 hover:bg-white/10">
+                        <Button variant="outline" size="sm" onClick={handleRandomQuestion} className="bg-transparent border-white/10 text-slate-300 hover:bg-white/10">
                             <Shuffle className="mr-2 h-4 w-4" /> Rastgele Soru
                         </Button>
                         <Button 
@@ -1049,7 +1049,7 @@ function TeamCompetitionComponent() {
                         <Button size="lg" className="h-14 px-8 text-lg font-bold bg-white text-slate-900 hover:bg-slate-200" onClick={() => window.location.reload()}>
                             <Repeat className="mr-2 h-5 w-5"/> Tekrar Oyna
                         </Button>
-                        <Button asChild size="lg" variant="outline" className="h-14 px-8 text-lg border-white/10 text-slate-300 hover:text-white">
+                        <Button asChild size="lg" variant="outline" className="h-14 px-8 text-lg bg-transparent border-white/10 text-slate-300 hover:text-white hover:bg-white/10">
                             <Link href="/teacher/smartboard"><Home className="mr-2 h-5 w-5"/> Menüye Dön</Link>
                         </Button>
                     </CardFooter>

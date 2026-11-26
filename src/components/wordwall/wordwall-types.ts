@@ -69,6 +69,7 @@ export interface WordwallShellProps {
     maxLives?: number;
     timeLeft?: number;
     maxTime?: number;
+    timerMode?: 'countdown' | 'countup';
     onTimeUp?: () => void;
     onBack?: () => void;
     backUrl?: string;

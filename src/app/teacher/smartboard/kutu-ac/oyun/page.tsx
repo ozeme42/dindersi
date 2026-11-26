@@ -73,6 +73,14 @@ function KutuAcGame() {
   const [showFinishConfirm, setShowFinishConfirm] = useState(false);
   
   const mainContentRef = useRef<HTMLDivElement>(null);
+  const answeredBoxRef = useRef(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const handleFsChange = () => setIsFullscreen(Boolean(document.fullscreenElement));
+    document.addEventListener('fullscreenchange', handleFsChange);
+    return () => document.removeEventListener('fullscreenchange', handleFsChange);
+  }, []);
 
   // Konfeti tetikleyici
   useEffect(() => {
@@ -174,6 +182,7 @@ function KutuAcGame() {
     setOpenedBoxes(prev => new Set(prev).add(boxIndex + 1));
 
     if (content && content.type === 'soru') {
+      answeredBoxRef.current = false;
       setOpenedQuestion({ number: boxIndex + 1, question: content.data });
     } else {
       handleNextTurn();
@@ -181,6 +190,7 @@ function KutuAcGame() {
   };
   
   const handleAnswerQuestion = useCallback((questionNumber: number, isCorrect: boolean, scoreChange: number) => {
+    answeredBoxRef.current = true;
     setOpenedQuestion(null);
     
     if (isCorrect) {
@@ -193,9 +203,16 @@ function KutuAcGame() {
   }, [activePlayerIndex, handleNextTurn]);
 
   const handleModalClose = useCallback(() => {
+    if (!answeredBoxRef.current && openedQuestion) {
+      setOpenedBoxes(prev => {
+        const next = new Set(prev);
+        next.delete(openedQuestion.number);
+        return next;
+      });
+    }
     setOpenedQuestion(null);
     setIsProcessing(false); 
-  }, []);
+  }, [openedQuestion]);
 
   const adjustScore = (playerIndex: number, delta: number) => {
     setPlayers(prev => prev.map((p, idx) => 
@@ -490,7 +507,7 @@ function KutuAcGame() {
 
                <div className="flex justify-center gap-4">
                  <Link href={backUrl}>
-                    <Button variant="outline" size="lg" className="h-14 border-white/10 hover:bg-white/10 text-slate-300 font-bold text-base rounded-xl px-6">
+                    <Button variant="outline" size="lg" className="h-14 bg-transparent border-white/10 hover:bg-white/10 text-slate-300 font-bold text-base rounded-xl px-6">
                         <Home className="mr-2 h-5 w-5" /> Ana Menü
                     </Button>
                  </Link>
@@ -510,7 +527,7 @@ function KutuAcGame() {
       {/* Soru Modalı */}
       {openedQuestion && (
         <QuestionDialog
-          isFullscreen={false}
+          isFullscreen={isFullscreen}
           isOpen={!!openedQuestion}
           onClose={handleModalClose}
           questionData={openedQuestion}

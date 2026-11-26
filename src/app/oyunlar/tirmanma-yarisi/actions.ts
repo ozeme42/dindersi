@@ -1,4 +1,6 @@
 
+'use server';
+
 import type { Question, GetQuizInput } from "@/lib/types";
 import { getQuestionsFromBank, getStaticGameData } from "@/lib/quiz-actions";
 import { isDefinitionValidAndClean } from '@/lib/quiz-validation';

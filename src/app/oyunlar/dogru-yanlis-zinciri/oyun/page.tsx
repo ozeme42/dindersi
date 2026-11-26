@@ -435,7 +435,7 @@ function TrueFalseChainGame() {
         <WordwallShell
             title="Seri (Doğru / Yanlış)"
             subtitle={topicName}
-            currentQuestionIndex={currentQuestionIndex + 1}
+            currentQuestionIndex={currentQuestionIndex}
             totalQuestions={questions.length}
             score={score}
             timeLeft={timeLeft}

@@ -184,8 +184,8 @@ function ClimbingDuelBoard({
     user,
     router,
 }: {
-    gameState: 'loading' | 'home' | 'playing' | 'win';
-    setGameState: (s: 'loading' | 'home' | 'playing' | 'win') => void;
+    gameState: 'loading' | 'home' | 'playing' | 'win' | 'error';
+    setGameState: (s: 'loading' | 'home' | 'playing' | 'win' | 'error') => void;
     scores: { p1: number; p2: number };
     p1Question: Question | null;
     p2Question: Question | null;
@@ -439,10 +439,11 @@ function ClimbingDuelGameContent() {
     const topicName = searchParams.get('topicName') || searchParams.get('title') || undefined;
 
     // --- STATE ---
-    const [gameState, setGameState] = useState<'loading' | 'home' | 'playing' | 'win'>('loading');
+    const [gameState, setGameState] = useState<'loading' | 'home' | 'playing' | 'win' | 'error'>('loading');
     const [questions, setQuestions] = useState<Question[]>([]);
     const [error, setError] = useState<string|null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const isRaceEndedRef = useRef(false);
 
     // Oyun Mantığı
     const [scores, setScores] = useState({ p1: 0, p2: 0 });
@@ -509,7 +510,7 @@ function ClimbingDuelGameContent() {
 
             if (resultQuestions.length < 5) {
                 setError("Bu oyun için en az 5 soru gerekli.");
-                setGameState('loading');
+                setGameState('error');
             } else {
                 setQuestions(resultQuestions);
                 setGameState('home');
@@ -547,6 +548,7 @@ function ClimbingDuelGameContent() {
         if (questions.length < 1) return;
         setScores({ p1: 0, p2: 0 });
         setConfetti([]);
+        isRaceEndedRef.current = false;
         setGameState('playing');
         initAudio();
         askQuestion(1);
@@ -555,6 +557,7 @@ function ClimbingDuelGameContent() {
     }, [questions]);
 
     const checkAnswer = (player: 1 | 2, choice: string) => {
+        if (gameState !== 'playing' || isRaceEndedRef.current) return;
         const question = player === 1 ? p1Question : p2Question;
         if (!question) return;
 
@@ -601,6 +604,8 @@ function ClimbingDuelGameContent() {
     };
 
     const celebrateWin = (player: 1 | 2) => {
+        if (isRaceEndedRef.current) return;
+        isRaceEndedRef.current = true;
         sfxWin();
         triggerConfetti();
         setWinnerText(player === 1 ? "Mavi Takım" : "Kırmızı Takım");
@@ -619,7 +624,19 @@ function ClimbingDuelGameContent() {
     };
 
     if (isLoading) return <div className="h-screen w-full flex items-center justify-center bg-slate-900 text-white flex-col gap-4"><Loader2 className="w-16 h-16 animate-spin text-cyan-400" /><span>Oyun Yükleniyor...</span></div>;
-    if (error) return <div className="h-screen w-full flex items-center justify-center p-8 bg-red-950 text-red-200 text-center text-xl flex-col gap-4"><div>{error}</div><Button onClick={() => window.location.reload()} variant="outline" className="text-black"><RefreshCw className="mr-2 h-4 w-4"/> Yenile</Button></div>;
+    if (error) return (
+        <div className="h-screen w-full flex items-center justify-center p-8 bg-red-950 text-red-100 text-center text-xl flex-col gap-4">
+            <div className="max-w-md font-semibold">{error}</div>
+            <div className="flex items-center gap-3">
+                <Button onClick={() => window.location.reload()} className="bg-white text-slate-900 hover:bg-slate-200">
+                    <RefreshCw className="mr-2 h-4 w-4"/> Yenile
+                </Button>
+                <Button onClick={() => router.push(backUrl)} variant="outline" className="bg-transparent border-white/30 text-white hover:bg-white/10">
+                    Geri Dön
+                </Button>
+            </div>
+        </div>
+    );
 
     const isFinished = gameState === 'win';
 
