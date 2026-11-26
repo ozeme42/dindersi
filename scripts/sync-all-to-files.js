@@ -177,42 +177,107 @@ async function syncAll() {
   let flowsCount = 0;
   let ozetCount = 0;
   let yazilacaklarCount = 0;
+  const topicFlags = new Map();
+  const unitFlags = new Map();
 
   try {
     const coursesSnap = await getDocs(collection(db, 'courses'));
     for (const courseDoc of coursesSnap.docs) {
       const unitsSnap = await getDocs(collection(db, 'courses', courseDoc.id, 'units'));
       for (const unitDoc of unitsSnap.docs) {
+        const unitData = unitDoc.data();
+        const unitId = unitDoc.id;
+        const unitHasFlow = Array.isArray(unitData.steps) && unitData.steps.some(s => s?.isPublished !== false);
+        const unitHasOzet = !!(unitData.htmlContent && typeof unitData.htmlContent === 'string' && unitData.htmlContent.trim().length > 0);
+
+        if (Array.isArray(unitData.steps) && unitData.steps.length > 0) {
+          fs.writeFileSync(path.join(flowsDir, `${unitId}.json`), JSON.stringify(unitData.steps, null, 2), 'utf8');
+        }
+        if (unitHasOzet) {
+          fs.writeFileSync(path.join(ozetlerDir, `${unitId}.html`), unitData.htmlContent, 'utf8');
+        }
+        unitFlags.set(unitId, {
+          hasFlowContent: unitHasFlow,
+          hasUnitOzet: unitHasOzet,
+        });
+
         const topicsSnap = await getDocs(collection(db, 'courses', courseDoc.id, 'units', unitDoc.id, 'topics'));
         for (const topicDoc of topicsSnap.docs) {
           const data = topicDoc.data();
           const topicId = topicDoc.id;
 
           // 1. Ders Akışı (steps)
-          if (Array.isArray(data.steps) && data.steps.length > 0) {
+          const hasSteps = Array.isArray(data.steps) && data.steps.length > 0;
+          const hasPublishedFlow = Array.isArray(data.steps) && data.steps.some(s => s?.isPublished !== false);
+          if (hasSteps) {
             fs.writeFileSync(path.join(flowsDir, `${topicId}.json`), JSON.stringify(data.steps, null, 2), 'utf8');
             flowsCount++;
           }
 
           // 2. Özet HTML içeriği
-          if (data.htmlContent && typeof data.htmlContent === 'string' && data.htmlContent.trim().length > 0) {
+          const hasOzet = !!(data.htmlContent && typeof data.htmlContent === 'string' && data.htmlContent.trim().length > 0);
+          if (hasOzet) {
             fs.writeFileSync(path.join(ozetlerDir, `${topicId}.html`), data.htmlContent, 'utf8');
             ozetCount++;
           }
 
           // 3. Yazılacaklar / Notlar & Kavramlar
+          let hasYazilacaklar = false;
           if (data.writingContent && typeof data.writingContent === 'object') {
             const hasNotes = Array.isArray(data.writingContent.notes) && data.writingContent.notes.length > 0;
             const hasDefs = Array.isArray(data.writingContent.conceptDefinitions) && data.writingContent.conceptDefinitions.length > 0;
             if (hasNotes || hasDefs) {
               fs.writeFileSync(path.join(yazilacaklarDir, `${topicId}.json`), JSON.stringify(data.writingContent, null, 2), 'utf8');
               yazilacaklarCount++;
+              hasYazilacaklar = true;
             }
           }
+          if (!hasYazilacaklar && fs.existsSync(path.join(yazilacaklarDir, `${topicId}.json`))) {
+            hasYazilacaklar = true;
+          }
+
+          topicFlags.set(topicId, {
+            hasFlowContent: hasPublishedFlow,
+            hasOzetContent: hasOzet,
+            hasYazilacaklarContent: hasYazilacaklar,
+          });
         }
       }
     }
     console.log(`✅ ${flowsCount} ders akışı (flows), ${ozetCount} özet (ozetler) ve ${yazilacaklarCount} yazılacaklar dosyası güncellendi.`);
+
+    // manifest.json bayraklarını da senkronize et
+    const manifestPath = path.join(curriculumDir, 'manifest.json');
+    if (fs.existsSync(manifestPath)) {
+      const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+      let manifestModified = false;
+      for (const cg of manifest.classGroups || []) {
+        for (const c of cg.courses || []) {
+          for (const u of c.units || []) {
+            const uFlags = unitFlags.get(u.id);
+            if (uFlags) {
+              u.hasFlowContent = uFlags.hasFlowContent;
+              u.hasUnitOzet = uFlags.hasUnitOzet;
+              manifestModified = true;
+            }
+            for (const t of u.topics || []) {
+              const tFlags = topicFlags.get(t.id);
+              if (tFlags) {
+                t.hasFlowContent = tFlags.hasFlowContent;
+                t.hasOzetContent = tFlags.hasOzetContent;
+                t.hasYazilacaklarContent = tFlags.hasYazilacaklarContent;
+                manifestModified = true;
+              }
+            }
+          }
+        }
+      }
+      if (manifestModified) {
+        manifest.generatedAt = new Date().toISOString();
+        fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2), 'utf8');
+        console.log('✅ manifest.json bayrakları (hasFlowContent, hasOzetContent, hasYazilacaklarContent) güncellendi.');
+      }
+    }
   } catch (flowErr) {
     console.warn('⚠️ Ders akışları senkronize edilirken hata:', flowErr.message);
   }

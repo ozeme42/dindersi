@@ -686,7 +686,7 @@
                   "id": "MQMk9UpwHeh4cabJVNH6",
                   "title": "1. Allah’a Yaklaşmanın Yolu: İbadet",
                   "hasOzetContent": false,
-                  "hasFlowContent": false,
+                  "hasFlowContent": true,
                   "hasYazilacaklarContent": true,
                   "isPublished": true
                 },
@@ -1921,5 +1921,6 @@
         }
       ]
     }
-  ]
+  ],
+  "generatedAt": "2026-11-26T20:37:05.274Z"
 }

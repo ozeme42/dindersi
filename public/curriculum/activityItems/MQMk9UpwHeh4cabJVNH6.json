@@ -1,0 +1,332 @@
+[
+  {
+    "id": "concept_MQMk9UpwHeh4cabJVNH6_0",
+    "type": "concept",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "İbadet"
+    },
+    "updatedAt": "2026-11-26T20:02:17.282Z"
+  },
+  {
+    "id": "concept_MQMk9UpwHeh4cabJVNH6_1",
+    "type": "concept",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Salih Amel"
+    },
+    "updatedAt": "2026-11-26T20:02:17.282Z"
+  },
+  {
+    "id": "concept_MQMk9UpwHeh4cabJVNH6_2",
+    "type": "concept",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Namaz"
+    },
+    "updatedAt": "2026-11-26T20:02:17.282Z"
+  },
+  {
+    "id": "concept_MQMk9UpwHeh4cabJVNH6_3",
+    "type": "concept",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Oruç"
+    },
+    "updatedAt": "2026-11-26T20:02:17.282Z"
+  },
+  {
+    "id": "concept_MQMk9UpwHeh4cabJVNH6_4",
+    "type": "concept",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Zekât"
+    },
+    "updatedAt": "2026-11-26T20:02:17.282Z"
+  },
+  {
+    "id": "concept_MQMk9UpwHeh4cabJVNH6_5",
+    "type": "concept",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Hac"
+    },
+    "updatedAt": "2026-11-26T20:02:17.282Z"
+  },
+  {
+    "id": "concept_MQMk9UpwHeh4cabJVNH6_6",
+    "type": "concept",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Kurban"
+    },
+    "updatedAt": "2026-11-26T20:02:17.282Z"
+  },
+  {
+    "id": "concept_MQMk9UpwHeh4cabJVNH6_7",
+    "type": "concept",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Fitre"
+    },
+    "updatedAt": "2026-11-26T20:02:17.282Z"
+  },
+  {
+    "id": "concept_MQMk9UpwHeh4cabJVNH6_8",
+    "type": "concept",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Tevhit"
+    },
+    "updatedAt": "2026-11-26T20:02:17.282Z"
+  },
+  {
+    "id": "concept_MQMk9UpwHeh4cabJVNH6_9",
+    "type": "concept",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Hamt"
+    },
+    "updatedAt": "2026-11-26T20:02:17.282Z"
+  },
+  {
+    "id": "concept_MQMk9UpwHeh4cabJVNH6_10",
+    "type": "concept",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Rızık"
+    },
+    "updatedAt": "2026-11-26T20:02:17.282Z"
+  },
+  {
+    "id": "def_MQMk9UpwHeh4cabJVNH6_0",
+    "type": "definition",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "İbadet",
+      "definition": "Yüce Allah’ın insanlara emrettiği ve insanların O’na karşı yapmakla yükümlü oldukları; O’nu yüceltmek, sevgi ve saygıyla boyun eğmek amacıyla yapılan her türlü güzel davranış."
+    },
+    "updatedAt": "2026-11-26T20:02:17.283Z"
+  },
+  {
+    "id": "def_MQMk9UpwHeh4cabJVNH6_1",
+    "type": "definition",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Salih Amel",
+      "definition": "İslam’da rıza gözetilerek yapılan, sevap kazanmaya vesile olan her türlü iyi, doğru, faydalı iş ve yararlı fiil."
+    },
+    "updatedAt": "2026-11-26T20:02:17.283Z"
+  },
+  {
+    "id": "def_MQMk9UpwHeh4cabJVNH6_2",
+    "type": "definition",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Namaz",
+      "definition": "Akıl sağlığı yerinde ve ergenlik çağına gelmiş kişilerin günün belirli vakitlerinde yerine getirdiği, tüm ibadetlerin özü kabul edilen temel ibadet."
+    },
+    "updatedAt": "2026-11-26T20:02:17.283Z"
+  },
+  {
+    "id": "def_MQMk9UpwHeh4cabJVNH6_3",
+    "type": "definition",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Oruç",
+      "definition": "Tan yerinin ağarmasından güneşin batışına kadar geçen sürede, yeme ve içme gibi bazı fiziki ihtiyaçlardan uzak durarak gerçekleştirilen irade eğitimi."
+    },
+    "updatedAt": "2026-11-26T20:02:17.283Z"
+  },
+  {
+    "id": "def_MQMk9UpwHeh4cabJVNH6_4",
+    "type": "definition",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Zekât",
+      "definition": "Dinen zengin sayılan kişilerin, mallarının belli bir miktarını yılda bir defa ihtiyaç sahipleriyle paylaşması."
+    },
+    "updatedAt": "2026-11-26T20:02:17.283Z"
+  },
+  {
+    "id": "def_MQMk9UpwHeh4cabJVNH6_5",
+    "type": "definition",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Hac",
+      "definition": "Yılın belli bir vaktinde kutsal mekânların usulüne uygun şekilde ziyaret edilmesiyle gerçekleştirilen mali ve bedeni ibadet."
+    },
+    "updatedAt": "2026-11-26T20:02:17.283Z"
+  },
+  {
+    "id": "def_MQMk9UpwHeh4cabJVNH6_6",
+    "type": "definition",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Kurban",
+      "definition": "Belirli niteliklere sahip hayvanların, bayram günlerinde ibadet niyetiyle usulüne uygun olarak kesilmesi."
+    },
+    "updatedAt": "2026-11-26T20:02:17.284Z"
+  },
+  {
+    "id": "def_MQMk9UpwHeh4cabJVNH6_7",
+    "type": "definition",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Hamt",
+      "definition": "Sayısız lütuf ve güzellikler veren Yüce Yaratıcıyı övmek, yüceltmek ve O’na şükretmek."
+    },
+    "updatedAt": "2026-11-26T20:02:17.284Z"
+  },
+  {
+    "id": "def_MQMk9UpwHeh4cabJVNH6_8",
+    "type": "definition",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Fitre",
+      "definition": "Maddi durumu yerinde olanların, Ramazan ayında fakirlere vermekle yükümlü olduğu ve bu aya ulaşmanın duyduğu şükrün bir ifadesi olan sadaka türü."
+    },
+    "updatedAt": "2026-11-26T20:02:17.284Z"
+  },
+  {
+    "id": "def_MQMk9UpwHeh4cabJVNH6_9",
+    "type": "definition",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Tevhit",
+      "definition": "Yaratıcının bir ve tek olduğuna, O’ndan başka ilah bulunmadığına inanmak ve bu inancı esas almak."
+    },
+    "updatedAt": "2026-11-26T20:02:17.284Z"
+  },
+  {
+    "id": "def_MQMk9UpwHeh4cabJVNH6_10",
+    "type": "definition",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Rızık",
+      "definition": "Yaratıcının evrendeki tüm varlıklara bahşettiği; yenilen, içilen, giyilen ve maddi manevi yararlanılan her türlü nimet."
+    },
+    "updatedAt": "2026-11-26T20:02:17.284Z"
+  },
+  {
+    "id": "sentence_MQMk9UpwHeh4cabJVNH6_0",
+    "type": "sentence",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "İbadet yalnız Yüce Allah için yapılır."
+    },
+    "updatedAt": "2026-11-26T20:02:17.285Z"
+  },
+  {
+    "id": "sentence_MQMk9UpwHeh4cabJVNH6_1",
+    "type": "sentence",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "İnsanın yaratılış amacı Allah'a kulluk etmektir."
+    },
+    "updatedAt": "2026-11-26T20:02:17.285Z"
+  },
+  {
+    "id": "sentence_MQMk9UpwHeh4cabJVNH6_2",
+    "type": "sentence",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Namaz tüm ibadetlerin özü kabul edilir."
+    },
+    "updatedAt": "2026-11-26T20:02:17.285Z"
+  },
+  {
+    "id": "sentence_MQMk9UpwHeh4cabJVNH6_3",
+    "type": "sentence",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Oruç ibadeti insana sabrı öğretir."
+    },
+    "updatedAt": "2026-11-26T20:02:17.285Z"
+  },
+  {
+    "id": "sentence_MQMk9UpwHeh4cabJVNH6_4",
+    "type": "sentence",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Zekât zengin ile fakir arasında köprüdür."
+    },
+    "updatedAt": "2026-11-26T20:02:17.285Z"
+  },
+  {
+    "id": "sentence_MQMk9UpwHeh4cabJVNH6_5",
+    "type": "sentence",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Salih amel iyi ve faydalı iştir."
+    },
+    "updatedAt": "2026-11-26T20:02:17.285Z"
+  },
+  {
+    "id": "sentence_MQMk9UpwHeh4cabJVNH6_6",
+    "type": "sentence",
+    "topicId": "MQMk9UpwHeh4cabJVNH6",
+    "unitId": "T0dzieJJzUQjvvgpCf1N",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Kurban ibadeti teslimiyetin bir göstergesidir."
+    },
+    "updatedAt": "2026-11-26T20:02:17.285Z"
+  }
+]

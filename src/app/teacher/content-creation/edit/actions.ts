@@ -25,17 +25,33 @@ export async function updateTopicContent({
     htmlContent?: string;
 }) {
     try {
-        const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
-        
         // Firestore works best with plain objects, so we serialize the steps array.
         const plainSteps = JSON.parse(JSON.stringify(steps));
-        
-        await setDoc(topicRef, { 
+        const updatePayload = {
             steps: plainSteps,
             sourceText: sourceText || '',
             htmlContent: htmlContent || '',
             itemCount: plainSteps.length,
-        }, { merge: true });
+        };
+
+        // Prefer Admin SDK inside Server Actions so writes are not rejected by
+        // client-auth Firestore rules (request.auth == null on the server).
+        try {
+            const { getAdminDb } = await import('@/lib/firebase-admin');
+            const adminDb = getAdminDb();
+            await adminDb
+                .collection('courses')
+                .doc(courseId)
+                .collection('units')
+                .doc(unitId)
+                .collection('topics')
+                .doc(topicId)
+                .set(updatePayload, { merge: true });
+        } catch (adminErr) {
+            console.warn("Admin SDK write failed in updateTopicContent, falling back to client SDK:", adminErr);
+            const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
+            await setDoc(topicRef, updatePayload, { merge: true });
+        }
 
         // Statik dosya sistemine otomatik senkronizasyon (/curriculum/flows/{topicId}.json)
         try {
@@ -102,10 +118,6 @@ export async function updateTopicContent({
                                         if (htmlContent) t.hasOzetContent = true;
                                         modified = true;
                                     }
-                                }
-                                if (plainSteps.length > 0) {
-                                    u.hasFlowContent = true;
-                                    modified = true;
                                 }
                             }
                         }

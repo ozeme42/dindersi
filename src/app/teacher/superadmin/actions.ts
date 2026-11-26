@@ -341,12 +341,12 @@ function processCoursesForManifest(courseList: any[], units: any[], topics: any[
                 id: unit.id,
                 title: unit.title,
                 hasUnitOzet: !!unit.htmlContent,
-                hasFlowContent: (unit.steps || []).some((s:any) => s.isPublished),
+                hasFlowContent: (unit.steps || []).some((s:any) => s.isPublished !== false),
                 topics: unitTopics.map((t: any) => ({
                     id: t.id,
                     title: t.title,
                     hasOzetContent: !!t.htmlContent,
-                    hasFlowContent: (t.steps || []).some((s:any) => s.isPublished),
+                    hasFlowContent: (t.steps || []).some((s:any) => s.isPublished !== false),
                     hasYazilacaklarContent: (t.writingContent?.notes?.length || 0) > 0 
                 }))
             };

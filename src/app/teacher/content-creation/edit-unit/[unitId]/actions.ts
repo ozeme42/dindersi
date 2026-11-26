@@ -11,8 +11,6 @@ export async function updateUnitContent(courseId: string, unitId: string, data: 
             throw new Error("Ders veya Ünite ID'si eksik.");
         }
         
-        const unitRef = doc(db, `courses/${courseId}/units/${unitId}`);
-
         const dataToUpdate: any = {};
         if (data.title) {
             dataToUpdate.title = data.title;
@@ -30,7 +28,22 @@ export async function updateUnitContent(courseId: string, unitId: string, data: 
             dataToUpdate.sourceText = data.sourceText;
         }
 
-        await setDoc(unitRef, dataToUpdate, { merge: true });
+        // Prefer Admin SDK inside Server Actions so writes are not rejected by
+        // client-auth Firestore rules (request.auth == null on the server).
+        try {
+            const { getAdminDb } = await import('@/lib/firebase-admin');
+            const adminDb = getAdminDb();
+            await adminDb
+                .collection('courses')
+                .doc(courseId)
+                .collection('units')
+                .doc(unitId)
+                .set(dataToUpdate, { merge: true });
+        } catch (adminErr) {
+            console.warn("Admin SDK write failed in updateUnitContent, falling back to client SDK:", adminErr);
+            const unitRef = doc(db, `courses/${courseId}/units/${unitId}`);
+            await setDoc(unitRef, dataToUpdate, { merge: true });
+        }
 
         // Statik dosya senkronizasyonu
         try {

@@ -55,6 +55,54 @@ export async function clearFlowDataCache() {
     memoryCache = null;
 }
 
+/**
+ * Collects topic/unit IDs that have at least one published lesson step either on
+ * local disk (`public/curriculum/flows/*.json`) or directly in Firestore.
+ * Falls back silently so static/offline environments keep working with manifest.json.
+ */
+async function collectLiveFlowIds(): Promise<Set<string>> {
+    const flowIds = new Set<string>();
+
+    // 1. Local static flow files (fast disk check)
+    try {
+        const flowsDir = path.join(process.cwd(), 'public', 'curriculum', 'flows');
+        const entries = await fs.readdir(flowsDir);
+        for (const entry of entries) {
+            if (entry.endsWith('.json')) {
+                flowIds.add(entry.slice(0, -5));
+            }
+        }
+    } catch {
+        // Directory may not exist in all environments
+    }
+
+    // 2. Live Firestore steps check (catches newly saved flows before manifest sync)
+    try {
+        const { getAdminDb } = await import('@/lib/firebase-admin');
+        const adminDb = getAdminDb();
+        const [topicsSnap, unitsSnap] = await Promise.all([
+            adminDb.collectionGroup('topics').select('steps').get(),
+            adminDb.collectionGroup('units').select('steps').get(),
+        ]);
+
+        const recordDocsWithSteps = (docs: FirebaseFirestore.QueryDocumentSnapshot[]) => {
+            for (const docSnap of docs) {
+                const steps = docSnap.get('steps');
+                if (Array.isArray(steps) && steps.some((s: any) => s?.isPublished !== false)) {
+                    flowIds.add(docSnap.id);
+                }
+            }
+        };
+
+        recordDocsWithSteps(topicsSnap.docs);
+        recordDocsWithSteps(unitsSnap.docs);
+    } catch (error) {
+        console.warn("Live Firestore flow check skipped in getFlowData:", error);
+    }
+
+    return flowIds;
+}
+
 export async function getFlowData(): Promise<EnrichedClass[]> {
     const now = Date.now();
     if (memoryCache && (now - memoryCache.timestamp < CACHE_TTL_MS)) {
@@ -63,7 +111,10 @@ export async function getFlowData(): Promise<EnrichedClass[]> {
 
     try {
         const mPath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
-        const manifestContent = await fs.readFile(mPath, 'utf-8');
+        const [manifestContent, liveFlowIds] = await Promise.all([
+            fs.readFile(mPath, 'utf-8'),
+            collectLiveFlowIds(),
+        ]);
         const manifest = JSON.parse(manifestContent);
         
         const cleanClassGroups: EnrichedClass[] = (manifest.classGroups || [])
@@ -79,12 +130,12 @@ export async function getFlowData(): Promise<EnrichedClass[]> {
                         .map((u: any) => ({
                             id: u.id,
                             title: u.title,
-                            hasFlowContent: !!(u.hasFlowContent || (u.topics && u.topics.some((t: any) => t.hasFlowContent))),
+                            hasFlowContent: !!(u.hasFlowContent || liveFlowIds.has(u.id)),
                             topics: (u.topics || [])
                                 .map((t: any) => ({
                                     id: t.id,
                                     title: t.title,
-                                    hasFlowContent: !!t.hasFlowContent
+                                    hasFlowContent: !!(t.hasFlowContent || liveFlowIds.has(t.id))
                                 }))
                                 .sort((tA: any, tB: any) => compareTitlesByLeadingNumber(tA.title, tB.title))
                         }))
