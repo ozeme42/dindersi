@@ -1,26 +1,23 @@
-
 'use server';
 
 import { db } from "@/lib/firebase";
-import { 
-  doc, 
-  updateDoc, 
-  increment, 
-  collection, 
-  addDoc, 
-  serverTimestamp, 
-  writeBatch, 
-  query, 
-  where, 
-  getDocs, 
+import {
+  doc,
+  updateDoc,
+  increment,
+  collection,
+  addDoc,
+  serverTimestamp,
+  writeBatch,
+  query,
+  where,
+  getDocs,
   getCountFromServer,
-  limit 
+  limit
 } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
-import type { ActivityItem } from '@/lib/types';
-import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
-import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
-
+import { getRegisteredStudioItemsForGame } from '@/lib/quiz-actions';
+import { pickStudioDistractors, prepareStudioDefinitionPairs, shuffleArray } from '@/lib/studio-game-helpers';
 
 export type HitTheTargetRound = {
     definition: string;
@@ -37,69 +34,37 @@ export async function getHitTheTargetAction(
     try {
         const effectiveTopicId = (topicId && topicId !== unitId && topicId !== 'preview-topic' && topicId !== 'unit-flow' && topicId !== 'all') ? topicId : undefined;
 
-        const allItems = await getStaticQuestionsForGame({
+        const studio = await getRegisteredStudioItemsForGame({
             courseId,
             unitId,
             topicId: effectiveTopicId,
-            dataType: 'all'
         });
 
-        const pairs: { term: string; definition: string }[] = [];
-        const fallbackTerms = ['İman', 'İslam', 'Ahlak', 'İbadet', 'Tevhit', 'Nübüvvet', 'Kuran', 'Sünnet', 'Adalet', 'Merhamet', 'Sabır', 'Şükür', 'İhlas', 'Takva', 'Furkan'];
-        const seenTerms = new Set<string>();
+        const pairs = prepareStudioDefinitionPairs(studio.conceptDefinitions, {
+            minTermLength: 2,
+            maxTermLength: 35,
+            cleanClue: true,
+        });
 
-        for (const item of allItems || []) {
-            if ('type' in item) {
-                let t = '';
-                let d = '';
-                if (item.type === 'definition') {
-                    t = String((item as any).content?.term || (item as any).term || '').trim();
-                    d = String((item as any).content?.definition || (item as any).definition || '').trim();
-                } else if (item.type === 'concept') {
-                    t = String((item as any).content?.term || (item as any).content?.text || (item as any).term || '').trim();
-                    d = String((item as any).content?.definition || (item as any).content?.meaning || (item as any).definition || '').trim();
-                } else if ((item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer && ((item as any).text || (item as any).question)) {
-                    t = String((item as any).correctAnswer).trim();
-                    d = String((item as any).text || (item as any).question).trim();
-                }
-
-                if (t.length >= 2 && t.length <= 30 && isDefinitionValidAndClean(t, d)) {
-                    const tKey = t.toLocaleLowerCase('tr-TR');
-                    if (!seenTerms.has(tKey)) {
-                        seenTerms.add(tKey);
-                        pairs.push({ term: t, definition: d });
-                    }
-                }
-            }
-        }
-
-        if (pairs.length < 2) {
-            return { error: "Hedefi Vur oynamak için bu konuda en az 2 adet uygun kavram/tanım bulunmalıdır.", data: null };
-        }
-        
-        const allTargetWords = [...new Set([...pairs.map(p => p.term), ...(pairs.length < 4 && !unitId && !topicId ? fallbackTerms : [])])];
-        const shuffled = [...pairs].sort(() => 0.5 - Math.random());
+        const distractorPool = [...new Set([...pairs.map(p => p.term), ...studio.concepts])];
+        const shuffled = shuffleArray(pairs);
         const rounds: HitTheTargetRound[] = [];
 
         for (const targetDef of shuffled) {
-            const targetWord = targetDef.term;
-            const definition = targetDef.definition;
-            
-            const otherWords = allTargetWords
-                .filter(w => w.toLocaleLowerCase('tr-TR') !== targetWord.toLocaleLowerCase('tr-TR'));
-            
-            const shuffledOthers = otherWords.sort(() => 0.5 - Math.random());
-            const decoys = shuffledOthers.slice(0, 3);
-
-            const wordsForRound = [targetWord, ...decoys].sort(() => 0.5 - Math.random());
+            const decoys = pickStudioDistractors(targetDef.term, distractorPool, 3);
+            if (decoys.length === 0) continue;
 
             rounds.push({
-                definition: definition,
-                target: targetWord,
-                words: wordsForRound,
+                definition: targetDef.definition,
+                target: targetDef.term,
+                words: shuffleArray([targetDef.term, ...decoys]),
             });
         }
-        
+
+        if (pairs.length < 2 || rounds.length < 2) {
+            return { error: "Hedefi Vur oynamak için bu konuda Kavram ve Notlar Stüdyosu'na kayıtlı en az 2 kavram ve tanım bulunmalıdır.", data: null };
+        }
+
         const finalRounds = rounds.slice(0, 10);
 
         return { data: JSON.parse(JSON.stringify(finalRounds)) };
@@ -110,14 +75,13 @@ export async function getHitTheTargetAction(
     }
 }
 
-
 export async function submitHitTheTargetScoreAction(
-    userId: string | null, 
-    score: number, 
+    userId: string | null,
+    score: number,
     context: string
 ): Promise<{ success: boolean; error?: string }> {
     if (!userId || score <= 0) return { success: true };
-    
+
     try {
         const attemptsQuery = query(
             collection(db, 'scoreEvents'),
@@ -125,19 +89,19 @@ export async function submitHitTheTargetScoreAction(
             where('gameType', 'in', ['Hedefi Vur', 'hedefi-vur']),
             where('context', '==', context)
         );
-        
+
         const attemptsSnapshot = await getCountFromServer(attemptsQuery);
         const attemptCount = attemptsSnapshot.data().count;
 
         if (attemptCount >= MAX_ATTEMPTS_PER_CONTEXT) {
-            return { 
-                success: false, 
-                error: `Bu etkinlikten daha fazla puan kazanamazsınız. Lütfen farklı bir konu seçin.` 
+            return {
+                success: false,
+                error: `Bu etkinlikten daha fazla puan kazanamazsınız. Lütfen farklı bir konu seçin.`
             };
         }
 
         const batch = writeBatch(db);
-        
+
         const userRef = doc(db, 'users', userId);
         batch.update(userRef, { score: increment(score) });
 

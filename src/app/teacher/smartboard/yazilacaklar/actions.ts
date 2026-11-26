@@ -184,22 +184,37 @@ export async function loadAllYazilacaklarData(): Promise<{ success: boolean; ite
                             }
                         };
 
+                        let yazilacaklarIsMuchNewer = false;
                         // ── A. Read from public/curriculum/yazilacaklar/${topicId}.json ──
                         if (existingYazilacaklarFiles.has(jsonFileName)) {
                             try {
-                                const raw = await fs.readFile(path.join(YAZILACAKLAR_DIR, `${topicId}.json`), 'utf-8');
+                                const yazPath = path.join(YAZILACAKLAR_DIR, `${topicId}.json`);
+                                const raw = await fs.readFile(yazPath, 'utf-8');
                                 const parsed = JSON.parse(raw);
                                 if (Array.isArray(parsed.notes)) {
                                     parsed.notes.forEach((n: any) => {
                                         if (typeof n === 'string' && n.trim()) notesList.push(n.trim());
                                     });
                                 }
+                                let hasValidDefsInYaz = false;
                                 if (Array.isArray(parsed.conceptDefinitions)) {
                                     parsed.conceptDefinitions.forEach((c: any) => {
                                         if (c && c.concept && c.concept.trim()) {
+                                            hasValidDefsInYaz = true;
                                             registerDefinition(c.concept, c.definition || '');
                                         }
                                     });
+                                }
+                                if (hasValidDefsInYaz && existingActivityFiles.has(jsonFileName)) {
+                                    try {
+                                        const actPath = path.join(ACTIVITIES_DIR, `${topicId}.json`);
+                                        const [yStat, aStat] = await Promise.all([fs.stat(yazPath), fs.stat(actPath)]);
+                                        if (yStat.mtimeMs - aStat.mtimeMs > 60_000) {
+                                            yazilacaklarIsMuchNewer = true;
+                                        }
+                                    } catch {
+                                        // ignore stat errors
+                                    }
                                 }
                             } catch (readErr) {
                                 console.warn(`Error reading yazilacaklar for ${topicId}:`, readErr);
@@ -214,9 +229,9 @@ export async function loadAllYazilacaklarData(): Promise<{ success: boolean; ite
                                 if (Array.isArray(parsedAct)) {
                                     parsedAct.forEach((it: any) => {
                                         if (!it) return;
-                                        if (it.type === 'concept' && it.content?.text) {
+                                        if (!yazilacaklarIsMuchNewer && it.type === 'concept' && it.content?.text) {
                                             registerConcept(it.content.text);
-                                        } else if (it.type === 'definition' && it.content?.term) {
+                                        } else if (!yazilacaklarIsMuchNewer && it.type === 'definition' && it.content?.term) {
                                             registerDefinition(it.content.term, it.content.definition || '');
                                         } else if (it.type === 'sentence' && it.content?.text) {
                                             const sentence = it.content.text.trim();

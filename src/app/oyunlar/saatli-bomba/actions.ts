@@ -12,8 +12,8 @@ import {
   serverTimestamp, 
   increment,
 } from 'firebase/firestore';
-import { getStaticQuestionsForGame, getQuestionsFromBank } from '@/lib/quiz-actions';
-import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
+import { getRegisteredStudioItemsForGame } from '@/lib/quiz-actions';
+import { pickStudioDistractors, prepareStudioDefinitionPairs, shuffleArray } from '@/lib/studio-game-helpers';
 
 export interface BombQuestion {
     id: string;
@@ -23,203 +23,59 @@ export interface BombQuestion {
     hint?: string;
 }
 
-const CURRICULUM_FALLBACK_CONCEPTS: { term: string; definition: string }[] = [
-    { term: 'Tevhid', definition: 'Yüce Allah’ın bir olduğuna, eşi, benzeri ve ortağı bulunmadığına inanmak.' },
-    { term: 'İhlas', definition: 'İbadet ve hayırları sadece ve sadece Allah rızası için, samimiyetle yapmak.' },
-    { term: 'Şirk', definition: 'Allah’a ortak koşmak veya O’ndan başka varlıklara ilahi özellikler atfetmek.' },
-    { term: 'Tevekkül', definition: 'Bir iş için gerekli tüm gayreti gösterdikten sonra sonucunu Allah’a bırakıp güvenmek.' },
-    { term: 'Sadaka-i Cariye', definition: 'Kişi vefat ettikten sonra da sevabı devam eden okul, çeşme, cami gibi kalıcı hayırlar.' },
-    { term: 'Zekat', definition: 'Dinen zengin sayılan Müslümanların yılda bir kez mallarının belli bir kısmını ihtiyaç sahiplerine vermesi.' },
-    { term: 'Nisap', definition: 'Bir Müslümanın dinen zengin sayılması için sahip olması gereken asgari zenginlik ölçüsü.' },
-    { term: 'İmsak', definition: 'Oruç tutacak kişinin yeme, içme ve diğer oruç yasaklarına başladığı tan yeri ağarma vakti.' },
-    { term: 'İftar', definition: 'Akşam ezanının okunmasıyla orucun açıldığı vakit.' },
-    { term: 'Farz', definition: 'Dinen yapılması kesin ve açık delillerle emredilen bağlayıcı hükümler (Namaz, Oruç, Zekat gibi).' },
-    { term: 'Vacip', definition: 'Farz kadar kesin olmamakla birlikte yapılması kuvvetle emredilen dini hükümler (Kurban, Vitir namazı gibi).' },
-    { term: 'Sünnet', definition: 'Peygamber Efendimiz’in (s.a.v.) farz ve vacip dışında yaptığı, Müslümanlara tavsiye ettiği güzel davranışlar.' },
-    { term: 'Kaza', definition: 'Zamanında kılınamayan namazın veya tutulamayan orucun daha sonra yerine getirilmesi.' },
-    { term: 'Kader', definition: 'Allah’ın ezelden ebede kadar olacak her şeyi önceden bilip takdir etmesi ve ölçü koyması.' },
-    { term: 'Basar', definition: 'Yüce Allah’ın her şeyi, karanlıkta veya gizlide olsa dahi eksiksiz görmesi sıfatı.' },
-    { term: 'Semi', definition: 'Yüce Allah’ın fısıltı dahil her türlü sesi ve duayı işitmesi sıfatı.' },
-    { term: 'İlim', definition: 'Yüce Allah’ın geçmişi, geleceği, gizliyi ve açığı her yönüyle bilmesi sıfatı.' },
-    { term: 'Kudret', definition: 'Yüce Allah’ın her şeye gücünün yetmesi, dilediğini yaratabilmesi sıfatı.' },
-    { term: 'Takva', definition: 'Allah’ın emirlerine uyup yasaklarından kaçınarak O’nun sevgisini kaybetmekten sakınmak.' },
-    { term: 'Fıtrat', definition: 'İnsanın doğuştan getirdiği, inanmaya ve iyiliğe yatkın olan temiz yaratılış hali.' },
-];
-
 export async function getSaatliBombaQuestionsAction(
     { topicId, courseId, unitId }: { topicId?: string; courseId?: string; unitId?: string; }
 ): Promise<{ questions: BombQuestion[] | null; error?: string }> {
     noStore();
     try {
-        const gameQuestions: BombQuestion[] = [];
-        const seenAnswers = new Set<string>();
+        const effectiveTopicId = (topicId && topicId !== unitId && topicId !== 'preview-topic' && topicId !== 'unit-flow' && topicId !== 'all')
+            ? topicId
+            : undefined;
 
-        // 1. Statik aktivitelerden tanımları çek
-        let itemsForTopic = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'activities' });
-        const pairs: { term: string; definition: string }[] = [];
+        const studio = await getRegisteredStudioItemsForGame({ courseId, unitId, topicId: effectiveTopicId });
+        const pairs = prepareStudioDefinitionPairs(studio.conceptDefinitions, {
+            minTermLength: 2,
+            maxTermLength: 38,
+            cleanClue: true,
+        });
 
-        for (const item of itemsForTopic || []) {
-            if ('type' in item) {
-                if (item.type === 'definition' && (item as any).content?.term && (item as any).content?.definition) {
-                    const t = String((item as any).content.term).trim();
-                    const d = String((item as any).content.definition).trim();
-                    if (t.length >= 2 && t.length <= 35 && t.split(/\s+/).length <= 3) pairs.push({ term: t, definition: d });
-                } else if (item.type === 'concept' && ((item as any).content?.term || (item as any).content?.text) && ((item as any).content?.definition || (item as any).content?.meaning)) {
-                    const t = String((item as any).content?.term || (item as any).content?.text).trim();
-                    const d = String((item as any).content?.definition || (item as any).content?.meaning).trim();
-                    if (t.length >= 2 && t.length <= 35 && t.split(/\s+/).length <= 3) pairs.push({ term: t, definition: d });
-                }
-            }
+        const distractorPool = [...new Set([...pairs.map(p => p.term), ...studio.concepts])];
+        const validPairs = pairs.filter(p => pickStudioDistractors(p.term, distractorPool, 3).length >= 1);
+
+        if (validPairs.length < 2) {
+            return {
+                error: "Saatli Bomba oynamak için bu konuda Kavram ve Notlar Stüdyosu'na kayıtlı en az 2 kavram ve tanım bulunmalıdır.",
+                questions: null,
+            };
         }
 
-        // Havuz terimleri topla
-        const allTermsPool = [
-            ...pairs.map(p => p.term),
-            ...CURRICULUM_FALLBACK_CONCEPTS.map(c => c.term)
-        ];
-
-        // Tanımlardan soru üret
-        for (const item of pairs) {
-            const correctAnswer = item.term.trim();
-            const definition = item.definition.trim();
-
-            if (definition.length < 10) continue;
-            if (definition.toLowerCase().includes(correctAnswer.toLowerCase())) continue;
-            
-            const key = correctAnswer.toLowerCase();
-            if (seenAnswers.has(key)) continue;
-            seenAnswers.add(key);
-
-            let distractors = allTermsPool
-                .filter(term => term.toLocaleLowerCase('tr-TR') !== correctAnswer.toLocaleLowerCase('tr-TR'))
-                .sort(() => 0.5 - Math.random())
-                .slice(0, 3);
-
-            while (distractors.length < 3) {
-                const fb = CURRICULUM_FALLBACK_CONCEPTS[Math.floor(Math.random() * CURRICULUM_FALLBACK_CONCEPTS.length)].term;
-                if (!distractors.includes(fb) && fb.toLowerCase() !== correctAnswer.toLowerCase()) {
-                    distractors.push(fb);
-                }
-            }
-
-            const options = [correctAnswer, ...distractors].sort(() => 0.5 - Math.random());
-
-            gameQuestions.push({
-                id: `bomb-def-${gameQuestions.length + 1}`,
-                definition,
-                options,
-                correctAnswer
-            });
-        }
-
-        // 2. Yeterli soru yoksa soru bankasından çoktan seçmeli soruları da dene
-        if (gameQuestions.length < 8) {
-            try {
-                const bankResult = await getQuestionsFromBank({
-                    courseId,
-                    unitId,
-                    topicId,
-                    questionCount: 15,
-                    questionTypes: ['Çoktan Seçmeli', 'mcq']
-                });
-
-                if (bankResult.questions && bankResult.questions.length > 0) {
-                    for (const q of bankResult.questions) {
-                        if (q.options && q.options.length >= 2 && q.correctAnswer) {
-                            const correctOpt = q.correctAnswer.trim();
-                            const key = correctOpt.toLowerCase();
-                            if (seenAnswers.has(key)) continue;
-                            seenAnswers.add(key);
-
-                            let currentOptions = [...q.options];
-                            while (currentOptions.length < 4) {
-                                const fb = CURRICULUM_FALLBACK_CONCEPTS[Math.floor(Math.random() * CURRICULUM_FALLBACK_CONCEPTS.length)].term;
-                                if (!currentOptions.includes(fb)) {
-                                    currentOptions.push(fb);
-                                }
-                            }
-                            
-                            gameQuestions.push({
-                                id: `bomb-bank-${q.id || gameQuestions.length + 1}`,
-                                definition: q.text || 'Bu kavramı doğru belirleyiniz.',
-                                options: currentOptions.slice(0, 4).sort(() => 0.5 - Math.random()),
-                                correctAnswer: correctOpt
-                            });
-                        }
-                    }
-                }
-            } catch (err) {
-                console.warn("Saatli Bomba soru bankası verisi alınırken hata:", err);
-            }
-        }
-
-        // 3. Hala 5'ten azsa zengin yedek müfredat kavramlarından tamamla
-        if (gameQuestions.length < 8) {
-            for (const fbItem of CURRICULUM_FALLBACK_CONCEPTS) {
-                const key = fbItem.term.toLowerCase();
-                if (seenAnswers.has(key)) continue;
-                seenAnswers.add(key);
-
-                const distractors = CURRICULUM_FALLBACK_CONCEPTS
-                    .filter(c => c.term.toLowerCase() !== key)
-                    .sort(() => 0.5 - Math.random())
-                    .slice(0, 3)
-                    .map(c => c.term);
-
-                const options = [fbItem.term, ...distractors].sort(() => 0.5 - Math.random());
-
-                gameQuestions.push({
-                    id: `bomb-fallback-${gameQuestions.length + 1}`,
-                    definition: fbItem.definition,
-                    options,
-                    correctAnswer: fbItem.term
-                });
-
-                if (gameQuestions.length >= 15) break;
-            }
-        }
-
-        // 4. ARALIKLI TEKRAR (Spaced Repetition): Her kavramı en az 3 kez sor
-        // Akademik olarak zorlanan öğrencilerin kavramları pekiştirmesi için her kavram en az 3 kez gelir.
-        const targetRounds = 3; 
-        const basePool = gameQuestions.length > 0 ? gameQuestions : CURRICULUM_FALLBACK_CONCEPTS.map((c, i) => ({
-            id: `bomb-fb-${i}`,
-            definition: c.definition,
-            options: [c.term, 'İhlas', 'Zekat', 'Tevhid'],
-            correctAnswer: c.term
-        }));
-
-        // 4 ila 6 kavram seçerek toplam tur sayısını ideal (12-18) tut
-        const uniqueConcepts = basePool.slice(0, Math.min(basePool.length, 6));
-
+        // 4 ila 6 kavram seçerek 3 tekrar dalgasında toplam tur sayısını ideal tut
+        const selectedPairs = shuffleArray(validPairs).slice(0, Math.min(validPairs.length, 6));
+        const targetRounds = 3;
         const tripleDeck: BombQuestion[] = [];
+
         for (let wave = 0; wave < targetRounds; wave++) {
-            // Her dalgada kavramların sırası karıştırılır (aynı kavram peş peşe gelmez)
-            const waveItems = [...uniqueConcepts].sort(() => 0.5 - Math.random());
-            
+            const waveItems = shuffleArray(selectedPairs);
+
             for (let i = 0; i < waveItems.length; i++) {
                 const item = waveItems[i];
-                // Çeldiricileri her dalga için yeniden karıştır
-                const distractors = allTermsPool
-                    .filter(t => t.toLowerCase() !== item.correctAnswer.toLowerCase())
-                    .sort(() => 0.5 - Math.random())
-                    .slice(0, 3);
-                
-                while (distractors.length < 3) {
-                    const fb = CURRICULUM_FALLBACK_CONCEPTS[Math.floor(Math.random() * CURRICULUM_FALLBACK_CONCEPTS.length)].term;
-                    if (!distractors.includes(fb) && fb.toLowerCase() !== item.correctAnswer.toLowerCase()) {
-                        distractors.push(fb);
-                    }
-                }
+                const distractors = pickStudioDistractors(item.term, distractorPool, 3);
+                if (distractors.length === 0) continue;
 
-                const options = [item.correctAnswer, ...distractors].sort(() => 0.5 - Math.random());
                 tripleDeck.push({
-                    id: `bomb-w${wave + 1}-${i + 1}-${item.id}`,
+                    id: `bomb-w${wave + 1}-${i + 1}-${item.term}`,
                     definition: item.definition,
-                    options,
-                    correctAnswer: item.correctAnswer
+                    options: shuffleArray([item.term, ...distractors]),
+                    correctAnswer: item.term,
                 });
             }
+        }
+
+        if (tripleDeck.length === 0) {
+            return {
+                error: "Saatli Bomba için yeterli kavram verisi bulunamadı.",
+                questions: null,
+            };
         }
 
         return { questions: JSON.parse(JSON.stringify(tripleDeck)) };

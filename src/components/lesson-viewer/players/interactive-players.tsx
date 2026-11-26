@@ -19,6 +19,7 @@ import type {
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { playSound } from '@/lib/audio-service';
+import { getRegisteredStudioItemsForGame } from '@/lib/quiz-actions';
 
 const useTeacherMode = () => {
     const { user } = useAuth();
@@ -1429,15 +1430,49 @@ export function MatchingPlayer({
             if (rawPairs.length === 0 && topicId) {
                 setIsLoading(true);
                 try {
-                    const res = await fetch(`/curriculum/activity-items/${topicId}.json?v=${Date.now()}`);
-                    if (res.ok) {
-                        const data = await res.json();
-                        if (Array.isArray(data)) {
-                            data.forEach((item: any) => {
-                                const c = item.content?.term || item.content?.text || item.concept || item.term;
-                                const d = item.content?.definition || item.definition;
-                                if (c && d) rawPairs.push({ concept: String(c).trim(), definition: String(d).trim() });
-                            });
+                    const studio = await getRegisteredStudioItemsForGame({ topicId });
+                    if (studio.conceptDefinitions && studio.conceptDefinitions.length > 0) {
+                        studio.conceptDefinitions.forEach((item) => {
+                            if (item.term && item.definition) {
+                                rawPairs.push({
+                                    concept: item.term.trim(),
+                                    definition: item.definition.trim(),
+                                });
+                            }
+                        });
+                    }
+
+                    if (rawPairs.length === 0) {
+                        const [yazRes, actRes] = await Promise.all([
+                            fetch(`/curriculum/yazilacaklar/${topicId}.json?v=${Date.now()}`).catch(() => null),
+                            fetch(`/curriculum/activities/${topicId}.json?v=${Date.now()}`).catch(() => null),
+                        ]);
+                        const seen = new Set<string>();
+                        if (yazRes && yazRes.ok) {
+                            const yData = await yazRes.json();
+                            if (Array.isArray(yData?.conceptDefinitions)) {
+                                yData.conceptDefinitions.forEach((item: any) => {
+                                    const c = String(item?.concept || '').trim();
+                                    const d = String(item?.definition || '').trim();
+                                    if (c && d && !seen.has(c.toLocaleLowerCase('tr-TR'))) {
+                                        seen.add(c.toLocaleLowerCase('tr-TR'));
+                                        rawPairs.push({ concept: c, definition: d });
+                                    }
+                                });
+                            }
+                        }
+                        if (actRes && actRes.ok) {
+                            const aData = await actRes.json();
+                            if (Array.isArray(aData)) {
+                                aData.forEach((item: any) => {
+                                    const c = String(item?.content?.term || item?.concept || item?.term || '').trim();
+                                    const d = String(item?.content?.definition || item?.definition || '').trim();
+                                    if (item?.type === 'definition' && c && d && !seen.has(c.toLocaleLowerCase('tr-TR'))) {
+                                        seen.add(c.toLocaleLowerCase('tr-TR'));
+                                        rawPairs.push({ concept: c, definition: d });
+                                    }
+                                });
+                            }
                         }
                     }
                 } catch (e) {
@@ -1445,15 +1480,6 @@ export function MatchingPlayer({
                 } finally {
                     setIsLoading(false);
                 }
-            }
-
-            if (rawPairs.length === 0) {
-                rawPairs = [
-                    { concept: "Adalet", definition: "Her hak sahibine hakkını vermek, eşit ve dürüst davranmak." },
-                    { concept: "İhlas", definition: "İbadet ve amelleri sadece Allah rızası için samimiyetle yapmak." },
-                    { concept: "Tevhid", definition: "Allah'ın bir ve tek olduğuna, eşi ve benzeri olmadığına inanmak." },
-                    { concept: "Ahlak", definition: "İnsanın iyi veya kötü olarak vasıflandırılmasına yol açan manevi nitelikleri ve davranışları." },
-                ];
             }
 
             const formatted = rawPairs.map((p, idx) => ({
@@ -1708,6 +1734,11 @@ export function MatchingPlayer({
                 <div className="flex-1 flex flex-col items-center justify-center text-slate-400">
                     <Loader2 className="w-10 h-10 animate-spin text-indigo-400 mb-3" />
                     <p className="font-bold text-sm">Kavramlar yükleniyor...</p>
+                </div>
+            ) : currentRoundPairs.length === 0 ? (
+                <div className="flex-1 flex flex-col items-center justify-center text-center px-6 text-slate-400">
+                    <p className="font-bold text-base mb-1">Kayıtlı Kavram Bulunamadı</p>
+                    <p className="text-xs opacity-80">Bu konu için Kavram ve Notlar Stüdyosu&apos;na kavram ve tanım eklendiğinde burada görünecektir.</p>
                 </div>
             ) : (
                 <div className="flex-1 w-full min-h-0 grid grid-cols-2 gap-3 sm:gap-4 md:gap-6 relative">

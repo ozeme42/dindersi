@@ -1,27 +1,24 @@
-
 'use server';
 
 import { db } from "@/lib/firebase";
-import { 
-  doc, 
-  updateDoc, 
-  increment, 
-  collection, 
-  addDoc, 
-  serverTimestamp, 
-  writeBatch, 
-  query, 
-  where, 
-  getDocs, 
+import {
+  doc,
+  updateDoc,
+  increment,
+  collection,
+  addDoc,
+  serverTimestamp,
+  writeBatch,
+  query,
+  where,
+  getDocs,
   getCountFromServer,
-  limit 
+  limit
 } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
-import type { ActivityItem } from '@/lib/types';
 import { cleanForAnagram } from '@/lib/utils';
-
-import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
-import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
+import { getRegisteredStudioItemsForGame } from '@/lib/quiz-actions';
+import { prepareStudioDefinitionPairs, shuffleArray } from '@/lib/studio-game-helpers';
 
 export type IlimHazinesiLevel = {
     letters: string[];
@@ -37,55 +34,50 @@ export async function getIlimHazinesiAction(
 ): Promise<{ levels: IlimHazinesiLevel[] | null; error?: string }> {
     noStore();
     try {
-        const allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'all' });
-        
+        const effectiveTopicId = (topicId && topicId !== unitId && topicId !== 'preview-topic' && topicId !== 'unit-flow' && topicId !== 'all')
+            ? topicId
+            : undefined;
+
+        const studio = await getRegisteredStudioItemsForGame({ courseId, unitId, topicId: effectiveTopicId });
+        const pairs = prepareStudioDefinitionPairs(studio.conceptDefinitions, {
+            minTermLength: 3,
+            maxTermLength: 24,
+            cleanClue: true,
+        });
+
         const validItems: { term: string; definition: string }[] = [];
         const seenWords = new Set<string>();
 
-        for (const item of allItems || []) {
-            if ('type' in item) {
-                if ((item.type === 'definition' || item.type === 'concept') && (item as any).content?.term && ((item as any).content?.definition || (item as any).content?.meaning)) {
-                    const t = String((item as any).content.term).trim();
-                    const d = String((item as any).content.definition || (item as any).content.meaning).trim();
-                    const cleaned = cleanForAnagram(t).replace(/\s/g, '');
-                    if (cleaned.length >= 3 && cleaned.length <= 14 && isDefinitionValidAndClean(t, d) && !seenWords.has(cleaned)) {
-                        seenWords.add(cleaned);
-                        validItems.push({ term: t, definition: d });
-                    }
-                }
+        for (const p of pairs) {
+            const cleaned = cleanForAnagram(p.term).replace(/\s/g, '');
+            if (cleaned.length >= 3 && cleaned.length <= 16 && !seenWords.has(cleaned)) {
+                seenWords.add(cleaned);
+                validItems.push(p);
             }
         }
 
         if (validItems.length === 0) {
-            return { error: "İlim Hazinesi oynamak için bu konuda en az 1 adet tanımı olan kavram bulunmalıdır.", levels: null };
+            return { error: "İlim Hazinesi oynamak için bu konuda Kavram ve Notlar Stüdyosu'na kayıtlı tanımı olan en az 1 uygun kavram bulunmalıdır.", levels: null };
         }
-        
-        const shuffled = [...validItems].sort(() => 0.5 - Math.random());
-        
-        const gameLevels: IlimHazinesiLevel[] = [];
 
-        for (const item of shuffled) {
+        const shuffled = shuffleArray(validItems);
+        const gameLevels: IlimHazinesiLevel[] = shuffled.slice(0, 20).map(item => {
             const mainWord = cleanForAnagram(item.term);
-            const definition = item.definition;
-            
-            // The letters will only be from the main word itself.
-            const letters = mainWord.replace(/\s/g, '').split('').sort(() => Math.random() - 0.5);
-            
-            gameLevels.push({
+            const letters = shuffleArray(mainWord.replace(/\s/g, '').split(''));
+            return {
                 mainWord,
-                info: definition,
+                info: item.definition,
                 letters,
-            });
-        }
-        
-        return { levels: JSON.parse(JSON.stringify(gameLevels.slice(0, 20))) };
+            };
+        });
+
+        return { levels: JSON.parse(JSON.stringify(gameLevels)) };
 
     } catch (error: any) {
         console.error("Server Action Error (getIlimHazinesiAction):", error);
         return { error: "Oyun verileri alınırken teknik bir hata oluştu.", levels: null };
     }
 }
-
 
 export async function submitIlimHazinesiScoreAction(userId: string | null, score: number, context: string): Promise<{ success: boolean; error?: string }> {
     if (!userId || score <= 0) {
@@ -101,13 +93,13 @@ export async function submitIlimHazinesiScoreAction(userId: string | null, score
         );
         const attemptsSnapshot = await getCountFromServer(attemptsQuery);
         const attemptCount = attemptsSnapshot.data().count;
-        
+
         if (attemptCount >= MAX_ATTEMPTS_PER_CONTEXT) {
             return { success: false, error: "Puan limiti aşıldı. Bu etkinlikten daha fazla puan kazanamazsınız." };
         }
 
         const batch = writeBatch(db);
-        
+
         const userRef = doc(db, 'users', userId);
         batch.update(userRef, { score: increment(score) });
 

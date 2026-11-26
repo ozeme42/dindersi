@@ -39,59 +39,10 @@ export default function KavramAviOyunPage() {
                 }
 
                 if (formattedQuestions.length === 0) {
-                    const DEFAULT_CONCEPTS: MiniGameQuestion[] = [
-                        {
-                            id: 'sample-ag-1',
-                            question: "Allah'ın bir ve tek olduğuna, eşi ve benzeri bulunmadığına inanmak.",
-                            options: ['TEVHİD'],
-                            correctAnswerIndex: 0
-                        },
-                        {
-                            id: 'sample-ag-2',
-                            question: "Allah'ı görüyormuş gibi ibadet etmek; O'nun her an bizi gördüğünün bilincinde olmak.",
-                            options: ['İHSAN'],
-                            correctAnswerIndex: 0
-                        },
-                        {
-                            id: 'sample-ag-3',
-                            question: "Dinen zengin sayılan Müslümanların yılda bir kez mallarının belirli bir kısmını vermesi.",
-                            options: ['ZEKÂT'],
-                            correctAnswerIndex: 0
-                        },
-                        {
-                            id: 'sample-ag-4',
-                            question: "Allah rızası için yapılan her türlü maddi ve manevi iyilik ve yardım.",
-                            options: ['SADAKA'],
-                            correctAnswerIndex: 0
-                        },
-                        {
-                            id: 'sample-ag-5',
-                            question: "Peygamber Efendimiz Hz. Muhammed'in hayatını, ahlakını ve mücadelesini inceleyen ilim dalı.",
-                            options: ['SİYER'],
-                            correctAnswerIndex: 0
-                        },
-                        {
-                            id: 'sample-ag-6',
-                            question: "Kur'an-ı Kerim ayetlerini açıklayan, yorumlayan ve anlamını derinlemesine inceleyen ilim.",
-                            options: ['TEFSİR'],
-                            correctAnswerIndex: 0
-                        },
-                        {
-                            id: 'sample-ag-7',
-                            question: "Peygamber Efendimizin (s.a.v.) sözleri, fiilleri ve takrirleri.",
-                            options: ['HADİS'],
-                            correctAnswerIndex: 0
-                        },
-                        {
-                            id: 'sample-ag-8',
-                            question: "Allah’ın emir ve yasaklarına titizlikle uyarak O’nun sevgisini kaybetmekten sakınmak.",
-                            options: ['TAKVA'],
-                            correctAnswerIndex: 0
-                        }
-                    ];
                     return {
-                        questions: DEFAULT_CONCEPTS,
-                        topicTitle: topicName || 'Din Kültürü ve Ahlak Bilgisi',
+                        questions: [],
+                        topicTitle: topicName || '',
+                        error: res.error || "Bu konu için Kavram ve Notlar Stüdyosu'nda kayıtlı kavram ve tanım bulunamadı.",
                     };
                 }
 

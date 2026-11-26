@@ -3,55 +3,74 @@
 import { db } from "@/lib/firebase";
 import { collection, query, where, doc, writeBatch, serverTimestamp, increment, getCountFromServer } from "firebase/firestore";
 import type { Question, GetQuizInput } from "@/lib/types";
-import { getQuestionsFromBank, getStaticGameData } from "@/lib/quiz-actions";
-import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
+import { getQuestionsFromBank, getRegisteredStudioItemsForGame } from "@/lib/quiz-actions";
+import { filterStudioWordList, prepareStudioDefinitionPairs } from '@/lib/studio-game-helpers';
 import { unstable_noStore as noStore } from 'next/cache';
 
-export async function getSiberSifreKiriciAction(params: GetQuizInput): Promise<{ questions: Question[]; error?: string }> {
+export async function getSiberSifreKiriciAction(
+    params: GetQuizInput
+): Promise<{ questions: Question[]; concepts?: string[]; error?: string }> {
     noStore();
     try {
-        const fetchParams: GetQuizInput = { 
-            ...params, 
+        const fetchParams: GetQuizInput = {
+            ...params,
             questionCount: 30,
             questionTypes: ['mcq', 'tf', 'Çoktan Seçmeli', 'Doğru/Yanlış']
         };
         const result = await getQuestionsFromBank(fetchParams);
-        let questions = (result.questions || []) as Question[];
+        const questions = (result.questions || []) as Question[];
 
-        if (questions.length < 3) {
-            try {
-                const allItems = await getStaticGameData({ courseId: params.courseId, unitId: params.unitId, topicId: params.topicId });
-                const definitions = allItems.filter(it => 'type' in it && it.type === 'definition' && (it as any).content?.term && (it as any).content?.definition && isDefinitionValidAndClean(String((it as any).content.term), String((it as any).content.definition)));
-                
-                definitions.forEach((dItem, idx) => {
-                    const term = (dItem as any).content.term.trim();
-                    const def = (dItem as any).content.definition.trim();
-                    const isTrue = idx % 2 === 0;
-                    let statement = `${term}, ${def}`;
-                    if (!isTrue && definitions.length > 1) {
-                        const wrongTerm = (definitions[(idx + 1) % definitions.length] as any).content.term.trim();
-                        statement = `${wrongTerm}, ${def}`;
-                    }
-                    if (!questions.some(q => q.text === statement)) {
-                        questions.push({
-                            id: `siber-tf-${idx}-${Date.now()}`,
-                            type: 'Doğru/Yanlış',
-                            text: statement,
-                            correctAnswer: isTrue ? 'Doğru' : 'Yanlış',
-                            options: ['Doğru', 'Yanlış'],
-                            difficulty: 'Orta',
-                            topicId: params.topicId || ''
-                        } as any);
-                    }
+        const effectiveTopicId = (params.topicId && params.topicId !== params.unitId && params.topicId !== 'preview-topic' && params.topicId !== 'unit-flow' && params.topicId !== 'all')
+            ? params.topicId
+            : undefined;
+
+        let studioConcepts: string[] = [];
+        try {
+            const studio = await getRegisteredStudioItemsForGame({
+                courseId: params.courseId,
+                unitId: params.unitId,
+                topicId: effectiveTopicId,
+            });
+            studioConcepts = filterStudioWordList(studio.concepts, {
+                removeSpaces: true,
+                minLength: 4,
+                maxLength: 14,
+            });
+
+            if (questions.length < 3) {
+                const definitions = prepareStudioDefinitionPairs(studio.conceptDefinitions, {
+                    minTermLength: 2,
+                    maxTermLength: 40,
+                    cleanClue: true,
                 });
-            } catch (fallbackErr) {}
+                if (definitions.length >= 2) {
+                    definitions.forEach((dItem, idx) => {
+                        const isTrue = idx % 2 === 0;
+                        const shownTerm = isTrue ? dItem.term : definitions[(idx + 1) % definitions.length].term;
+                        const statement = `${shownTerm}, ${dItem.definition}`;
+                        if (!questions.some(q => q.text === statement)) {
+                            questions.push({
+                                id: `siber-tf-${idx}`,
+                                type: 'Doğru/Yanlış',
+                                text: statement,
+                                correctAnswer: isTrue ? 'Doğru' : 'Yanlış',
+                                options: ['Doğru', 'Yanlış'],
+                                difficulty: 'Orta',
+                                topicId: effectiveTopicId || '',
+                            } as any);
+                        }
+                    });
+                }
+            }
+        } catch (studioErr) {
+            console.warn("Could not load studio concepts for Siber Sifre Kirici:", studioErr);
         }
 
         if (questions.length < 2) {
-            return { questions: [], error: "Bu konu için yeterli sayıda soru bulunamadı (En az 2 gerekli)." };
+            return { questions: [], concepts: studioConcepts, error: "Bu konu için yeterli sayıda soru bulunamadı (En az 2 gerekli)." };
         }
 
-        return { questions: JSON.parse(JSON.stringify(questions)) };
+        return { questions: JSON.parse(JSON.stringify(questions)), concepts: studioConcepts };
     } catch (e: any) {
         console.error("Error getting Siber Sifre Kirici questions:", e);
         return { questions: [], error: 'Sorular alınırken bir veritabanı hatası oluştu.' };
@@ -62,7 +81,7 @@ export async function submitSiberSifreKiriciScoreAction(userId: string, points: 
     if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true' || !userId || points <= 0) {
         return { success: true };
     }
-    
+
     try {
         const attemptsQuery = query(
             collection(db, 'scoreEvents'),

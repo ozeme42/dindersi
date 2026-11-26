@@ -14,10 +14,8 @@ import {
   where, 
   getCountFromServer,
 } from 'firebase/firestore';
-import fs from 'fs/promises';
-import path from 'path';
-import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
-import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
+import { getRegisteredStudioItemsForGame } from '@/lib/quiz-actions';
+import { prepareStudioDefinitionPairs, shuffleArray } from '@/lib/studio-game-helpers';
 
 export type ScrambledSentenceData = {
     correctSentence: string;
@@ -28,44 +26,43 @@ export async function getCumleOlusturmaAction(
 ): Promise<{ data: ScrambledSentenceData[] | null; error?: string }> {
     noStore();
     try {
-        let allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'activities' });
-        
-        if (!allItems || allItems.length === 0) {
-            return { error: "Bu konu için oynanabilir veri bulunamadı.", data: null };
-        }
-        
+        const effectiveTopicId = (topicId && topicId !== unitId && topicId !== 'preview-topic' && topicId !== 'unit-flow' && topicId !== 'all')
+            ? topicId
+            : undefined;
+
+        const studio = await getRegisteredStudioItemsForGame({ courseId, unitId, topicId: effectiveTopicId });
         const extractedSentences: string[] = [];
 
-        for (const item of allItems) {
-            if ('type' in item) {
-                if (item.type === 'sentence' && (item as any).content?.text) {
-                    const txt = String((item as any).content.text).trim();
-                    if (txt.split(' ').length >= 3) extractedSentences.push(txt);
-                } else if (item.type === 'definition' && (item as any).content?.term && (item as any).content?.definition) {
-                    const t = String((item as any).content.term).trim();
-                    const d = String((item as any).content.definition).trim();
-                    if (isDefinitionValidAndClean(t, d)) {
-                        const s = `${t}, ${d}`;
-                        if (s.split(' ').length >= 3 && s.length <= 150) extractedSentences.push(s);
-                    }
-                }
+        for (const rawSentence of studio.sentences) {
+            const txt = String(rawSentence || '').trim();
+            if (txt.split(/\s+/).length >= 3 && txt.length <= 160) {
+                extractedSentences.push(txt);
+            }
+        }
+
+        const pairs = prepareStudioDefinitionPairs(studio.conceptDefinitions, {
+            minTermLength: 2,
+            maxTermLength: 40,
+            cleanClue: false,
+        });
+        for (const p of pairs) {
+            const s = `${p.term}, ${p.definition}`;
+            if (s.split(/\s+/).length >= 3 && s.length <= 150) {
+                extractedSentences.push(s);
             }
         }
 
         const uniqueSentences = [...new Set(extractedSentences)];
 
         if (uniqueSentences.length < 1) {
-            return { error: "Cümle Oluşturma oynamak için bu konuda yeterli uygunlukta cümle bulunamadı.", data: null };
-        }
-        
-        for (let i = uniqueSentences.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [uniqueSentences[i], uniqueSentences[j]] = [uniqueSentences[j], uniqueSentences[i]];
+            return { error: "Cümle Oluşturma oynamak için bu konuda Kavram ve Notlar Stüdyosu'na kayıtlı uygun cümle veya tanım bulunamadı.", data: null };
         }
 
-        const gameData: ScrambledSentenceData[] = uniqueSentences.slice(0, 15).map(sentence => ({
-            correctSentence: sentence.trim(),
-        }));
+        const gameData: ScrambledSentenceData[] = shuffleArray(uniqueSentences)
+            .slice(0, 15)
+            .map(sentence => ({
+                correctSentence: sentence.trim(),
+            }));
 
         return { data: JSON.parse(JSON.stringify(gameData)) };
 

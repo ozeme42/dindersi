@@ -14,9 +14,8 @@ import {
   serverTimestamp, 
   increment,
 } from 'firebase/firestore';
-import fs from 'fs/promises';
-import path from 'path';
-import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
+import { getRegisteredStudioItemsForGame } from '@/lib/quiz-actions';
+import { filterStudioWordList, shuffleArray } from '@/lib/studio-game-helpers';
 
 export async function getKelimeAviAction(
     { topicId, courseId, unitId }: { topicId?: string; courseId?: string, unitId?: string }
@@ -27,77 +26,27 @@ export async function getKelimeAviAction(
             ? topicId 
             : undefined;
 
-        let allItems = await getStaticQuestionsForGame({ 
-            courseId, 
-            unitId, 
-            topicId: effectiveTopicId, 
-            dataType: 'activities' 
+        const studio = await getRegisteredStudioItemsForGame({
+            courseId,
+            unitId,
+            topicId: effectiveTopicId,
         });
-        
-        const turkishAlphabetRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ]+$/;
-        const validTerms: string[] = [];
-        const fallbackTerms = ['İMAN', 'İSLAM', 'AHLAK', 'İBADET', 'TEVHİT', 'KURAN', 'SÜNNET', 'ADALET', 'MERHAMET', 'SABIR', 'ŞÜKÜR', 'İHLAS', 'TAKVA', 'FURKAN'];
 
-        const cleanWord = (raw: string) => {
-            return raw
-                .replace(/[âÂ]/g, 'A')
-                .replace(/[îÎ]/g, 'İ')
-                .replace(/[ûÛ]/g, 'U')
-                .replace(/['’\-]/g, '')
-                .trim();
-        };
+        const uniqueConcepts = filterStudioWordList(studio.concepts, {
+            removeSpaces: true,
+            minLength: 3,
+            maxLength: 14,
+        });
 
-        for (const item of allItems || []) {
-            if ('type' in item) {
-                let term = '';
-                if ((item.type === 'concept' || item.type === 'definition') && (item as any).content?.term) {
-                    term = String((item as any).content.term).trim();
-                } else if ((item.type === 'concept' || item.type === 'definition') && (item as any).content?.text) {
-                    term = String((item as any).content.text).trim();
-                } else if (item.type === 'concept' && (item as any).text) {
-                    term = String((item as any).text).trim();
-                } else if (item.type === 'conceptExplanation' && (item as any).concept) {
-                    term = String((item as any).concept).trim();
-                } else if (item.type === 'flashcard' && (item as any).term) {
-                    term = String((item as any).term).trim();
-                }
-
-                if (term) {
-                    const cleaned = cleanWord(term);
-                    // Boşlukları kaldırarak tek kelime olarak ekle (örn: "Su döngüsü" → "SUDÖNGÜSÜ")
-                    const noSpace = cleaned.replace(/\s+/g, '').toLocaleUpperCase('tr-TR');
-                    if (noSpace.length >= 3 && noSpace.length <= 14 && turkishAlphabetRegex.test(noSpace)) {
-                        validTerms.push(noSpace);
-                    }
-                }
-            }
-        }
-
-        let uniqueConcepts = [...new Set(validTerms)];
-
-        // ASLA konu/ders bazlı oyunda alakasız yedek kavramları enjekte etme!
         if (uniqueConcepts.length < 3) {
-            if (!topicId && !courseId && !unitId) {
-                for (const fb of fallbackTerms) {
-                    if (!uniqueConcepts.includes(fb)) uniqueConcepts.push(fb);
-                    if (uniqueConcepts.length >= 8) break;
-                }
-            } else {
-                return { 
-                    error: "Bu ünite/konuya ait Kelime Avı için yeterli kavram bulunamadı. Lütfen kavramları ekleyin veya üretin.", 
-                    concepts: null 
-                };
-            }
-        }
-        
-        // Karıştır
-        for (let i = uniqueConcepts.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [uniqueConcepts[i], uniqueConcepts[j]] = [uniqueConcepts[j], uniqueConcepts[i]];
+            return {
+                error: "Bu konuda Kelime Avı için Kavram ve Notlar Stüdyosu'na kayıtlı en az 3 uygun kavram bulunmalıdır.",
+                concepts: null,
+            };
         }
 
-        return { concepts: JSON.parse(JSON.stringify(uniqueConcepts)) };
-        
+        return { concepts: JSON.parse(JSON.stringify(shuffleArray(uniqueConcepts))) };
+
     } catch (error: any) {
         console.error("Server Action Error (getKelimeAviAction):", error);
         return { error: "Oyun verileri alınırken teknik bir hata oluştu.", concepts: null };

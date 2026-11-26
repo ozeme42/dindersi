@@ -21,7 +21,15 @@ interface Question {
     isTrue?: boolean;
 }
 
-const FALLBACK_WORDS = ['TEVHID', 'IHLAS', 'MELEK', 'ZEKAT', 'ORUC', 'SÜNNET', 'FARZ', 'VACIP', 'AHLAK', 'SADAKA', 'TEVEKKUL'];
+const cleanSecretCandidate = (raw: string): string => {
+    return String(raw || '')
+        .replace(/\s*\([^)]*\)/g, '')
+        .replace(/[âÂ]/g, 'A')
+        .replace(/[îÎ]/g, 'İ')
+        .replace(/[ûÛ]/g, 'U')
+        .toLocaleUpperCase('tr-TR')
+        .replace(/[^A-ZÇĞİÖŞÜ]/g, '');
+};
 
 function SiberBoard({
     gameState,
@@ -156,6 +164,7 @@ function SiberSifreKiriciContent() {
     const [gameState, setGameState] = useState<'loading' | 'error' | 'home' | 'playing' | 'gameover'>('loading');
     const [error, setError] = useState<string | null>(null);
     const [questions, setQuestions] = useState<Question[]>([]);
+    const [studioConcepts, setStudioConcepts] = useState<string[]>([]);
     const [currentQIndex, setCurrentQIndex] = useState(0);
     
     // Siber State
@@ -185,6 +194,19 @@ function SiberSifreKiriciContent() {
                 setError(result.error || "Bu konu için soru bulunamadı.");
                 setGameState('error');
             } else {
+                const answerWords = result.questions
+                    .filter(q => q.type !== 'Doğru/Yanlış')
+                    .map(q => cleanSecretCandidate(q.correctAnswer || ''))
+                    .filter(w => w.length >= 4 && w.length <= 12 && w !== 'DOĞRU' && w !== 'YANLIŞ');
+
+                const secretPool = [...new Set([...(result.concepts || []), ...answerWords])];
+                if (secretPool.length === 0) {
+                    setError("Bu konu için şifre kelimesi oluşturabilecek kayıtlı kavram veya soru cevabı bulunamadı.");
+                    setGameState('error');
+                    return;
+                }
+
+                setStudioConcepts(secretPool);
                 setQuestions(result.questions);
                 setGameState('home');
             }
@@ -231,20 +253,12 @@ function SiberSifreKiriciContent() {
 
     // --- GAME LOGIC ---
     const startGame = () => {
-        let chosenWord = FALLBACK_WORDS[Math.floor(Math.random() * FALLBACK_WORDS.length)];
-        
-        const possibleWords = questions
-            .filter(q => q.type === 'Çoktan Seçmeli')
-            .map(q => q.correctAnswer)
-            .filter((ans): ans is string => Boolean(ans && !ans.includes(' ') && ans.length >= 4 && ans.length <= 10));
-            
-        if (possibleWords.length > 0) {
-            const randWord = possibleWords[Math.floor(Math.random() * possibleWords.length)];
-            if (randWord) {
-                const w = randWord.toLocaleUpperCase('tr-TR');
-                chosenWord = w.replace(/[^A-ZÇĞİÖŞÜ]/g, '');
-            }
+        if (studioConcepts.length === 0) {
+            setError("Bu konu için şifre kelimesi oluşturabilecek kayıtlı kavram bulunamadı.");
+            setGameState('error');
+            return;
         }
+        const chosenWord = studioConcepts[Math.floor(Math.random() * studioConcepts.length)];
 
         setSecretWord(chosenWord);
         setRevealedIndices(new Set());

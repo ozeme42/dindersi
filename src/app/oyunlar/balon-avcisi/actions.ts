@@ -4,29 +4,14 @@ import { db } from "@/lib/firebase";
 import { collection, query, where, getDocs, limit, doc, writeBatch, serverTimestamp, increment, getCountFromServer } from "firebase/firestore";
 import type { ActivityItem } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
-import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
-import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
+import { getRegisteredStudioItemsForGame } from '@/lib/quiz-actions';
+import { pickStudioDistractors, prepareStudioDefinitionPairs, shuffleArray } from '@/lib/studio-game-helpers';
 
 export type BalloonHunterQuestion = {
     q: string; // The definition
     a: string; // The correct term
     wrongs: string[]; // Distractor terms
 };
-
-const DEFAULT_PAIRS = [
-    { term: 'Tevhit', definition: 'Allah’ın bir ve tek olduğuna, eşi ve benzeri bulunmadığına kalpten inanmak.' },
-    { term: 'İman', definition: 'Allah’ın varlığına, meleklerine, kitaplarına ve peygamberlerine yürekten inanıp güvenmek.' },
-    { term: 'İbadet', definition: 'Yüce Allah’ın rızasını ve sevgisini kazanmak amacıyla yapılan her türlü güzel amel ve kulluk vazifesi.' },
-    { term: 'Ahlak', definition: 'İnsanın iyi veya kötü olarak nitelendirilmesine yol açan manevi nitelikleri, huyları ve davranışları.' },
-    { term: 'Nübüvvet', definition: 'Peygamberlik müessesesi; Yüce Allah’ın insanlara emir ve yasaklarını bildirmek üzere elçi göndermesi.' },
-    { term: 'Kuran', definition: 'Allah tarafından Hz. Muhammed’e vahiy yoluyla indirilen, okunmasıyla ibadet edilen son ilahi kitap.' },
-    { term: 'Sünnet', definition: 'Hz. Peygamber’in sözleri, uygulamaları ve sahabilerin güzel davranışlarını onaylaması.' },
-    { term: 'Takva', definition: 'Allah’a karşı derin bir sorumluluk bilinciyle günahlardan sakınma ve emirlerine titizlikle uyma hali.' },
-    { term: 'Adalet', definition: 'Her hak sahibine hakkını vermek, hak ve hukuka uygun davranarak haksızlıktan kaçınmak.' },
-    { term: 'İhlas', definition: 'Yapılan her türlü ibadet ve güzel davranışı sadece ve sadece Allah rızası için yerine getirmek.' }
-];
-
-const FALLBACK_TERMS = ['İman', 'İslam', 'Ahlak', 'İbadet', 'Tevhit', 'Nübüvvet', 'Kuran', 'Sünnet', 'Adalet', 'Merhamet', 'Sabır', 'Şükür', 'İhlas', 'Takva', 'Furkan', 'Mizan', 'Kıyamet', 'Ahiret', 'Hicret', 'Tevekkül'];
 
 export async function getBalloonHunterDataAction(
     { topicId, courseId, unitId }: { topicId?: string; courseId?: string, unitId?: string }
@@ -37,73 +22,34 @@ export async function getBalloonHunterDataAction(
             ? topicId
             : undefined;
 
-        let allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId: effectiveTopicId, dataType: 'activities' });
-
-        const pairs: { term: string; definition: string }[] = [];
-        const seenAnswers = new Set<string>();
-
-        for (const item of allItems || []) {
-            if ('type' in item) {
-                let t = '';
-                let d = '';
-                if (item.type === 'definition') {
-                    t = String((item as any).content?.term || (item as any).term || '').trim();
-                    d = String((item as any).content?.definition || (item as any).definition || '').trim();
-                } else if (item.type === 'concept') {
-                    t = String((item as any).content?.term || (item as any).content?.text || (item as any).term || '').trim();
-                    d = String((item as any).content?.definition || (item as any).content?.meaning || (item as any).definition || '').trim();
-                } else if (item.type === 'conceptExplanation') {
-                    t = String((item as any).concept || (item as any).term || '').trim();
-                    d = String((item as any).definition || '').trim();
-                }
-
-                if (t.length >= 2 && t.length <= 30 && isDefinitionValidAndClean(t, d)) {
-                    const key = t.toLocaleLowerCase('tr-TR');
-                    if (!seenAnswers.has(key)) {
-                        seenAnswers.add(key);
-                        pairs.push({ term: t, definition: d });
-                    }
-                }
-            }
-        }
-
-        if (pairs.length < 2) {
-            if (!topicId && !unitId && !courseId) {
-                pairs.push(...DEFAULT_PAIRS);
-            } else {
-                return { error: "Bu ünite/konu için en az 2 adet kavram tanımı bulunmalıdır.", questions: [] };
-            }
-        }
-
-        const unitTerms = pairs.map(p => p.term);
-
-        const gameQuestions: BalloonHunterQuestion[] = pairs.map(item => {
-            const correctAnswer = item.term;
-            const normCorrect = correctAnswer.toLocaleLowerCase('tr-TR');
-
-            // Çeldiricileri ÖNCELİKLE bu konunun/ünitenin kendi kavramlarından seç
-            const distractors = unitTerms
-                .filter(term => term.toLocaleLowerCase('tr-TR') !== normCorrect)
-                .sort(() => 0.5 - Math.random())
-                .slice(0, 4);
-
-            // Sadece ünitede 3'ten az kavram varsa eksik kalan kadar genel kavram ekle
-            let fbIdx = 0;
-            while (distractors.length < 3 && fbIdx < FALLBACK_TERMS.length) {
-                const candidate = FALLBACK_TERMS[fbIdx++];
-                if (candidate.toLocaleLowerCase('tr-TR') !== normCorrect && !distractors.includes(candidate)) {
-                    distractors.push(candidate);
-                }
-            }
-
-            return {
-                q: item.definition,
-                a: correctAnswer,
-                wrongs: distractors,
-            };
+        const studio = await getRegisteredStudioItemsForGame({ courseId, unitId, topicId: effectiveTopicId });
+        const pairs = prepareStudioDefinitionPairs(studio.conceptDefinitions, {
+            minTermLength: 2,
+            maxTermLength: 35,
+            cleanClue: true,
         });
 
-        return { questions: JSON.parse(JSON.stringify(gameQuestions.sort(() => 0.5 - Math.random()))) };
+        const distractorPool = [...new Set([...pairs.map(p => p.term), ...studio.concepts])];
+        const gameQuestions: BalloonHunterQuestion[] = [];
+
+        for (const item of pairs) {
+            const wrongs = pickStudioDistractors(item.term, distractorPool, 4);
+            if (wrongs.length === 0) continue;
+            gameQuestions.push({
+                q: item.definition,
+                a: item.term,
+                wrongs,
+            });
+        }
+
+        if (pairs.length < 2 || gameQuestions.length < 2) {
+            return {
+                error: "Balon Avcısı oynamak için bu konuda Kavram ve Notlar Stüdyosu'na kayıtlı en az 2 kavram ve tanım bulunmalıdır.",
+                questions: [],
+            };
+        }
+
+        return { questions: JSON.parse(JSON.stringify(shuffleArray(gameQuestions))) };
 
     } catch (error: any) {
         console.error("Error getting Balloon Hunter data:", error);

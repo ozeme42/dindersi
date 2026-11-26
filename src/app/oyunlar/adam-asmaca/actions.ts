@@ -1,46 +1,27 @@
 'use server';
 
 import { unstable_noStore as noStore } from 'next/cache';
-import type { ActivityItem } from '@/lib/types';
-import fs from 'fs/promises';
-import path from 'path';
 import { db } from "@/lib/firebase";
-import { 
-  doc, 
-  writeBatch, 
-  serverTimestamp, 
-  increment, 
-  collection, 
-  query, 
-  where, 
+import {
+  doc,
+  writeBatch,
+  serverTimestamp,
+  increment,
+  collection,
+  query,
+  where,
   getCountFromServer,
 } from 'firebase/firestore';
-import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
-import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
+import { getRegisteredStudioItemsForGame } from '@/lib/quiz-actions';
+import {
+  cleanStudioTermForWordGame,
+  prepareStudioDefinitionPairs,
+  shuffleArray,
+} from '@/lib/studio-game-helpers';
 
 export type HangmanData = {
     word: string;
     hint: string;
-};
-
-// Kavram ismini ve ek açıklamaları temizleme
-const cleanConceptTerm = (raw: string) => {
-    return raw
-        // Parantez ve köşeli parantez içi ek açıklamaları temizle: "İhlas (Samimiyet)" -> "İhlas"
-        .replace(/\s*\([^)]*\)/g, '')
-        .replace(/\s*\[[^\]]*\]/g, '')
-        // Başındaki numara ve madde işaretlerini temizle: "1. ", "a) ", "- "
-        .replace(/^[0-9]+[\.\-\)\s]+/, '')
-        // Şapkalı harfleri standart harflere dönüştür
-        .replace(/[âÂ]/g, 'A')
-        .replace(/[îÎ]/g, 'İ')
-        .replace(/[ûÛ]/g, 'U')
-        .replace(/[êÊ]/g, 'E')
-        // Tırnak, apostrof, tire ve noktaları temizle
-        .replace(/['’"”`\-\.]/g, '')
-        // Fazla boşlukları teke indir ve kenar boşluklarını sil
-        .replace(/\s+/g, ' ')
-        .trim();
 };
 
 export async function getAdamAsmacaAction(
@@ -48,78 +29,52 @@ export async function getAdamAsmacaAction(
 ): Promise<{ data: HangmanData[] | null; error?: string }> {
     noStore();
     try {
-        const effectiveTopicId = (topicId && topicId !== unitId && topicId !== 'preview-topic' && topicId !== 'unit-flow' && topicId !== 'all') 
-            ? topicId 
+        const effectiveTopicId = (topicId && topicId !== unitId && topicId !== 'preview-topic' && topicId !== 'unit-flow' && topicId !== 'all')
+            ? topicId
             : undefined;
 
-        // Sadece aktiviteler (kavram ve tanım kartları) çekiliyor
-        let allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId: effectiveTopicId, dataType: 'activities' });
-        
-        // Eğer seçilen konuda 2'den az tanım varsa, aynı ünitedeki diğer konulardan da kavramları al
-        if ((!allItems || allItems.length < 2) && unitId) {
-            const unitItems = await getStaticQuestionsForGame({ courseId, unitId, dataType: 'activities' });
-            allItems = [...(allItems || []), ...(unitItems || [])];
-        }
+        const studio = await getRegisteredStudioItemsForGame({
+            courseId,
+            unitId,
+            topicId: effectiveTopicId,
+        });
 
-        if (!allItems || allItems.length === 0) {
-            return { error: "Bu konu için oynanabilir kavram tanımı bulunamadı.", data: null };
-        }
+        const pairs = prepareStudioDefinitionPairs(studio.conceptDefinitions, {
+            minTermLength: 3,
+            maxTermLength: 38,
+            cleanTermForTyping: false,
+            cleanClue: true,
+        });
 
-        const turkishAlphabetRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ\s]+$/;
+        const turkishAlphabetRegex = /^[A-ZÇĞİÖŞÜ]+( [A-ZÇĞİÖŞÜ]+)*$/;
         const validWords: HangmanData[] = [];
         const seenWords = new Set<string>();
 
-        for (const item of allItems || []) {
-            if ('type' in item) {
-                const itemType = (item as any).type;
-                let rawTerm = '';
-                let rawHint = '';
+        for (const pair of pairs) {
+            const upperTerm = cleanStudioTermForWordGame(pair.term, { removeSpaces: false, uppercase: true });
+            const lettersOnly = upperTerm.replace(/\s+/g, '');
 
-                // SADECE tanımı olan kavramlar (definition ve concept) dahil edilir
-                if (itemType === 'definition' && (item as any).content?.term && (item as any).content?.definition) {
-                    rawTerm = String((item as any).content.term).trim();
-                    rawHint = String((item as any).content.definition).trim();
-                } else if (itemType === 'concept' && ((item as any).content?.term || (item as any).content?.text) && ((item as any).content?.definition || (item as any).content?.meaning)) {
-                    rawTerm = String((item as any).content?.term || (item as any).content?.text).trim();
-                    rawHint = String((item as any).content?.definition || (item as any).content?.meaning).trim();
-                } else if (itemType === 'conceptExplanation' && (item as any).concept && (item as any).definition) {
-                    rawTerm = String((item as any).concept).trim();
-                    rawHint = String((item as any).definition).trim();
-                } else if (itemType === 'flashcard' && (item as any).term && (item as any).definition) {
-                    rawTerm = String((item as any).term).trim();
-                    rawHint = String((item as any).definition).trim();
-                }
-
-                if (rawTerm && rawHint) {
-                    const cleaned = cleanConceptTerm(rawTerm);
-                    if (!isDefinitionValidAndClean(cleaned, rawHint)) continue;
-
-                    const upperTerm = cleaned.toLocaleUpperCase('tr-TR');
-                    const lettersOnly = upperTerm.replace(/\s+/g, '');
-                    const wordCount = upperTerm.split(' ').length;
-
-                    // Geçerli bir kavram: 3-25 harf uzunluğunda, en fazla 3 kelime, sadece Türkçe harf ve boşluk
-                    if (
-                        lettersOnly.length >= 3 && 
-                        lettersOnly.length <= 25 && 
-                        wordCount <= 3 && 
-                        turkishAlphabetRegex.test(upperTerm) && 
-                        !seenWords.has(upperTerm)
-                    ) {
-                        seenWords.add(upperTerm);
-                        validWords.push({ word: upperTerm, hint: rawHint });
-                    }
-                }
+            if (
+                lettersOnly.length >= 3 &&
+                upperTerm.length <= 38 &&
+                turkishAlphabetRegex.test(upperTerm) &&
+                !seenWords.has(upperTerm)
+            ) {
+                seenWords.add(upperTerm);
+                validWords.push({ word: upperTerm, hint: pair.definition });
             }
         }
-        
+
         if (validWords.length < 2) {
-            return { error: "Adam Asmaca oynamak için bu konuda yeterli uygunlukta kavram tanımı bulunamadı (en az 2 adet).", data: null };
+            return {
+                error: "Adam Asmaca oynamak için bu konuda Kavram ve Notlar Stüdyosu'na kayıtlı en az 2 kavram tanımı bulunmalıdır.",
+                data: null,
+            };
         }
-        
-        const shuffled = [...validWords].sort(() => 0.5 - Math.random());
+
+        const shuffled = shuffleArray(validWords);
         return { data: JSON.parse(JSON.stringify(shuffled.slice(0, 15))) };
-        
+
     } catch (error: any) {
         console.error("Server Action Error (getAdamAsmacaAction):", error);
         return { error: "Oyun verileri alınırken teknik bir hata oluştu.", data: null };
@@ -127,14 +82,14 @@ export async function getAdamAsmacaAction(
 }
 
 export async function submitAdamAsmacaScoreAction(
-    userId: string | null, 
-    score: number, 
+    userId: string | null,
+    score: number,
     context: string
 ): Promise<{ success: boolean; error?: string }> {
     if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true' || !userId || score <= 0) {
         return { success: true };
     }
-    
+
     try {
         const attemptsQuery = query(
             collection(db, 'scoreEvents'),
@@ -150,7 +105,7 @@ export async function submitAdamAsmacaScoreAction(
         }
 
         const batch = writeBatch(db);
-        
+
         const userRef = doc(db, 'users', userId);
         batch.update(userRef, { score: increment(score) });
 

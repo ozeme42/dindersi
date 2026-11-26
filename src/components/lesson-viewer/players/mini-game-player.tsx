@@ -206,13 +206,17 @@ export const MiniGamePlayer: React.FC<MiniGamePlayerProps> = ({
         .then(res => {
           if (isCancelled) return;
           const isKelime = KELIME_SABLONLARI.includes(activeTemplate);
-          if (isKelime && res.conceptPairs && res.conceptPairs.length > 0) {
-            setAutoQuestions(res.conceptPairs.map((cp, idx) => ({
-              id: `cp-${idx + 1}`,
-              question: cp.definition,
-              options: [cp.term],
-              correctAnswerIndex: 0
-            })));
+          if (isKelime) {
+            if (res.conceptPairs && res.conceptPairs.length > 0) {
+              setAutoQuestions(res.conceptPairs.map((cp, idx) => ({
+                id: `cp-${idx + 1}`,
+                question: cp.definition,
+                options: [cp.term],
+                correctAnswerIndex: 0
+              })));
+            } else {
+              setAutoQuestions([]);
+            }
           } else if (res.questions && res.questions.length > 0) {
             setAutoQuestions(res.questions);
           } else if (res.conceptPairs && res.conceptPairs.length > 0) {
@@ -222,6 +226,8 @@ export const MiniGamePlayer: React.FC<MiniGamePlayerProps> = ({
               options: [cp.term],
               correctAnswerIndex: 0
             })));
+          } else {
+            setAutoQuestions([]);
           }
         })
         .catch(err => console.warn('Otomatik ünite soru çekme uyarısı:', err));
@@ -261,7 +267,7 @@ export const MiniGamePlayer: React.FC<MiniGamePlayerProps> = ({
   const gameData = useMemo(() => {
     const rawQuestions = (!isMockQuestions && step.questions && step.questions.length > 0)
       ? step.questions
-      : (autoQuestions || step.questions || []);
+      : (autoQuestions || []);
     const isKelime = KELIME_SABLONLARI.includes(activeTemplate);
     const isDy = activeTemplate === 'dogru-yanlis';
 

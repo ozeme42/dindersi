@@ -47,13 +47,12 @@ export default function LabirentOyunPage() {
                                 options[0] = q.correctAnswer;
                                 correctIdx = 0;
                             } else {
-                                options = [q.correctAnswer, 'A', 'B', 'C'];
-                                correctIdx = 0;
+                                continue;
                             }
                         }
                     }
 
-                    while (options.length < 4) {
+                    while (options.length < 2) {
                         options.push(`Seçenek ${options.length + 1}`);
                     }
 
@@ -66,41 +65,10 @@ export default function LabirentOyunPage() {
                 }
 
                 if (formattedQuestions.length === 0) {
-                    const DEFAULT_MCQS: MiniGameQuestion[] = [
-                        {
-                            id: 'sample-lab-1',
-                            question: "İslam'ın beş şartından biri olan ve yılda bir kez zengin Müslümanların verdiği ibadet hangisidir?",
-                            options: ['Zekât', 'Oruç', 'Namaz', 'Hac'],
-                            correctAnswerIndex: 0
-                        },
-                        {
-                            id: 'sample-lab-2',
-                            question: "Kur'an-ı Kerim'in ilk indirilen suresi hangisidir?",
-                            options: ['Alak', 'Fâtiha', 'Bakara', 'İhlas'],
-                            correctAnswerIndex: 0
-                        },
-                        {
-                            id: 'sample-lab-3',
-                            question: "Allah'ın varlığı ve birliği inancına ne ad verilir?",
-                            options: ['Tevhid', 'Şirk', 'Nifak', 'Riya'],
-                            correctAnswerIndex: 0
-                        },
-                        {
-                            id: 'sample-lab-4',
-                            question: "Peygamber Efendimiz Hz. Muhammed'e (s.a.v.) güvenilirliğinden dolayı verilen lakap nedir?",
-                            options: ['Muhammedü’l-Emin', 'Ebu’l-Kasım', 'Habibullah', 'Hatemü’l-Enbiya'],
-                            correctAnswerIndex: 0
-                        },
-                        {
-                            id: 'sample-lab-5',
-                            question: "Müslümanların kıblesi olan Kâbe hangi şehirdedir?",
-                            options: ['Mekke', 'Medine', 'Kudüs', 'Şam'],
-                            correctAnswerIndex: 0
-                        }
-                    ];
                     return {
-                        questions: DEFAULT_MCQS,
-                        topicTitle: topicName || 'Din Kültürü ve Ahlak Bilgisi',
+                        questions: [],
+                        topicTitle: topicName || '',
+                        error: res.error || 'Bu konu için kayıtlı soru bulunamadı.',
                     };
                 }
 

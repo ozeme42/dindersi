@@ -16,8 +16,8 @@ import {
   serverTimestamp, 
   increment 
 } from 'firebase/firestore';
-import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
-import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
+import { getRegisteredStudioItemsForGame } from '@/lib/quiz-actions';
+import { prepareStudioDefinitionPairs, shuffleArray } from '@/lib/studio-game-helpers';
 
 
 export async function getAcikUcluCevaplaAction(
@@ -25,59 +25,33 @@ export async function getAcikUcluCevaplaAction(
 ): Promise<{ questions: Question[]; error?: string }> {
     noStore();
     try {
-        let allItems: ActivityItem[] = (await getStaticQuestionsForGame({ courseId, unitId, topicId }) as any);
+        const effectiveTopicId = (topicId && topicId !== unitId && topicId !== 'preview-topic' && topicId !== 'unit-flow' && topicId !== 'all')
+            ? topicId
+            : undefined;
 
-        if (allItems.length === 0) {
-             return { error: "Bu konu için etkinlik verisi bulunamadı.", questions: [] };
-        }
-
-        let allDefinitions: { term: string; definition: string; courseId?: string; unitId?: string; topicId?: string; }[] = allItems
-            .filter(item => (item.type === 'definition' || item.type === 'concept') && item.content?.term && (item.content?.definition || item.content?.meaning))
-            .map(item => ({
-                term: String(item.content!.term!).trim(),
-                definition: String(item.content!.definition || (item.content as any)!.meaning)!.trim(),
-                courseId: item.courseId,
-                unitId: item.unitId,
-                topicId: item.topicId
-            }))
-            .filter(item => isDefinitionValidAndClean(item.term, item.definition));
+        const studio = await getRegisteredStudioItemsForGame({ courseId, unitId, topicId: effectiveTopicId });
+        const allDefinitions = prepareStudioDefinitionPairs(studio.conceptDefinitions, {
+            minTermLength: 2,
+            maxTermLength: 40,
+            cleanClue: true,
+        });
 
         if (allDefinitions.length < 1) {
-            for (const item of allItems) {
-                if ('type' in item) {
-                    if ((item.type === 'Boşluk Doldurma' || item.type === 'fitb') && (item as any).correctAnswer && ((item as any).sentenceWithBlank || (item as any).text)) {
-                        const term = String((item as any).correctAnswer).trim();
-                        const def = String((item as any).sentenceWithBlank || (item as any).text).trim();
-                        if (term && def && term.length <= 30) {
-                            allDefinitions.push({ term, definition: def, courseId: item.courseId, unitId: item.unitId, topicId: item.topicId });
-                        }
-                    } else if ((item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer && ((item as any).question || (item as any).text)) {
-                        const term = String((item as any).correctAnswer).trim();
-                        const def = String((item as any).question || (item as any).text).trim();
-                        if (term && def && term.length <= 25) {
-                            allDefinitions.push({ term, definition: def, courseId: item.courseId, unitId: item.unitId, topicId: item.topicId });
-                        }
-                    }
-                }
-            }
+            return { error: "Açık Uçlu Cevaplama için bu konuda Kavram ve Notlar Stüdyosu'na kayıtlı kavram ve tanım bulunamadı.", questions: [] };
         }
 
-        if (allDefinitions.length < 1) {
-            return { error: "Açık Uçlu Cevaplama için bu konuda uygun soru veya tanım bulunamadı.", questions: [] };
-        }
-        
-        const selectedDefinitions = allDefinitions.sort(() => 0.5 - Math.random());
+        const selectedDefinitions = shuffleArray(allDefinitions);
 
         const gameQuestions: Question[] = selectedDefinitions.map((item, index) => ({
-            id: `${topicId}-${index}`,
+            id: `${effectiveTopicId || unitId || 'studio'}-${index}`,
             text: item.definition,
             type: 'Açık Uçlu',
             correctAnswer: item.term,
             difficulty: 'Orta',
-            courseId: item.courseId,
-            unitId: item.unitId,
-            topicId: item.topicId,
-            topic: '', 
+            courseId,
+            unitId,
+            topicId: effectiveTopicId,
+            topic: '',
         }));
 
         return { questions: JSON.parse(JSON.stringify(gameQuestions)) };

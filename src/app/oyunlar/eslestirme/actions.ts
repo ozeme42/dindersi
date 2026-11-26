@@ -2,27 +2,19 @@
 'use server';
 
 import { unstable_noStore as noStore } from 'next/cache';
-import type { ActivityItem } from '@/lib/types';
 import { db } from "@/lib/firebase";
-import { 
-  doc, 
-  getDoc,
-  updateDoc, 
-  increment, 
-  collection, 
-  addDoc, 
-  serverTimestamp, 
-  writeBatch, 
-  query, 
-  where, 
-  getDocs, 
-  limit as firestoreLimit,
+import {
+  increment,
+  collection,
+  serverTimestamp,
+  writeBatch,
+  query,
+  where,
   getCountFromServer,
+  doc,
 } from 'firebase/firestore';
-import fs from 'fs/promises';
-import path from 'path';
-import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
-import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
+import { getRegisteredStudioItemsForGame } from '@/lib/quiz-actions';
+import { prepareStudioDefinitionPairs, shuffleArray } from '@/lib/studio-game-helpers';
 
 export type MatchingPair = {
     id: string;
@@ -31,152 +23,35 @@ export type MatchingPair = {
     pairId: string;
 };
 
-// Tanımın gerçek bir pedagojik kavram tanımı olup olmadığını denetler (Anagram veya soru yönergelerini kesinlikle eler)
-function isValidEducationalDefinition(term: string, definition: string): boolean {
-    return isDefinitionValidAndClean(term, definition);
-}
-
 export async function getEslestirmeAction(
     { topicId, courseId, unitId }: { topicId?: string; courseId?: string, unitId?: string }
 ): Promise<{ pairs: MatchingPair[] | null; error?: string }> {
     noStore();
     try {
-        const rawPairs: { term: string; definition: string }[] = [];
+        const effectiveTopicId = (topicId && topicId !== unitId && topicId !== 'preview-topic' && topicId !== 'unit-flow' && topicId !== 'all')
+            ? topicId
+            : undefined;
 
-        // 1. Statik dosyalardan (activities, questions, flows) öncelikli hızlı veri çekimi (0ms)
-        try {
-            const allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'all' });
-            for (const item of allItems) {
-                if (!item) continue;
+        const studio = await getRegisteredStudioItemsForGame({
+            courseId,
+            unitId,
+            topicId: effectiveTopicId,
+        });
 
-                let term = '';
-                let definition = '';
-
-                if ('type' in item) {
-                    if (item.type === 'definition' || item.type === 'concept') {
-                        term = String((item as any).content?.term || (item as any).content?.concept || (item as any).term || '').trim();
-                        definition = String((item as any).content?.definition || (item as any).definition || '').trim();
-                    } else if (item.type === 'conceptExplanation') {
-                        term = String((item as any).concept || (item as any).term || '').trim();
-                        definition = String((item as any).definition || '').trim();
-                    } else if (item.type === 'flashcard') {
-                        term = String((item as any).term || (item as any).correctAnswer || '').trim();
-                        definition = String((item as any).definition || '').trim();
-                    }
-                }
-
-                // SADECE VE SADECE GERÇEK EĞİTSEL TANIMI OLAN KAVRAMLAR:
-                if (isValidEducationalDefinition(term, definition)) {
-                    rawPairs.push({ term, definition });
-                }
-            }
-        } catch (e) {
-            console.warn("Static items read warning in getEslestirmeAction:", e);
-        }
-
-        // Tekilleştir (Kavram adına göre)
-        const seenTerms = new Set<string>();
-        let uniquePairs: { term: string; definition: string }[] = [];
-        for (const p of rawPairs) {
-            const key = p.term.toLocaleLowerCase('tr-TR');
-            if (!seenTerms.has(key)) {
-                seenTerms.add(key);
-                uniquePairs.push(p);
-            }
-        }
-
-        // Statik dosyalarda yeterli kavram-tanım çifti varsa DOĞRUDAN DÖN (Veritabanına hiç gitmeden anında açılır)
-        if (uniquePairs.length >= 2) {
-            const selectedItems = uniquePairs.sort(() => 0.5 - Math.random()).slice(0, 11);
-            const gamePairs: MatchingPair[] = [];
-            selectedItems.forEach((item, index) => {
-                const pairId = `pair-${index}`;
-                gamePairs.push({ id: `term-${index}`, type: 'term', content: item.term, pairId });
-                gamePairs.push({ id: `def-${index}`, type: 'definition', content: item.definition, pairId });
-            });
-            const shuffledPairs = gamePairs.sort(() => Math.random() - 0.5);
-            return { pairs: JSON.parse(JSON.stringify(shuffledPairs)) };
-        }
-
-        // 3. SADECE VE SADECE statik dosyalarda hiç veri yoksa (öğretmenin Firestore'da açtığı özel konuysa) Firestore'u sorgula
-        if (topicId && topicId !== 'all') {
-            try {
-                let topicSnap = null;
-                if (courseId && unitId) {
-                    topicSnap = await getDoc(doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId));
-                }
-                if (!topicSnap || !topicSnap.exists()) {
-                    topicSnap = await getDoc(doc(db, 'topics', topicId));
-                }
-                if (topicSnap && topicSnap.exists()) {
-                    const topicData = topicSnap.data();
-                    if (Array.isArray(topicData.steps)) {
-                        for (const step of topicData.steps) {
-                            if (step.type === 'conceptExplanation' && Array.isArray(step.items)) {
-                                for (const it of step.items) {
-                                    const term = String(it.concept || it.term || '').trim();
-                                    const definition = String(it.definition || '').trim();
-                                    const key = term.toLocaleLowerCase('tr-TR');
-                                    if (isValidEducationalDefinition(term, definition) && !seenTerms.has(key)) {
-                                        seenTerms.add(key);
-                                        uniquePairs.push({ term, definition });
-                                    }
-                                }
-                            } else if (step.type === 'flashcard' && Array.isArray(step.cards)) {
-                                for (const cd of step.cards) {
-                                    const term = String(cd.term || cd.correctAnswer || '').trim();
-                                    const definition = String(cd.definition || '').trim();
-                                    const key = term.toLocaleLowerCase('tr-TR');
-                                    if (isValidEducationalDefinition(term, definition) && !seenTerms.has(key)) {
-                                        seenTerms.add(key);
-                                        uniquePairs.push({ term, definition });
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            } catch (e) {
-                console.warn("Firestore fallback warning in getEslestirmeAction:", e);
-            }
-        } else if (unitId && unitId !== 'all') {
-            try {
-                if (courseId) {
-                    const unitSnap = await getDoc(doc(db, 'courses', courseId, 'units', unitId));
-                    if (unitSnap.exists()) {
-                        const unitData = unitSnap.data();
-                        if (Array.isArray(unitData.steps)) {
-                            for (const step of unitData.steps) {
-                                if (step.type === 'conceptExplanation' && Array.isArray(step.items)) {
-                                    for (const it of step.items) {
-                                        const term = String(it.concept || it.term || '').trim();
-                                        const definition = String(it.definition || '').trim();
-                                        const key = term.toLocaleLowerCase('tr-TR');
-                                        if (isValidEducationalDefinition(term, definition) && !seenTerms.has(key)) {
-                                            seenTerms.add(key);
-                                            uniquePairs.push({ term, definition });
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            } catch (e) {
-                console.warn("Firestore unit fallback warning in getEslestirmeAction:", e);
-            }
-        }
+        const uniquePairs = prepareStudioDefinitionPairs(studio.conceptDefinitions, {
+            minTermLength: 2,
+            maxTermLength: 40,
+            cleanClue: true,
+        });
 
         if (uniquePairs.length < 2) {
-            return { 
-                error: "Bu konu için henüz eşleştirilebilir kavram veya tanım verisi bulunamadı.", 
-                pairs: null 
+            return {
+                error: "Eşleştirme oynamak için bu konuda Kavram ve Notlar Stüdyosu'na kayıtlı en az 2 kavram ve tanım bulunmalıdır.",
+                pairs: null,
             };
         }
 
-        // En fazla 11 çift seç
-        const selectedItems = uniquePairs.sort(() => 0.5 - Math.random()).slice(0, 11);
-
+        const selectedItems = shuffleArray(uniquePairs).slice(0, 20);
         const gamePairs: MatchingPair[] = [];
         selectedItems.forEach((item, index) => {
             const pairId = `pair-${index}`;
@@ -184,9 +59,7 @@ export async function getEslestirmeAction(
             gamePairs.push({ id: `def-${index}`, type: 'definition', content: item.definition, pairId });
         });
 
-        const shuffledPairs = gamePairs.sort(() => Math.random() - 0.5);
-
-        return { pairs: JSON.parse(JSON.stringify(shuffledPairs)) };
+        return { pairs: JSON.parse(JSON.stringify(shuffleArray(gamePairs))) };
 
     } catch (error: any) {
         console.error("Server Action Error (getEslestirmeAction):", error);

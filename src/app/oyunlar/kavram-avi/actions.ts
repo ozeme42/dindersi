@@ -2,196 +2,109 @@
 'use server';
 
 import { unstable_noStore as noStore } from 'next/cache';
-import type { ActivityItem, Anagram } from '@/lib/types';
+import type { Anagram } from '@/lib/types';
 import { db } from "@/lib/firebase";
-import { 
-  collection, 
-  query, 
-  where, 
-  getCountFromServer, 
-  writeBatch, 
-  doc, 
-  serverTimestamp, 
+import {
+  collection,
+  query,
+  where,
+  getCountFromServer,
+  writeBatch,
+  doc,
+  serverTimestamp,
   increment,
-  getDocs,
-  getDoc
 } from 'firebase/firestore';
-import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
-import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
+import { getRegisteredStudioItemsForGame } from '@/lib/quiz-actions';
+import {
+  cleanStudioTermForWordGame,
+  prepareStudioDefinitionPairs,
+  shuffleArray,
+} from '@/lib/studio-game-helpers';
 
-
-function isValidEducationalDefinition(term: string, definition: string): boolean {
-    return isDefinitionValidAndClean(term, definition);
+function scrambleConceptWord(answerUpper: string): string {
+    return answerUpper
+        .split(' ')
+        .map(word => {
+            const chars = word.split('');
+            if (chars.length <= 1) return word;
+            let scrambled = word;
+            let attempts = 0;
+            while (scrambled === word && attempts < 20) {
+                scrambled = shuffleArray(chars).join('');
+                attempts++;
+            }
+            if (scrambled === word) {
+                [chars[0], chars[chars.length - 1]] = [chars[chars.length - 1], chars[0]];
+                scrambled = chars.join('');
+            }
+            return scrambled;
+        })
+        .join(' ');
 }
 
-export async function getConceptHuntAction({ 
+export async function getConceptHuntAction({
     courseId,
     unitId,
     topicId
-}: { 
+}: {
     courseId?: string;
     unitId?: string;
-    topicId?: string; 
+    topicId?: string;
 }): Promise<{ questions: Anagram[] | null; error?: string }> {
     noStore();
     try {
-        const rawItems: { term: string; definition: string }[] = [];
+        const effectiveTopicId = (topicId && topicId !== unitId && topicId !== 'preview-topic' && topicId !== 'unit-flow' && topicId !== 'all')
+            ? topicId
+            : undefined;
 
-        // 1. Statik dosyalardan (activities, questions, flows) öncelikli hızlı veri çekimi
-        try {
-            const allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'all' });
-            for (const item of allItems || []) {
-                if (!item || typeof item !== 'object') continue;
+        const studio = await getRegisteredStudioItemsForGame({
+            courseId,
+            unitId,
+            topicId: effectiveTopicId,
+        });
 
-                let term = '';
-                let definition = '';
+        const pairs = prepareStudioDefinitionPairs(studio.conceptDefinitions, {
+            minTermLength: 3,
+            maxTermLength: 38,
+            cleanTermForTyping: false,
+            cleanClue: true,
+        });
 
-                if ('type' in item) {
-                    if (item.type === 'definition' || item.type === 'concept') {
-                        term = String((item as any).content?.term || (item as any).content?.concept || (item as any).term || '').trim();
-                        definition = String((item as any).content?.definition || (item as any).definition || '').trim();
-                    } else if (item.type === 'conceptExplanation') {
-                        term = String((item as any).concept || (item as any).term || '').trim();
-                        definition = String((item as any).definition || '').trim();
-                    } else if (item.type === 'flashcard') {
-                        term = String((item as any).term || (item as any).correctAnswer || '').trim();
-                        definition = String((item as any).definition || '').trim();
-                    }
-                }
-
-                if (isValidEducationalDefinition(term, definition)) {
-                    rawItems.push({ term, definition });
-                }
-            }
-        } catch (e) {
-            console.warn("Static items read warning in getConceptHuntAction:", e);
-        }
-
-        // 2. Statik dosyalarda veri azsa Firestore fallback yap
-        if (rawItems.length < 2 && topicId && topicId !== 'all') {
-            try {
-                let topicSnap = null;
-                if (courseId && unitId) {
-                    topicSnap = await (await import('firebase/firestore')).getDoc(doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId));
-                }
-                if (!topicSnap || !topicSnap.exists()) {
-                    topicSnap = await (await import('firebase/firestore')).getDoc(doc(db, 'topics', topicId));
-                }
-                if (topicSnap && topicSnap.exists()) {
-                    const topicData = topicSnap.data();
-                    if (Array.isArray(topicData.steps)) {
-                        for (const step of topicData.steps) {
-                            if (step.type === 'conceptExplanation' && Array.isArray(step.items)) {
-                                for (const it of step.items) {
-                                    const term = String(it.concept || it.term || '').trim();
-                                    const definition = String(it.definition || '').trim();
-                                    if (isValidEducationalDefinition(term, definition)) {
-                                        rawItems.push({ term, definition });
-                                    }
-                                }
-                            } else if (step.type === 'flashcard' && Array.isArray(step.cards)) {
-                                for (const cd of step.cards) {
-                                    const term = String(cd.term || cd.correctAnswer || '').trim();
-                                    const definition = String(cd.definition || '').trim();
-                                    if (isValidEducationalDefinition(term, definition)) {
-                                        rawItems.push({ term, definition });
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            } catch (e) {
-                console.warn("Firestore fallback warning in getConceptHuntAction:", e);
-            }
-        } else if (rawItems.length < 2 && unitId && unitId !== 'all') {
-            try {
-                if (courseId) {
-                    const unitSnap = await getDoc(doc(db, 'courses', courseId, 'units', unitId));
-                    if (unitSnap.exists()) {
-                        const unitData = unitSnap.data();
-                        if (Array.isArray(unitData.steps)) {
-                            for (const step of unitData.steps) {
-                                if (step.type === 'conceptExplanation' && Array.isArray(step.items)) {
-                                    for (const it of step.items) {
-                                        const term = String(it.concept || it.term || '').trim();
-                                        const definition = String(it.definition || '').trim();
-                                        if (isValidEducationalDefinition(term, definition)) {
-                                            rawItems.push({ term, definition });
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            } catch (e) {
-                console.warn("Firestore unit fallback warning in getConceptHuntAction:", e);
-            }
-        }
-
-        const cleanWord = (raw: string) => {
-            return raw
-                .replace(/[âÂ]/g, 'a')
-                .replace(/[îÎ]/g, 'i')
-                .replace(/[ûÛ]/g, 'u')
-                .replace(/[''\\-\s\.]/g, '')
-                .trim()
-                .toLocaleLowerCase('tr-TR');
-        };
-
-        const turkishAlphabetRegex = /^[abcçdefgğhıijklmnoöprsştuüvyz]+$/;
+        const turkishAlphabetRegex = /^[A-ZÇĞİÖŞÜ]+( [A-ZÇĞİÖŞÜ]+)*$/;
         const seenTerms = new Set<string>();
         const validItems: { term: string; definition: string }[] = [];
 
-        for (const item of rawItems) {
-            const cleaned = cleanWord(item.term);
+        for (const item of pairs) {
+            const upperTerm = cleanStudioTermForWordGame(item.term, { removeSpaces: false, uppercase: true });
+            const lettersOnly = upperTerm.replace(/\s+/g, '');
+
             if (
-                cleaned.length >= 3 && 
-                cleaned.length <= 15 && 
-                turkishAlphabetRegex.test(cleaned) && 
-                !seenTerms.has(cleaned)
+                lettersOnly.length >= 3 &&
+                upperTerm.length <= 38 &&
+                turkishAlphabetRegex.test(upperTerm) &&
+                !seenTerms.has(upperTerm)
             ) {
-                seenTerms.add(cleaned);
-                validItems.push({ term: cleaned, definition: item.definition.trim() });
+                seenTerms.add(upperTerm);
+                validItems.push({ term: upperTerm, definition: item.definition });
             }
         }
 
         if (validItems.length < 1) {
-            return { error: "Kavram Avı oynamak için bu konuda tanımı bulunan en az 1 adet uygun kavram bulunmalıdır.", questions: null };
-        }
-        
-        // Karıştır
-        for (let i = validItems.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [validItems[i], validItems[j]] = [validItems[j], validItems[i]];
-        }
-        
-        const anagramQuestions: Anagram[] = validItems.map(item => {
-            const correctAnswer = item.term.toLocaleUpperCase('tr-TR');
-            const chars = correctAnswer.split('');
-            let scrambled = correctAnswer;
-            let attempts = 0;
-            // Kesinlikle anagram oluşturacak şekilde karıştır (aynı kalmasın)
-            while (scrambled === correctAnswer && attempts < 25) {
-                scrambled = [...chars].sort(() => 0.5 - Math.random()).join('');
-                attempts++;
-            }
-            if (scrambled === correctAnswer && chars.length > 1) {
-                // Manuel swap
-                const temp = chars[0];
-                chars[0] = chars[chars.length - 1];
-                chars[chars.length - 1] = temp;
-                scrambled = chars.join('');
-            }
             return {
-                definition: item.definition,
-                scrambledWord: scrambled.toLocaleUpperCase('tr-TR'),
-                correctAnswer: correctAnswer,
+                error: "Kavram Avı oynamak için bu konuda Kavram ve Notlar Stüdyosu'na kayıtlı tanımı bulunan en az 1 uygun kavram bulunmalıdır.",
+                questions: null,
             };
-        });
+        }
 
-        return { questions: JSON.parse(JSON.stringify(anagramQuestions.slice(0, 20))) };
+        const anagramQuestions: Anagram[] = shuffleArray(validItems)
+            .slice(0, 20)
+            .map(item => ({
+                definition: item.definition,
+                scrambledWord: scrambleConceptWord(item.term),
+                correctAnswer: item.term,
+            }));
+
+        return { questions: JSON.parse(JSON.stringify(anagramQuestions)) };
 
     } catch (error: any) {
         console.error("Server Action Error (getConceptHuntAction):", error);

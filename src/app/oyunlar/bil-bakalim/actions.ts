@@ -13,101 +13,42 @@ import {
   serverTimestamp, 
   increment,
 } from 'firebase/firestore';
-import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
-import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
-
-// Kavram ismini temizleme
-const cleanConceptTerm = (raw: string) => {
-    return raw
-        // Parantez ve köşeli parantez içi ek notları sil: "İhlas (Samimiyet)" -> "İhlas"
-        .replace(/\s*\([^)]*\)/g, '')
-        .replace(/\s*\[[^\]]*\]/g, '')
-        // Başındaki numara veya madde işaretlerini sil: "1. ", "a) ", "- "
-        .replace(/^[0-9]+[\.\-\)\s]+/, '')
-        // Şapkalı harfleri standart harflere çevir
-        .replace(/[âÂ]/g, 'A')
-        .replace(/[îÎ]/g, 'İ')
-        .replace(/[ûÛ]/g, 'U')
-        .replace(/[êÊ]/g, 'E')
-        // Tırnak, apostrof, tire ve noktaları temizle
-        .replace(/['’"”`\-\.]/g, '')
-        // Fazla boşlukları teke indir ve kenar boşluklarını kırp
-        .replace(/\s+/g, ' ')
-        .trim();
-};
-
-// Tanım metnini temizleme
-const cleanClueText = (term: string, rawDef: string) => {
-    let clue = rawDef.replace(/^[0-9]+[\.\-\)\s]+/, '').trim();
-    // Eğer tanım doğrudan kavramın adıyla başlıyorsa (örn: "Rahman: ...") başlığı temizle
-    const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    clue = clue.replace(new RegExp(`^${escaped}\\s*[:,-]\\s*`, 'i'), '');
-    if (clue.length > 0) {
-        clue = clue.charAt(0).toLocaleUpperCase('tr-TR') + clue.slice(1);
-    }
-    return clue;
-};
+import { getRegisteredStudioItemsForGame } from '@/lib/quiz-actions';
+import { prepareStudioDefinitionPairs, shuffleArray } from '@/lib/studio-game-helpers';
 
 export async function getBilBakalimAction(
     { topicId, courseId, unitId }: { topicId?: string; courseId?: string, unitId?: string }
 ): Promise<{ questions: Partial<Question>[]; error?: string }> {
     noStore();
     try {
-        let allItems: ActivityItem[] = (await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'activities' }) as any);
+        const effectiveTopicId = (topicId && topicId !== unitId && topicId !== 'preview-topic' && topicId !== 'unit-flow' && topicId !== 'all')
+            ? topicId
+            : undefined;
 
-        // Eğer seçilen konuda 4'ten az tanım varsa, aynı ünitedeki diğer konulardan da kavramları al
-        if ((!allItems || allItems.length < 4) && unitId) {
-            const unitItems: ActivityItem[] = (await getStaticQuestionsForGame({ courseId, unitId, dataType: 'activities' }) as any);
-            allItems = [...(allItems || []), ...(unitItems || [])];
+        const studio = await getRegisteredStudioItemsForGame({ courseId, unitId, topicId: effectiveTopicId });
+        const pairs = prepareStudioDefinitionPairs(studio.conceptDefinitions, {
+            minTermLength: 2,
+            maxTermLength: 40,
+            cleanTermForTyping: true,
+            cleanClue: true,
+        });
+
+        if (pairs.length < 2) {
+            return {
+                questions: [],
+                error: "Bil Bakalım oynamak için bu konuda Kavram ve Notlar Stüdyosu'na kayıtlı en az 2 kavram tanımı bulunmalıdır.",
+            };
         }
 
-        if (!allItems || allItems.length === 0) {
-             return { questions: [], error: "Bu konu için etkinlik verisi bulunamadı." };
-        }
-        
-        const validDefinitions: Partial<Question>[] = [];
-        const seenTerms = new Set<string>();
+        const validDefinitions: Partial<Question>[] = pairs.map((p, idx) => ({
+            id: `def-${effectiveTopicId || unitId || 'studio'}-${idx}`,
+            text: p.definition,
+            type: 'Bil Bakalım',
+            correctAnswer: p.term,
+            difficulty: 'Orta',
+        }));
 
-        for (const item of allItems || []) {
-            if ('type' in item) {
-                let rawTerm = '';
-                let rawDef = '';
-
-                if (item.type === 'definition' && (item as any).content?.term && (item as any).content?.definition) {
-                    rawTerm = String((item as any).content.term).trim();
-                    rawDef = String((item as any).content.definition).trim();
-                } else if (item.type === 'concept' && ((item as any).content?.term || (item as any).content?.text) && ((item as any).content?.definition || (item as any).content?.meaning)) {
-                    rawTerm = String((item as any).content?.term || (item as any).content?.text).trim();
-                    rawDef = String((item as any).content?.definition || (item as any).content?.meaning).trim();
-                }
-
-                if (rawTerm && rawDef) {
-                    const cleanedTerm = cleanConceptTerm(rawTerm);
-                    const cleanedDef = cleanClueText(cleanedTerm, rawDef);
-
-                    // Geçerlilik ve sızıntı kontrolleri: Gerçek tanım olmalı ve ipucu kelimeyi ele vermemeli
-                    if (!isDefinitionValidAndClean(cleanedTerm, cleanedDef)) continue;
-
-                    const key = cleanedTerm.toLocaleLowerCase('tr-TR');
-                    if (seenTerms.has(key)) continue;
-                    seenTerms.add(key);
-
-                    validDefinitions.push({
-                        id: item.id || `def-${Math.random()}`,
-                        text: cleanedDef,
-                        type: 'Bil Bakalım',
-                        correctAnswer: cleanedTerm,
-                        difficulty: 'Orta',
-                    });
-                }
-            }
-        }
-        
-        if (validDefinitions.length < 2) {
-            return { questions: [], error: "Bil Bakalım oynamak için bu konuda en az 2 farklı kavram tanımı bulunmalıdır." };
-        }
-
-        const shuffled = [...validDefinitions].sort(() => 0.5 - Math.random());
+        const shuffled = shuffleArray(validDefinitions);
         // Wordwall "Find the Match" için ideal soru sayısı: 8 ila 12 arası
         return { questions: JSON.parse(JSON.stringify(shuffled.slice(0, 12))) };
 

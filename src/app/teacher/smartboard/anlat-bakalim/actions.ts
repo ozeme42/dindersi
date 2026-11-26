@@ -1,94 +1,39 @@
 'use server';
 
-import type { ActivityItem } from "@/lib/types";
-import { getStaticQuestionsForGame } from "@/lib/quiz-actions";
+import { getRegisteredStudioItemsForGame } from "@/lib/quiz-actions";
+import { filterStudioWordList, shuffleArray } from "@/lib/studio-game-helpers";
 import { unstable_noStore as noStore } from 'next/cache';
 
 export type AnlatBakalimWord = string;
-
-const DEFAULT_ANLAT_BAKALIM_WORDS: string[] = [
-    'ZEKÂT', 'SADAKA', 'NAMAZ', 'ORUÇ', 'HAC', 'KÂBE', 'FATİHA', 'İHLAS', 
-    'MEKKE', 'MEDİNE', 'PEYGAMBER', 'MÜMİN', 'SEVAP', 'GÜNAH', 'CENNET', 
-    'TEVHİD', 'ADALET', 'SABIR', 'MERHAMET', 'ŞÜKÜR', 'ABDEST', 'EZAN', 
-    'CAMİ', 'MİHRAP', 'MİNBER', 'HİCRET', 'KANDİL', 'RAMAZAN', 'KURAN', 'AYET'
-];
 
 export async function getAnlatBakalimWords(
     { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
 ): Promise<{ words: AnlatBakalimWord[]; error?: string }> {
     noStore();
     try {
-        const effectiveTopicId = (topicId && topicId !== unitId && topicId !== 'preview-topic' && topicId !== 'unit-flow' && topicId !== 'all') 
-            ? topicId 
+        const effectiveTopicId = (topicId && topicId !== unitId && topicId !== 'preview-topic' && topicId !== 'unit-flow' && topicId !== 'all')
+            ? topicId
             : undefined;
 
-        let allItems: any[] = [];
-        try {
-            allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId: effectiveTopicId, dataType: 'activities' }) || [];
-        } catch (e) {
-            console.warn("Static questions fetch warning in anlat-bakalim:", e);
+        const studio = await getRegisteredStudioItemsForGame({ courseId, unitId, topicId: effectiveTopicId });
+        const uniqueWords = filterStudioWordList(studio.concepts, {
+            minLength: 3,
+            maxLength: 18,
+            maxWords: 2,
+        });
+
+        if (uniqueWords.length === 0) {
+            return {
+                words: [],
+                error: "Anlat Bakalım oynamak için bu konuda Kavram ve Notlar Stüdyosu'na kayıtlı uygun kavram bulunamadı.",
+            };
         }
 
-        const turkishAlphabetRegex = /^[A-ZÇĞİÖŞÜ]+( [A-ZÇĞİÖŞÜ]+)*$/;
-        const validWords: string[] = [];
-
-        const cleanWord = (raw: string) => {
-            return raw
-                .replace(/^Hz[\.\s]*/i, '')
-                .replace(/\s*\([^)]*\)/g, '')
-                .replace(/\s*\[[^\]]*\]/g, '')
-                .replace(/[âÂ]/g, 'A')
-                .replace(/[îÎ]/g, 'İ')
-                .replace(/[ûÛ]/g, 'U')
-                .replace(/['’\-.]/g, ' ')
-                .replace(/\s+/g, ' ')
-                .trim();
-        };
-
-        for (const item of allItems) {
-            if ('type' in item) {
-                let term = '';
-                if ((item.type === 'concept' || item.type === 'definition') && (item as any).content?.term) {
-                    term = String((item as any).content.term).trim();
-                } else if ((item.type === 'concept' || item.type === 'definition') && (item as any).content?.text) {
-                    term = String((item as any).content.text).trim();
-                } else if ((item as any).term) {
-                    term = String((item as any).term).trim();
-                } else if ((item as any).concept) {
-                    term = String((item as any).concept).trim();
-                }
-
-                if (term) {
-                    const cleaned = cleanWord(term);
-                    const upper = cleaned.toLocaleUpperCase('tr-TR');
-                    const lettersOnly = upper.replace(/\s+/g, '');
-                    const wordCount = upper.split(' ').length;
-
-                    // 1 veya 2 kelimelik kavramlar bölünmeden eklenir
-                    if (
-                        lettersOnly.length >= 3 && 
-                        lettersOnly.length <= 18 && 
-                        wordCount <= 2 && 
-                        turkishAlphabetRegex.test(upper)
-                    ) {
-                        validWords.push(upper);
-                    }
-                }
-            }
-        }
-
-        let uniqueWords = [...new Set(validWords)];
-
-        // Sadece ve sadece parametresiz saf sayfada açıldıysa genel müfredat kelimeleri ekle
-        if (uniqueWords.length < 5 && !unitId && !topicId && !courseId) {
-            uniqueWords = [...new Set([...uniqueWords, ...DEFAULT_ANLAT_BAKALIM_WORDS])];
-        }
-
-        const shuffled = [...uniqueWords].sort(() => 0.5 - Math.random());
+        const shuffled = shuffleArray(uniqueWords);
         return { words: JSON.parse(JSON.stringify(shuffled.slice(0, 30))) };
 
     } catch (error: any) {
         console.error("Error getting Anlat Bakalım words:", error);
-        return { words: [...DEFAULT_ANLAT_BAKALIM_WORDS].sort(() => 0.5 - Math.random()) };
+        return { error: "Veri alınırken hata oluştu.", words: [] };
     }
 }

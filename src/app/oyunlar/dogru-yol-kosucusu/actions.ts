@@ -5,10 +5,8 @@ import { db } from "@/lib/firebase";
 import { collection, query, where, getDocs, limit, doc, writeBatch, serverTimestamp, increment, getCountFromServer } from "firebase/firestore";
 import type { ActivityItem } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
-import fs from 'fs/promises';
-import path from 'path';
-import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
-import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
+import { getRegisteredStudioItemsForGame } from '@/lib/quiz-actions';
+import { pickStudioDistractors, prepareStudioDefinitionPairs, shuffleArray } from '@/lib/studio-game-helpers';
 
 export type DogruYolQuestion = {
     q: string;
@@ -21,52 +19,35 @@ export async function getDogruYolKosucusuAction(
 ): Promise<{ questions: DogruYolQuestion[]; error?: string }> {
     noStore();
     try {
-        const allItems = await getStaticQuestionsForGame({ topicId, courseId, unitId, dataType: 'all' });
-        
-        const pairs: { q: string, correct: string, wrong?: string }[] = [];
-        
-        for (const item of allItems || []) {
-            if ('type' in item) {
-                if ((item.type === 'definition' || item.type === 'concept') && (item as any).content?.term && (item as any).content?.definition) {
-                    const t = String((item as any).content.term).trim();
-                    const d = String((item as any).content.definition).trim();
-                    if (isDefinitionValidAndClean(t, d)) {
-                        pairs.push({
-                            q: d,
-                            correct: t
-                        });
-                    }
-                } else if ((item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer && ((item as any).text || (item as any).question)) {
-                    const wrongs = ((item as any).options || []).filter((o: any) => o !== (item as any).correctAnswer);
-                    pairs.push({
-                        q: ((item as any).text || (item as any).question).trim(),
-                        correct: String((item as any).correctAnswer).trim(),
-                        wrong: wrongs[0] ? String(wrongs[0]).trim() : undefined
-                    });
-                }
-            }
-        }
+        const effectiveTopicId = (topicId && topicId !== unitId && topicId !== 'preview-topic' && topicId !== 'unit-flow' && topicId !== 'all')
+            ? topicId
+            : undefined;
 
-        if (pairs.length < 2) {
-            return { error: "Bu oyun için en az 2 farklı tanım veya soru gereklidir.", questions: [] };
-        }
-            
-        const gameQuestions: DogruYolQuestion[] = pairs.map((item, index, arr) => {
-            let wrongAnswer = item.wrong;
-            if (!wrongAnswer) {
-                const otherOptions = arr.filter((_, i) => i !== index);
-                wrongAnswer = otherOptions[Math.floor(Math.random() * otherOptions.length)]?.correct || 'İslam';
-            }
-
-            return {
-                q: item.q,
-                correct: item.correct,
-                wrong: wrongAnswer
-            };
+        const studio = await getRegisteredStudioItemsForGame({ topicId: effectiveTopicId, courseId, unitId });
+        const pairs = prepareStudioDefinitionPairs(studio.conceptDefinitions, {
+            minTermLength: 2,
+            maxTermLength: 40,
+            cleanClue: true,
         });
 
-        const shuffled = [...gameQuestions].sort(() => 0.5 - Math.random());
-        return { questions: JSON.parse(JSON.stringify(shuffled.slice(0, 20))) };
+        const distractorPool = [...new Set([...pairs.map(p => p.term), ...studio.concepts])];
+        const gameQuestions: DogruYolQuestion[] = [];
+
+        for (const item of pairs) {
+            const wrong = pickStudioDistractors(item.term, distractorPool, 1)[0];
+            if (!wrong) continue;
+            gameQuestions.push({
+                q: item.definition,
+                correct: item.term,
+                wrong,
+            });
+        }
+
+        if (pairs.length < 2 || gameQuestions.length < 2) {
+            return { error: "Bu oyun için Kavram ve Notlar Stüdyosu'na kayıtlı en az 2 kavram ve tanım gereklidir.", questions: [] };
+        }
+
+        return { questions: JSON.parse(JSON.stringify(shuffleArray(gameQuestions).slice(0, 20))) };
 
     } catch (error: any) {
         console.error("Error getting Dogru Yol Kosucusu questions:", error);

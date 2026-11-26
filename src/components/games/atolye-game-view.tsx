@@ -74,6 +74,8 @@ function AtolyeGameViewContent({
         if (!active) return;
         if (res.error && (!res.questions || res.questions.length === 0)) {
           setError(res.error);
+        } else if (!res.questions || res.questions.length === 0) {
+          setError('Bu konu için kayıtlı içerik bulunamadı.');
         } else {
           setQuestions(res.questions || []);
           setTopicTitle(res.topicTitle || '');

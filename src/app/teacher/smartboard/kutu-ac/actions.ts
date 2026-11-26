@@ -13,101 +13,8 @@ import {
 } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
 import type { Question } from '@/lib/types';
-import { getQuestionsFromBank } from "@/lib/quiz-actions";
-import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
-
-const DEFAULT_FALLBACK_QUESTIONS: Question[] = [
-  {
-    id: 'kutu-default-1',
-    text: "İslam'ın ilk ve en temel şartı aşağıdakilerden hangisidir?",
-    correctAnswer: "Kelime-i Şehadet getirmek",
-    options: ["Kelime-i Şehadet getirmek", "Namaz kılmak", "Oruç tutmak", "Zekat vermek"],
-    type: "Çoktan Seçmeli",
-    difficulty: "Kolay",
-    topicId: ""
-  },
-  {
-    id: 'kutu-default-2',
-    text: "Kur'an-ı Kerim'in ilk indirilen suresi hangisidir?",
-    correctAnswer: "Alak Suresi",
-    options: ["Alak Suresi", "Fatiha Suresi", "İhlas Suresi", "Bakara Suresi"],
-    type: "Çoktan Seçmeli",
-    difficulty: "Kolay",
-    topicId: ""
-  },
-  {
-    id: 'kutu-default-3',
-    text: "Peygamber Efendimiz Hz. Muhammed (s.a.v.) hangi şehirde dünyaya gelmiştir?",
-    correctAnswer: "Mekke",
-    options: ["Mekke", "Medine", "Kudüs", "Taif"],
-    type: "Çoktan Seçmeli",
-    difficulty: "Kolay",
-    topicId: ""
-  },
-  {
-    id: 'kutu-default-4',
-    text: "İslam'da farz olan oruç ibadeti hangi ayda tutulur?",
-    correctAnswer: "Ramazan",
-    options: ["Ramazan", "Şaban", "Recep", "Muharrem"],
-    type: "Çoktan Seçmeli",
-    difficulty: "Kolay",
-    topicId: ""
-  },
-  {
-    id: 'kutu-default-5',
-    text: "Kur'an-ı Kerim'in en kısa suresi hangisidir?",
-    correctAnswer: "Kevser Suresi",
-    options: ["Kevser Suresi", "İhlas Suresi", "Felak Suresi", "Nas Suresi"],
-    type: "Çoktan Seçmeli",
-    difficulty: "Kolay",
-    topicId: ""
-  },
-  {
-    id: 'kutu-default-6',
-    text: "Müslümanların kıblesi olan Kâbe hangi kutsal şehirde yer alır?",
-    correctAnswer: "Mekke",
-    options: ["Mekke", "Medine", "Şam", "Kudüs"],
-    type: "Çoktan Seçmeli",
-    difficulty: "Kolay",
-    topicId: ""
-  },
-  {
-    id: 'kutu-default-7',
-    text: "İslam dini paylaşma, yardımlaşma ve dürüstlüğe büyük önem verir.",
-    correctAnswer: "Doğru",
-    options: ["Doğru", "Yanlış"],
-    type: "Doğru/Yanlış",
-    difficulty: "Kolay",
-    topicId: ""
-  },
-  {
-    id: 'kutu-default-8',
-    text: "Hz. Muhammed (s.a.v.) güvenilirliği nedeniyle gençliğinde 'el-Emin' lakabıyla anılmıştır.",
-    correctAnswer: "Doğru",
-    options: ["Doğru", "Yanlış"],
-    type: "Doğru/Yanlış",
-    difficulty: "Kolay",
-    topicId: ""
-  },
-  {
-    id: 'kutu-default-9',
-    text: "Namaz kılmadan önce temizlenmek amacıyla abdest almak farzdır.",
-    correctAnswer: "Doğru",
-    options: ["Doğru", "Yanlış"],
-    type: "Doğru/Yanlış",
-    difficulty: "Kolay",
-    topicId: ""
-  },
-  {
-    id: 'kutu-default-10',
-    text: "Zekât, maddi durumu yeterli olan Müslümanların yılda bir kez vermesi gereken bir ibadettir.",
-    correctAnswer: "Doğru",
-    options: ["Doğru", "Yanlış"],
-    type: "Doğru/Yanlış",
-    difficulty: "Kolay",
-    topicId: ""
-  }
-];
+import { getQuestionsFromBank, getRegisteredStudioItemsForGame } from "@/lib/quiz-actions";
+import { prepareStudioDefinitionPairs, shuffleArray } from '@/lib/studio-game-helpers';
 
 export async function getKutuAcQuestionsAction(
   { courseId, unitId, topicId, questionCount }: { courseId?: string; unitId?: string; topicId?: string; questionCount?: number }
@@ -120,60 +27,65 @@ export async function getKutuAcQuestionsAction(
       courseId,
       unitId,
       topicId,
-      questionCount: requestedCount, 
+      questionCount: requestedCount,
       questionTypes: ['Çoktan Seçmeli', 'Doğru/Yanlış', 'mcq', 'tf'],
     };
-    
+
     let questions: Question[] = [];
     try {
       const result = await getQuestionsFromBank(params);
       questions = (result.questions || []) as Question[];
     } catch (err) {
-      console.warn("Could not load from question bank, falling back:", err);
+      console.warn("Could not load from question bank, checking registered studio definitions:", err);
     }
 
     if (questions.length < 5) {
       try {
-        const { getStaticGameData } = await import('@/lib/quiz-actions');
-        const allItems = await getStaticGameData({ courseId, unitId, topicId });
-        const definitions = allItems.filter(it => 'type' in it && it.type === 'definition' && (it as any).content?.term && (it as any).content?.definition && isDefinitionValidAndClean(String((it as any).content.term), String((it as any).content.definition)));
-        
-        definitions.forEach((dItem, idx) => {
-          const term = (dItem as any).content.term.trim();
-          const def = (dItem as any).content.definition.trim();
-          const isTrue = idx % 2 === 0;
-          let statement = `${term}, ${def}`;
-          if (!isTrue && definitions.length > 1) {
-            const wrongTerm = (definitions[(idx + 1) % definitions.length] as any).content.term.trim();
-            statement = `${wrongTerm}, ${def}`;
-          }
-          if (!questions.some(q => q.text === statement)) {
-            questions.push({
-              id: `kutu-tf-${idx}-${Date.now()}`,
-              type: 'Doğru/Yanlış',
-              text: statement,
-              correctAnswer: isTrue ? 'Doğru' : 'Yanlış',
-              options: ['Doğru', 'Yanlış'],
-              difficulty: 'Orta',
-              topicId: topicId || ''
-            } as any);
-          }
+        const effectiveTopicId = (topicId && topicId !== unitId && topicId !== 'preview-topic' && topicId !== 'unit-flow' && topicId !== 'all')
+          ? topicId
+          : undefined;
+        const studio = await getRegisteredStudioItemsForGame({ courseId, unitId, topicId: effectiveTopicId });
+        const definitions = prepareStudioDefinitionPairs(studio.conceptDefinitions, {
+          minTermLength: 2,
+          maxTermLength: 40,
+          cleanClue: true,
         });
-      } catch (fallbackErr) {}
-    }
-    
-    // Eğer hala soru bulunamazsa varsayılan müfredat sorularını ekle
-    if (questions.length < 2) {
-      questions = [...DEFAULT_FALLBACK_QUESTIONS];
-    }
-    
-    const shuffledQuestions = [...questions].sort(() => Math.random() - 0.5);
 
-    return { questions: shuffledQuestions as Question[] };
-    
+        if (definitions.length >= 2) {
+          definitions.forEach((dItem, idx) => {
+            const isTrue = idx % 2 === 0;
+            const shownTerm = isTrue ? dItem.term : definitions[(idx + 1) % definitions.length].term;
+            const statement = `${shownTerm}, ${dItem.definition}`;
+            if (!questions.some(q => q.text === statement)) {
+              questions.push({
+                id: `kutu-tf-${idx}`,
+                type: 'Doğru/Yanlış',
+                text: statement,
+                correctAnswer: isTrue ? 'Doğru' : 'Yanlış',
+                options: ['Doğru', 'Yanlış'],
+                difficulty: 'Orta',
+                topicId: effectiveTopicId || '',
+              } as any);
+            }
+          });
+        }
+      } catch (studioErr) {
+        console.warn("Could not load registered studio definitions for Kutu Aç:", studioErr);
+      }
+    }
+
+    if (questions.length < 2) {
+      return {
+        questions: [],
+        error: "Kutu Aç oyunu için bu konuda yeterli soru veya Kavram ve Notlar Stüdyosu tanımı bulunamadı.",
+      };
+    }
+
+    return { questions: shuffleArray(questions) as Question[] };
+
   } catch (e: any) {
     console.error("Error getting Kutu Aç questions:", e);
-    return { questions: [...DEFAULT_FALLBACK_QUESTIONS] };
+    return { questions: [], error: "Sorular yüklenirken teknik bir hata oluştu." };
   }
 }
 

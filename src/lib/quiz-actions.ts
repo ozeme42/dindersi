@@ -9,6 +9,7 @@ import fs from 'fs/promises';
 import { db } from "@/lib/firebase"; 
 import { collection, doc, getDoc, query, where, getDocs, limit as firestoreLimit, Query, and, collectionGroup } from "firebase/firestore";
 import { normalizeTr, isDefinitionValidAndClean } from "./quiz-validation";
+import { normalizeConcept } from "./concept-utils";
 
 // This is a type guard to check if an object is a valid Question.
 function isQuestion(obj: any): obj is Question {
@@ -209,7 +210,7 @@ export async function clearStaticGameCache() {
     MEMORY_CACHE.clear();
 }
 
-const readJsonFile = async (filePath: string): Promise<any[] | null> => {
+const readJsonFile = async (filePath: string): Promise<any | null> => {
     if (STATIC_FILE_CACHE.has(filePath)) {
         return STATIC_FILE_CACHE.get(filePath) || null;
     }
@@ -224,46 +225,234 @@ const readJsonFile = async (filePath: string): Promise<any[] | null> => {
     }
 };
 
-const readDataForTopic = async (topicIdToFetch: string): Promise<(ActivityItem | Question)[]> => {
+const getFileMtimeMs = async (filePath: string): Promise<number | null> => {
+    try {
+        const st = await fs.stat(filePath);
+        return st.mtimeMs;
+    } catch {
+        return null;
+    }
+};
+
+/**
+ * Loads ONLY registered "Kavram & Notlar Stüdyosu" data (concepts, conceptDefinitions, activitySentences)
+ * for a single topicId. Never reads presentation flows/steps or raw sourceTexts.
+ */
+async function readStudioItemsForTopic(
+    topicIdToFetch: string,
+    context?: { courseId?: string; unitId?: string }
+): Promise<ActivityItem[]> {
+    const activityPath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicIdToFetch}.json`);
+    const activityItemsPath = path.join(process.cwd(), 'public', 'curriculum', 'activityItems', `${topicIdToFetch}.json`);
+    const yazilacaklarPath = path.join(process.cwd(), 'public', 'curriculum', 'yazilacaklar', `${topicIdToFetch}.json`);
+
+    const [actRaw, actItemsRaw, yazRaw, actMtime, yazMtime] = await Promise.all([
+        readJsonFile(activityPath),
+        readJsonFile(activityItemsPath),
+        readJsonFile(yazilacaklarPath),
+        getFileMtimeMs(activityPath),
+        getFileMtimeMs(yazilacaklarPath),
+    ]);
+
+    const activityData: any[] = (Array.isArray(actRaw) && actRaw.length > 0)
+        ? actRaw
+        : (Array.isArray(actItemsRaw) ? actItemsRaw : []);
+
+    const yazObj = (yazRaw && !Array.isArray(yazRaw)) ? (yazRaw as any) : null;
+    const yazDefs: { concept: string; definition: string }[] = Array.isArray(yazObj?.conceptDefinitions)
+        ? yazObj.conceptDefinitions
+            .map((cd: any) => ({
+                concept: String(cd?.concept || cd?.term || '').trim(),
+                definition: String(cd?.definition || '').trim(),
+            }))
+            .filter((cd: { concept: string; definition: string }) => !!cd.concept)
+        : [];
+
+    const hasValidYazDefs = yazDefs.some(cd => cd.concept && cd.definition);
+    const preferYazOverOlderActConcepts = Boolean(
+        hasValidYazDefs &&
+        yazMtime !== null &&
+        actMtime !== null &&
+        yazMtime > actMtime + 60_000
+    );
+
+    const conceptMap = new Map<string, string>();
+    const defMap = new Map<string, { term: string; definition: string }>();
+    const sentencesSet = new Set<string>();
+
+    const registerConcept = (rawTerm: string) => {
+        const clean = String(rawTerm || '').trim();
+        if (!clean) return;
+        const key = normalizeConcept(clean);
+        if (!key) return;
+        const existing = conceptMap.get(key);
+        if (!existing || clean.length > existing.length || /[îâû'’]/i.test(clean)) {
+            conceptMap.set(key, clean);
+        }
+    };
+
+    const registerDefinition = (rawTerm: string, rawDef: string) => {
+        const cleanTerm = String(rawTerm || '').trim();
+        const cleanDef = String(rawDef || '').trim();
+        if (!cleanTerm) return;
+        const key = normalizeConcept(cleanTerm);
+        if (!key) return;
+        registerConcept(cleanTerm);
+        const existing = defMap.get(key);
+        if (!existing) {
+            defMap.set(key, { term: cleanTerm, definition: cleanDef });
+        } else {
+            if (!existing.definition && cleanDef) {
+                existing.definition = cleanDef;
+            }
+            if (cleanTerm.length > existing.term.length || /[îâû'’]/i.test(cleanTerm)) {
+                existing.term = cleanTerm;
+            }
+        }
+    };
+
+    // 1. Öncelik: public/curriculum/yazilacaklar/${topicId}.json (Kavram & Notlar Stüdyosu tanım listesi)
+    for (const cd of yazDefs) {
+        registerDefinition(cd.concept, cd.definition);
+    }
+
+    // 2. public/curriculum/activities/${topicId}.json (Sadece concept, definition, sentence tipleri)
+    for (const item of activityData) {
+        if (!item || typeof item !== 'object') continue;
+        if (item.type === 'sentence') {
+            const txt = String(item.content?.text || '').trim();
+            if (txt) sentencesSet.add(txt);
+            continue;
+        }
+        if (preferYazOverOlderActConcepts) {
+            continue;
+        }
+        if (item.type === 'concept') {
+            const term = String(item.content?.text || item.content?.term || '').trim();
+            if (term) registerConcept(term);
+        } else if (item.type === 'definition') {
+            const term = String(item.content?.term || item.content?.concept || '').trim();
+            const def = String(item.content?.definition || item.content?.meaning || '').trim();
+            if (term) registerDefinition(term, def);
+        }
+    }
+
+    // 3. Yerel dosyalarda kayıtlı Stüdyo verisi yoksa Firestore'daki kayıtlı activityItems ve writingContent'ten çek
+    if (conceptMap.size === 0 && defMap.size === 0 && sentencesSet.size === 0) {
+        try {
+            const qAct = query(collection(db, "activityItems"), where("topicId", "==", topicIdToFetch));
+            const snapAct = await getDocs(qAct);
+            snapAct.docs.forEach(d => {
+                const item = d.data() as any;
+                if (item.type === 'concept') {
+                    const term = String(item.content?.text || item.content?.term || '').trim();
+                    if (term) registerConcept(term);
+                } else if (item.type === 'definition') {
+                    const term = String(item.content?.term || item.content?.concept || '').trim();
+                    const def = String(item.content?.definition || item.content?.meaning || '').trim();
+                    if (term) registerDefinition(term, def);
+                } else if (item.type === 'sentence') {
+                    const txt = String(item.content?.text || '').trim();
+                    if (txt) sentencesSet.add(txt);
+                }
+            });
+        } catch (err) {
+            console.warn(`Firestore activityItems fallback warning for ${topicIdToFetch}:`, err);
+        }
+
+        try {
+            let topicSnap = null;
+            if (context?.courseId && context?.unitId && context.unitId !== 'all' && context.courseId !== 'all') {
+                topicSnap = await getDoc(doc(db, 'courses', context.courseId, 'units', context.unitId, 'topics', topicIdToFetch));
+            }
+            if (!topicSnap || !topicSnap.exists()) {
+                topicSnap = await getDoc(doc(db, 'topics', topicIdToFetch));
+            }
+            if (topicSnap && topicSnap.exists()) {
+                const tData = topicSnap.data() as any;
+                if (Array.isArray(tData?.writingContent?.conceptDefinitions)) {
+                    for (const cd of tData.writingContent.conceptDefinitions) {
+                        const term = String(cd?.concept || cd?.term || '').trim();
+                        const def = String(cd?.definition || '').trim();
+                        if (term) registerDefinition(term, def);
+                    }
+                }
+            }
+        } catch (err) {
+            console.warn(`Firestore writingContent fallback warning for ${topicIdToFetch}:`, err);
+        }
+    }
+
+    const out: ActivityItem[] = [];
+    let idx = 0;
+
+    for (const [key, pair] of defMap.entries()) {
+        if (pair.definition) {
+            out.push({
+                id: `studio-def-${topicIdToFetch}-${idx++}`,
+                type: 'definition',
+                content: { term: pair.term, definition: pair.definition },
+                topicId: topicIdToFetch,
+                courseId: context?.courseId || '',
+                unitId: context?.unitId || '',
+            } as any);
+        }
+        // Ayrıca kavram listesinde de bulunsun (kelime oyunları için)
+        const displayConcept = conceptMap.get(key) || pair.term;
+        out.push({
+            id: `studio-con-${topicIdToFetch}-${idx++}`,
+            type: 'concept',
+            content: { text: displayConcept, term: displayConcept },
+            topicId: topicIdToFetch,
+            courseId: context?.courseId || '',
+            unitId: context?.unitId || '',
+        } as any);
+        conceptMap.delete(key);
+    }
+
+    for (const term of conceptMap.values()) {
+        out.push({
+            id: `studio-con-${topicIdToFetch}-${idx++}`,
+            type: 'concept',
+            content: { text: term, term },
+            topicId: topicIdToFetch,
+            courseId: context?.courseId || '',
+            unitId: context?.unitId || '',
+        } as any);
+    }
+
+    for (const sentence of sentencesSet) {
+        out.push({
+            id: `studio-sent-${topicIdToFetch}-${idx++}`,
+            type: 'sentence',
+            content: { text: sentence },
+            topicId: topicIdToFetch,
+            courseId: context?.courseId || '',
+            unitId: context?.unitId || '',
+        } as any);
+    }
+
+    return out;
+}
+
+const readDataForTopic = async (
+    topicIdToFetch: string,
+    context?: { courseId?: string; unitId?: string }
+): Promise<(ActivityItem | Question)[]> => {
     if (STATIC_TOPIC_CACHE.has(topicIdToFetch)) {
         return STATIC_TOPIC_CACHE.get(topicIdToFetch)!;
     }
 
-    const activityPath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicIdToFetch}.json`);
-    const activityItemsPath = path.join(process.cwd(), 'public', 'curriculum', 'activityItems', `${topicIdToFetch}.json`);
-    const activityItemsDashPath = path.join(process.cwd(), 'public', 'curriculum', 'activity-items', `${topicIdToFetch}.json`);
     const questionPath = path.join(process.cwd(), 'public', 'curriculum', 'questions', `${topicIdToFetch}.json`);
-    const flowPath = path.join(process.cwd(), 'public', 'curriculum', 'flows', `${topicIdToFetch}.json`);
-    const yazilacaklarPath = path.join(process.cwd(), 'public', 'curriculum', 'yazilacaklar', `${topicIdToFetch}.json`);
 
-    let [activityData, questionData, flowData, yazilacaklarRaw] = await Promise.all([
-        readJsonFile(activityPath),
+    const [studioItems, questionRaw] = await Promise.all([
+        readStudioItemsForTopic(topicIdToFetch, context),
         readJsonFile(questionPath),
-        readJsonFile(flowPath),
-        readJsonFile(yazilacaklarPath),
     ]);
 
-    if (!activityData || activityData.length === 0) {
-        activityData = await readJsonFile(activityItemsPath);
-    }
-    if (!activityData || activityData.length === 0) {
-        activityData = await readJsonFile(activityItemsDashPath);
-    }
-
-    // Firestore Fallback: Eğer yerel statik dosyalarda veri yoksa doğrudan Firestore'dan çek (0 kesinti)
-    let dbActivityItems: ActivityItem[] = [];
-    if (!activityData || activityData.length === 0) {
-        try {
-            const q = query(collection(db, "activityItems"), where("topicId", "==", topicIdToFetch));
-            const snap = await getDocs(q);
-            dbActivityItems = snap.docs.map(d => ({ id: d.id, ...d.data() } as ActivityItem));
-        } catch (err) {
-            console.warn(`Firestore activityItems fallback warning for ${topicIdToFetch}:`, err);
-        }
-    }
-
+    const questionData: any[] = Array.isArray(questionRaw) ? questionRaw : [];
     let dbQuestions: Question[] = [];
-    if (!questionData || questionData.length === 0) {
+    if (questionData.length === 0) {
         try {
             const q = query(collection(db, "questions"), where("topicId", "==", topicIdToFetch));
             const snap = await getDocs(q);
@@ -273,390 +462,17 @@ const readDataForTopic = async (topicIdToFetch: string): Promise<(ActivityItem |
         }
     }
 
-    // Yazılacaklar → ActivityItem dönüşümü
-    const yazilacaklarItems: (ActivityItem | Question)[] = [];
-    if (yazilacaklarRaw && !Array.isArray(yazilacaklarRaw)) {
-        const wr = yazilacaklarRaw as any;
-        if (Array.isArray(wr.conceptDefinitions)) {
-            wr.conceptDefinitions.forEach((cd: any, idx: number) => {
-                if (cd.concept && cd.definition) {
-                    yazilacaklarItems.push({
-                        id: `yaz-def-${topicIdToFetch}-${idx}`,
-                        type: 'definition',
-                        content: { term: String(cd.concept).trim(), definition: String(cd.definition).trim() },
-                        topicId: topicIdToFetch
-                    } as any);
-                }
-            });
-        }
-        if (Array.isArray(wr.notes)) {
-            wr.notes.forEach((note: string, idx: number) => {
-                if (note && note.trim()) {
-                    yazilacaklarItems.push({
-                        id: `yaz-note-${topicIdToFetch}-${idx}`,
-                        type: 'sentence',
-                        content: { text: String(note).trim() },
-                        topicId: topicIdToFetch
-                    } as any);
-                }
-            });
-        }
-    }
-
-    const flowItems: (ActivityItem | Question)[] = [];
-    if (Array.isArray(flowData)) {
-        flowItems.push(...extractAllItemsFromSteps(flowData, undefined, topicIdToFetch));
-    }
-
-    const allCombined = [
-        ...(activityData || []),
-        ...dbActivityItems,
-        ...yazilacaklarItems,
-        ...(questionData || []),
+    const allCombined: (ActivityItem | Question)[] = [
+        ...studioItems,
+        ...questionData,
         ...dbQuestions,
-        ...flowItems
     ];
 
-    // Tekilleştirme (aynı id veya içerik tekrar etmesin)
-    const seenItemKeys = new Set<string>();
-    const deduplicated: (ActivityItem | Question)[] = [];
-    for (const item of allCombined) {
-        const itemKey = (item as any).id || `${item.type}_${(item as any).content?.term || (item as any).content?.text || (item as any).text}`;
-        if (!seenItemKeys.has(itemKey)) {
-            seenItemKeys.add(itemKey);
-            deduplicated.push(item);
-        }
-    }
-
-    STATIC_TOPIC_CACHE.set(topicIdToFetch, deduplicated);
-    return deduplicated;
+    STATIC_TOPIC_CACHE.set(topicIdToFetch, allCombined);
+    return allCombined;
 };
 
-// Helper: Slayt adımlarından tüm kavram, tanım ve soruları eksiksiz çıkaran fonksiyon
-function extractAllItemsFromSteps(
-    steps: any[], 
-    unitId?: string, 
-    topicId?: string
-): (ActivityItem | Question)[] {
-    const out: (ActivityItem | Question)[] = [];
-    if (!Array.isArray(steps)) return out;
-
-    steps.forEach((step, sIdx) => {
-        if (!step || step.isPublished === false) return;
-
-        // 1. categoryTable (Ünite genelinde kavram ve tanımların en zengin olduğu yer)
-        if (step.type === 'categoryTable' && Array.isArray(step.categories)) {
-            step.categories.forEach((cat: any, cIdx: number) => {
-                (cat.items || []).forEach((it: any, itIdx: number) => {
-                    const text = String(it || '').trim();
-                    const match = text.match(/^([^:;–—\-]{2,40})[:;–—\-]\s*(.+)$/);
-                    if (match) {
-                        const term = match[1].replace(/^\d+[\.\)]\s*/, '').trim();
-                        const definition = match[2].trim();
-                        if (term.length >= 2 && term.length <= 40 && definition.length >= 4) {
-                            out.push({
-                                id: `ct-def-${unitId || topicId || 'u'}-${sIdx}-${cIdx}-${itIdx}`,
-                                type: 'definition',
-                                content: { term, definition },
-                                unitId,
-                                topicId
-                            } as any);
-                            out.push({
-                                id: `ct-c-${unitId || topicId || 'u'}-${sIdx}-${cIdx}-${itIdx}`,
-                                type: 'concept',
-                                content: { term, text: term },
-                                unitId,
-                                topicId
-                            } as any);
-                        }
-                    } else if (text.length >= 3 && text.length <= 35 && !text.includes('.')) {
-                        out.push({
-                            id: `ct-raw-${unitId || topicId || 'u'}-${sIdx}-${cIdx}-${itIdx}`,
-                            type: 'concept',
-                            content: { term: text, text },
-                            unitId,
-                            topicId
-                        } as any);
-                    }
-                });
-            });
-        }
-
-        // 2. conceptExplanation
-        if (step.type === 'conceptExplanation' && Array.isArray(step.items)) {
-            step.items.forEach((it: any, iIdx: number) => {
-                const term = String(it.concept || it.term || '').trim();
-                const definition = String(it.definition || '').trim();
-                if (term) {
-                    out.push({
-                        id: `ce-def-${unitId || topicId || 'u'}-${sIdx}-${iIdx}`,
-                        type: 'definition',
-                        content: { term, definition },
-                        unitId,
-                        topicId
-                    } as any);
-                    out.push({
-                        id: `ce-c-${unitId || topicId || 'u'}-${sIdx}-${iIdx}`,
-                        type: 'concept',
-                        content: { term, text: term },
-                        unitId,
-                        topicId
-                    } as any);
-                }
-            });
-        }
-
-        // 3. flashcard / anagramFlashcard
-        if ((step.type === 'flashcard' || step.type === 'anagramFlashcard') && Array.isArray(step.cards)) {
-            step.cards.forEach((cd: any, cIdx: number) => {
-                const term = String(cd.term || cd.correctAnswer || '').trim();
-                const definition = String(cd.definition || '').trim();
-                if (term) {
-                    out.push({
-                        id: `fc-def-${unitId || topicId || 'u'}-${sIdx}-${cIdx}`,
-                        type: 'definition',
-                        content: { term, definition },
-                        unitId,
-                        topicId
-                    } as any);
-                    out.push({
-                        id: `fc-c-${unitId || topicId || 'u'}-${sIdx}-${cIdx}`,
-                        type: 'concept',
-                        content: { term, text: term },
-                        unitId,
-                        topicId
-                    } as any);
-                }
-            });
-        }
-
-        // 4. matching / conceptMatching
-        if ((step.type === 'matching' || step.type === 'conceptMatching') && Array.isArray(step.pairs)) {
-            step.pairs.forEach((p: any, pIdx: number) => {
-                const term = String(p.concept || p.term || '').trim();
-                const definition = String(p.definition || '').trim();
-                if (term && !/kavram \d/i.test(term)) {
-                    out.push({
-                        id: `m-def-${unitId || topicId || 'u'}-${sIdx}-${pIdx}`,
-                        type: 'definition',
-                        content: { term, definition },
-                        unitId,
-                        topicId
-                    } as any);
-                    out.push({
-                        id: `m-c-${unitId || topicId || 'u'}-${sIdx}-${pIdx}`,
-                        type: 'concept',
-                        content: { term, text: term },
-                        unitId,
-                        topicId
-                    } as any);
-                }
-            });
-        }
-
-        // 5. categorySort
-        if (step.type === 'categorySort' && Array.isArray(step.items)) {
-            step.items.forEach((it: any, itIdx: number) => {
-                const term = String(it.text || '').trim();
-                const hint = String(it.hint || '').trim();
-                if (term && !/namazının farzı|vitir namazı/i.test(term)) {
-                    out.push({
-                        id: `cs-c-${unitId || topicId || 'u'}-${sIdx}-${itIdx}`,
-                        type: 'concept',
-                        content: { term, text: term },
-                        unitId,
-                        topicId
-                    } as any);
-                    if (hint) {
-                        out.push({
-                            id: `cs-def-${unitId || topicId || 'u'}-${sIdx}-${itIdx}`,
-                            type: 'definition',
-                            content: { term, definition: hint },
-                            unitId,
-                            topicId
-                        } as any);
-                    }
-                }
-            });
-        }
-
-        // 6. clozeParagraph
-        if (step.type === 'clozeParagraph' && Array.isArray(step.blanks)) {
-            step.blanks.forEach((b: any, bIdx: number) => {
-                const term = String(b.targetWord || '').trim();
-                const definition = String(b.hint || '').trim();
-                if (term) {
-                    out.push({
-                        id: `cp-c-${unitId || topicId || 'u'}-${sIdx}-${bIdx}`,
-                        type: 'concept',
-                        content: { term, text: term },
-                        unitId,
-                        topicId
-                    } as any);
-                    if (definition) {
-                        out.push({
-                            id: `cp-def-${unitId || topicId || 'u'}-${sIdx}-${bIdx}`,
-                            type: 'definition',
-                            content: { term, definition },
-                            unitId,
-                            topicId
-                        } as any);
-                    }
-                }
-            });
-        }
-
-        // 7. notebookNote
-        if (step.type === 'notebookNote' && Array.isArray(step.notes)) {
-            step.notes.forEach((nt: any, nIdx: number) => {
-                const line = String(nt || '').trim();
-                const match = line.match(/^([^:;–—\-]{2,35})[:;–—\-]\s*(.+)$/);
-                if (match) {
-                    const term = match[1].replace(/^\d+[\.\)]\s*/, '').trim();
-                    const definition = match[2].trim();
-                    if (term.length >= 2 && term.length <= 35 && definition.length >= 4) {
-                        out.push({
-                            id: `nn-def-${unitId || topicId || 'u'}-${sIdx}-${nIdx}`,
-                            type: 'definition',
-                            content: { term, definition },
-                            unitId,
-                            topicId
-                        } as any);
-                        out.push({
-                            id: `nn-c-${unitId || topicId || 'u'}-${sIdx}-${nIdx}`,
-                            type: 'concept',
-                            content: { term, text: term },
-                            unitId,
-                            topicId
-                        } as any);
-                    }
-                }
-            });
-        }
-
-        // 8. mcq / Çoktan Seçmeli
-        if ((step.type === 'mcq' || step.type === 'Çoktan Seçmeli') && step.question) {
-            const qText = String(step.question).trim();
-            if (!/bu konuyla ilgili \d/i.test(qText)) {
-                out.push({
-                    id: step.id || `mcq-${unitId || topicId || 'u'}-${sIdx}`,
-                    type: 'Çoktan Seçmeli',
-                    text: qText,
-                    options: step.options || [],
-                    correctAnswer: step.options?.[step.correctAnswerIndex ?? 0] || step.correctAnswer || '',
-                    difficulty: step.difficulty || 'Orta',
-                    unitId,
-                    topicId
-                } as any);
-            }
-        }
-
-        // 9. tf / trueFalseList
-        if (step.type === 'trueFalseList' && Array.isArray(step.questions)) {
-            step.questions.forEach((q: any, qIdx: number) => {
-                if (q.statement) {
-                    out.push({
-                        id: `tf-${unitId || topicId || 'u'}-${sIdx}-${qIdx}`,
-                        type: 'Doğru/Yanlış',
-                        text: String(q.statement).trim(),
-                        correctAnswer: q.isCorrect ? 'Doğru' : 'Yanlış',
-                        options: ['Doğru', 'Yanlış'],
-                        difficulty: 'Orta',
-                        unitId,
-                        topicId
-                    } as any);
-                }
-            });
-        }
-        if (step.type === 'tf' && step.statement) {
-            out.push({
-                id: step.id || `tf-s-${unitId || topicId || 'u'}-${sIdx}`,
-                type: 'Doğru/Yanlış',
-                text: String(step.statement).trim(),
-                correctAnswer: step.isCorrect ? 'Doğru' : 'Yanlış',
-                options: ['Doğru', 'Yanlış'],
-                difficulty: 'Orta',
-                unitId,
-                topicId
-            } as any);
-        }
-
-        // 10. miniGame
-        if (step.type === 'miniGame' && Array.isArray(step.questions)) {
-            step.questions.forEach((q: any, qIdx: number) => {
-                const qText = String(q.question || '').trim();
-                const correctOpt = String(q.options?.[q.correctAnswerIndex ?? 0] || '').trim();
-                if (!/bu konuyla ilgili \d/i.test(qText) && !/doğru seçenek/i.test(correctOpt)) {
-                    out.push({
-                        id: q.id || `mg-${unitId || topicId || 'u'}-${sIdx}-${qIdx}`,
-                        type: 'Çoktan Seçmeli',
-                        text: qText,
-                        options: q.options || [],
-                        correctAnswer: correctOpt,
-                        unitId,
-                        topicId
-                    } as any);
-                    if (correctOpt.length >= 2 && correctOpt.length <= 35 && !correctOpt.includes('.')) {
-                        out.push({
-                            id: `mg-c-${unitId || topicId || 'u'}-${sIdx}-${qIdx}`,
-                            type: 'concept',
-                            content: { term: correctOpt, text: correctOpt },
-                            unitId,
-                            topicId
-                        } as any);
-                        if (qText.length >= 5) {
-                            out.push({
-                                id: `mg-def-${unitId || topicId || 'u'}-${sIdx}-${qIdx}`,
-                                type: 'definition',
-                                content: { term: correctOpt, definition: qText },
-                                unitId,
-                                topicId
-                            } as any);
-                        }
-                    }
-                }
-            });
-        }
-    });
-
-    return out;
-}
-
-// Helper: Kaynak metinden kavram ve tanım satırlarını çıkaran yardımcı fonksiyon
-function extractConceptsFromText(text: string, unitId?: string, topicId?: string): (ActivityItem | Question)[] {
-    const items: (ActivityItem | Question)[] = [];
-    if (!text || typeof text !== 'string') return items;
-    const lines = text.split('\n');
-    lines.forEach((line, lIdx) => {
-        const trimmed = line.trim();
-        const match = trimmed.match(/^([^:;–—\-]{2,35})[:;–—\-]\s*(.+)$/);
-        if (match) {
-            const term = match[1].replace(/^\d+[\.\)]\s*/, '').trim();
-            const definition = match[2].trim();
-            if (term.length >= 2 && term.length <= 40 && definition.length >= 5) {
-                items.push({
-                    id: `st-def-${unitId || topicId || 'u'}-${lIdx}`,
-                    type: 'definition',
-                    content: { term, definition },
-                    unitId,
-                    topicId
-                } as any);
-                items.push({
-                    id: `st-c-${unitId || topicId || 'u'}-${lIdx}`,
-                    type: 'concept',
-                    content: { term, text: term },
-                    unitId,
-                    topicId
-                } as any);
-            }
-        }
-    });
-    return items;
-}
-
-// Helper: Unit ID'nin ait olduğu dersi bulan yardımcı
-async function resolveCourseIdForUnit(unitId: string): Promise<string | null> {
-    if (!unitId || unitId === 'preview-unit') return null;
+async function getManifestCached(): Promise<any | null> {
     if (!CACHED_MANIFEST) {
         try {
             const manifestPath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
@@ -664,8 +480,15 @@ async function resolveCourseIdForUnit(unitId: string): Promise<string | null> {
             CACHED_MANIFEST = JSON.parse(manifestContent);
         } catch {}
     }
-    if (CACHED_MANIFEST?.classGroups) {
-        for (const g of CACHED_MANIFEST.classGroups) {
+    return CACHED_MANIFEST;
+}
+
+// Helper: Unit ID'nin ait olduğu dersi bulan yardımcı
+async function resolveCourseIdForUnit(unitId: string): Promise<string | null> {
+    if (!unitId || unitId === 'preview-unit' || unitId === 'all') return null;
+    const manifest = await getManifestCached();
+    if (manifest?.classGroups) {
+        for (const g of manifest.classGroups) {
             for (const c of g.courses || []) {
                 if (c.units?.some((u: any) => u.id === unitId)) {
                     return c.id;
@@ -686,8 +509,9 @@ async function resolveCourseIdForUnit(unitId: string): Promise<string | null> {
 }
 
 /**
- * Fetches data from static JSON files for games. Reads from `activities`, `questions`, and `flows` directories.
- * If topicId is 'all', it aggregates data from all topics within the given unit.
+ * Fetches data ONLY from saved Kavram & Notlar Stüdyosu files/records and saved topic questions.
+ * Never reads presentation `flows`, `steps`, or `sourceText`.
+ * Strictly scopes by topicId, unitId, or courseId.
  */
 export async function getStaticGameData(params: {
   courseId?: string;
@@ -700,146 +524,62 @@ export async function getStaticGameData(params: {
     const isEffectiveTopic = topicId && topicId !== 'all' && topicId !== 'unit-flow' && topicId !== 'preview-topic' && topicId !== unitId;
 
     if (isEffectiveTopic) {
-        return readDataForTopic(topicId!);
-    } else if (unitId && unitId !== 'all') {
+        return readDataForTopic(topicId!, { courseId, unitId });
+    }
+
+    const isEffectiveUnit = unitId && unitId !== 'all' && unitId !== 'preview-unit';
+    const isEffectiveCourse = courseId && courseId !== 'all' && courseId !== 'preview-course';
+
+    if (isEffectiveUnit) {
         const unitCacheKey = `unit_${unitId}`;
         if (STATIC_TOPIC_CACHE.has(unitCacheKey)) {
             return STATIC_TOPIC_CACHE.get(unitCacheKey)!;
         }
 
-        let allUnitItems: (ActivityItem | Question)[] = [];
-
-        // 1. Önce bu ünitenin doğrudan bir ders akışı (flow) dosyası var mı kontrol et
-        try {
-            const unitFlowPath = path.join(process.cwd(), 'public', 'curriculum', 'flows', `${unitId}.json`);
-            const flowContent = await fs.readFile(unitFlowPath, 'utf-8');
-            const flowSteps = JSON.parse(flowContent);
-            if (Array.isArray(flowSteps)) {
-                allUnitItems.push(...extractAllItemsFromSteps(flowSteps, unitId));
-            }
-        } catch (flowErr) {
-            // Flow dosyası olmayabilir, normal
-        }
-
-        // 2. Manifest'ten bu üniteye ait TÜM konuların verilerini topla
-        try {
-            if (!CACHED_MANIFEST) {
-                const manifestPath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
-                const manifestContent = await fs.readFile(manifestPath, 'utf-8');
-                CACHED_MANIFEST = JSON.parse(manifestContent);
-            }
-            const manifest = CACHED_MANIFEST;
-            
-            let targetUnit: any;
-            for (const group of manifest.classGroups || []) {
+        const topicIds = new Set<string>();
+        const manifest = await getManifestCached();
+        if (manifest?.classGroups) {
+            for (const group of manifest.classGroups) {
                 for (const course of group.courses || []) {
                     const foundUnit = course.units?.find((u: any) => u.id === unitId);
                     if (foundUnit) {
-                        targetUnit = foundUnit;
-                        if (!courseId) courseId = course.id;
+                        if (!courseId || courseId === 'preview-course' || courseId === 'all') courseId = course.id;
+                        for (const t of foundUnit.topics || []) {
+                            if (t?.id) topicIds.add(t.id);
+                        }
                         break;
                     }
                 }
-                if (targetUnit) break;
             }
-
-            if (targetUnit && targetUnit.topics && targetUnit.topics.length > 0) {
-                const topicDataPromises = targetUnit.topics.map((topic: any) => readDataForTopic(topic.id));
-                const allTopicsData = await Promise.all(topicDataPromises);
-                allUnitItems.push(...allTopicsData.flat());
-            }
-        } catch (mErr) {
-            console.warn("Manifest unit check error:", mErr);
         }
 
-        // 3. Eğer courseId eksikse dinamik olarak çöz
-        if (!courseId || courseId === 'preview-course') {
-            const resolved = await resolveCourseIdForUnit(unitId);
+        if (!courseId || courseId === 'preview-course' || courseId === 'all') {
+            const resolved = await resolveCourseIdForUnit(unitId!);
             if (resolved) courseId = resolved;
         }
 
-        // 4. Firestore'dan ünite belgesini ve alt konularını tara
-        try {
-            if (courseId && unitId && unitId !== 'preview-unit') {
-                // A) Doğrudan ünite belgesindeki slaytları ve kaynak metni tara
-                try {
-                    const uSnap = await getDoc(doc(db, 'courses', courseId, 'units', unitId));
-                    if (uSnap.exists()) {
-                        const uData = uSnap.data();
-                        if (Array.isArray(uData.steps)) {
-                            allUnitItems.push(...extractAllItemsFromSteps(uData.steps, unitId));
-                        }
-                        if (uData.sourceText && typeof uData.sourceText === 'string') {
-                            allUnitItems.push(...extractConceptsFromText(uData.sourceText, unitId));
-                        }
-                    }
-                } catch (uErr) {
-                    console.warn("Firestore unit doc fetch warning:", uErr);
-                }
-
-                // B) Ünitenin altındaki tüm konuları (topics subcollection) tara
-                try {
-                    const topicsSnap = await getDocs(collection(db, `courses/${courseId}/units/${unitId}/topics`));
-                    for (const tDoc of topicsSnap.docs) {
-                        const tData = tDoc.data();
-                        // 1) Yerel dosyalardan bu konunun verilerini oku
-                        const localTopicItems = await readDataForTopic(tDoc.id);
-                        allUnitItems.push(...localTopicItems);
-
-                        // 2) Firestore'daki topic slaytlarını da tara
-                        if (Array.isArray(tData.steps)) {
-                            allUnitItems.push(...extractAllItemsFromSteps(tData.steps, unitId, tDoc.id));
-                        }
-                        if (tData.sourceText && typeof tData.sourceText === 'string') {
-                            allUnitItems.push(...extractConceptsFromText(tData.sourceText, unitId, tDoc.id));
-                        }
-
-                        // 3) writingContent.conceptDefinitions
-                        if (Array.isArray(tData?.writingContent?.conceptDefinitions)) {
-                            tData.writingContent.conceptDefinitions.forEach((cd: any, cdIdx: number) => {
-                                const term = String(cd.concept || cd.term || '').trim();
-                                const definition = String(cd.definition || '').trim();
-                                if (term) {
-                                    allUnitItems.push({
-                                        id: `fs-top-cd-${tDoc.id}-${cdIdx}`,
-                                        type: 'definition',
-                                        content: { term, definition },
-                                        unitId,
-                                        topicId: tDoc.id
-                                    } as any);
-                                    allUnitItems.push({
-                                        id: `fs-top-c-${tDoc.id}-${cdIdx}`,
-                                        type: 'concept',
-                                        content: { term, text: term },
-                                        unitId,
-                                        topicId: tDoc.id
-                                    } as any);
-                                }
-                            });
-                        }
-                    }
-                } catch (tErr) {
-                    console.warn("Firestore unit topics subcollection fetch warning:", tErr);
-                }
-
-                // C) Firestore activityItems koleksiyonunu filtrele
-                try {
-                    const actSnap = await getDocs(query(collection(db, 'activityItems'), where('unitId', '==', unitId)));
-                    actSnap.docs.forEach(d => {
-                        allUnitItems.push({ id: d.id, ...d.data() } as any);
-                    });
-                } catch {}
+        // Manifest'te yoksa (öğretmenin Firestore'a eklediği ünite/konuysa) Firestore topics ID'lerini ekle
+        if (topicIds.size === 0 && courseId && courseId !== 'all' && courseId !== 'preview-course') {
+            try {
+                const topicsSnap = await getDocs(collection(db, `courses/${courseId}/units/${unitId}/topics`));
+                topicsSnap.docs.forEach(d => topicIds.add(d.id));
+            } catch (tErr) {
+                console.warn("Firestore unit topics subcollection fetch warning:", tErr);
             }
-        } catch (fsErr) {
-            console.warn("Firestore unit extraction error:", fsErr);
         }
 
-        // Tekilleştirme (aynı kavram veya soru tekrar etmesin)
+        const allTopicArrays = await Promise.all(
+            Array.from(topicIds).map(tId => readDataForTopic(tId, { courseId, unitId }))
+        );
+        const rawItems = allTopicArrays.flat();
+
         const seenKeys = new Set<string>();
         const deduplicatedUnitItems: (ActivityItem | Question)[] = [];
-        for (const item of allUnitItems) {
-            const term = (item as any).content?.term || (item as any).content?.concept || (item as any).term || (item as any).text;
-            const itemKey = `${item.type}_${String(term || (item as any).id).toLocaleLowerCase('tr-TR').trim()}`;
+        for (const item of rawItems) {
+            const itemType = (item as any).type;
+            const term = (item as any).content?.term || (item as any).content?.text || (item as any).term || (item as any).text || (item as any).question;
+            const norm = term ? normalizeConcept(String(term)) : '';
+            const itemKey = norm ? `${itemType}_${norm}` : `${itemType}_${(item as any).id}`;
             if (!seenKeys.has(itemKey)) {
                 seenKeys.add(itemKey);
                 deduplicatedUnitItems.push(item);
@@ -850,7 +590,124 @@ export async function getStaticGameData(params: {
         return deduplicatedUnitItems;
     }
 
+    if (isEffectiveCourse) {
+        const courseCacheKey = `course_${courseId}`;
+        if (STATIC_TOPIC_CACHE.has(courseCacheKey)) {
+            return STATIC_TOPIC_CACHE.get(courseCacheKey)!;
+        }
+
+        const topicRefs: { topicId: string; unitId: string }[] = [];
+        const seenTopicIds = new Set<string>();
+        const manifest = await getManifestCached();
+        if (manifest?.classGroups) {
+            for (const group of manifest.classGroups) {
+                const foundCourse = (group.courses || []).find((c: any) => c.id === courseId);
+                if (foundCourse) {
+                    for (const u of foundCourse.units || []) {
+                        for (const t of u.topics || []) {
+                            if (t?.id && !seenTopicIds.has(t.id)) {
+                                seenTopicIds.add(t.id);
+                                topicRefs.push({ topicId: t.id, unitId: u.id });
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
+        if (topicRefs.length === 0) {
+            try {
+                const unitsSnap = await getDocs(collection(db, `courses/${courseId}/units`));
+                for (const uDoc of unitsSnap.docs) {
+                    const topicsSnap = await getDocs(collection(db, `courses/${courseId}/units/${uDoc.id}/topics`));
+                    for (const tDoc of topicsSnap.docs) {
+                        if (!seenTopicIds.has(tDoc.id)) {
+                            seenTopicIds.add(tDoc.id);
+                            topicRefs.push({ topicId: tDoc.id, unitId: uDoc.id });
+                        }
+                    }
+                }
+            } catch (cErr) {
+                console.warn("Firestore course topics fetch warning:", cErr);
+            }
+        }
+
+        const allCourseArrays = await Promise.all(
+            topicRefs.map(ref => readDataForTopic(ref.topicId, { courseId, unitId: ref.unitId }))
+        );
+        const rawItems = allCourseArrays.flat();
+
+        const seenKeys = new Set<string>();
+        const deduplicatedCourseItems: (ActivityItem | Question)[] = [];
+        for (const item of rawItems) {
+            const itemType = (item as any).type;
+            const term = (item as any).content?.term || (item as any).content?.text || (item as any).term || (item as any).text || (item as any).question;
+            const norm = term ? normalizeConcept(String(term)) : '';
+            const itemKey = norm ? `${itemType}_${norm}` : `${itemType}_${(item as any).id}`;
+            if (!seenKeys.has(itemKey)) {
+                seenKeys.add(itemKey);
+                deduplicatedCourseItems.push(item);
+            }
+        }
+
+        STATIC_TOPIC_CACHE.set(courseCacheKey, deduplicatedCourseItems);
+        return deduplicatedCourseItems;
+    }
+
     return [];
+}
+
+/**
+ * Canonical helper for ALL games: returns ONLY registered items from Kavram & Notlar Stüdyosu
+ * (concepts, conceptDefinitions, sentences) for the specified topic/unit/course scope.
+ */
+export async function getRegisteredStudioItemsForGame(params: {
+    courseId?: string;
+    unitId?: string;
+    topicId?: string;
+}): Promise<{
+    concepts: string[];
+    conceptDefinitions: { term: string; definition: string }[];
+    sentences: string[];
+}> {
+    const allData = await getStaticGameData(params);
+
+    const conceptMap = new Map<string, string>();
+    const defMap = new Map<string, { term: string; definition: string }>();
+    const sentencesSet = new Set<string>();
+
+    for (const item of allData) {
+        if (!item || typeof item !== 'object') continue;
+        const itemType = (item as any).type;
+
+        if (itemType === 'definition') {
+            const term = String((item as any).content?.term || (item as any).content?.concept || '').trim();
+            const def = String((item as any).content?.definition || '').trim();
+            const key = normalizeConcept(term);
+            if (term && key && isDefinitionValidAndClean(term, def)) {
+                if (!conceptMap.has(key)) conceptMap.set(key, term);
+                if (!defMap.has(key)) {
+                    defMap.set(key, { term, definition: def });
+                }
+            }
+        } else if (itemType === 'concept') {
+            const term = String((item as any).content?.text || (item as any).content?.term || '').trim();
+            const key = normalizeConcept(term);
+            if (term && key && !conceptMap.has(key)) {
+                conceptMap.set(key, term);
+            }
+        } else if (itemType === 'sentence') {
+            const txt = String((item as any).content?.text || '').trim();
+            if (txt) sentencesSet.add(txt);
+        }
+    }
+
+    return {
+        concepts: Array.from(conceptMap.values()),
+        conceptDefinitions: Array.from(defMap.values()),
+        sentences: Array.from(sentencesSet),
+    };
 }
 
 
@@ -870,7 +727,7 @@ export async function getStaticQuestionsForGame(params: {
     }
     
     const QUESTION_TYPES = new Set(['Çoktan Seçmeli', 'Doğru/Yanlış', 'Boşluk Doldurma', 'mcq', 'tf', 'fitb', 'Açık Uçlu']);
-    const ACTIVITY_TYPES = new Set(['concept', 'definition', 'sentence', 'categorization', 'sorting']);
+    const ACTIVITY_TYPES = new Set(['concept', 'definition', 'sentence']);
 
     return allData.filter(item => {
         const itemType = (item as any).type;
@@ -881,9 +738,8 @@ export async function getStaticQuestionsForGame(params: {
 }
 
 /**
- * Server Action: MiniGamePlayer ve oyunlar için ünitenin veya konunun gerçek kavram ve sorularını döner.
- * Eğer oyun bir kelime oyunuysa (kelime-avi, anagram, eslestirme vb.) ve soru havuzu yoksa kavram-tanım çiftlerini döner.
- * Eğer test oyunuysa (penalti, carkifelek vb.) ve hazır soru yoksa kavram-tanımlardan dinamik test sorusu üretir!
+ * Server Action: MiniGamePlayer ve oyunlar için ünitenin veya konunun kayıtlı Stüdyo kavramlarını ve sorularını döner.
+ * Kelime/kavram oyunları için YALNIZCA Kavram & Notlar Stüdyosu'ndaki kavram-tanım çiftlerini kullanır.
  */
 export async function getUnitOrTopicGameQuestionsAction(params: {
     courseId?: string;
@@ -909,13 +765,20 @@ export async function getUnitOrTopicGameQuestionsAction(params: {
             ? params.topicId
             : undefined;
 
-        const allItems = await getStaticGameData({
-            courseId: params.courseId,
-            unitId: params.unitId,
-            topicId: effectiveTopicId
-        });
+        const [allItems, studioData] = await Promise.all([
+            getStaticGameData({
+                courseId: params.courseId,
+                unitId: params.unitId,
+                topicId: effectiveTopicId
+            }),
+            getRegisteredStudioItemsForGame({
+                courseId: params.courseId,
+                unitId: params.unitId,
+                topicId: effectiveTopicId
+            })
+        ]);
 
-        // 1. Çoktan seçmeli soruları topla
+        // 1. Çoktan seçmeli soruları topla (Sadece test/soru oyunları için)
         const mcqQuestions: Array<{
             id: string;
             question: string;
@@ -941,44 +804,16 @@ export async function getUnitOrTopicGameQuestionsAction(params: {
             }
         });
 
-        // 2. Kavram & Tanım çiftlerini topla
-        const conceptMap = new Map<string, string>();
-        allItems.forEach(it => {
-            if ('type' in it) {
-                let term = '';
-                let def = '';
-                if (it.type === 'definition') {
-                    term = String((it as any).content?.term || (it as any).term || '').trim();
-                    def = String((it as any).content?.definition || (it as any).definition || '').trim();
-                } else if (it.type === 'concept') {
-                    term = String((it as any).content?.term || (it as any).content?.text || (it as any).term || '').trim();
-                    def = String((it as any).content?.definition || (it as any).content?.meaning || (it as any).definition || '').trim();
-                } else if (it.type === 'conceptExplanation') {
-                    term = String((it as any).concept || (it as any).term || '').trim();
-                    def = String((it as any).definition || '').trim();
-                } else if (it.type === 'flashcard') {
-                    term = String((it as any).term || (it as any).correctAnswer || '').trim();
-                    def = String((it as any).definition || '').trim();
-                }
-                if (term && term.length >= 2 && term.length <= 40 && !/^(doğru|kavram \d)$/i.test(term)) {
-                    if (def && def.length >= 4 && !conceptMap.has(term)) {
-                        conceptMap.set(term, def);
-                    } else if (!conceptMap.has(term)) {
-                        conceptMap.set(term, `${term} kavramı`);
-                    }
-                }
-            }
-        });
-
-        const conceptPairs = Array.from(conceptMap.entries()).map(([term, definition]) => ({ term, definition }));
+        // 2. YALNIZCA Kavram & Notlar Stüdyosu'ndaki kayıtlı kavram-tanım çiftleri
+        const conceptPairs = studioData.conceptDefinitions.filter(cp => cp.term.length >= 2 && cp.term.length <= 40);
         const allTerms = conceptPairs.map(cp => cp.term);
 
-        // 3. Eğer çoktan seçmeli soru yetersizse kavramlardan dinamik çoktan seçmeli soru türet
+        // 3. Eğer çoktan seçmeli soru yetersizse kayıtlı Stüdyo kavramlarından dinamik çoktan seçmeli soru türet
         if (mcqQuestions.length < 5 && conceptPairs.length >= 2) {
             conceptPairs.forEach((cp, idx) => {
-                const normTerm = cp.term.toLocaleLowerCase('tr-TR');
+                const normTerm = normalizeConcept(cp.term);
                 const distractors = allTerms
-                    .filter(t => t.toLocaleLowerCase('tr-TR') !== normTerm)
+                    .filter(t => normalizeConcept(t) !== normTerm)
                     .sort(() => 0.5 - Math.random())
                     .slice(0, 3);
 
