@@ -472,6 +472,7 @@ export function SettingsModal({
     open,
     soundEnabled,
     teacherFreeMode,
+    canToggleTeacherFreeMode = false,
     onToggleSound,
     onToggleTeacherFreeMode,
     onResetProgress,
@@ -480,6 +481,7 @@ export function SettingsModal({
     open: boolean;
     soundEnabled: boolean;
     teacherFreeMode: boolean;
+    canToggleTeacherFreeMode?: boolean;
     onToggleSound: () => void;
     onToggleTeacherFreeMode: () => void;
     onResetProgress: () => void;
@@ -504,7 +506,11 @@ export function SettingsModal({
                     </div>
                     <div>
                         <h2 className="text-lg font-black text-slate-900">Macera Ayarları</h2>
-                        <p className="text-xs font-bold text-slate-500">Ses, Öğretmen Modu ve İlerleme</p>
+                        <p className="text-xs font-bold text-slate-500">
+                            {canToggleTeacherFreeMode
+                                ? 'Ses, Öğretmen Modu ve İlerleme'
+                                : 'Ses ve İlerleme Ayarları'}
+                        </p>
                     </div>
                 </div>
 
@@ -537,35 +543,37 @@ export function SettingsModal({
                         </span>
                     </button>
 
-                    <button
-                        type="button"
-                        onClick={onToggleTeacherFreeMode}
-                        className="w-full p-3.5 rounded-2xl border-2 border-slate-200 hover:border-amber-300 flex items-center justify-between cursor-pointer"
-                    >
-                        <div className="flex items-center gap-3">
-                            {teacherFreeMode ? (
-                                <Unlock className="w-5 h-5 text-amber-600" />
-                            ) : (
-                                <ShieldCheck className="w-5 h-5 text-sky-600" />
-                            )}
-                            <div className="text-left">
-                                <div className="text-sm font-black text-slate-900">Öğretmen / Serbest Keşif Modu</div>
-                                <div className="text-xs font-semibold text-slate-500">
-                                    {teacherFreeMode
-                                        ? `Tüm ${TOTAL_ADVENTURE_STAGES} Diyanet adımının kilidi açık`
-                                        : 'Normal öğrenci modu (Adım adım sınavla açılır)'}
+                    {canToggleTeacherFreeMode && (
+                        <button
+                            type="button"
+                            onClick={onToggleTeacherFreeMode}
+                            className="w-full p-3.5 rounded-2xl border-2 border-slate-200 hover:border-amber-300 flex items-center justify-between cursor-pointer"
+                        >
+                            <div className="flex items-center gap-3">
+                                {teacherFreeMode ? (
+                                    <Unlock className="w-5 h-5 text-amber-600" />
+                                ) : (
+                                    <ShieldCheck className="w-5 h-5 text-sky-600" />
+                                )}
+                                <div className="text-left">
+                                    <div className="text-sm font-black text-slate-900">Öğretmen / Serbest Keşif Modu</div>
+                                    <div className="text-xs font-semibold text-slate-500">
+                                        {teacherFreeMode
+                                            ? `Tüm ${TOTAL_ADVENTURE_STAGES} Diyanet adımının kilidi açık`
+                                            : 'Normal öğrenci modu (Adım adım sınavla açılır)'}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <span
-                            className={cn(
-                                'px-3 py-1 rounded-full text-xs font-black shrink-0 ml-2',
-                                teacherFreeMode ? 'bg-amber-100 text-amber-900' : 'bg-sky-100 text-sky-800'
-                            )}
-                        >
-                            {teacherFreeMode ? 'SERBEST' : 'AŞAMALI'}
-                        </span>
-                    </button>
+                            <span
+                                className={cn(
+                                    'px-3 py-1 rounded-full text-xs font-black shrink-0 ml-2',
+                                    teacherFreeMode ? 'bg-amber-100 text-amber-900' : 'bg-sky-100 text-sky-800'
+                                )}
+                            >
+                                {teacherFreeMode ? 'SERBEST' : 'AŞAMALI'}
+                            </span>
+                        </button>
+                    )}
 
                     <button
                         type="button"

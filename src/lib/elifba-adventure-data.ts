@@ -701,7 +701,7 @@ export function mergeAdventureProgress(
             ...local,
             name: cloud.name || local.name,
             avatar: cloud.avatar || local.avatar,
-            teacherFreeMode: Boolean(cloud.teacherFreeMode ?? local.teacherFreeMode),
+            teacherFreeMode: Boolean(cloud.teacherFreeMode),
             curriculumVersion: CURRENT_CURRICULUM_VERSION
         };
     }
@@ -759,7 +759,7 @@ export function mergeAdventureProgress(
         badges,
         xp: Math.max(Number(local.xp) || 0, Number(cloud.xp) || 0),
         streak: Math.max(Number(local.streak) || 0, Number(cloud.streak) || 0),
-        teacherFreeMode: Boolean(cloud.teacherFreeMode ?? local.teacherFreeMode),
+        teacherFreeMode: Boolean(cloud.teacherFreeMode),
         lastStageTitle: cloud.lastStageTitle || local.lastStageTitle,
         lastActivityAt: cloud.lastActivityAt || local.lastActivityAt,
         curriculumVersion: CURRENT_CURRICULUM_VERSION,

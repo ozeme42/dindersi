@@ -63,6 +63,7 @@ const WINDING_OFFSETS_MOBILE = [0, -28, -42, -28, 0, 28, 42, 28];
 
 export default function ElifbaMaceraPage() {
     const { user, loading: authLoading } = useAuth();
+    const isTeacherUser = user?.role === 'teacher' || user?.role === 'superadmin';
 
     const [playerData, setPlayerData] = useState<AdventurePlayerData>({
         name: 'Küçük Hafız',
@@ -168,7 +169,7 @@ export default function ElifbaMaceraPage() {
             }
         } else {
             hasInitializedUserRef.current = null;
-            const loadedGuest = loadAdventurePlayerData();
+            const loadedGuest = { ...loadAdventurePlayerData(), teacherFreeMode: false };
             setPlayerData(loadedGuest);
             setCloudSyncStatus('guest');
             setIsLoaded(true);
@@ -492,7 +493,7 @@ export default function ElifbaMaceraPage() {
                                 setIsSettingsModalOpen(true);
                             }}
                             className="w-9 h-9 rounded-2xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-600 flex items-center justify-center cursor-pointer transition-all"
-                            title="Ayarlar & Öğretmen Modu"
+                            title={isTeacherUser ? 'Ayarlar & Öğretmen Modu' : 'Ayarlar'}
                         >
                             <Settings className="w-4 h-4" />
                         </button>
@@ -1144,8 +1145,10 @@ export default function ElifbaMaceraPage() {
                 open={isSettingsModalOpen}
                 soundEnabled={soundEnabled}
                 teacherFreeMode={playerData.teacherFreeMode}
+                canToggleTeacherFreeMode={isTeacherUser}
                 onToggleSound={() => setSoundEnabled(s => !s)}
                 onToggleTeacherFreeMode={() => {
+                    if (!isTeacherUser) return;
                     if (soundEnabled) playAdventureTone('click');
                     updatePlayerData(prev => ({ ...prev, teacherFreeMode: !prev.teacherFreeMode }));
                 }}
