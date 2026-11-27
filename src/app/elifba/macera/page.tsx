@@ -9,6 +9,7 @@ import { forceStreakCheck } from '@/app/student/actions';
 import {
     ADVENTURE_STAGES,
     ADVENTURE_ISLANDS,
+    TOTAL_ADVENTURE_STAGES,
     MASCOT_QUOTES,
     AdventureStage,
     AdventurePlayerData,
@@ -54,7 +55,7 @@ import { cn } from '@/lib/utils';
 
 type ActiveScreen =
     | { mode: 'map' }
-    | { mode: 'stage'; stageId: number; phase: 'learn' | 'reinforce' | 'exam' };
+    | { mode: 'stage'; stageId: number; phase: 'learn' | 'reinforce' | 'exam'; roundIndex?: number };
 
 // S-Eğrisi Kıvrımlı Yol Ofsetleri (Duolingo tarzı organik adım yerleşimi)
 const WINDING_OFFSETS_DESKTOP = [0, -56, -84, -56, 0, 56, 84, 56];
@@ -153,10 +154,15 @@ export default function ElifbaMaceraPage() {
             setCloudSyncStatus('synced');
             setIsLoaded(true);
 
-            // Eğer ilk defa girişte bulutta hiç kayıt yoksa veya öğretmen/yerel ilerleme öndeyse buluta yaz
+            // Eğer ilk defa girişte bulutta hiç kayıt yoksa, eski sürümse veya öğretmen/yerel ilerleme öndeyse buluta yaz
             if (hasInitializedUserRef.current !== uid) {
                 hasInitializedUserRef.current = uid;
-                if (!cloudData || merged.xp > (cloudData.xp || 0) || merged.unlockedStage > (cloudData.unlockedStage || 1)) {
+                if (
+                    !cloudData ||
+                    cloudData.curriculumVersion !== merged.curriculumVersion ||
+                    merged.xp > (cloudData.xp || 0) ||
+                    merged.unlockedStage > (cloudData.unlockedStage || 1)
+                ) {
                     persistToFirestore(merged, merged.lastStageTitle, true);
                 }
             }
@@ -218,7 +224,7 @@ export default function ElifbaMaceraPage() {
         return Object.values(playerData.stageStars).reduce((acc, s) => acc + s, 0);
     }, [playerData.stageStars]);
 
-    const maxPossibleStars = ADVENTURE_STAGES.length * 3; // 72
+    const maxPossibleStars = ADVENTURE_STAGES.length * 3; // 90
 
     const completedStagesCount = useMemo(() => {
         return ADVENTURE_STAGES.filter(st => playerData.stageMastered[st.id]?.examPassed || (playerData.stageStars[st.id] || 0) > 0).length;
@@ -254,9 +260,9 @@ export default function ElifbaMaceraPage() {
         [updatePlayerData]
     );
 
-    // Faz 1 Tamamlandı
+    // Faz 1 Tamamlandı (aktif mini tur için)
     const handleCompleteLearn = useCallback(
-        (stageId: number) => {
+        (stageId: number, roundIdx: number = 1) => {
             const stageObj = ADVENTURE_STAGES.find(s => s.id === stageId);
             updatePlayerData(
                 prev => {
@@ -264,7 +270,8 @@ export default function ElifbaMaceraPage() {
                         learnDone: false,
                         reinforceDone: false,
                         examPassed: false,
-                        bestAccuracy: 0
+                        bestAccuracy: 0,
+                        completedRounds: []
                     };
                     return {
                         ...prev,
@@ -277,35 +284,46 @@ export default function ElifbaMaceraPage() {
                 },
                 { stageTitle: stageObj ? `Adım ${stageObj.id}: ${stageObj.shortTitle}` : undefined, immediateCloud: true }
             );
-            setScreen({ mode: 'stage', stageId, phase: 'reinforce' });
+            setScreen({ mode: 'stage', stageId, phase: 'reinforce', roundIndex: roundIdx });
         },
         [updatePlayerData]
     );
 
-    // Faz 2 Tamamlandı
-    const handleCompleteReinforce = useCallback(
-        (stageId: number) => {
+    // Faz 2 Mini Tur Tamamlandı (tüm turlar bittiğinde reinforceDone true olur)
+    const handleCompleteRound = useCallback(
+        (stageId: number, roundIdx: number) => {
             const stageObj = ADVENTURE_STAGES.find(s => s.id === stageId);
+            const totalRounds = Math.max(1, stageObj?.miniRounds.length || 1);
             updatePlayerData(
                 prev => {
                     const existing = prev.stageMastered[stageId] || {
                         learnDone: true,
                         reinforceDone: false,
                         examPassed: false,
-                        bestAccuracy: 0
+                        bestAccuracy: 0,
+                        completedRounds: []
                     };
+                    const nextRounds = Array.from(
+                        new Set([...(existing.completedRounds || []), roundIdx])
+                    ).sort((a, b) => a - b);
+                    const allDone = existing.reinforceDone || nextRounds.length >= totalRounds;
+
                     return {
                         ...prev,
-                        xp: (prev.xp || 0) + 25,
+                        xp: (prev.xp || 0) + 20,
                         stageMastered: {
                             ...prev.stageMastered,
-                            [stageId]: { ...existing, learnDone: true, reinforceDone: true }
+                            [stageId]: {
+                                ...existing,
+                                learnDone: true,
+                                completedRounds: nextRounds,
+                                reinforceDone: allDone
+                            }
                         }
                     };
                 },
-                { stageTitle: stageObj ? `Adım ${stageObj.id}: ${stageObj.shortTitle}` : undefined, immediateCloud: true }
+                { stageTitle: stageObj ? `Adım ${stageObj.id}: ${stageObj.shortTitle} (Tur ${roundIdx})` : undefined, immediateCloud: true }
             );
-            setScreen({ mode: 'stage', stageId, phase: 'exam' });
         },
         [updatePlayerData]
     );
@@ -576,21 +594,21 @@ export default function ElifbaMaceraPage() {
                                     🗺️ Büyük Elifba Macerası
                                 </h1>
                                 <p className="text-xs sm:text-sm font-bold text-slate-500 max-w-lg">
-                                    Kolaydan zora 24 adım! Önce <strong className="text-sky-700">bol tekrar</strong> yap,{' '}
-                                    <strong className="text-emerald-700">oyunla pekiştir</strong>, sonra{' '}
-                                    <strong className="text-amber-700">ustalık sınavını</strong> geçerek sonraki kapıyı aç!
+                                    Öğretmen panelindeki <strong className="text-emerald-700">Diyanet {TOTAL_ADVENTURE_STAGES} Adım Müfredatı</strong>! Uzun adımları mini turlarla öğren,{' '}
+                                    <strong className="text-sky-700">oyunla pekiştir</strong> ve{' '}
+                                    <strong className="text-amber-700">ustalık sınavını</strong> geçerek sonraki adımı aç!
                                 </p>
 
                                 {/* İlerleme Çubuğu */}
                                 <div className="pt-2 max-w-md mx-auto md:mx-0">
                                     <div className="flex items-center justify-between text-xs font-black text-slate-600 mb-1">
                                         <span>Genel İlerleme</span>
-                                        <span className="text-emerald-600">{completedStagesCount} / 24 Adım Tamamlandı</span>
+                                        <span className="text-emerald-600">{completedStagesCount} / {TOTAL_ADVENTURE_STAGES} Adım Tamamlandı</span>
                                     </div>
                                     <div className="h-3.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200 p-0.5">
                                         <div
                                             className="h-full bg-gradient-to-r from-sky-500 via-emerald-500 to-amber-500 rounded-full transition-all duration-700"
-                                            style={{ width: `${Math.max(4, Math.round((completedStagesCount / 24) * 100))}%` }}
+                                            style={{ width: `${Math.max(4, Math.round((completedStagesCount / TOTAL_ADVENTURE_STAGES) * 100))}%` }}
                                         />
                                     </div>
                                 </div>
@@ -657,7 +675,7 @@ export default function ElifbaMaceraPage() {
                                     : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
                             )}
                         >
-                            🗺️ Tüm Yolculuk (1-24)
+                            🗺️ Tüm Yolculuk (1-{TOTAL_ADVENTURE_STAGES})
                         </button>
                         {ADVENTURE_ISLANDS.map(isl => (
                             <button
@@ -815,13 +833,13 @@ export default function ElifbaMaceraPage() {
                                                                 </>
                                                             ) : stage.isGate ? (
                                                                 <>
-                                                                    {stage.id === 24 ? (
+                                                                    {stage.id === TOTAL_ADVENTURE_STAGES ? (
                                                                         <Crown className="w-8 h-8 drop-shadow mb-0.5" />
                                                                     ) : (
                                                                         <Shield className="w-8 h-8 drop-shadow mb-0.5" />
                                                                     )}
                                                                     <span className="text-[11px] font-black tracking-wide">
-                                                                        SINAV {stage.id}
+                                                                        ADIM {stage.id}
                                                                     </span>
                                                                 </>
                                                             ) : (
@@ -900,71 +918,142 @@ export default function ElifbaMaceraPage() {
             {/* ═════════════════════════════════════════════════════════════════ */}
             {/* EKRAN 2: 3 FAZLI AKTİF ÖĞRENME & SINAV ARENASI                    */}
             {/* ═════════════════════════════════════════════════════════════════ */}
-            {screen.mode === 'stage' && activeStageObj && (
-                <main className="pt-5 relative z-10">
-                    {screen.phase === 'learn' && (
-                        <LearnPhaseView
-                            stage={activeStageObj}
-                            soundEnabled={soundEnabled}
-                            teacherFreeMode={playerData.teacherFreeMode}
-                            playAudio={playAudio}
-                            onAddXp={handleAddXp}
-                            onBackToMap={() => setScreen({ mode: 'map' })}
-                            onCompleteLearn={() => handleCompleteLearn(activeStageObj.id)}
-                            onMascotMessage={msg => {
-                                setMascotQuote(msg);
-                                setMascotBubbleOpen(true);
-                            }}
-                        />
-                    )}
+            {screen.mode === 'stage' && activeStageObj && (() => {
+                const activeCompletedRounds =
+                    playerData.stageMastered[activeStageObj.id]?.completedRounds || [];
+                const defaultRound =
+                    activeStageObj.miniRounds.find(
+                        mr => !activeCompletedRounds.includes(mr.roundIndex)
+                    )?.roundIndex || 1;
+                const activeRoundIndex = screen.roundIndex || defaultRound;
 
-                    {screen.phase === 'reinforce' && (
-                        <ReinforcePhaseView
-                            stage={activeStageObj}
-                            soundEnabled={soundEnabled}
-                            playAudio={playAudio}
-                            onAddXp={handleAddXp}
-                            onBackToMap={() => setScreen({ mode: 'map' })}
-                            onBackToLearn={() =>
-                                setScreen({ mode: 'stage', stageId: activeStageObj.id, phase: 'learn' })
-                            }
-                            onCompleteReinforce={() => handleCompleteReinforce(activeStageObj.id)}
-                            onMascotMessage={msg => {
-                                setMascotQuote(msg);
-                                setMascotBubbleOpen(true);
-                            }}
-                        />
-                    )}
+                return (
+                    <main className="pt-5 relative z-10">
+                        {screen.phase === 'learn' && (
+                            <LearnPhaseView
+                                stage={activeStageObj}
+                                roundIndex={activeRoundIndex}
+                                completedRounds={activeCompletedRounds}
+                                soundEnabled={soundEnabled}
+                                teacherFreeMode={playerData.teacherFreeMode}
+                                playAudio={playAudio}
+                                onAddXp={handleAddXp}
+                                onBackToMap={() => setScreen({ mode: 'map' })}
+                                onSelectRound={r =>
+                                    setScreen({
+                                        mode: 'stage',
+                                        stageId: activeStageObj.id,
+                                        phase: 'learn',
+                                        roundIndex: r
+                                    })
+                                }
+                                onCompleteLearn={rIdx => handleCompleteLearn(activeStageObj.id, rIdx)}
+                                onSkipToExam={() =>
+                                    setScreen({
+                                        mode: 'stage',
+                                        stageId: activeStageObj.id,
+                                        phase: 'exam'
+                                    })
+                                }
+                                onMascotMessage={msg => {
+                                    setMascotQuote(msg);
+                                    setMascotBubbleOpen(true);
+                                }}
+                            />
+                        )}
 
-                    {screen.phase === 'exam' && (
-                        <ExamPhaseView
-                            stage={activeStageObj}
-                            hasNextStage={activeStageObj.id < ADVENTURE_STAGES.length}
-                            soundEnabled={soundEnabled}
-                            playAudio={playAudio}
-                            onBackToMap={() => setScreen({ mode: 'map' })}
-                            onRetryLearn={() =>
-                                setScreen({ mode: 'stage', stageId: activeStageObj.id, phase: 'learn' })
-                            }
-                            onExamPassed={(stars, acc, xp) =>
-                                handleExamPassed(activeStageObj.id, stars, acc, xp)
-                            }
-                            onProceedNextStage={() => {
-                                const nextId = Math.min(ADVENTURE_STAGES.length, activeStageObj.id + 1);
-                                setScreen({ mode: 'stage', stageId: nextId, phase: 'learn' });
-                            }}
-                            onOpenCertificate={() => {
-                                setScreen({ mode: 'map' });
-                                setIsCertificateModalOpen(true);
-                            }}
-                            onMascotMessage={msg => {
-                                setMascotQuote(msg);
-                                setMascotBubbleOpen(true);
-                            }}
-                        />
-                    )}
-                </main>
-            )}
+                        {screen.phase === 'reinforce' && (
+                            <ReinforcePhaseView
+                                stage={activeStageObj}
+                                roundIndex={activeRoundIndex}
+                                completedRounds={activeCompletedRounds}
+                                teacherFreeMode={playerData.teacherFreeMode}
+                                soundEnabled={soundEnabled}
+                                playAudio={playAudio}
+                                onAddXp={handleAddXp}
+                                onBackToMap={() => setScreen({ mode: 'map' })}
+                                onBackToLearn={() =>
+                                    setScreen({
+                                        mode: 'stage',
+                                        stageId: activeStageObj.id,
+                                        phase: 'learn',
+                                        roundIndex: activeRoundIndex
+                                    })
+                                }
+                                onSelectRound={r =>
+                                    setScreen({
+                                        mode: 'stage',
+                                        stageId: activeStageObj.id,
+                                        phase: 'reinforce',
+                                        roundIndex: r
+                                    })
+                                }
+                                onCompleteRound={rIdx => handleCompleteRound(activeStageObj.id, rIdx)}
+                                onNextRound={nextR =>
+                                    setScreen({
+                                        mode: 'stage',
+                                        stageId: activeStageObj.id,
+                                        phase: 'learn',
+                                        roundIndex: nextR
+                                    })
+                                }
+                                onProceedToExam={() =>
+                                    setScreen({
+                                        mode: 'stage',
+                                        stageId: activeStageObj.id,
+                                        phase: 'exam'
+                                    })
+                                }
+                                onMascotMessage={msg => {
+                                    setMascotQuote(msg);
+                                    setMascotBubbleOpen(true);
+                                }}
+                            />
+                        )}
+
+                        {screen.phase === 'exam' && (
+                            <ExamPhaseView
+                                stage={activeStageObj}
+                                hasNextStage={activeStageObj.id < ADVENTURE_STAGES.length}
+                                soundEnabled={soundEnabled}
+                                playAudio={playAudio}
+                                onBackToMap={() => setScreen({ mode: 'map' })}
+                                onRetryLearn={() =>
+                                    setScreen({
+                                        mode: 'stage',
+                                        stageId: activeStageObj.id,
+                                        phase: 'learn',
+                                        roundIndex: 1
+                                    })
+                                }
+                                onExamPassed={(stars, acc, xp) =>
+                                    handleExamPassed(activeStageObj.id, stars, acc, xp)
+                                }
+                                onProceedNextStage={() => {
+                                    const nextId = Math.min(
+                                        ADVENTURE_STAGES.length,
+                                        activeStageObj.id + 1
+                                    );
+                                    setScreen({
+                                        mode: 'stage',
+                                        stageId: nextId,
+                                        phase: 'learn',
+                                        roundIndex: 1
+                                    });
+                                }}
+                                onOpenCertificate={() => {
+                                    setScreen({ mode: 'map' });
+                                    setIsCertificateModalOpen(true);
+                                }}
+                                onMascotMessage={msg => {
+                                    setMascotQuote(msg);
+                                    setMascotBubbleOpen(true);
+                                }}
+                            />
+                        )}
+                    </main>
+                );
+            })()}
 
             {/* ═════════════════════════════════════════════════════════════════ */}
             {/* SEVİMLİ MASKOT HÜDHÜD (🐥) — DOKUNMATİK DOSTU                      */}
@@ -1024,9 +1113,9 @@ export default function ElifbaMaceraPage() {
                 stage={launcherStage}
                 playerData={playerData}
                 onClose={() => setLauncherStage(null)}
-                onLaunchPhase={(stageId, phase) => {
+                onLaunchPhase={(stageId, phase, roundIndex) => {
                     setLauncherStage(null);
-                    setScreen({ mode: 'stage', stageId, phase });
+                    setScreen({ mode: 'stage', stageId, phase, roundIndex });
                 }}
             />
 

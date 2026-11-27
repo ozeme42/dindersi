@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import {
     ADVENTURE_STAGES,
+    TOTAL_ADVENTURE_STAGES,
     AVATAR_CHOICES,
     AdventureStage,
     AdventurePlayerData,
@@ -20,7 +21,6 @@ import {
     RotateCcw,
     Volume2,
     VolumeX,
-    Sparkles,
     Star,
     ShieldCheck,
     Sliders
@@ -28,7 +28,7 @@ import {
 import { cn } from '@/lib/utils';
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 1. AŞAMA BAŞLATICI MODAL (3 FAZLI ÖĞRENME YOL HARİTASI)
+// 1. AŞAMA BAŞLATICI MODAL (DİYANET ADIMI + MİNİ TURLAR + 3 FAZ)
 // ─────────────────────────────────────────────────────────────────────────────
 
 export function StageLauncherModal({
@@ -40,7 +40,7 @@ export function StageLauncherModal({
     stage: AdventureStage | null;
     playerData: AdventurePlayerData;
     onClose: () => void;
-    onLaunchPhase: (stageId: number, phase: 'learn' | 'reinforce' | 'exam') => void;
+    onLaunchPhase: (stageId: number, phase: 'learn' | 'reinforce' | 'exam', roundIndex?: number) => void;
 }) {
     if (!stage) return null;
 
@@ -48,17 +48,27 @@ export function StageLauncherModal({
         learnDone: false,
         reinforceDone: false,
         examPassed: false,
-        bestAccuracy: 0
+        bestAccuracy: 0,
+        completedRounds: []
     };
+    const completedRounds = progress.completedRounds || [];
+    const totalRounds = Math.max(1, stage.miniRounds.length);
+    const allRoundsCompleted = progress.reinforceDone || completedRounds.length >= totalRounds;
+    const nextPendingRound =
+        stage.miniRounds.find(mr => !completedRounds.includes(mr.roundIndex))?.roundIndex || 1;
+    const maxUnlockedRound = Math.min(
+        totalRounds,
+        Math.max(1, (completedRounds.length > 0 ? Math.max(...completedRounds) : 0) + 1)
+    );
+
     const stars = playerData.stageStars[stage.id] || 0;
     const isFree = playerData.teacherFreeMode;
 
-    // En mantıklı başlangıç fazını öner
-    const recommendedPhase: 'learn' | 'reinforce' | 'exam' = !progress.learnDone
-        ? 'learn'
-        : !progress.reinforceDone
+    const recommendedPhase: 'learn' | 'reinforce' | 'exam' = allRoundsCompleted
+        ? 'exam'
+        : progress.learnDone && totalRounds === 1
         ? 'reinforce'
-        : 'exam';
+        : 'learn';
 
     const difficultyMeta = {
         kolay: { label: 'Kolay Başlangıç', cls: 'bg-emerald-100 text-emerald-800 border-emerald-300' },
@@ -69,7 +79,7 @@ export function StageLauncherModal({
 
     return (
         <div className="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="bg-white rounded-[2rem] border-4 border-sky-200 shadow-2xl p-6 sm:p-7 max-w-lg w-full relative animate-in fade-in zoom-in-95">
+            <div className="bg-white rounded-[2rem] border-4 border-sky-200 shadow-2xl p-6 sm:p-7 max-w-lg w-full relative max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in-95">
                 <button
                     type="button"
                     onClick={onClose}
@@ -85,18 +95,14 @@ export function StageLauncherModal({
                     </div>
                     <div className="flex items-center justify-center gap-2 mb-1.5 flex-wrap">
                         <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 text-xs font-black">
-                            Adım {stage.id} / 24
+                            Diyanet Adım {stage.id} / {TOTAL_ADVENTURE_STAGES}
                         </span>
-                        <span className={cn("px-2.5 py-0.5 rounded-full border text-xs font-black", difficultyMeta.cls)}>
+                        <span className={cn('px-2.5 py-0.5 rounded-full border text-xs font-black', difficultyMeta.cls)}>
                             {difficultyMeta.label}
                         </span>
                     </div>
-                    <h2 className="text-xl sm:text-2xl font-black text-slate-900">
-                        {stage.title}
-                    </h2>
-                    <p className="text-xs sm:text-sm font-bold text-slate-500 mt-1">
-                        {stage.desc}
-                    </p>
+                    <h2 className="text-xl sm:text-2xl font-black text-slate-900">{stage.title}</h2>
+                    <p className="text-xs sm:text-sm font-bold text-slate-500 mt-1">{stage.desc}</p>
                     {stars > 0 && (
                         <div className="mt-2 inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-xs font-black text-amber-800">
                             <span>Kazanılan: {'⭐'.repeat(stars)}{'☆'.repeat(3 - stars)}</span>
@@ -105,61 +111,110 @@ export function StageLauncherModal({
                     )}
                 </div>
 
+                {/* Çok Turlu Adım İse Mini Turlar Grid'i */}
+                {totalRounds > 1 && (
+                    <div className="mb-4 p-3 rounded-2xl bg-sky-50/70 border-2 border-sky-200/80">
+                        <div className="flex items-center justify-between text-xs font-black text-sky-900 mb-2">
+                            <span>🎯 Mini Turlar ({stage.items.length} Örnek / {totalRounds} Tur)</span>
+                            <span className="text-emerald-700">
+                                {completedRounds.length}/{totalRounds} Tamamlandı
+                            </span>
+                        </div>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+                            {stage.miniRounds.map(mr => {
+                                const isDone = completedRounds.includes(mr.roundIndex);
+                                const isUnlocked = isFree || isDone || mr.roundIndex <= maxUnlockedRound;
+                                return (
+                                    <button
+                                        key={mr.roundIndex}
+                                        type="button"
+                                        disabled={!isUnlocked}
+                                        onClick={() => onLaunchPhase(stage.id, 'learn', mr.roundIndex)}
+                                        className={cn(
+                                            'p-2 rounded-xl border text-left transition-all text-[11px] font-bold flex items-center justify-between gap-1',
+                                            isDone
+                                                ? 'bg-emerald-50 border-emerald-300 text-emerald-900 hover:bg-emerald-100 cursor-pointer'
+                                                : isUnlocked
+                                                ? 'bg-white border-sky-300 text-sky-900 hover:border-sky-500 cursor-pointer shadow-xs'
+                                                : 'bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed opacity-75'
+                                        )}
+                                    >
+                                        <span className="truncate">{mr.title}</span>
+                                        <span>{isDone ? '✅' : isUnlocked ? '▶️' : '🔒'}</span>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </div>
+                )}
+
                 {/* 3 Fazlı Pedagojik Yol */}
-                <div className="space-y-2.5 mb-6">
+                <div className="space-y-2.5 mb-5">
                     {/* Faz 1 */}
                     <button
                         type="button"
-                        onClick={() => onLaunchPhase(stage.id, 'learn')}
+                        onClick={() => onLaunchPhase(stage.id, 'learn', nextPendingRound)}
                         className={cn(
-                            "w-full p-3.5 rounded-2xl border-2 flex items-center gap-3.5 text-left transition-all cursor-pointer",
-                            progress.learnDone
-                                ? "bg-emerald-50/70 border-emerald-300 hover:bg-emerald-50"
-                                : "bg-sky-50/80 border-sky-300 hover:border-sky-500 shadow-sm"
+                            'w-full p-3.5 rounded-2xl border-2 flex items-center gap-3.5 text-left transition-all cursor-pointer',
+                            allRoundsCompleted || progress.learnDone
+                                ? 'bg-emerald-50/70 border-emerald-300 hover:bg-emerald-50'
+                                : 'bg-sky-50/80 border-sky-300 hover:border-sky-500 shadow-sm'
                         )}
                     >
-                        <div className={cn(
-                            "w-11 h-11 rounded-xl flex items-center justify-center shrink-0 font-black text-lg",
-                            progress.learnDone ? "bg-emerald-500 text-white" : "bg-sky-500 text-white"
-                        )}>
-                            {progress.learnDone ? <CheckCircle2 className="w-6 h-6" /> : <BookOpen className="w-5 h-5" />}
+                        <div
+                            className={cn(
+                                'w-11 h-11 rounded-xl flex items-center justify-center shrink-0 font-black text-lg',
+                                allRoundsCompleted || progress.learnDone
+                                    ? 'bg-emerald-500 text-white'
+                                    : 'bg-sky-500 text-white'
+                            )}
+                        >
+                            {allRoundsCompleted || progress.learnDone ? (
+                                <CheckCircle2 className="w-6 h-6" />
+                            ) : (
+                                <BookOpen className="w-5 h-5" />
+                            )}
                         </div>
                         <div className="flex-1 min-w-0">
                             <div className="font-black text-sm text-slate-900">
-                                1. Keşfet &amp; Bol Tekrar ({stage.items.length} Kart)
+                                1. Keşfet &amp; Bol Tekrar ({stage.items.length} Örnek)
                             </div>
                             <div className="text-xs font-bold text-slate-500">
-                                Her öğeyi dinle, ipucunu gör ve {stage.requiredRepeats} kez sesli tekrar et
+                                {totalRounds > 1
+                                    ? `5'li mini turlarla dinle, her birini ${stage.requiredRepeats} kez tekrar et`
+                                    : `Her öğeyi dinle ve ${stage.requiredRepeats} kez sesli tekrar et`}
                             </div>
                         </div>
                         <span className="text-xs font-black px-2.5 py-1 rounded-xl bg-white border border-slate-200 text-sky-700">
-                            {progress.learnDone ? 'Tekrarla' : 'Başla'}
+                            {totalRounds > 1 && !allRoundsCompleted ? `Tur ${nextPendingRound}` : 'Aç'}
                         </span>
                     </button>
 
                     {/* Faz 2 */}
                     <button
                         type="button"
-                        disabled={!progress.learnDone && !isFree}
-                        onClick={() => onLaunchPhase(stage.id, 'reinforce')}
+                        disabled={!allRoundsCompleted && !progress.learnDone && !isFree}
+                        onClick={() => onLaunchPhase(stage.id, 'reinforce', nextPendingRound)}
                         className={cn(
-                            "w-full p-3.5 rounded-2xl border-2 flex items-center gap-3.5 text-left transition-all",
-                            progress.learnDone || isFree
-                                ? progress.reinforceDone
-                                    ? "bg-emerald-50/70 border-emerald-300 hover:bg-emerald-50 cursor-pointer"
-                                    : "bg-teal-50/80 border-teal-300 hover:border-teal-500 shadow-sm cursor-pointer"
-                                : "bg-slate-50 border-slate-200 opacity-60 cursor-not-allowed"
+                            'w-full p-3.5 rounded-2xl border-2 flex items-center gap-3.5 text-left transition-all',
+                            allRoundsCompleted || progress.learnDone || isFree
+                                ? allRoundsCompleted
+                                    ? 'bg-emerald-50/70 border-emerald-300 hover:bg-emerald-50 cursor-pointer'
+                                    : 'bg-teal-50/80 border-teal-300 hover:border-teal-500 shadow-sm cursor-pointer'
+                                : 'bg-slate-50 border-slate-200 opacity-60 cursor-not-allowed'
                         )}
                     >
-                        <div className={cn(
-                            "w-11 h-11 rounded-xl flex items-center justify-center shrink-0 font-black",
-                            progress.reinforceDone
-                                ? "bg-emerald-500 text-white"
-                                : progress.learnDone || isFree
-                                ? "bg-teal-500 text-white"
-                                : "bg-slate-200 text-slate-500"
-                        )}>
-                            {progress.reinforceDone ? (
+                        <div
+                            className={cn(
+                                'w-11 h-11 rounded-xl flex items-center justify-center shrink-0 font-black',
+                                allRoundsCompleted
+                                    ? 'bg-emerald-500 text-white'
+                                    : progress.learnDone || isFree
+                                    ? 'bg-teal-500 text-white'
+                                    : 'bg-slate-200 text-slate-500'
+                            )}
+                        >
+                            {allRoundsCompleted ? (
                                 <CheckCircle2 className="w-6 h-6" />
                             ) : progress.learnDone || isFree ? (
                                 <Gamepad2 className="w-5 h-5" />
@@ -172,12 +227,12 @@ export function StageLauncherModal({
                                 2. Pekiştirme Mini Oyunları
                             </div>
                             <div className="text-xs font-bold text-slate-500">
-                                Kart eşleştirme &amp; güvenli sesli tanıma ile hafızana kazı
+                                Şekil eşleştirme &amp; sesli tanıma ile hafızana kazı
                             </div>
                         </div>
-                        {(progress.learnDone || isFree) && (
+                        {(allRoundsCompleted || progress.learnDone || isFree) && (
                             <span className="text-xs font-black px-2.5 py-1 rounded-xl bg-white border border-slate-200 text-teal-700">
-                                {progress.reinforceDone ? 'Oyna' : 'Başla'}
+                                {allRoundsCompleted ? 'Tekrar Oyna' : 'Başla'}
                             </span>
                         )}
                     </button>
@@ -185,28 +240,28 @@ export function StageLauncherModal({
                     {/* Faz 3 */}
                     <button
                         type="button"
-                        disabled={!progress.reinforceDone && !isFree}
+                        disabled={!allRoundsCompleted && !isFree}
                         onClick={() => onLaunchPhase(stage.id, 'exam')}
                         className={cn(
-                            "w-full p-3.5 rounded-2xl border-2 flex items-center gap-3.5 text-left transition-all",
-                            progress.reinforceDone || isFree
+                            'w-full p-3.5 rounded-2xl border-2 flex items-center gap-3.5 text-left transition-all',
+                            allRoundsCompleted || isFree
                                 ? progress.examPassed
-                                    ? "bg-amber-50/70 border-amber-300 hover:bg-amber-50 cursor-pointer"
-                                    : "bg-orange-50/80 border-orange-300 hover:border-orange-500 shadow-sm cursor-pointer"
-                                : "bg-slate-50 border-slate-200 opacity-60 cursor-not-allowed"
+                                    ? 'bg-amber-50/70 border-amber-300 hover:bg-amber-50 cursor-pointer'
+                                    : 'bg-orange-50/80 border-orange-300 hover:border-orange-500 shadow-sm cursor-pointer'
+                                : 'bg-slate-50 border-slate-200 opacity-60 cursor-not-allowed'
                         )}
                     >
-                        <div className={cn(
-                            "w-11 h-11 rounded-xl flex items-center justify-center shrink-0 font-black",
-                            progress.examPassed
-                                ? "bg-amber-500 text-white"
-                                : progress.reinforceDone || isFree
-                                ? "bg-orange-500 text-white"
-                                : "bg-slate-200 text-slate-500"
-                        )}>
-                            {progress.examPassed ? (
-                                <Trophy className="w-5 h-5" />
-                            ) : progress.reinforceDone || isFree ? (
+                        <div
+                            className={cn(
+                                'w-11 h-11 rounded-xl flex items-center justify-center shrink-0 font-black',
+                                progress.examPassed
+                                    ? 'bg-amber-500 text-white'
+                                    : allRoundsCompleted || isFree
+                                    ? 'bg-orange-500 text-white'
+                                    : 'bg-slate-200 text-slate-500'
+                            )}
+                        >
+                            {progress.examPassed || allRoundsCompleted || isFree ? (
                                 <Trophy className="w-5 h-5" />
                             ) : (
                                 <Lock className="w-5 h-5" />
@@ -217,10 +272,10 @@ export function StageLauncherModal({
                                 3. Ustalık Sınavı (%{stage.passingScorePercent} Geçiş)
                             </div>
                             <div className="text-xs font-bold text-slate-500">
-                                Öğrendiğini kanıtla, yıldızları topla ve sonraki adımı aç!
+                                Tüm adımı test et, yıldızları topla ve sonraki adımı aç!
                             </div>
                         </div>
-                        {(progress.reinforceDone || isFree) && (
+                        {(allRoundsCompleted || isFree) && (
                             <span className="text-xs font-black px-2.5 py-1 rounded-xl bg-white border border-slate-200 text-orange-700">
                                 {progress.examPassed ? 'Sınava Gir' : 'Başla'}
                             </span>
@@ -231,14 +286,22 @@ export function StageLauncherModal({
                 {/* Hızlı Devam CTA */}
                 <button
                     type="button"
-                    onClick={() => onLaunchPhase(stage.id, recommendedPhase)}
+                    onClick={() =>
+                        onLaunchPhase(
+                            stage.id,
+                            recommendedPhase,
+                            recommendedPhase === 'exam' ? undefined : nextPendingRound
+                        )
+                    }
                     className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-black text-base border-b-4 border-indigo-900 active:border-b-0 active:translate-y-1 transition-all cursor-pointer shadow-lg"
                 >
                     {recommendedPhase === 'learn'
-                        ? '📖 1. Faz: Keşfet & Bol Tekrar İle Başla!'
+                        ? totalRounds > 1
+                            ? `📖 ${nextPendingRound}. Tur İle Devam Et!`
+                            : '📖 1. Faz: Keşfet & Bol Tekrar İle Başla!'
                         : recommendedPhase === 'reinforce'
                         ? '🎮 2. Faz: Pekiştirme Oyununa Devam Et!'
-                        : '🏆 3. Faz: Ustalık Sınavına Başla!'}
+                        : '🏆 3. Faz: Adım Ustalık Sınavına Başla!'}
                 </button>
             </div>
         </div>
@@ -290,17 +353,14 @@ export function ProfileAvatarModal({
                 </button>
 
                 <div className="text-5xl mb-2">{avatar}</div>
-                <div className={cn("text-xs font-black uppercase tracking-wider mb-1", rank.color)}>
+                <div className={cn('text-xs font-black uppercase tracking-wider mb-1', rank.color)}>
                     {rank.icon} Ünvan: {rank.title}
                 </div>
-                <h2 className="text-2xl font-black text-slate-900 mb-1">
-                    Kaşif Profilin
-                </h2>
+                <h2 className="text-2xl font-black text-slate-900 mb-1">Kaşif Profilin</h2>
                 <p className="text-slate-500 text-xs sm:text-sm font-bold mb-4">
                     Sertifikanda ve maceranda görünecek adını ve karakterini seç!
                 </p>
 
-                {/* Avatar Seçimi */}
                 <div className="grid grid-cols-4 gap-2 mb-5">
                     {AVATAR_CHOICES.map(av => (
                         <button
@@ -308,10 +368,10 @@ export function ProfileAvatarModal({
                             type="button"
                             onClick={() => setAvatar(av)}
                             className={cn(
-                                "h-12 rounded-2xl text-2xl flex items-center justify-center border-2 transition-all cursor-pointer",
+                                'h-12 rounded-2xl text-2xl flex items-center justify-center border-2 transition-all cursor-pointer',
                                 avatar === av
-                                    ? "bg-sky-50 border-sky-500 ring-2 ring-sky-200 scale-105"
-                                    : "bg-slate-50 border-slate-200 hover:bg-slate-100"
+                                    ? 'bg-sky-50 border-sky-500 ring-2 ring-sky-200 scale-105'
+                                    : 'bg-slate-50 border-slate-200 hover:bg-slate-100'
                             )}
                         >
                             {av}
@@ -342,7 +402,7 @@ export function ProfileAvatarModal({
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 3. ROZET DOLABI MODALI (TROPHY CABINET)
+// 3. ROZET DOLABI MODALI (30 DİYANET ADIMI ROZETLERİ)
 // ─────────────────────────────────────────────────────────────────────────────
 
 export function BadgesTrophyModal({
@@ -369,7 +429,7 @@ export function BadgesTrophyModal({
 
                 <div className="text-4xl mb-1">🏅</div>
                 <h2 className="text-xl sm:text-2xl font-black text-purple-950">
-                    Rozet &amp; Başarı Koleksiyonu
+                    Diyanet 30 Adım Rozet Koleksiyonu
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-500 font-bold mb-4">
                     Ustalık sınavlarını geçtikçe kazandığın rozetler ({earnedBadges.length} / {ADVENTURE_STAGES.length})
@@ -382,15 +442,13 @@ export function BadgesTrophyModal({
                             <div
                                 key={stage.id}
                                 className={cn(
-                                    "rounded-2xl p-3 border-2 text-center transition-all flex flex-col items-center justify-center",
+                                    'rounded-2xl p-3 border-2 text-center transition-all flex flex-col items-center justify-center',
                                     isEarned
-                                        ? "bg-gradient-to-b from-purple-50 to-white border-purple-300 shadow-sm"
-                                        : "bg-slate-50 border-slate-200 opacity-55"
+                                        ? 'bg-gradient-to-b from-purple-50 to-white border-purple-300 shadow-sm'
+                                        : 'bg-slate-50 border-slate-200 opacity-55'
                                 )}
                             >
-                                <div className="text-3xl mb-1">
-                                    {isEarned ? stage.badgeIcon : '🔒'}
-                                </div>
+                                <div className="text-3xl mb-1">{isEarned ? stage.badgeIcon : '🔒'}</div>
                                 <div className="text-xs font-black text-purple-950 line-clamp-1">
                                     {stage.badgeName}
                                 </div>
@@ -451,7 +509,6 @@ export function SettingsModal({
                 </div>
 
                 <div className="space-y-3">
-                    {/* Ses Kontrolü */}
                     <button
                         type="button"
                         onClick={onToggleSound}
@@ -472,15 +529,14 @@ export function SettingsModal({
                         </div>
                         <span
                             className={cn(
-                                "px-3 py-1 rounded-full text-xs font-black",
-                                soundEnabled ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800"
+                                'px-3 py-1 rounded-full text-xs font-black',
+                                soundEnabled ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
                             )}
                         >
                             {soundEnabled ? 'AÇIK' : 'KAPALI'}
                         </span>
                     </button>
 
-                    {/* Öğretmen Serbest Keşif Modu */}
                     <button
                         type="button"
                         onClick={onToggleTeacherFreeMode}
@@ -496,22 +552,21 @@ export function SettingsModal({
                                 <div className="text-sm font-black text-slate-900">Öğretmen / Serbest Keşif Modu</div>
                                 <div className="text-xs font-semibold text-slate-500">
                                     {teacherFreeMode
-                                        ? 'Tüm 24 adımın kilidi serbestçe açık'
+                                        ? `Tüm ${TOTAL_ADVENTURE_STAGES} Diyanet adımının kilidi açık`
                                         : 'Normal öğrenci modu (Adım adım sınavla açılır)'}
                                 </div>
                             </div>
                         </div>
                         <span
                             className={cn(
-                                "px-3 py-1 rounded-full text-xs font-black shrink-0 ml-2",
-                                teacherFreeMode ? "bg-amber-100 text-amber-900" : "bg-sky-100 text-sky-800"
+                                'px-3 py-1 rounded-full text-xs font-black shrink-0 ml-2',
+                                teacherFreeMode ? 'bg-amber-100 text-amber-900' : 'bg-sky-100 text-sky-800'
                             )}
                         >
                             {teacherFreeMode ? 'SERBEST' : 'AŞAMALI'}
                         </span>
                     </button>
 
-                    {/* İlerlemeyi Sıfırla */}
                     <button
                         type="button"
                         onClick={onResetProgress}
@@ -581,11 +636,11 @@ export function CertificateModal({
                         KUR&apos;AN-I KERİM ELİFBASI
                     </h2>
                     <div className="text-sm sm:text-base font-extrabold text-amber-700 tracking-wider mb-5">
-                        🌟 ÜSTÜN BAŞARI VE ŞAMPİYONLUK BELGESİ 🌟
+                        🌟 DİYANET 30 ADIM BAŞARI VE ŞAMPİYONLUK BELGESİ 🌟
                     </div>
 
                     <p className="text-xs sm:text-sm font-bold text-amber-900 max-w-lg mx-auto mb-3">
-                        Bu belge, Büyük Elifba Macerası&apos;ndaki adımları tekrar, pekiştirme ve ustalık sınavlarıyla tamamlayan öğrencimiz:
+                        Bu belge, Diyanet 30 Adım Büyük Elifba Macerası&apos;ndaki adımları tekrar, pekiştirme ve ustalık sınavlarıyla tamamlayan öğrencimiz:
                     </p>
 
                     <div className="inline-flex items-center gap-3 bg-white border-3 border-amber-400 rounded-3xl px-7 py-3 my-2 shadow-md shadow-amber-200/50">
@@ -596,9 +651,8 @@ export function CertificateModal({
                     </div>
 
                     <div className="text-xs sm:text-sm md:text-base font-bold text-amber-950 max-w-xl mx-auto my-4 leading-relaxed">
-                        Elifba harflerini, harekeleri, med, cezm, şedde ve tenvin kaidelerini başarıyla öğrenerek{' '}
+                        Elifba harflerini, harekeleri, med, cezm, şedde, tenvin, ileri kaideler ve namaz dualarını başarıyla öğrenerek{' '}
                         <strong className="text-amber-800">&ldquo;{rank.title}&rdquo;</strong> ünvanını almaya hak kazanmıştır.
-                        Kur&apos;an yolunda ömür boyu başarılar dileriz.
                     </div>
 
                     <div className="flex items-center justify-center gap-3 sm:gap-5 flex-wrap my-5">
@@ -609,7 +663,7 @@ export function CertificateModal({
                             ⭐ Yıldız: <strong>{totalStars}</strong>
                         </div>
                         <div className="bg-white border-2 border-amber-300 rounded-2xl px-4 py-1.5 text-xs sm:text-sm font-extrabold text-sky-900 shadow-sm">
-                            🏁 Adım: <strong>{completedStagesCount} / 24</strong>
+                            🏁 Adım: <strong>{completedStagesCount} / {TOTAL_ADVENTURE_STAGES}</strong>
                         </div>
                         <div className="bg-white border-2 border-amber-300 rounded-2xl px-4 py-1.5 text-xs sm:text-sm font-extrabold text-sky-900 shadow-sm">
                             📅 {new Date().toLocaleDateString('tr-TR')}

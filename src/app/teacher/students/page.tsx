@@ -228,9 +228,9 @@ function StudentTable({
                             </TableCell>
                             <TableCell>
                                 <Link href={`/teacher/students/${student.uid}`}>
-                                    {student.elifbaAdventure ? (
+                                    {student.elifbaAdventure?.curriculumVersion === 'diyanet_30' ? (
                                         <Badge className="bg-emerald-500/15 text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/25 cursor-pointer font-bold">
-                                            🗺️ Adım {student.elifbaAdventure.unlockedStage}/24 • ⭐ {advStats.totalStars}
+                                            🗺️ Adım {student.elifbaAdventure.unlockedStage}/30 • ⭐ {advStats.totalStars}
                                         </Badge>
                                     ) : (
                                         <span className="text-xs text-slate-500 italic hover:text-slate-300">Başlamadı</span>

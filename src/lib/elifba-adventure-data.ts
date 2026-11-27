@@ -1,5 +1,17 @@
-// Büyük Elifba Macerası — Pedagojik Oyun Motoru ve Veri Modeli
-// Kolaydan Zora 24 Aşama • 5 Tematik Diyar • 3 Fazlı Ustalık Döngüsü (Keşfet -> Pekiştir -> Ustalık Sınavı)
+// Büyük Elifba Macerası — Diyanet 30 Adım Tabanlı Pedagojik Oyun Motoru ve Veri Modeli
+// Öğretmen Panelindeki DIYANET_ELIFBA_STAGES (cuz1..cuz28, dualar, cuz) ile birebir aynı müfredat!
+// Kalabalık adımlar bunaltmaması için 4-6 öğeli Mini Turlara bölünür; 3 Fazlı Ustalık Döngüsü (Keşfet -> Pekiştir -> Ustalık Sınavı) ile işlenir.
+
+import {
+    DIYANET_ELIFBA_STAGES,
+    DIYANET_SECTIONS,
+    getStageItemMeta,
+    isDiyanetStageCompleted,
+    getDiyanetStepNumber,
+    type ElifbaStage
+} from './elifba-curriculum';
+import { ELIFBA_UNITS } from './elifba-data';
+import type { UserProfile } from './types';
 
 export interface AdventureItem {
     id: string;
@@ -8,13 +20,21 @@ export interface AdventureItem {
     audSrc: string;
     arabic?: string;
     tip?: string;
+    subLabel?: string;
     hideLabelInQuiz?: boolean;
+}
+
+export interface AdventureMiniRound {
+    roundIndex: number; // 1-based
+    title: string;
+    items: AdventureItem[];
 }
 
 export type StageDifficulty = 'kolay' | 'orta' | 'ileri' | 'ustalik';
 
 export interface AdventureStage {
-    id: number;
+    id: number; // 1..30 (Diyanet Adım Numarası)
+    curriculumId: string; // 'cuz1'..'cuz28', 'dualar', 'cuz'
     title: string;
     shortTitle: string;
     desc: string;
@@ -26,14 +46,16 @@ export interface AdventureStage {
     badgeId: string;
     badgeName: string;
     badgeIcon: string;
-    islandId: number;
+    islandId: number; // 1..4 (DIYANET_SECTIONS sırası)
     islandName: string;
     items: AdventureItem[];
-    reviewPoolIds?: number[]; // Aralıklı tekrar (Spaced Repetition) için önceki aşama ID'leri
+    miniRounds: AdventureMiniRound[];
+    reviewPoolIds?: number[];
 }
 
 export interface AdventureIsland {
-    id: number;
+    id: number; // 1..4
+    sectionId: 'section1' | 'section2' | 'section3' | 'section4';
     name: string;
     shortName: string;
     subtitle: string;
@@ -51,12 +73,13 @@ export interface StageMasteryProgress {
     reinforceDone: boolean;
     examPassed: boolean;
     bestAccuracy: number;
+    completedRounds?: number[]; // Tamamlanan mini tur indeksleri (1-based)
 }
 
 export interface AdventurePlayerData {
     name: string;
     avatar: string;
-    unlockedStage: number;
+    unlockedStage: number; // 1..30
     stageStars: Record<number, number>;
     stageScores: Record<number, number>;
     stageMastered: Record<number, StageMasteryProgress>;
@@ -66,7 +89,13 @@ export interface AdventurePlayerData {
     teacherFreeMode: boolean;
     lastStageTitle?: string;
     lastActivityAt?: string;
+    curriculumVersion?: string;
+    syncedFromGuestUid?: string;
+    syncedFromGuestName?: string;
+    lastSyncedAt?: string;
 }
+
+export const CURRENT_CURRICULUM_VERSION = 'diyanet_30';
 
 export const AVATAR_CHOICES = ['🦁', '🦉', '🦊', '🐼', '🐥', '🚀', '🌙', '🌟'];
 
@@ -79,10 +108,10 @@ export interface PlayerRank {
 
 export const PLAYER_RANKS: PlayerRank[] = [
     { title: 'Minik Kaşif', icon: '🌱', minStars: 0, color: 'text-emerald-600' },
-    { title: 'Harf Yolcusu', icon: '🧭', minStars: 12, color: 'text-sky-600' },
-    { title: 'Hareke Yıldızı', icon: '⭐', minStars: 28, color: 'text-amber-600' },
-    { title: 'Kaide Ustası', icon: '🕌', minStars: 45, color: 'text-indigo-600' },
-    { title: "Kur'an Şampiyonu", icon: '👑', minStars: 60, color: 'text-purple-600' }
+    { title: 'Harf Yolcusu', icon: '🧭', minStars: 15, color: 'text-sky-600' },
+    { title: 'Hareke Yıldızı', icon: '⭐', minStars: 35, color: 'text-amber-600' },
+    { title: 'Kaide Ustası', icon: '🕌', minStars: 60, color: 'text-indigo-600' },
+    { title: "Kur'an Şampiyonu", icon: '👑', minStars: 80, color: 'text-purple-600' }
 ];
 
 export function getPlayerRank(totalStars: number): PlayerRank {
@@ -93,677 +122,334 @@ export function getPlayerRank(totalStars: number): PlayerRank {
     return current;
 }
 
-// 5 Tematik Diyar (Kolaydan Zora)
-export const ADVENTURE_ISLANDS: AdventureIsland[] = [
+// Öğretmen Panelindeki 4 Resmi Diyanet Bölümü -> Macera Diyarı Temaları
+const SECTION_STYLE_MAP: Record<
+    'section1' | 'section2' | 'section3' | 'section4',
     {
-        id: 1,
-        name: "1. Diyar: Harfler Sahili",
-        shortName: "Harfler Sahili",
-        subtitle: "Elif'ten Ye'ye 28 Temel Kur'an Harfini Azar Azar Keşfet (Adım 1 - 9)",
-        icon: "🏝️",
-        themeColor: "sky",
-        gradient: "from-sky-500 via-cyan-500 to-blue-600",
-        nodeBg: "bg-sky-500 border-sky-700",
-        nodeShadow: "shadow-[0_6px_0_#0369a1]",
-        badgeBg: "bg-sky-100 text-sky-800 border-sky-300",
-        stages: [1, 2, 3, 4, 5, 6, 7, 8, 9]
-    },
-    {
-        id: 2,
-        name: "2. Diyar: Harekeler Vadisi",
-        shortName: "Harekeler Vadisi",
-        subtitle: "Üstün, Esre ve Ötre ile Harfleri Kelimeye Dönüştür (Adım 10 - 16)",
-        icon: "🌿",
-        themeColor: "emerald",
-        gradient: "from-emerald-500 via-teal-500 to-green-600",
-        nodeBg: "bg-emerald-500 border-emerald-700",
-        nodeShadow: "shadow-[0_6px_0_#047857]",
-        badgeBg: "bg-emerald-100 text-emerald-800 border-emerald-300",
-        stages: [10, 11, 12, 13, 14, 15, 16]
-    },
-    {
-        id: 3,
-        name: "3. Diyar: Bitişme & Med Ormanı",
-        shortName: "Med Ormanı",
-        subtitle: "Harflerin Bitişme Halleri ve Uzatma (Med) Kuralları (Adım 17 - 19)",
-        icon: "🌲",
-        themeColor: "teal",
-        gradient: "from-teal-500 via-emerald-600 to-cyan-700",
-        nodeBg: "bg-teal-500 border-teal-700",
-        nodeShadow: "shadow-[0_6px_0_#0f766e]",
-        badgeBg: "bg-teal-100 text-teal-800 border-teal-300",
-        stages: [17, 18, 19]
-    },
-    {
-        id: 4,
-        name: "4. Diyar: Cezm & Şedde Kalesi",
-        shortName: "Cezm & Şedde",
-        subtitle: "Sükun ile Tutturma ve Şedde ile Çift Vurgu Gücü (Adım 20 - 21)",
-        icon: "🏰",
-        themeColor: "amber",
-        gradient: "from-amber-500 via-orange-500 to-rose-500",
-        nodeBg: "bg-amber-500 border-amber-700",
-        nodeShadow: "shadow-[0_6px_0_#b45309]",
-        badgeBg: "bg-amber-100 text-amber-800 border-amber-300",
-        stages: [20, 21]
-    },
-    {
-        id: 5,
-        name: "5. Diyar: Tenvin & Kur'an Zirvesi",
-        shortName: "Kur'an Zirvesi",
-        subtitle: "Tenvinler, İleri Kaideler ve Büyük Şampiyonluk Sınavı (Adım 22 - 24)",
-        icon: "👑",
-        themeColor: "purple",
-        gradient: "from-violet-600 via-purple-600 to-fuchsia-600",
-        nodeBg: "bg-purple-600 border-purple-800",
-        nodeShadow: "shadow-[0_6px_0_#6b21a8]",
-        badgeBg: "bg-purple-100 text-purple-800 border-purple-300",
-        stages: [22, 23, 24]
+        id: number;
+        shortName: string;
+        icon: string;
+        themeColor: string;
+        gradient: string;
+        nodeBg: string;
+        nodeShadow: string;
+        badgeBg: string;
     }
-];
-
-// 24 Aşamalı Kolaydan Zora Öğrenme Yolculuğu
-export const ADVENTURE_STAGES: AdventureStage[] = [
-    // ──────── DİYAR 1: HARFLER SAHİLİ (1 - 9) ────────
-    {
+> = {
+    section1: {
         id: 1,
-        title: "Elif, Be, Te ve Peltek Se",
-        shortTitle: "Elif - Se",
-        desc: "İlk 4 harfi tanı; nokta sayısına ve yerine dikkat et!",
-        difficulty: 'kolay',
-        hasExactReading: true,
-        passingScorePercent: 80,
-        requiredRepeats: 3,
-        badgeId: "badge_1",
-        badgeName: "İlk Filiz",
-        badgeIcon: "🌱",
-        islandId: 1,
-        islandName: "Harfler Sahili",
-        items: [
-            { id: '1', name: 'Elif', imgSrc: '/elifba/dosyalar/1.png', audSrc: '/elifba/dosyalar/1.mp3', arabic: 'ا', tip: 'Dümdüz bir çubuk gibidir, noktasızdır. "E" sesiyle başlar.' },
-            { id: '2', name: 'Be', imgSrc: '/elifba/dosyalar/2.png', audSrc: '/elifba/dosyalar/2.mp3', arabic: 'ب', tip: 'Tekneye benzer, altında TEK noktası vardır. Dudakları birleştirip "Be" de!' },
-            { id: '3', name: 'Te', imgSrc: '/elifba/dosyalar/3.png', audSrc: '/elifba/dosyalar/3.mp3', arabic: 'ت', tip: 'Be’ye benzer ama İKİ noktası üstündedir. İki gözü yukarıda gibi düşün!' },
-            { id: '4', name: 'Peltek Se', imgSrc: '/elifba/dosyalar/4.png', audSrc: '/elifba/dosyalar/4.mp3', arabic: 'ث', tip: 'Üstünde ÜÇ nokta vardır. Dil ucunu üst dişlere hafifçe değdirip peltek "Se" de!' }
-        ]
+        shortName: '1. Harf & Hareke',
+        icon: '🏝️',
+        themeColor: 'emerald',
+        gradient: 'from-emerald-500 via-teal-500 to-cyan-600',
+        nodeBg: 'bg-emerald-500 border-emerald-700',
+        nodeShadow: 'shadow-[0_6px_0_#047857]',
+        badgeBg: 'bg-emerald-100 text-emerald-800 border-emerald-300'
     },
-    {
+    section2: {
         id: 2,
-        title: "Cim, Ha, Hı ve Dal",
-        shortTitle: "Cim - Dal",
-        desc: "Kardeş harfler Cim-Ha-Hı ve köşeli Dal harfi!",
-        difficulty: 'kolay',
-        hasExactReading: true,
-        passingScorePercent: 80,
-        requiredRepeats: 3,
-        badgeId: "badge_2",
-        badgeName: "Nokta Avcısı",
-        badgeIcon: "🔍",
-        islandId: 1,
-        islandName: "Harfler Sahili",
-        reviewPoolIds: [1],
-        items: [
-            { id: '5', name: 'Cim', imgSrc: '/elifba/dosyalar/5.png', audSrc: '/elifba/dosyalar/5.mp3', arabic: 'ج', tip: 'Karnının ortasında TEK noktası vardır. "C" sesi verir.' },
-            { id: '6', name: 'Ha', imgSrc: '/elifba/dosyalar/6.png', audSrc: '/elifba/dosyalar/6.mp3', arabic: 'ح', tip: 'Cim’in kardeşidir ama HİÇ noktası yoktur! Boğazın ortasından temiz "Ha" de.' },
-            { id: '7', name: 'Hı', imgSrc: '/elifba/dosyalar/7.png', audSrc: '/elifba/dosyalar/7.mp3', arabic: 'خ', tip: 'Noktası TEPESİNDEDİR! Boğazdan hafif hırıltılı ve kalın "Hı" çıkar.' },
-            { id: '8', name: 'Dal', imgSrc: '/elifba/dosyalar/8.png', audSrc: '/elifba/dosyalar/8.mp3', arabic: 'د', tip: 'Noktasız, dirsek gibi kıvrık bir harftir. Yumuşak "D" sesi verir.' }
-        ]
+        shortName: '2. Cezm, Med & Şedde',
+        icon: '🏔️',
+        themeColor: 'sky',
+        gradient: 'from-sky-500 via-blue-600 to-indigo-600',
+        nodeBg: 'bg-sky-500 border-sky-700',
+        nodeShadow: 'shadow-[0_6px_0_#0369a1]',
+        badgeBg: 'bg-sky-100 text-sky-800 border-sky-300'
     },
-    {
+    section3: {
         id: 3,
-        title: "Peltek Zel, Ra, Ze ve Sin",
-        shortTitle: "Zel - Sin",
-        desc: "Peltek ve keskin sesler ile dişli Sin harfini ayırt et!",
-        difficulty: 'kolay',
-        hasExactReading: true,
-        passingScorePercent: 80,
-        requiredRepeats: 3,
-        badgeId: "badge_3",
-        badgeName: "Ses Kaşifi",
-        badgeIcon: "⚡",
-        islandId: 1,
-        islandName: "Harfler Sahili",
-        reviewPoolIds: [1, 2],
-        items: [
-            { id: '9', name: 'Peltek Zel', imgSrc: '/elifba/dosyalar/9.png', audSrc: '/elifba/dosyalar/9.mp3', arabic: 'ذ', tip: 'Dal’a benzer ama üstünde nokta vardır. Dil ucunu dişlere değdirip peltek "Zel" de!' },
-            { id: '10', name: 'Ra', imgSrc: '/elifba/dosyalar/10.png', audSrc: '/elifba/dosyalar/10.mp3', arabic: 'ر', tip: 'Kızak gibi kayar, noktasızdır. Dil ucuyla "Ra" şeklinde okunur.' },
-            { id: '11', name: 'Ze', imgSrc: '/elifba/dosyalar/11.png', audSrc: '/elifba/dosyalar/11.mp3', arabic: 'ز', tip: 'Ra’nın noktalısıdır! Arı vızıltısı gibi keskin "Ze" sesi çıkar.' },
-            { id: '12', name: 'Sin', imgSrc: '/elifba/dosyalar/12.png', audSrc: '/elifba/dosyalar/12.mp3', arabic: 'س', tip: 'Üç küçük dişi ve büyük çanağı vardır, noktasızdır. İnce "Sin" sesi!' }
-        ]
+        shortName: '3. Tenvin & Kaideler',
+        icon: '🏰',
+        themeColor: 'amber',
+        gradient: 'from-amber-500 via-orange-500 to-rose-500',
+        nodeBg: 'bg-amber-500 border-amber-700',
+        nodeShadow: 'shadow-[0_6px_0_#b45309]',
+        badgeBg: 'bg-amber-100 text-amber-800 border-amber-300'
     },
-    {
+    section4: {
         id: 4,
-        title: "🏆 Kontrol Kapısı: İlk 12 Harf",
-        shortTitle: "İlk 12 Harf Sınavı",
-        desc: "Öğrendiğin ilk 12 harfi karıştırmadan tanıdığını kanıtla!",
-        difficulty: 'orta',
-        isGate: true,
-        hasExactReading: true,
-        passingScorePercent: 80,
-        requiredRepeats: 1,
-        badgeId: "badge_4",
-        badgeName: "İlk Kapı Muhafızı",
-        badgeIcon: "🛡️",
-        islandId: 1,
-        islandName: "Harfler Sahili",
-        items: [
-            { id: '2', name: 'Be', imgSrc: '/elifba/dosyalar/2.png', audSrc: '/elifba/dosyalar/2.mp3', arabic: 'ب', tip: 'Tek nokta altta: Be' },
-            { id: '3', name: 'Te', imgSrc: '/elifba/dosyalar/3.png', audSrc: '/elifba/dosyalar/3.mp3', arabic: 'ت', tip: 'İki nokta üstte: Te' },
-            { id: '4', name: 'Peltek Se', imgSrc: '/elifba/dosyalar/4.png', audSrc: '/elifba/dosyalar/4.mp3', arabic: 'ث', tip: 'Üç nokta üstte: Peltek Se' },
-            { id: '5', name: 'Cim', imgSrc: '/elifba/dosyalar/5.png', audSrc: '/elifba/dosyalar/5.mp3', arabic: 'ج', tip: 'Nokta karnında: Cim' },
-            { id: '6', name: 'Ha', imgSrc: '/elifba/dosyalar/6.png', audSrc: '/elifba/dosyalar/6.mp3', arabic: 'ح', tip: 'Noktasız boğaz harfi: Ha' },
-            { id: '7', name: 'Hı', imgSrc: '/elifba/dosyalar/7.png', audSrc: '/elifba/dosyalar/7.mp3', arabic: 'خ', tip: 'Nokta tepesinde hırıltılı: Hı' },
-            { id: '8', name: 'Dal', imgSrc: '/elifba/dosyalar/8.png', audSrc: '/elifba/dosyalar/8.mp3', arabic: 'د', tip: 'Noktasız dirsek: Dal' },
-            { id: '9', name: 'Peltek Zel', imgSrc: '/elifba/dosyalar/9.png', audSrc: '/elifba/dosyalar/9.mp3', arabic: 'ذ', tip: 'Üstü noktalı dirsek: Peltek Zel' },
-            { id: '10', name: 'Ra', imgSrc: '/elifba/dosyalar/10.png', audSrc: '/elifba/dosyalar/10.mp3', arabic: 'ر', tip: 'Noktasız kızak: Ra' },
-            { id: '11', name: 'Ze', imgSrc: '/elifba/dosyalar/11.png', audSrc: '/elifba/dosyalar/11.mp3', arabic: 'ز', tip: 'Üstü noktalı kızak: Ze' },
-            { id: '12', name: 'Sin', imgSrc: '/elifba/dosyalar/12.png', audSrc: '/elifba/dosyalar/12.mp3', arabic: 'س', tip: 'Noktasız üç diş: Sin' }
-        ]
-    },
-    {
-        id: 5,
-        title: "Şın, Sad, Dad ve Tı",
-        shortTitle: "Şın - Tı",
-        desc: "Kalın ve ıslıklı Kur'an harfleriyle tanış!",
-        difficulty: 'orta',
-        hasExactReading: true,
-        passingScorePercent: 80,
-        requiredRepeats: 3,
-        badgeId: "badge_5",
-        badgeName: "Kalın Ses Ustası",
-        badgeIcon: "🌊",
-        islandId: 1,
-        islandName: "Harfler Sahili",
-        reviewPoolIds: [3],
-        items: [
-            { id: '13', name: 'Şın', imgSrc: '/elifba/dosyalar/13.png', audSrc: '/elifba/dosyalar/13.mp3', arabic: 'ش', tip: 'Sin’e benzer ama üstünde ÜÇ noktası vardır. "Ş" sesi çıkar.' },
-            { id: '14', name: 'Sad', imgSrc: '/elifba/dosyalar/14.png', audSrc: '/elifba/dosyalar/14.mp3', arabic: 'ص', tip: 'Balon gibi yuvarlak gövdeli, noktasız KALIN "Sa" sesidir.' },
-            { id: '15', name: 'Dad', imgSrc: '/elifba/dosyalar/15.png', audSrc: '/elifba/dosyalar/15.mp3', arabic: 'ض', tip: 'Sad’ın tepesi noktalısıdır! Arapçaya özgü kalın "Dad" sesi.' },
-            { id: '16', name: 'Tı', imgSrc: '/elifba/dosyalar/16.png', audSrc: '/elifba/dosyalar/16.mp3', arabic: 'ط', tip: 'Çubuklu şapka gibidir, noktasız KALIN "Ta" sesi verir.' }
-        ]
-    },
-    {
-        id: 6,
-        title: "Peltek Zı, Ayn, Gayn ve Fe",
-        shortTitle: "Zı - Fe",
-        desc: "Boğaz derinliği ve kalın peltek Zı harfini öğren!",
-        difficulty: 'orta',
-        hasExactReading: true,
-        passingScorePercent: 80,
-        requiredRepeats: 3,
-        badgeId: "badge_6",
-        badgeName: "Mahreç Yıldızı",
-        badgeIcon: "🌸",
-        islandId: 1,
-        islandName: "Harfler Sahili",
-        reviewPoolIds: [5],
-        items: [
-            { id: '17', name: 'Peltek Zı', imgSrc: '/elifba/dosyalar/17.png', audSrc: '/elifba/dosyalar/17.mp3', arabic: 'ظ', tip: 'Tı harfine benzer ama üstünde nokta vardır. Kalın peltek "Za" de!' },
-            { id: '18', name: 'Ayn', imgSrc: '/elifba/dosyalar/18.png', audSrc: '/elifba/dosyalar/18.mp3', arabic: 'ع', tip: 'Ters 3 rakamına benzer, noktasızdır. Boğaz ortasını hafif sıkarak okunur.' },
-            { id: '19', name: 'Gayn', imgSrc: '/elifba/dosyalar/19.png', audSrc: '/elifba/dosyalar/19.mp3', arabic: 'غ', tip: 'Ayn’ın tepesi noktalısıdır! Kalın ve yumuşak "Ğa" sesi verir.' },
-            { id: '20', name: 'Fe', imgSrc: '/elifba/dosyalar/20.png', audSrc: '/elifba/dosyalar/20.mp3', arabic: 'ف', tip: 'Tek gözlüdür ve üzerinde TEK nokta vardır. Üst dişlerle alt dudaktan "F" de.' }
-        ]
-    },
-    {
-        id: 7,
-        title: "Kaf, Kef, Lam ve Mim",
-        shortTitle: "Kaf - Mim",
-        desc: "Kalın Kaf ve ince Kef farkını mükemmel kavra!",
-        difficulty: 'orta',
-        hasExactReading: true,
-        passingScorePercent: 80,
-        requiredRepeats: 3,
-        badgeId: "badge_7",
-        badgeName: "Bilgi Kalesi",
-        badgeIcon: "💎",
-        islandId: 1,
-        islandName: "Harfler Sahili",
-        reviewPoolIds: [6],
-        items: [
-            { id: '21', name: 'Kaf', imgSrc: '/elifba/dosyalar/21.png', audSrc: '/elifba/dosyalar/21.mp3', arabic: 'ق', tip: 'İki noktası vardır, çanağı derindir. Boğaz kökünden KALIN "Ka" çıkar.' },
-            { id: '22', name: 'Kef', imgSrc: '/elifba/dosyalar/22.png', audSrc: '/elifba/dosyalar/22.mp3', arabic: 'ك', tip: 'İçinde küçük "S" işareti bulunur. İnce ve nazik "Ke" sesi verir.' },
-            { id: '23', name: 'Lam', imgSrc: '/elifba/dosyalar/23.png', audSrc: '/elifba/dosyalar/23.mp3', arabic: 'ل', tip: 'Baston şeklindedir, noktasızdır. Bildiğimiz "L" sesi!' },
-            { id: '24', name: 'Mim', imgSrc: '/elifba/dosyalar/24.png', audSrc: '/elifba/dosyalar/24.mp3', arabic: 'م', tip: 'Yuvarlak başlı ve aşağı inen kuyrukludur. Dudaklardan "M" sesi!' }
-        ]
-    },
-    {
-        id: 8,
-        title: "Nun, Vav, He, Lâmelif ve Ye",
-        shortTitle: "Nun - Ye",
-        desc: "Son harfleri de öğrenerek alfabeyi tamamla!",
-        difficulty: 'orta',
-        hasExactReading: true,
-        passingScorePercent: 80,
-        requiredRepeats: 3,
-        badgeId: "badge_8",
-        badgeName: "Alfabe Kaşifi",
-        badgeIcon: "🅰️",
-        islandId: 1,
-        islandName: "Harfler Sahili",
-        reviewPoolIds: [7],
-        items: [
-            { id: '25', name: 'Nun', imgSrc: '/elifba/dosyalar/25.png', audSrc: '/elifba/dosyalar/25.mp3', arabic: 'ن', tip: 'Çanak içinde TEK nokta taşır. "N" sesi verir.' },
-            { id: '26', name: 'Vav', imgSrc: '/elifba/dosyalar/26.png', audSrc: '/elifba/dosyalar/26.mp3', arabic: 'و', tip: '9 rakamına benzer. Dudakları öne uzatarak "V" de!' },
-            { id: '27', name: 'He', imgSrc: '/elifba/dosyalar/27.png', audSrc: '/elifba/dosyalar/27.mp3', arabic: 'ه', tip: 'Gözlüklü veya fiyonk gibidir. Göğüsten gelen yumuşak "H" sesi!' },
-            { id: '28', name: 'Lâmelif', imgSrc: '/elifba/dosyalar/28.png', audSrc: '/elifba/dosyalar/28.mp3', arabic: 'لا', tip: 'Lam (ل) ve Elif (ا) harflerinin kucaklaşmış halidir.' },
-            { id: '29', name: 'Ye', imgSrc: '/elifba/dosyalar/29.png', audSrc: '/elifba/dosyalar/29.mp3', arabic: 'ي', tip: 'Ördeğe benzer, altında İKİ yan yana nokta bulunur. "Y" sesi verir.' }
-        ]
-    },
-    {
-        id: 9,
-        title: "🏆 Diyar 1 Şampiyonu: Tüm Harfler",
-        shortTitle: "28 Harf Finali",
-        desc: "Benzer harfleri (Kalın/İnce, Noktalı/Noktasız) ayırt etme sınavı!",
-        difficulty: 'ustalik',
-        isGate: true,
-        hasExactReading: true,
-        passingScorePercent: 85,
-        requiredRepeats: 1,
-        badgeId: "badge_9",
-        badgeName: "Harfler Sahili Fatihi",
-        badgeIcon: "🏝️",
-        islandId: 1,
-        islandName: "Harfler Sahili",
-        items: [
-            { id: '13', name: 'Şın', imgSrc: '/elifba/dosyalar/13.png', audSrc: '/elifba/dosyalar/13.mp3', arabic: 'ش', tip: 'Üç noktalı: Şın' },
-            { id: '14', name: 'Sad', imgSrc: '/elifba/dosyalar/14.png', audSrc: '/elifba/dosyalar/14.mp3', arabic: 'ص', tip: 'Noktasız kalın: Sad' },
-            { id: '15', name: 'Dad', imgSrc: '/elifba/dosyalar/15.png', audSrc: '/elifba/dosyalar/15.mp3', arabic: 'ض', tip: 'Üstü noktalı kalın: Dad' },
-            { id: '16', name: 'Tı', imgSrc: '/elifba/dosyalar/16.png', audSrc: '/elifba/dosyalar/16.mp3', arabic: 'ط', tip: 'Noktasız kalın: Tı' },
-            { id: '17', name: 'Peltek Zı', imgSrc: '/elifba/dosyalar/17.png', audSrc: '/elifba/dosyalar/17.mp3', arabic: 'ظ', tip: 'Noktalı kalın peltek: Zı' },
-            { id: '18', name: 'Ayn', imgSrc: '/elifba/dosyalar/18.png', audSrc: '/elifba/dosyalar/18.mp3', arabic: 'ع', tip: 'Noktasız boğaz: Ayn' },
-            { id: '19', name: 'Gayn', imgSrc: '/elifba/dosyalar/19.png', audSrc: '/elifba/dosyalar/19.mp3', arabic: 'غ', tip: 'Noktalı: Gayn' },
-            { id: '21', name: 'Kaf', imgSrc: '/elifba/dosyalar/21.png', audSrc: '/elifba/dosyalar/21.mp3', arabic: 'ق', tip: 'İki noktalı kalın: Kaf' },
-            { id: '22', name: 'Kef', imgSrc: '/elifba/dosyalar/22.png', audSrc: '/elifba/dosyalar/22.mp3', arabic: 'ك', tip: 'İnce: Kef' },
-            { id: '25', name: 'Nun', imgSrc: '/elifba/dosyalar/25.png', audSrc: '/elifba/dosyalar/25.mp3', arabic: 'ن', tip: 'Üstünde tek nokta: Nun' },
-            { id: '29', name: 'Ye', imgSrc: '/elifba/dosyalar/29.png', audSrc: '/elifba/dosyalar/29.mp3', arabic: 'ي', tip: 'Altında iki nokta: Ye' }
-        ]
-    },
-
-    // ──────── DİYAR 2: HAREKELER VADİSİ (10 - 16) ────────
-    {
-        id: 10,
-        title: "Üstün Harekesi (E - A Sesi)",
-        shortTitle: "Üstün Harfler",
-        desc: "Harfin üstündeki eğik çizgi ince harfi 'E', kalın harfi 'A' okutur!",
-        difficulty: 'kolay',
-        hasExactReading: true,
-        passingScorePercent: 80,
-        requiredRepeats: 3,
-        badgeId: "badge_10",
-        badgeName: "Üstün Kahramanı",
-        badgeIcon: "🎈",
-        islandId: 2,
-        islandName: "Harekeler Vadisi",
-        items: [
-            { id: 'u1', name: 'E', imgSrc: '/elifba/ustun1/ustun1/1.png', audSrc: '/elifba/ustun1/ustun1/1.m4a', arabic: 'اَ', tip: 'Elif üzerinde üstün: İnce "E"' },
-            { id: 'u2', name: 'Be', imgSrc: '/elifba/ustun1/ustun1/2.png', audSrc: '/elifba/ustun1/ustun1/2.m4a', arabic: 'بَ', tip: 'Be üzerinde üstün: "Be"' },
-            { id: 'u3', name: 'Te', imgSrc: '/elifba/ustun1/ustun1/3.png', audSrc: '/elifba/ustun1/ustun1/3.m4a', arabic: 'تَ', tip: 'Te üzerinde üstün: "Te"' },
-            { id: 'u5', name: 'Ce', imgSrc: '/elifba/ustun1/ustun1/5.png', audSrc: '/elifba/ustun1/ustun1/5.m4a', arabic: 'جَ', tip: 'Cim üzerinde üstün: "Ce"' },
-            { id: 'u10', name: 'Ra', imgSrc: '/elifba/ustun1/ustun1/10.png', audSrc: '/elifba/ustun1/ustun1/10.m4a', arabic: 'رَ', tip: 'Ra harfi üstünle KALIN okunur: "Ra"!' },
-            { id: 'u14', name: 'Sa', imgSrc: '/elifba/ustun1/ustun1/14.png', audSrc: '/elifba/ustun1/ustun1/14.m4a', arabic: 'صَ', tip: 'Kalın Sad üstünle "Sa" diye okunur!' },
-            { id: 'u21', name: 'Ka', imgSrc: '/elifba/ustun1/ustun1/21.png', audSrc: '/elifba/ustun1/ustun1/21.m4a', arabic: 'قَ', tip: 'Kalın Kaf üstünle "Ka" diye okunur!' },
-            { id: 'u23', name: 'Le', imgSrc: '/elifba/ustun1/ustun1/23.png', audSrc: '/elifba/ustun1/ustun1/23.m4a', arabic: 'لَ', tip: 'İnce Lam üstünle "Le" diye okunur!' }
-        ]
-    },
-    {
-        id: 11,
-        title: "İlk Kelimeler: Üstünlü Kelimeler",
-        shortTitle: "Üstün Kelimeler",
-        desc: "3 harfi üstünle birbirine bağlayarak ilk Kur'an kelimelerini oku!",
-        difficulty: 'orta',
-        hasExactReading: true,
-        passingScorePercent: 80,
-        requiredRepeats: 3,
-        badgeId: "badge_11",
-        badgeName: "İlk Kelime Ustası",
-        badgeIcon: "📖",
-        islandId: 2,
-        islandName: "Harekeler Vadisi",
-        reviewPoolIds: [10],
-        items: [
-            { id: 'darabe', name: 'Darabe', imgSrc: '/elifba/ustun/ustun/darabe.png', audSrc: '/elifba/ustun/ustun/darabe.mp3', arabic: 'ضَرَبَ', tip: 'Dad (Da) + Ra (Ra) + Be (Be) -> Darabe' },
-            { id: 'kesebe', name: 'Kesebe', imgSrc: '/elifba/ustun/ustun/kesebe.png', audSrc: '/elifba/ustun/ustun/kesebe.mp3', arabic: 'كَسَبَ', tip: 'Kef (Ke) + Sin (Se) + Be (Be) -> Kesebe' },
-            { id: 'nezele', name: 'Nezele', imgSrc: '/elifba/ustun/ustun/nezele.png', audSrc: '/elifba/ustun/ustun/nezele.mp3', arabic: 'نَزَلَ', tip: 'Nun (Ne) + Ze (Ze) + Lam (Le) -> Nezele' },
-            { id: 'zehebe', name: 'Zehebe', imgSrc: '/elifba/ustun/ustun/zehebe.png', audSrc: '/elifba/ustun/ustun/zehebe.mp3', arabic: 'ذَهَبَ', tip: 'Peltek Zel (Ze) + He (He) + Be (Be) -> Zehebe' },
-            { id: 'vecede', name: 'Vecede', imgSrc: '/elifba/ustun/ustun/vecede.png', audSrc: '/elifba/ustun/ustun/vecede.mp3', arabic: 'وَجَدَ', tip: 'Vav (Ve) + Cim (Ce) + Dal (De) -> Vecede' },
-            { id: 'emera', name: 'Emera', imgSrc: '/elifba/ustun/ustun/emera.png', audSrc: '/elifba/ustun/ustun/emera.mp3', arabic: 'اَمَرَ', tip: 'Elif (E) + Mim (Me) + Ra (Ra) -> Emera' },
-            { id: 'sadeka', name: 'Sadaka', imgSrc: '/elifba/ustun/ustun/sadeka.png', audSrc: '/elifba/ustun/ustun/sadeka.mp3', arabic: 'صَدَقَ', tip: 'Sad (Sa) + Dal (De) + Kaf (Ka) -> Sadaka' },
-            { id: 'ceale', name: 'Ceale', imgSrc: '/elifba/ustun/ustun/ceale.png', audSrc: '/elifba/ustun/ustun/ceale.mp3', arabic: 'جَعَلَ', tip: 'Cim (Ce) + Ayn (A) + Lam (Le) -> Ceale' }
-        ]
-    },
-    {
-        id: 12,
-        title: "Esre Harekesi (İ - I Sesi)",
-        shortTitle: "Esre Harfler",
-        desc: "Harfin ALTINA yazılan çizgi ince harfi 'İ', kalın harfi 'I' okutur!",
-        difficulty: 'kolay',
-        hasExactReading: true,
-        passingScorePercent: 80,
-        requiredRepeats: 3,
-        badgeId: "badge_12",
-        badgeName: "Esre Yıldızı",
-        badgeIcon: "💧",
-        islandId: 2,
-        islandName: "Harekeler Vadisi",
-        items: [
-            { id: 'e1', name: 'İ', imgSrc: '/elifba/esre1/esre1/1.png', audSrc: '/elifba/esre1/esre1/1.m4a', arabic: 'اِ', tip: 'Çizgi harfin altında: "İ" sesi!' },
-            { id: 'e2', name: 'Bi', imgSrc: '/elifba/esre1/esre1/2.png', audSrc: '/elifba/esre1/esre1/2.m4a', arabic: 'بِ', tip: 'Be altında esre: "Bi"' },
-            { id: 'e3', name: 'Ti', imgSrc: '/elifba/esre1/esre1/3.png', audSrc: '/elifba/esre1/esre1/3.m4a', arabic: 'تِ', tip: 'Te altında esre: "Ti"' },
-            { id: 'e5', name: 'Ci', imgSrc: '/elifba/esre1/esre1/5.png', audSrc: '/elifba/esre1/esre1/5.m4a', arabic: 'جِ', tip: 'Cim altında esre: "Ci"' },
-            { id: 'e8', name: 'Di', imgSrc: '/elifba/esre1/esre1/8.png', audSrc: '/elifba/esre1/esre1/8.m4a', arabic: 'دِ', tip: 'Dal altında esre: "Di"' },
-            { id: 'e10', name: 'Ri', imgSrc: '/elifba/esre1/esre1/10.png', audSrc: '/elifba/esre1/esre1/10.m4a', arabic: 'رِ', tip: 'Ra esreli olduğunda ince "Ri" okunur!' },
-            { id: 'e14', name: 'Sı', imgSrc: '/elifba/esre1/esre1/14.png', audSrc: '/elifba/esre1/esre1/14.m4a', arabic: 'صِ', tip: 'Kalın Sad esreyle "Sı" sesine yaklaşır!' },
-            { id: 'e23', name: 'Li', imgSrc: '/elifba/esre1/esre1/23.png', audSrc: '/elifba/esre1/esre1/23.m4a', arabic: 'لِ', tip: 'Lam altında esre: "Li"' }
-        ]
-    },
-    {
-        id: 13,
-        title: "Esreli Kelimeler Okuma",
-        shortTitle: "Esre Kelimeler",
-        desc: "Sesi dikkatle dinle, harflerin üstündeki ve altındaki harekeleri takip et!",
-        difficulty: 'orta',
-        hasExactReading: false,
-        passingScorePercent: 80,
-        requiredRepeats: 3,
-        badgeId: "badge_13",
-        badgeName: "Esre Bilgini",
-        badgeIcon: "🌊",
-        islandId: 2,
-        islandName: "Harekeler Vadisi",
-        items: [
-            { id: 'ew1', name: 'Esreli Kelime #1', imgSrc: '/elifba/esre/esre/esre1.png', audSrc: '/elifba/esre/esre/esre1.mp3', tip: 'Alttaki çizgiye dikkat ederek harfleri birleştir!' },
-            { id: 'ew2', name: 'Esreli Kelime #2', imgSrc: '/elifba/esre/esre/esre2.png', audSrc: '/elifba/esre/esre/esre2.mp3', tip: 'Sesi dinle ve görseldeki hareke yerlerini takip et.' },
-            { id: 'ew3', name: 'Esreli Kelime #3', imgSrc: '/elifba/esre/esre/esre3.png', audSrc: '/elifba/esre/esre/esre3.mp3', tip: 'Kalın ve ince harflerin "i/ı" geçişlerine dikkat et!' },
-            { id: 'ew4', name: 'Esreli Kelime #4', imgSrc: '/elifba/esre/esre/esre4.png', audSrc: '/elifba/esre/esre/esre4.mp3', tip: 'Heceleri tek tek oku, sonra hızlan.' },
-            { id: 'ew5', name: 'Esreli Kelime #5', imgSrc: '/elifba/esre/esre/esre5.png', audSrc: '/elifba/esre/esre/esre5.mp3', tip: 'Çok güzel! Esre her zaman harfin altındadır.' },
-            { id: 'ew6', name: 'Esreli Kelime #6', imgSrc: '/elifba/esre/esre/esre6.png', audSrc: '/elifba/esre/esre/esre6.mp3', tip: 'Sesi tekrar dinleyip gözünle kelimeyi takip et.' }
-        ]
-    },
-    {
-        id: 14,
-        title: "Ötre Harekesi (Ü - U Sesi)",
-        shortTitle: "Ötre Harfler",
-        desc: "Harfin üzerindeki minik 'vav' işareti dudakları büzerek 'Ü/U' okutur!",
-        difficulty: 'kolay',
-        hasExactReading: true,
-        passingScorePercent: 80,
-        requiredRepeats: 3,
-        badgeId: "badge_14",
-        badgeName: "Ötre Ustası",
-        badgeIcon: "🍩",
-        islandId: 2,
-        islandName: "Harekeler Vadisi",
-        items: [
-            { id: 'o1', name: 'Ü', imgSrc: '/elifba/otre1/otre1/1.png', audSrc: '/elifba/otre1/otre1/1.m4a', arabic: 'اُ', tip: 'Elif üzerinde ötre: "Ü" sesi!' },
-            { id: 'o2', name: 'Bü', imgSrc: '/elifba/otre1/otre1/2.png', audSrc: '/elifba/otre1/otre1/2.m4a', arabic: 'بُ', tip: 'Be üzerinde ötre: "Bü"' },
-            { id: 'o3', name: 'Tü', imgSrc: '/elifba/otre1/otre1/3.png', audSrc: '/elifba/otre1/otre1/3.m4a', arabic: 'تُ', tip: 'Te üzerinde ötre: "Tü"' },
-            { id: 'o5', name: 'Cü', imgSrc: '/elifba/otre1/otre1/5.png', audSrc: '/elifba/otre1/otre1/5.m4a', arabic: 'جُ', tip: 'Cim üzerinde ötre: "Cü"' },
-            { id: 'o8', name: 'Dü', imgSrc: '/elifba/otre1/otre1/8.png', audSrc: '/elifba/otre1/otre1/8.m4a', arabic: 'دُ', tip: 'Dal üzerinde ötre: "Dü"' },
-            { id: 'o10', name: 'Ru', imgSrc: '/elifba/otre1/otre1/10.png', audSrc: '/elifba/otre1/otre1/10.m4a', arabic: 'رُ', tip: 'Ra harfi ötreyle KALIN "Ru" okunur!' },
-            { id: 'o14', name: 'Su', imgSrc: '/elifba/otre1/otre1/14.png', audSrc: '/elifba/otre1/otre1/14.m4a', arabic: 'صُ', tip: 'Kalın Sad ötreyle "Su" diye okunur!' },
-            { id: 'o23', name: 'Lü', imgSrc: '/elifba/otre1/otre1/23.png', audSrc: '/elifba/otre1/otre1/23.m4a', arabic: 'لُ', tip: 'Lam üzerinde ötre: "Lü"' }
-        ]
-    },
-    {
-        id: 15,
-        title: "Ötreli & Karma Kelimeler",
-        shortTitle: "Ötre Kelimeler",
-        desc: "Üstün, esre ve ötrenin bir arada bulunduğu kelimeleri akıcı oku!",
-        difficulty: 'orta',
-        hasExactReading: false,
-        passingScorePercent: 80,
-        requiredRepeats: 3,
-        badgeId: "badge_15",
-        badgeName: "Üç Hareke Bilgini",
-        badgeIcon: "🧁",
-        islandId: 2,
-        islandName: "Harekeler Vadisi",
-        items: [
-            { id: 'ow1', name: 'Ötreli Kelime #1', imgSrc: '/elifba/otre/otre/otre1.png', audSrc: '/elifba/otre/otre/otre1.mp3', tip: 'Küçük vav (ötre) gördüğün yerde dudaklarını topla!' },
-            { id: 'ow2', name: 'Ötreli Kelime #2', imgSrc: '/elifba/otre/otre/otre2.png', audSrc: '/elifba/otre/otre/otre2.mp3', tip: 'Sesi dinle ve hangi harfin ötre, hangisinin esre/üstün olduğuna bak.' },
-            { id: 'ow3', name: 'Ötreli Kelime #3', imgSrc: '/elifba/otre/otre/otre3.png', audSrc: '/elifba/otre/otre/otre3.mp3', tip: 'Üç harekeyi hızlıca seçebilmek Kur\'an okumanın anahtarıdır!' },
-            { id: 'ow4', name: 'Ötreli Kelime #4', imgSrc: '/elifba/otre/otre/otre4.png', audSrc: '/elifba/otre/otre/otre4.mp3', tip: 'Hızlıca söyleyip tekrar et!' },
-            { id: 'ow5', name: 'Ötreli Kelime #5', imgSrc: '/elifba/otre/otre/otre5.png', audSrc: '/elifba/otre/otre/otre5.mp3', tip: 'Her harfin kendi harekesini bozmadan oku.' },
-            { id: 'ow6', name: 'Ötreli Kelime #6', imgSrc: '/elifba/otre/otre/otre6.png', audSrc: '/elifba/otre/otre/otre6.mp3', tip: 'Harika! Dinle ve aynı tonlamayla tekrar et.' }
-        ]
-    },
-    {
-        id: 16,
-        title: "🏆 Hareke Ustası Kapısı: Be - Bi - Bü",
-        shortTitle: "Hareke Ayırt Etme",
-        desc: "Aynı harfi Üstün, Esre ve Ötre ile birbirinden ayırt edebiliyor musun?",
-        difficulty: 'ustalik',
-        isGate: true,
-        hasExactReading: true,
-        passingScorePercent: 85,
-        requiredRepeats: 1,
-        badgeId: "badge_16",
-        badgeName: "Harekeler Vadisi Fatihi",
-        badgeIcon: "🌿",
-        islandId: 2,
-        islandName: "Harekeler Vadisi",
-        items: [
-            { id: 'u2', name: 'Be', imgSrc: '/elifba/ustun1/ustun1/2.png', audSrc: '/elifba/ustun1/ustun1/2.m4a', arabic: 'بَ', tip: 'Üstteki çizgi: Be' },
-            { id: 'e2', name: 'Bi', imgSrc: '/elifba/esre1/esre1/2.png', audSrc: '/elifba/esre1/esre1/2.m4a', arabic: 'بِ', tip: 'Alttaki çizgi: Bi' },
-            { id: 'o2', name: 'Bü', imgSrc: '/elifba/otre1/otre1/2.png', audSrc: '/elifba/otre1/otre1/2.m4a', arabic: 'بُ', tip: 'Üstteki kuyruk: Bü' },
-            { id: 'u3', name: 'Te', imgSrc: '/elifba/ustun1/ustun1/3.png', audSrc: '/elifba/ustun1/ustun1/3.m4a', arabic: 'تَ', tip: 'Üstünlü Te: Te' },
-            { id: 'e3', name: 'Ti', imgSrc: '/elifba/esre1/esre1/3.png', audSrc: '/elifba/esre1/esre1/3.m4a', arabic: 'تِ', tip: 'Esreli Te: Ti' },
-            { id: 'o3', name: 'Tü', imgSrc: '/elifba/otre1/otre1/3.png', audSrc: '/elifba/otre1/otre1/3.m4a', arabic: 'تُ', tip: 'Ötreli Te: Tü' },
-            { id: 'u5', name: 'Ce', imgSrc: '/elifba/ustun1/ustun1/5.png', audSrc: '/elifba/ustun1/ustun1/5.m4a', arabic: 'جَ', tip: 'Üstünlü Cim: Ce' },
-            { id: 'e5', name: 'Ci', imgSrc: '/elifba/esre1/esre1/5.png', audSrc: '/elifba/esre1/esre1/5.m4a', arabic: 'جِ', tip: 'Esreli Cim: Ci' },
-            { id: 'o5', name: 'Cü', imgSrc: '/elifba/otre1/otre1/5.png', audSrc: '/elifba/otre1/otre1/5.m4a', arabic: 'جُ', tip: 'Ötreli Cim: Cü' }
-        ]
-    },
-
-    // ──────── DİYAR 3: BİTİŞME & MED ORMANI (17 - 19) ────────
-    {
-        id: 17,
-        title: "Harflerin Başta, Ortada ve Sonda Halleri",
-        shortTitle: "Bitişme Şekilleri",
-        desc: "Kelime içinde el ele tutuşan harfleri şeklinden hemen tanı!",
-        difficulty: 'orta',
-        hasExactReading: true,
-        passingScorePercent: 80,
-        requiredRepeats: 2,
-        badgeId: "badge_17",
-        badgeName: "Bitişme Uzmanı",
-        badgeIcon: "🤝",
-        islandId: 3,
-        islandName: "Bitişme & Med Ormanı",
-        items: [
-            { id: 'bit2', name: 'Be (Bitişme)', imgSrc: '/elifba/dosyalar/2-2.png', audSrc: '/elifba/dosyalar/2-1.mp3', tip: 'Be başta, ortada ve sonda hep ALTINDAKİ tek noktayla tanınır!' },
-            { id: 'bit3', name: 'Te (Bitişme)', imgSrc: '/elifba/dosyalar/3-2.png', audSrc: '/elifba/dosyalar/3-1.mp3', tip: 'Te nerede olursa olsun ÜSTÜNDE İKİ nokta taşır.' },
-            { id: 'bit5', name: 'Cim (Bitişme)', imgSrc: '/elifba/dosyalar/5-2.png', audSrc: '/elifba/dosyalar/5-1.mp3', tip: 'Cim birleşince kuyruğu gider, başının altındaki tek noktası kalır!' },
-            { id: 'bit12', name: 'Sin (Bitişme)', imgSrc: '/elifba/dosyalar/12-2.png', audSrc: '/elifba/dosyalar/12-1.mp3', tip: 'Sin birleşince çanağını bırakır, 3 minik dişi kalır.' },
-            { id: 'bit18', name: 'Ayn (Bitişme)', imgSrc: '/elifba/dosyalar/18-2.png', audSrc: '/elifba/dosyalar/18-1.mp3', tip: 'Ayn ortada ve sonda üçgen gibi kapanır!' },
-            { id: 'bit24', name: 'Mim (Bitişme)', imgSrc: '/elifba/dosyalar/24-2.png', audSrc: '/elifba/dosyalar/24-1.mp3', tip: 'Mim hep yuvarlak küçük bir başla gösterilir.' },
-            { id: 'bit27', name: 'He (Bitişme)', imgSrc: '/elifba/dosyalar/27-2.png', audSrc: '/elifba/dosyalar/27-1.mp3', tip: 'He ortada fiyonk/kelebek şeklini alır!' },
-            { id: 'bit28', name: 'Ye (Bitişme)', imgSrc: '/elifba/dosyalar/28-2.png', audSrc: '/elifba/dosyalar/28-1.mp3', tip: 'Ye başta ve ortada Be’ye benzer ama ALTINDA İKİ nokta vardır!' }
-        ]
-    },
-    {
-        id: 18,
-        title: "Med Harfi: Elif ile Uzatma (Â / Ê)",
-        shortTitle: "Med Elif",
-        desc: "Üstünlü harften sonra harekesiz Elif gelirse 1 elif miktarı (2 parmak) uzat!",
-        difficulty: 'orta',
-        hasExactReading: false,
-        passingScorePercent: 80,
-        requiredRepeats: 3,
-        badgeId: "badge_18",
-        badgeName: "Uzatma Ustası",
-        badgeIcon: "🚀",
-        islandId: 3,
-        islandName: "Bitişme & Med Ormanı",
-        items: [
-            { id: 'me1', name: 'Med Elif #1', imgSrc: '/elifba/medelif/medelif/medelif1.png', audSrc: '/elifba/medelif/medelif/medelif1.mp3', tip: 'Harekesiz Elif önceki üstünü yukarı doğru uzatır!' },
-            { id: 'me2', name: 'Med Elif #2', imgSrc: '/elifba/medelif/medelif/medelif2.png', audSrc: '/elifba/medelif/medelif/medelif2.mp3', tip: 'Sesi acele etmeden "kââ" şeklinde 1 elif miktarı çek.' },
-            { id: 'me3', name: 'Med Elif #3', imgSrc: '/elifba/medelif/medelif/medelif3.png', audSrc: '/elifba/medelif/medelif/medelif3.mp3', tip: 'Elif üzerinde hiçbir hareke yoksa uzatma görevi görür.' },
-            { id: 'me4', name: 'Med Elif #4', imgSrc: '/elifba/medelif/medelif/medelif4.png', audSrc: '/elifba/medelif/medelif/medelif4.mp3', tip: 'Sesi dinle ve uzatılan heceyi fark et!' },
-            { id: 'me5', name: 'Med Elif #5', imgSrc: '/elifba/medelif/medelif/medelif5.png', audSrc: '/elifba/medelif/medelif/medelif5.mp3', tip: 'Kısa hecelerle uzun hece arasındaki farka kulak ver!' },
-            { id: 'me6', name: 'Med Elif #6', imgSrc: '/elifba/medelif/medelif/medelif6.png', audSrc: '/elifba/medelif/medelif/medelif6.mp3', tip: 'Çok iyi! Uzatmayı abartmadan dengeli oku.' }
-        ]
-    },
-    {
-        id: 19,
-        title: "Med Vav (Û) & Med Yâ (Î) ile Uzatma",
-        shortTitle: "Med Vav & Yâ",
-        desc: "Ötreli harfi Vav ile 'Û/Ü'; Esreli harfi Yâ ile 'Î/I' diye uzat!",
-        difficulty: 'ileri',
-        hasExactReading: false,
-        passingScorePercent: 80,
-        requiredRepeats: 3,
-        badgeId: "badge_19",
-        badgeName: "Med Ormanı Bilgini",
-        badgeIcon: "🌲",
-        islandId: 3,
-        islandName: "Bitişme & Med Ormanı",
-        items: [
-            { id: 'mv1', name: 'Med Vav #1', imgSrc: '/elifba/medvav/medvav/medvav1.png', audSrc: '/elifba/medvav/medvav/medvav1.mp3', tip: 'Ötre + harekesiz Vav -> Dudaklar büzülerek uzatılır (Û/Ü)!' },
-            { id: 'mv2', name: 'Med Vav #2', imgSrc: '/elifba/medvav/medvav/medvav2.png', audSrc: '/elifba/medvav/medvav/medvav2.mp3', tip: 'Vav harfinin üzerinde cezm veya hareke yoksa uzatır.' },
-            { id: 'mv3', name: 'Med Vav #3', imgSrc: '/elifba/medvav/medvav/medvav3.png', audSrc: '/elifba/medvav/medvav/medvav3.mp3', tip: 'Uzatma miktarı bir parmağı kaldırıp indirecek kadardır.' },
-            { id: 'my1', name: 'Med Yâ #1', imgSrc: '/elifba/medye/medye/medye1.png', audSrc: '/elifba/medye/medye/medye1.mp3', tip: 'Esre + harekesiz Yâ -> Aşağı doğru çekerek uzatılır (Î/I)!' },
-            { id: 'my2', name: 'Med Yâ #2', imgSrc: '/elifba/medye/medye/medye2.png', audSrc: '/elifba/medye/medye/medye2.mp3', tip: 'Altında iki noktalı Yâ harekesizse esreyi uzatır.' },
-            { id: 'my3', name: 'Med Yâ #3', imgSrc: '/elifba/medye/medye/medye3.png', audSrc: '/elifba/medye/medye/medye3.mp3', tip: 'Sesi dinle; uzun okunan "i" hecesini bul!' }
-        ]
-    },
-
-    // ──────── DİYAR 4: CEZM & ŞEDDE KALESİ (20 - 21) ────────
-    {
-        id: 20,
-        title: "Cezm (Sükun) ile Kapalı Heceler",
-        shortTitle: "Cezm Kuralı",
-        desc: "Küçük daire işareti ( ْ ) önceki harfi kendi sesine tutturur: Eb, Et, El, Em!",
-        difficulty: 'ileri',
-        hasExactReading: true,
-        passingScorePercent: 80,
-        requiredRepeats: 3,
-        badgeId: "badge_20",
-        badgeName: "Cezm Muhafızı",
-        badgeIcon: "🔒",
-        islandId: 4,
-        islandName: "Cezm & Şedde Kalesi",
-        items: [
-            { id: 'czh1', name: 'Eb', imgSrc: '/elifba/dosyalar/1-8.png', audSrc: '/elifba/dosyalar/1-7.mp3', arabic: 'اَبْ', tip: 'E + b (dur) = "Eb"' },
-            { id: 'czh2', name: 'Et', imgSrc: '/elifba/dosyalar/2-8.png', audSrc: '/elifba/dosyalar/2-7.mp3', arabic: 'اَتْ', tip: 'E + t (dur) = "Et"' },
-            { id: 'czh3', name: 'Es (Peltek)', imgSrc: '/elifba/dosyalar/3-8.png', audSrc: '/elifba/dosyalar/3-7.mp3', arabic: 'اَثْ', tip: 'E + peltek s = "Es"' },
-            { id: 'czh7', name: 'Ed', imgSrc: '/elifba/dosyalar/7-8.png', audSrc: '/elifba/dosyalar/7-7.mp3', arabic: 'اَدْ', tip: 'E + d = "Ed"' },
-            { id: 'czh9', name: 'Er', imgSrc: '/elifba/dosyalar/9-8.png', audSrc: '/elifba/dosyalar/9-7.mp3', arabic: 'اَرْ', tip: 'E + r = "Er"' },
-            { id: 'czh22', name: 'El', imgSrc: '/elifba/dosyalar/22-8.png', audSrc: '/elifba/dosyalar/22-7.mp3', arabic: 'اَلْ', tip: 'E + l = "El" (Kur\'an\'da en çok geçen hece!)' },
-            { id: 'czh23', name: 'Em', imgSrc: '/elifba/dosyalar/23-8.png', audSrc: '/elifba/dosyalar/23-7.mp3', arabic: 'اَمْ', tip: 'E + m = "Em"' },
-            { id: 'czh24', name: 'En', imgSrc: '/elifba/dosyalar/24-8.png', audSrc: '/elifba/dosyalar/24-7.mp3', arabic: 'اَنْ', tip: 'E + n = "En"' }
-        ]
-    },
-    {
-        id: 21,
-        title: "Cezm & Şedde Kelimeleri",
-        shortTitle: "Cezm & Şedde",
-        desc: "Cezm ile durdur, Şedde ( ّ ) gördüğün harfi iki kez kuvvetlice oku!",
-        difficulty: 'ileri',
-        isGate: true,
-        hasExactReading: false,
-        passingScorePercent: 80,
-        requiredRepeats: 3,
-        badgeId: "badge_21",
-        badgeName: "Kale Fatihi",
-        badgeIcon: "💥",
-        islandId: 4,
-        islandName: "Cezm & Şedde Kalesi",
-        items: [
-            { id: 'czw1', name: 'Cezmli Kelime #1', imgSrc: '/elifba/cezm/cezm/cez1.png', audSrc: '/elifba/cezm/cezm/cez1.mp3', tip: 'Cezmli harfte ses kesilir ve birleştirilir!' },
-            { id: 'czw2', name: 'Cezmli Kelime #2', imgSrc: '/elifba/cezm/cezm/cez2.png', audSrc: '/elifba/cezm/cezm/cez2.mp3', tip: 'Sesi dinle, hangi harfin üzerinde durulduğunu yakala.' },
-            { id: 'czw3', name: 'Cezmli Kelime #3', imgSrc: '/elifba/cezm/cezm/cez3.png', audSrc: '/elifba/cezm/cezm/cez3.mp3', tip: 'Cezmli harfe asla ekstra "e/i" sesi ekleme!' },
-            { id: 'sdw1', name: 'Şeddeli Kelime #1', imgSrc: '/elifba/sedde/sedde/cez16.png', audSrc: '/elifba/sedde/sedde/cez16.mp3', tip: 'Şedde (w şekli): Harfi önce tut, sonra harekesiyle tekrar oku!' },
-            { id: 'sdw2', name: 'Şeddeli Kelime #2', imgSrc: '/elifba/sedde/sedde/cez17.png', audSrc: '/elifba/sedde/sedde/cez17.mp3', tip: 'Şedde harfi iki kat güçlendirir!' },
-            { id: 'sdw3', name: 'Şeddeli Kelime #3', imgSrc: '/elifba/sedde/sedde/cez18.png', audSrc: '/elifba/sedde/sedde/cez18.mp3', tip: 'Dikkatle dinle; çift okunan harfi seç!' }
-        ]
-    },
-
-    // ──────── DİYAR 5: TENVİN & KUR'AN ZİRVESİ (22 - 24) ────────
-    {
-        id: 22,
-        title: "Tenvinler: İki Üstün, İki Esre, İki Ötre",
-        shortTitle: "Tenvinler (-en/-in/-ün)",
-        desc: "Çift harekeler kelimenin sonuna 'n' sesi ekler: En-An, İn-In, Ün-Un!",
-        difficulty: 'ileri',
-        hasExactReading: false,
-        passingScorePercent: 80,
-        requiredRepeats: 3,
-        badgeId: "badge_22",
-        badgeName: "Tenvin Bilgini",
-        badgeIcon: "🌟",
-        islandId: 5,
-        islandName: "Tenvin & Kur'an Zirvesi",
-        items: [
-            { id: 'tu1', name: 'İki Üstün (-en / -an)', imgSrc: '/elifba/ikiustun/ikiustun/ikiustun1.png', audSrc: '/elifba/ikiustun/ikiustun/ikiustun1.mp3', tip: 'Üstteki İKİ çizgi "-en / -an" sesi verir!' },
-            { id: 'tu2', name: 'İki Üstün Örnek #2', imgSrc: '/elifba/ikiustun/ikiustun/ikiustun2.png', audSrc: '/elifba/ikiustun/ikiustun/ikiustun2.mp3', tip: 'İki üstünün yanında genelde yardımcı bir Elif bulunur.' },
-            { id: 'te1', name: 'İki Esre (-in / -ın)', imgSrc: '/elifba/ikiesre/ikiesre/ikiesre1.png', audSrc: '/elifba/ikiesre/ikiesre/ikiesre1.mp3', tip: 'Alttaki İKİ çizgi "-in / -ın" sesi verir!' },
-            { id: 'te2', name: 'İki Esre Örnek #2', imgSrc: '/elifba/ikiesre/ikiesre/ikiesre2.png', audSrc: '/elifba/ikiesre/ikiesre/ikiesre2.mp3', tip: 'Son sesi "-in" olarak biten kelimeyi bul!' },
-            { id: 'to1', name: 'İki Ötre (-ün / -un)', imgSrc: '/elifba/ikiotre/ikiotre/ikiotre1.png', audSrc: '/elifba/ikiotre/ikiotre/ikiotre1.mp3', tip: 'Üstteki çift vav "-ün / -un" sesi verir!' },
-            { id: 'to2', name: 'İki Ötre Örnek #2', imgSrc: '/elifba/ikiotre/ikiotre/ikiotre2.png', audSrc: '/elifba/ikiotre/ikiotre/ikiotre2.mp3', tip: 'Sonu "-ün / -un" ile biten kelimeyi dinle ve seç.' }
-        ]
-    },
-    {
-        id: 23,
-        title: "İleri Pratik: Karma Kelime Okuma",
-        shortTitle: "Karma Okuma",
-        desc: "Medler, cezm, şedde ve tenvinlerin birleştiği kelimelerde hız kazan!",
-        difficulty: 'ustalik',
-        hasExactReading: false,
-        passingScorePercent: 80,
-        requiredRepeats: 2,
-        badgeId: "badge_23",
-        badgeName: "Kur'an Yolcusu",
-        badgeIcon: "📜",
-        islandId: 5,
-        islandName: "Tenvin & Kur'an Zirvesi",
-        items: [
-            { id: 'krm1', name: 'Üstünlü Kelime (Kesebe)', imgSrc: '/elifba/ustun/ustun/kesebe.png', audSrc: '/elifba/ustun/ustun/kesebe.mp3', tip: 'Üç üstünlü hızlı okuma!' },
-            { id: 'krm2', name: 'Med Elif Kelimesi', imgSrc: '/elifba/medelif/medelif/medelif4.png', audSrc: '/elifba/medelif/medelif/medelif4.mp3', tip: 'Elifle uzatmaya dikkat!' },
-            { id: 'krm3', name: 'Cezmli Kelime', imgSrc: '/elifba/cezm/cezm/cez4.png', audSrc: '/elifba/cezm/cezm/cez4.mp3', tip: 'Cezmle harfi tuttur!' },
-            { id: 'krm4', name: 'Şeddeli Kelime', imgSrc: '/elifba/sedde/sedde/cez19.png', audSrc: '/elifba/sedde/sedde/cez19.mp3', tip: 'Şeddeli harfi çift oku!' },
-            { id: 'krm5', name: 'İki Esreli Kelime', imgSrc: '/elifba/ikiesre/ikiesre/ikiesre3.png', audSrc: '/elifba/ikiesre/ikiesre/ikiesre3.mp3', tip: 'Tenvin (-in) sesini vurgula!' },
-            { id: 'krm6', name: 'İki Ötreli Kelime', imgSrc: '/elifba/ikiotre/ikiotre/ikiotre3.png', audSrc: '/elifba/ikiotre/ikiotre/ikiotre3.mp3', tip: 'Tenvin (-ün) sesini temiz çıkar!' }
-        ]
-    },
-    {
-        id: 24,
-        title: "👑 Büyük Final: Kur'an Şampiyonluğu",
-        shortTitle: "Şampiyonluk Finali",
-        desc: "Tüm 5 diyardan karma Ustalık Sınavını geç ve Başarı Sertifikanı kazan!",
-        difficulty: 'ustalik',
-        isGate: true,
-        hasExactReading: false,
-        passingScorePercent: 85,
-        requiredRepeats: 1,
-        badgeId: "badge_24",
-        badgeName: "Altın Elifba Şampiyonu",
-        badgeIcon: "👑",
-        islandId: 5,
-        islandName: "Tenvin & Kur'an Zirvesi",
-        items: [
-            { id: 'fin1', name: 'Peltek Se Harfi', imgSrc: '/elifba/dosyalar/4.png', audSrc: '/elifba/dosyalar/4.mp3', tip: '3 nokta üstte: Peltek Se' },
-            { id: 'fin2', name: 'Kalın Kaf Harfi', imgSrc: '/elifba/dosyalar/21.png', audSrc: '/elifba/dosyalar/21.mp3', tip: '2 nokta üstte kalın Kaf' },
-            { id: 'fin3', name: 'Üstünlü Kelime (Darabe)', imgSrc: '/elifba/ustun/ustun/darabe.png', audSrc: '/elifba/ustun/ustun/darabe.mp3', tip: 'Üstünlü kelime okuma' },
-            { id: 'fin4', name: 'Esreli Kelime', imgSrc: '/elifba/esre/esre/esre1.png', audSrc: '/elifba/esre/esre/esre1.mp3', tip: 'Esre kuralı' },
-            { id: 'fin5', name: 'Ötreli Kelime', imgSrc: '/elifba/otre/otre/otre1.png', audSrc: '/elifba/otre/otre/otre1.mp3', tip: 'Ötre kuralı' },
-            { id: 'fin6', name: 'Med Elif', imgSrc: '/elifba/medelif/medelif/medelif1.png', audSrc: '/elifba/medelif/medelif/medelif1.mp3', tip: 'Med Elif uzatması' },
-            { id: 'fin7', name: 'Cezm (Sükun)', imgSrc: '/elifba/cezm/cezm/cez1.png', audSrc: '/elifba/cezm/cezm/cez1.mp3', tip: 'Cezm tutturması' },
-            { id: 'fin8', name: 'Şedde (İkileme)', imgSrc: '/elifba/sedde/sedde/cez16.png', audSrc: '/elifba/sedde/sedde/cez16.mp3', tip: 'Şedde çift okuması' },
-            { id: 'fin9', name: 'İki Üstün (Tenvin)', imgSrc: '/elifba/ikiustun/ikiustun/ikiustun1.png', audSrc: '/elifba/ikiustun/ikiustun/ikiustun1.mp3', tip: 'Tenvin kuralı' }
-        ]
+        shortName: "4. Dualar & Kur'an",
+        icon: '👑',
+        themeColor: 'purple',
+        gradient: 'from-violet-600 via-purple-600 to-fuchsia-600',
+        nodeBg: 'bg-purple-600 border-purple-800',
+        nodeShadow: 'shadow-[0_6px_0_#6b21a8]',
+        badgeBg: 'bg-purple-100 text-purple-800 border-purple-300'
     }
-];
+};
+
+export const ADVENTURE_ISLANDS: AdventureIsland[] = DIYANET_SECTIONS.map(sec => {
+    const stStyle = SECTION_STYLE_MAP[sec.id];
+    const [startStep, endStep] = sec.stepRange;
+    const stages: number[] = [];
+    for (let i = startStep; i <= endStep; i++) stages.push(i);
+
+    return {
+        id: stStyle.id,
+        sectionId: sec.id,
+        name: sec.title,
+        shortName: stStyle.shortName,
+        subtitle: sec.subtitle,
+        icon: stStyle.icon,
+        themeColor: stStyle.themeColor,
+        gradient: stStyle.gradient,
+        nodeBg: stStyle.nodeBg,
+        nodeShadow: stStyle.nodeShadow,
+        badgeBg: stStyle.badgeBg,
+        stages
+    };
+});
+
+// Okuma adının kelimesi/harfi birebir yazılı olan aşamalar (Eşleştirme oyunu için uygun)
+const EXACT_READING_STAGE_IDS = new Set([
+    'cuz1',
+    'cuz2',
+    'cuz3',
+    'cuz4',
+    'cuz7',
+    'cuz8',
+    'cuz9',
+    'cuz18',
+    'dualar'
+]);
+
+const STAGE_BADGES: Record<number, { icon: string; name: string }> = {
+    1: { icon: '🌱', name: 'Harf Kaşifi' },
+    2: { icon: '🎵', name: 'Hareke Sesi' },
+    3: { icon: '🤝', name: 'Bitişme Ustası' },
+    4: { icon: '🎈', name: 'Üstün 1 Yıldızı' },
+    5: { icon: '📖', name: 'Üstün 2 Okuyucusu' },
+    6: { icon: '✨', name: 'Üstün 3 Bilgini' },
+    7: { icon: '💧', name: 'Esre Kahramanı' },
+    8: { icon: '🛡️', name: '1. Bölüm Fatihi' },
+    9: { icon: '🔒', name: 'Cezimli Sesler' },
+    10: { icon: '⚡', name: 'Cezm Ustası' },
+    11: { icon: '🎯', name: 'Cezm Talimcisi' },
+    12: { icon: '🚀', name: 'Uzatma Kaşifi' },
+    13: { icon: '📏', name: 'Med Elif Yıldızı' },
+    14: { icon: '🌊', name: 'Med Yâ Yıldızı' },
+    15: { icon: '🌀', name: 'Med Vâv Yıldızı' },
+    16: { icon: '🧭', name: 'Med Talimcisi' },
+    17: { icon: '💥', name: 'Şeddeli Okuyuş' },
+    18: { icon: '🔔', name: 'Şedde Kahramanı' },
+    19: { icon: '🏰', name: '2. Bölüm Fatihi' },
+    20: { icon: '🌟', name: 'İki Üstün Ustası' },
+    21: { icon: '💎', name: 'İki Esre Ustası' },
+    22: { icon: '🧁', name: 'İki Ötre Ustası' },
+    23: { icon: '🖌️', name: 'Çeker Kaidesi' },
+    24: { icon: '📜', name: 'Şekil Elif Ustası' },
+    25: { icon: '🪶', name: 'Zamir Hâ Bilgini' },
+    26: { icon: '🌙', name: 'El Takısı Uzmanı' },
+    27: { icon: '🔍', name: 'Okunmayan Harfler' },
+    28: { icon: '🕌', name: '3. Bölüm Fatihi' },
+    29: { icon: '🤲', name: 'Namaz Duaları Ustası' },
+    30: { icon: '👑', name: "Kur'an Şampiyonu" }
+};
+
+/**
+ * Verilen öğeleri dengeli 4-6 öğeli mini turlara böler (tek kalan 1-2 öğe bırakmaz).
+ */
+function buildBalancedChunks<T>(items: T[], targetSize: number = 5): T[][] {
+    if (items.length === 0) return [];
+    if (items.length <= 6) return [items];
+
+    const chunkCount = Math.ceil(items.length / targetSize);
+    const baseSize = Math.floor(items.length / chunkCount);
+    const remainder = items.length % chunkCount;
+
+    const chunks: T[][] = [];
+    let cursor = 0;
+    for (let i = 0; i < chunkCount; i++) {
+        const size = baseSize + (i < remainder ? 1 : 0);
+        chunks.push(items.slice(cursor, cursor + size));
+        cursor += size;
+    }
+    return chunks;
+}
+
+/**
+ * Bir Diyanet Elifba Aşamasının tüm sesli/görselli öğelerini ve 5-6'lı mini turlarını oluşturur.
+ */
+function buildItemsAndRoundsForStage(stage: ElifbaStage): {
+    items: AdventureItem[];
+    miniRounds: AdventureMiniRound[];
+} {
+    // Adım 29: Namaz Duaları (8 Dua, anlamlı gruplama)
+    if (stage.id === 'dualar') {
+        const duaUnits = ELIFBA_UNITS.filter(u => u.type === 'dua');
+        const allItems: AdventureItem[] = [];
+        const miniRounds: AdventureMiniRound[] = [];
+        let roundCounter = 1;
+
+        for (const unit of duaUnits) {
+            const unitItems: AdventureItem[] = unit.items.map(it => ({
+                id: `${unit.id}_${it.index}`,
+                name: `${unit.shortTitle} • ${it.index}. Bölüm`,
+                imgSrc: it.img,
+                audSrc: it.audio,
+                tip: unit.meaning ? `${unit.title} — ${unit.meaning.slice(0, 120)}...` : unit.description,
+                subLabel: unit.shortTitle
+            }));
+            allItems.push(...unitItems);
+
+            if (unitItems.length <= 6) {
+                miniRounds.push({
+                    roundIndex: roundCounter++,
+                    title: unit.shortTitle,
+                    items: unitItems
+                });
+            } else {
+                const subChunks = buildBalancedChunks(unitItems, 5);
+                subChunks.forEach((ch, idx) => {
+                    miniRounds.push({
+                        roundIndex: roundCounter++,
+                        title: `${unit.shortTitle} (${idx + 1}. Parça)`,
+                        items: ch
+                    });
+                });
+            }
+        }
+
+        return { items: allItems, miniRounds };
+    }
+
+    // Adım 30: Kur'an-ı Kerim / Cüz Okuma (Diyanet Müfredatının Tüm Kaidelerinden Özet Final)
+    if (stage.id === 'cuz') {
+        const capstoneSources: { stageId: string; itemIndex: number; label: string; tip: string }[] = [
+            { stageId: 'cuz1', itemIndex: 4, label: 'Peltek Se (Harf)', tip: 'Üstünde 3 nokta: Peltek Se' },
+            { stageId: 'cuz1', itemIndex: 21, label: 'Kalın Kaf (Harf)', tip: 'İki noktalı kalın boğaz harfi Kaf' },
+            { stageId: 'cuz2', itemIndex: 5, label: 'Cim (Harekeli)', tip: 'Üstün, esre ve ötre: Ce - Ci - Cü' },
+            { stageId: 'cuz4', itemIndex: 14, label: 'Sa (Üstün)', tip: 'Kalın Sad harfi üstünle Sa okunur' },
+            { stageId: 'cuz7', itemIndex: 2, label: 'Bi (Esre)', tip: 'Be esreyle Bi sesini verir' },
+            { stageId: 'cuz8', itemIndex: 10, label: 'Ru (Ötre)', tip: 'Ra harfi ötreyle kalın Ru okunur' },
+            { stageId: 'cuz9', itemIndex: 22, label: 'El (Cezm)', tip: 'Elif + Lam cezm = El hecesi' },
+            { stageId: 'cuz13', itemIndex: 1, label: 'Med Elif Örneği', tip: 'Harekesiz Elif önceki üstünü 1 elif uzatır' },
+            { stageId: 'cuz15', itemIndex: 1, label: 'Med Vâv Örneği', tip: 'Ötreden sonra harekesiz Vav uzatma yapar' },
+            { stageId: 'cuz18', itemIndex: 22, label: 'Elle (Şedde)', tip: 'Şeddeli harf iki kez kuvvetlice okunur' },
+            { stageId: 'cuz20', itemIndex: 1, label: 'İki Üstün (Tenvin)', tip: 'Çift üstün -en / -an sesi verir' },
+            { stageId: 'cuz28', itemIndex: 1, label: 'Lafzatullah / Mukattaa', tip: "Kur'an okuma öncesi son ileri kaide" }
+        ];
+
+        const capItems: AdventureItem[] = capstoneSources
+            .map((src, idx) => {
+                const meta = getStageItemMeta(src.stageId, src.itemIndex);
+                if (!meta.img || !meta.audio) return null;
+                return {
+                    id: `cuz30_${idx + 1}`,
+                    name: src.label || meta.name,
+                    imgSrc: meta.img,
+                    audSrc: meta.audio,
+                    arabic: meta.arabic,
+                    tip: src.tip || meta.desc
+                };
+            })
+            .filter(Boolean) as AdventureItem[];
+
+        const capChunks = buildBalancedChunks(capItems, 6);
+        const miniRounds = capChunks.map((ch, i) => ({
+            roundIndex: i + 1,
+            title: i === 0 ? 'Harf & Hareke Tekrarı' : 'Kaide & Tecvid Tekrarı',
+            items: ch
+        }));
+
+        return { items: capItems, miniRounds };
+    }
+
+    // Adım 1..28: Standart Diyanet Dersleri (cuz1..cuz28)
+    const unit = ELIFBA_UNITS.find(u => u.id === stage.id);
+    if (!unit) return { items: [], miniRounds: [] };
+
+    const items: AdventureItem[] = unit.items.map(it => {
+        const meta = getStageItemMeta(stage.id, it.index);
+        const cleanTitle = stage.shortTitle.replace(/^Adım \d+:\s*/, '');
+        const fallbackName = `${cleanTitle} • #${it.index}`;
+        const displayName =
+            meta.name && !(meta.name === 'Elif' && (stage.id !== 'cuz1' || it.index > 1))
+                ? meta.name
+                : fallbackName;
+
+        return {
+            id: `${stage.id}_${it.index}`,
+            name: displayName,
+            imgSrc: it.img,
+            audSrc: it.audio,
+            arabic: meta.arabic,
+            tip: meta.desc || stage.description
+        };
+    });
+
+    const chunks = buildBalancedChunks(items, 5);
+    const miniRounds: AdventureMiniRound[] = chunks.map((ch, idx) => ({
+        roundIndex: idx + 1,
+        title: `${idx + 1}. Tur (${ch.length} Örnek)`,
+        items: ch
+    }));
+
+    return { items, miniRounds };
+}
+
+// Öğretmen Panelindeki 30 Diyanet Adımının Oyunlaştırılmış Halini Oluştur
+export const ADVENTURE_STAGES: AdventureStage[] = DIYANET_ELIFBA_STAGES.map(stage => {
+    const stepNum = stage.stepNumber;
+    const islandStyle = SECTION_STYLE_MAP[stage.section];
+    const badge = STAGE_BADGES[stepNum] || { icon: '📘', name: stage.shortTitle };
+    const { items, miniRounds } = buildItemsAndRoundsForStage(stage);
+
+    const isGate = stepNum === 8 || stepNum === 19 || stepNum === 28 || stepNum === 30;
+    const difficulty: StageDifficulty =
+        stepNum === 30 || isGate
+            ? 'ustalik'
+            : stepNum <= 8
+            ? stepNum <= 4
+                ? 'kolay'
+                : 'orta'
+            : stepNum <= 19
+            ? 'orta'
+            : 'ileri';
+
+    const cleanShortTitle = stage.shortTitle.replace(/^Adım \d+:\s*/, '');
+    const cleanFullTitle = stage.title.replace(/^Adım \d+:\s*/, '');
+
+    const reviewPoolIds: number[] = [];
+    if (stepNum > 1 && stepNum < 29) {
+        if (stepNum > 2) reviewPoolIds.push(stepNum - 2);
+        reviewPoolIds.push(stepNum - 1);
+    }
+
+    return {
+        id: stepNum,
+        curriculumId: stage.id,
+        title: cleanFullTitle,
+        shortTitle: cleanShortTitle,
+        desc: stage.description,
+        difficulty,
+        isGate,
+        hasExactReading: EXACT_READING_STAGE_IDS.has(stage.id),
+        passingScorePercent: isGate ? 85 : 80,
+        requiredRepeats: miniRounds.length > 2 ? 2 : 3,
+        badgeId: `diyanet_badge_${stage.id}`,
+        badgeName: badge.name,
+        badgeIcon: badge.icon,
+        islandId: islandStyle.id,
+        islandName: stage.sectionTitle,
+        items,
+        miniRounds,
+        reviewPoolIds: reviewPoolIds.length > 0 ? reviewPoolIds : undefined
+    };
+});
+
+export const TOTAL_ADVENTURE_STAGES = ADVENTURE_STAGES.length; // 30
 
 export const MASCOT_QUOTES = [
-    "Önce Keşfet ve Bol Tekrar yap, sonra Pekiştirme Oyununda eğlen, en son Ustalık Sınavıyla kilidi aç! 🌟",
-    "Her harfi 3 kez sesli tekrar etmen hafızana altın harflerle kazınmasını sağlar! 🗣️",
-    "Takıldığın yerde '0.75x Yavaş' butonuna basıp harfin mahrecini dikkatle dinle! 🎧",
+    "Bu adımlar öğretmeninin Kur'an Takip Panelindeki gerçek Diyanet 30 Adımı ile birebir aynıdır! 🌟",
+    "Uzun adımlar seni yormasın diye 5'li mini turlara bölündü. Her turu kolayca bitirebilirsin! 🐥",
+    "Her harf veya kelimeyi bol tekrar edersen kalıcı öğrenirsin! 🗣️",
+    "Takıldığın yerde '0.75x Yavaş' butonuna basıp mahrecini dikkatle dinle! 🎧",
     "Kur'an harflerini öğrenmek çok kıymetlidir; her bir harf için on sevap vardır! ✨",
-    "Hatalar öğrenmenin en iyi arkadaşıdır. Yanlış yaptığın harfi tekrar dinleyip hemen pekiştir! 🐥",
-    "Tüm diyarları tamamladığında ismine özel Altın Başarı Sertifikası seni bekliyor! 🎓"
+    "30 Diyanet Adımını bitirdiğinde Kur'an Şampiyonu sertifikan seni bekliyor! 🎓"
 ];
 
-// Gelişmiş Web Audio API Sentezleyicisi (Kombo perdesi artan premium oyun sesleri)
+// Gelişmiş Web Audio API Sentezleyicisi (Kombo perdesi artan oyun sesleri)
 export const playAdventureTone = (
     type: 'correct' | 'wrong' | 'fanfare' | 'chirp' | 'click' | 'unlock' | 'pop',
     combo: number = 0
@@ -777,7 +463,6 @@ export const playAdventureTone = (
         const now = ctx.currentTime;
 
         if (type === 'correct') {
-            // Kombo arttıkça perdesi yükselen tatmin edici iki notalı zil
             const pitchBoost = Math.min(combo, 6) * 40;
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
@@ -878,13 +563,12 @@ export const playAdventureTone = (
 };
 
 const STORAGE_KEY_NAME = 'elifbam_adventure_player_name';
-const STORAGE_KEY_DATA = 'elifbam_adventure_progress_v2';
-const LEGACY_STORAGE_KEY_DATA = 'elifbam_adventure_progress';
+const STORAGE_KEY_DATA = 'elifbam_adventure_progress_v3_diyanet';
 
-export function getDefaultAdventurePlayerData(defaultName: string = "Küçük Hafız"): AdventurePlayerData {
+export function getDefaultAdventurePlayerData(defaultName: string = 'Küçük Hafız'): AdventurePlayerData {
     return {
-        name: defaultName || "Küçük Hafız",
-        avatar: "🦉",
+        name: defaultName || 'Küçük Hafız',
+        avatar: '🦉',
         unlockedStage: 1,
         stageStars: {},
         stageScores: {},
@@ -892,7 +576,8 @@ export function getDefaultAdventurePlayerData(defaultName: string = "Küçük Ha
         badges: [],
         xp: 0,
         streak: 0,
-        teacherFreeMode: false
+        teacherFreeMode: false,
+        curriculumVersion: CURRENT_CURRICULUM_VERSION
     };
 }
 
@@ -905,11 +590,13 @@ export function loadAdventurePlayerData(userId?: string, defaultName?: string): 
             const scopedRaw = localStorage.getItem(`${STORAGE_KEY_DATA}_${userId}`);
             if (scopedRaw) {
                 const parsed = JSON.parse(scopedRaw);
-                return {
-                    ...defaultData,
-                    ...parsed,
-                    name: parsed.name || defaultName || defaultData.name
-                };
+                if (parsed.curriculumVersion === CURRENT_CURRICULUM_VERSION) {
+                    return {
+                        ...defaultData,
+                        ...parsed,
+                        name: parsed.name || defaultName || defaultData.name
+                    };
+                }
             }
             return defaultData;
         }
@@ -917,30 +604,19 @@ export function loadAdventurePlayerData(userId?: string, defaultName?: string): 
         const savedName = localStorage.getItem(STORAGE_KEY_NAME);
         if (savedName) defaultData.name = savedName;
 
-        const savedV2 = localStorage.getItem(STORAGE_KEY_DATA);
-        if (savedV2) {
-            const parsed = JSON.parse(savedV2);
-            return {
-                ...defaultData,
-                ...parsed,
-                name: savedName || parsed.name || defaultData.name
-            };
-        }
-
-        // V1 verisi varsa koruyarak taşı
-        const legacy = localStorage.getItem(LEGACY_STORAGE_KEY_DATA);
-        if (legacy) {
-            const parsed = JSON.parse(legacy);
-            return {
-                ...defaultData,
-                unlockedStage: typeof parsed.unlockedStage === 'number' ? Math.min(24, Math.max(1, parsed.unlockedStage)) : 1,
-                stageStars: parsed.stageStars || {},
-                stageScores: parsed.stageScores || {},
-                badges: Array.isArray(parsed.badges) ? parsed.badges : []
-            };
+        const savedV3 = localStorage.getItem(STORAGE_KEY_DATA);
+        if (savedV3) {
+            const parsed = JSON.parse(savedV3);
+            if (parsed.curriculumVersion === CURRENT_CURRICULUM_VERSION) {
+                return {
+                    ...defaultData,
+                    ...parsed,
+                    name: savedName || parsed.name || defaultData.name
+                };
+            }
         }
     } catch (e) {
-        console.error("Player data load error:", e);
+        console.error('Player data load error:', e);
     }
     return defaultData;
 }
@@ -948,20 +624,27 @@ export function loadAdventurePlayerData(userId?: string, defaultName?: string): 
 export function saveAdventurePlayerData(data: AdventurePlayerData, userId?: string): void {
     if (typeof window === 'undefined') return;
     try {
+        const payload = { ...data, curriculumVersion: CURRENT_CURRICULUM_VERSION };
         if (userId) {
-            localStorage.setItem(`${STORAGE_KEY_DATA}_${userId}`, JSON.stringify(data));
+            localStorage.setItem(`${STORAGE_KEY_DATA}_${userId}`, JSON.stringify(payload));
             return;
         }
-        localStorage.setItem(STORAGE_KEY_NAME, data.name);
-        localStorage.setItem(STORAGE_KEY_DATA, JSON.stringify(data));
+        localStorage.setItem(STORAGE_KEY_NAME, payload.name);
+        localStorage.setItem(STORAGE_KEY_DATA, JSON.stringify(payload));
     } catch (e) {
-        console.error("Player data save error:", e);
+        console.error('Player data save error:', e);
     }
 }
 
 export function computeAdventureStats(data?: Partial<AdventurePlayerData> | null) {
-    if (!data) {
-        return { totalStars: 0, completedCount: 0, maxStars: ADVENTURE_STAGES.length * 3, percent: 0 };
+    const isCompatible = !data || !data.unlockedStage || data.curriculumVersion === CURRENT_CURRICULUM_VERSION;
+    if (!data || !isCompatible) {
+        return {
+            totalStars: 0,
+            completedCount: 0,
+            maxStars: ADVENTURE_STAGES.length * 3,
+            percent: 0
+        };
     }
     const stageStars = data.stageStars || {};
     const stageMastered = data.stageMastered || {};
@@ -969,36 +652,59 @@ export function computeAdventureStats(data?: Partial<AdventurePlayerData> | null
     const completedCount = ADVENTURE_STAGES.filter(
         st => stageMastered[st.id]?.examPassed || (Number(stageStars[st.id]) || 0) > 0
     ).length;
-    const maxStars = ADVENTURE_STAGES.length * 3;
+    const maxStars = ADVENTURE_STAGES.length * 3; // 90
     const percent = Math.round((completedCount / ADVENTURE_STAGES.length) * 100);
     return { totalStars, completedCount, maxStars, percent };
 }
 
 export function toCloudAdventurePayload(data: AdventurePlayerData, lastStageTitle?: string) {
-    const stats = computeAdventureStats(data);
-    return {
-        name: data.name || 'Küçük Hafız',
-        avatar: data.avatar || '🦉',
-        unlockedStage: Math.min(ADVENTURE_STAGES.length, Math.max(1, Number(data.unlockedStage) || 1)),
+    const normalized: AdventurePlayerData = {
+        ...data,
+        curriculumVersion: CURRENT_CURRICULUM_VERSION
+    };
+    const stats = computeAdventureStats(normalized);
+    const payload: Record<string, any> = {
+        name: normalized.name || 'Küçük Hafız',
+        avatar: normalized.avatar || '🦉',
+        unlockedStage: Math.min(ADVENTURE_STAGES.length, Math.max(1, Number(normalized.unlockedStage) || 1)),
         totalStars: stats.totalStars,
         completedCount: stats.completedCount,
-        xp: Number(data.xp) || 0,
-        streak: Number(data.streak) || 0,
-        badges: Array.isArray(data.badges) ? data.badges : [],
-        stageStars: data.stageStars || {},
-        stageScores: data.stageScores || {},
-        stageMastered: data.stageMastered || {},
-        teacherFreeMode: Boolean(data.teacherFreeMode),
-        lastStageTitle: lastStageTitle || data.lastStageTitle || `Adım ${data.unlockedStage || 1}`,
-        lastActivityAt: new Date().toISOString()
+        xp: Number(normalized.xp) || 0,
+        streak: Number(normalized.streak) || 0,
+        badges: Array.isArray(normalized.badges) ? normalized.badges : [],
+        stageStars: normalized.stageStars || {},
+        stageScores: normalized.stageScores || {},
+        stageMastered: normalized.stageMastered || {},
+        teacherFreeMode: Boolean(normalized.teacherFreeMode),
+        lastStageTitle: lastStageTitle || normalized.lastStageTitle || `Adım ${normalized.unlockedStage || 1}`,
+        lastActivityAt: new Date().toISOString(),
+        curriculumVersion: CURRENT_CURRICULUM_VERSION
     };
+
+    if (normalized.syncedFromGuestUid) payload.syncedFromGuestUid = normalized.syncedFromGuestUid;
+    if (normalized.syncedFromGuestName) payload.syncedFromGuestName = normalized.syncedFromGuestName;
+    if (normalized.lastSyncedAt) payload.lastSyncedAt = normalized.lastSyncedAt;
+
+    return payload as NonNullable<UserProfile['elifbaAdventure']>;
 }
 
 export function mergeAdventureProgress(
     local: AdventurePlayerData,
     cloud?: Partial<AdventurePlayerData> | null
 ): AdventurePlayerData {
-    if (!cloud) return local;
+    if (!cloud) return { ...local, curriculumVersion: CURRENT_CURRICULUM_VERSION };
+
+    // Eski 24 adımlı sürüm kalıntısı varsa sadece isim/avatar/serbest mod bilgisini taşı,
+    // adım haritasını temiz Diyanet 30 Adım ile başlat
+    if (cloud.curriculumVersion !== CURRENT_CURRICULUM_VERSION) {
+        return {
+            ...local,
+            name: cloud.name || local.name,
+            avatar: cloud.avatar || local.avatar,
+            teacherFreeMode: Boolean(cloud.teacherFreeMode ?? local.teacherFreeMode),
+            curriculumVersion: CURRENT_CURRICULUM_VERSION
+        };
+    }
 
     const mergedStars: Record<number, number> = { ...(local.stageStars || {}) };
     for (const [k, v] of Object.entries(cloud.stageStars || {})) {
@@ -1019,13 +725,19 @@ export function mergeAdventureProgress(
             learnDone: false,
             reinforceDone: false,
             examPassed: false,
-            bestAccuracy: 0
+            bestAccuracy: 0,
+            completedRounds: []
         };
+        const mergedRounds = Array.from(
+            new Set([...(cur.completedRounds || []), ...(v?.completedRounds || [])])
+        ).sort((a, b) => a - b);
+
         mergedMastered[id] = {
             learnDone: Boolean(cur.learnDone || v?.learnDone),
             reinforceDone: Boolean(cur.reinforceDone || v?.reinforceDone),
             examPassed: Boolean(cur.examPassed || v?.examPassed),
-            bestAccuracy: Math.max(Number(cur.bestAccuracy) || 0, Number(v?.bestAccuracy) || 0)
+            bestAccuracy: Math.max(Number(cur.bestAccuracy) || 0, Number(v?.bestAccuracy) || 0),
+            completedRounds: mergedRounds
         };
     }
 
@@ -1037,7 +749,10 @@ export function mergeAdventureProgress(
     return {
         name: (useCloudMeta ? cloud.name : local.name) || cloud.name || local.name || 'Küçük Hafız',
         avatar: (useCloudMeta ? cloud.avatar : local.avatar) || cloud.avatar || local.avatar || '🦉',
-        unlockedStage: Math.max(Number(local.unlockedStage) || 1, Number(cloud.unlockedStage) || 1),
+        unlockedStage: Math.min(
+            TOTAL_ADVENTURE_STAGES,
+            Math.max(Number(local.unlockedStage) || 1, Number(cloud.unlockedStage) || 1)
+        ),
         stageStars: mergedStars,
         stageScores: mergedScores,
         stageMastered: mergedMastered,
@@ -1046,6 +761,175 @@ export function mergeAdventureProgress(
         streak: Math.max(Number(local.streak) || 0, Number(cloud.streak) || 0),
         teacherFreeMode: Boolean(cloud.teacherFreeMode ?? local.teacherFreeMode),
         lastStageTitle: cloud.lastStageTitle || local.lastStageTitle,
-        lastActivityAt: cloud.lastActivityAt || local.lastActivityAt
+        lastActivityAt: cloud.lastActivityAt || local.lastActivityAt,
+        curriculumVersion: CURRENT_CURRICULUM_VERSION,
+        syncedFromGuestUid: cloud.syncedFromGuestUid || local.syncedFromGuestUid,
+        syncedFromGuestName: cloud.syncedFromGuestName || local.syncedFromGuestName,
+        lastSyncedAt: cloud.lastSyncedAt || local.lastSyncedAt
+    };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ÖĞRETMEN PANELİ (SANAL ÖĞRENCİ <-> KAYITLI ÖĞRENCİ) EŞİTLEME YARDIMCILARI
+// ─────────────────────────────────────────────────────────────────────────────
+
+export function normalizeStudentMatchName(name?: string): string {
+    if (!name) return '';
+    return name
+        .trim()
+        .toLocaleLowerCase('tr')
+        .replace(/[ıİ]/g, 'i')
+        .replace(/ş/g, 's')
+        .replace(/ğ/g, 'g')
+        .replace(/ü/g, 'u')
+        .replace(/ö/g, 'o')
+        .replace(/ç/g, 'c')
+        .replace(/[^a-z0-9\s]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+export function findMatchingGuestStudent(
+    registeredStudent: UserProfile,
+    guestStudents: UserProfile[]
+): UserProfile | null {
+    if (!guestStudents || guestStudents.length === 0) return null;
+
+    // 1. Önceden bağlanmış bir sanal öğrenci varsa onu döndür
+    const linkedUid = registeredStudent.elifbaAdventure?.syncedFromGuestUid;
+    if (linkedUid) {
+        const linked = guestStudents.find(g => g.uid === linkedUid);
+        if (linked) return linked;
+    }
+
+    // 2. Birebir Türkçe küçük harf isim eşleşmesi
+    const exactReg = (registeredStudent.displayName || '').trim().toLocaleLowerCase('tr');
+    if (exactReg) {
+        const exactMatch = guestStudents.find(
+            g => (g.displayName || '').trim().toLocaleLowerCase('tr') === exactReg
+        );
+        if (exactMatch) return exactMatch;
+    }
+
+    // 3. Karakter yumuşatılmış isim eşleşmesi
+    const foldedReg = normalizeStudentMatchName(registeredStudent.displayName);
+    if (foldedReg) {
+        const foldedMatch = guestStudents.find(
+            g => normalizeStudentMatchName(g.displayName) === foldedReg
+        );
+        if (foldedMatch) return foldedMatch;
+    }
+
+    return null;
+}
+
+export interface QuranProgressLike {
+    studentUid: string;
+    studentName?: string;
+    currentStageId?: string;
+    cuzPage?: number;
+    stages?: Record<string, { status: string; score?: number }>;
+}
+
+/**
+ * Sanal öğrencinin Öğretmen Panelindeki (quran_progress) okuma kaydını
+ * Kayıtlı Öğrencinin Elifba Macerası (30 Adım) yapısına dönüştürür.
+ */
+export function buildAdventureFromQuranProgress(
+    existingAdv: Partial<AdventurePlayerData> | undefined,
+    quranProgress: QuranProgressLike | undefined,
+    guestStudent: UserProfile,
+    fallbackStudentName: string
+): AdventurePlayerData {
+    const isCompat = existingAdv?.curriculumVersion === CURRENT_CURRICULUM_VERSION;
+    const base: AdventurePlayerData = isCompat
+        ? {
+              ...getDefaultAdventurePlayerData(fallbackStudentName),
+              ...existingAdv,
+              stageStars: { ...(existingAdv?.stageStars || {}) },
+              stageScores: { ...(existingAdv?.stageScores || {}) },
+              stageMastered: { ...(existingAdv?.stageMastered || {}) },
+              badges: [...(existingAdv?.badges || [])]
+          }
+        : {
+              ...getDefaultAdventurePlayerData(fallbackStudentName),
+              name: existingAdv?.name || fallbackStudentName || 'Öğrenci',
+              avatar: existingAdv?.avatar || '🦉',
+              teacherFreeMode: Boolean(existingAdv?.teacherFreeMode)
+          };
+
+    if (!quranProgress) return base;
+
+    const hasCuzPage = Boolean(quranProgress.cuzPage && quranProgress.cuzPage > 0);
+    let highestCompletedStep = 0;
+
+    for (const stage of ADVENTURE_STAGES) {
+        const step = stage.id;
+        const completedInTracker =
+            isDiyanetStageCompleted(quranProgress.stages, stage.curriculumId) ||
+            (hasCuzPage && step < 30);
+
+        if (completedInTracker) {
+            highestCompletedStep = Math.max(highestCompletedStep, step);
+            const rawScore = quranProgress.stages?.[stage.curriculumId]?.score;
+            const score = typeof rawScore === 'number' && rawScore > 0 ? Math.round(rawScore) : 100;
+            const stars = score >= 95 ? 3 : score >= 80 ? 2 : 1;
+
+            const prevMaster = base.stageMastered[step];
+            base.stageMastered[step] = {
+                learnDone: true,
+                reinforceDone: true,
+                examPassed: true,
+                bestAccuracy: Math.max(score, prevMaster?.bestAccuracy || 0),
+                completedRounds: stage.miniRounds.map(r => r.roundIndex)
+            };
+            base.stageStars[step] = Math.max(stars, base.stageStars[step] || 0);
+            base.stageScores[step] = Math.max(score, base.stageScores[step] || 0);
+
+            if (!base.badges.includes(stage.badgeId)) {
+                base.badges.push(stage.badgeId);
+            }
+        }
+    }
+
+    const trackerStep = getDiyanetStepNumber(quranProgress.currentStageId || 'cuz1', quranProgress.cuzPage);
+    const derivedUnlock = Math.min(
+        TOTAL_ADVENTURE_STAGES,
+        Math.max(1, base.unlockedStage || 1, highestCompletedStep + 1, trackerStep)
+    );
+    base.unlockedStage = derivedUnlock;
+
+    // XP'yi gerçekçi şekilde senkronize et (mevcuttan düşükse tamamlanan adım başı 60 XP)
+    const completedTotal = ADVENTURE_STAGES.filter(s => base.stageMastered[s.id]?.examPassed).length;
+    base.xp = Math.max(base.xp || 0, completedTotal * 60);
+
+    base.syncedFromGuestUid = guestStudent.uid;
+    base.syncedFromGuestName = guestStudent.displayName;
+    base.lastSyncedAt = new Date().toISOString();
+    base.lastStageTitle = `Adım ${derivedUnlock} (Sanal Kayıttan Eşitlendi)`;
+
+    return base;
+}
+
+/**
+ * Bir sanal öğrencinin quran_progress kaydında kaç Diyanet adımını tamamladığını hesaplar.
+ */
+export function summarizeQuranProgressForMatch(prog?: QuranProgressLike) {
+    if (!prog) return { completedCount: 0, activeStep: 1, completedCurriculumIds: [] as string[] };
+
+    const hasCuzPage = Boolean(prog.cuzPage && prog.cuzPage > 0);
+    const completedCurriculumIds: string[] = [];
+
+    for (const st of DIYANET_ELIFBA_STAGES) {
+        if (isDiyanetStageCompleted(prog.stages, st.id) || (hasCuzPage && st.stepNumber < 30)) {
+            completedCurriculumIds.push(st.id);
+        }
+    }
+
+    const activeStep = getDiyanetStepNumber(prog.currentStageId || 'cuz1', prog.cuzPage);
+    return {
+        completedCount: completedCurriculumIds.length,
+        activeStep,
+        completedCurriculumIds
     };
 }

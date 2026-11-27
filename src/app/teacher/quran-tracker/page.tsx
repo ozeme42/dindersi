@@ -1130,7 +1130,7 @@ export default function QuranTrackerPage() {
                                     ? "bg-white/20 text-white border-white/30"
                                     : ambianceTheme === 'dark' ? "bg-sky-400/20 text-sky-300 border-sky-400/40" : "bg-sky-100 text-sky-800 border-sky-200"
                             )}>
-                                24 Adım
+                                30 Diyanet Adımı
                             </Badge>
                         </button>
 
@@ -1165,7 +1165,7 @@ export default function QuranTrackerPage() {
                         ) : activeModule === 'elifba_macera' ? (
                             <span className="flex items-center gap-1.5">
                                 <span className="w-2 h-2 rounded-full bg-sky-400" />
-                                Kayıtlı öğrencilerin ev/bireysel Elifba Macerası (24 adım) canlı takibi
+                                Kayıtlı öğrencilerin Diyanet 30 Adım Macerası (bağımsız + tek tıkla eşitleme)
                             </span>
                         ) : (
                             <span className="flex items-center gap-1.5">
@@ -2164,11 +2164,14 @@ export default function QuranTrackerPage() {
                 ) : activeModule === 'elifba_macera' ? (
                     <TeacherClassAdventureTracker
                         students={registeredStudents}
+                        guestStudents={students}
+                        guestProgressMap={progressMap}
                         isLoading={isLoadingRegistered}
                         className={className}
                         selectedClassId={selectedClassId}
                         selectedBranch={selectedBranch}
                         ambianceTheme={ambianceTheme}
+                        onGuestProgressUpdated={loadTrackerData}
                         onStudentUpdated={(uid, nextAdv) => {
                             setRegisteredStudents(prev =>
                                 prev.map(s => (s.uid === uid ? { ...s, elifbaAdventure: nextAdv } : s))

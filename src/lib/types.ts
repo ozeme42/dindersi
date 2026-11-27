@@ -38,10 +38,15 @@ export type UserProfile = {
             reinforceDone: boolean;
             examPassed: boolean;
             bestAccuracy: number;
+            completedRounds?: number[];
         }>;
         teacherFreeMode?: boolean;
         lastStageTitle?: string;
         lastActivityAt?: string;
+        curriculumVersion?: string;
+        syncedFromGuestUid?: string;
+        syncedFromGuestName?: string;
+        lastSyncedAt?: string;
     };
 };
 

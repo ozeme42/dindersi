@@ -567,13 +567,13 @@ function PageContent() {
                                     <div className="flex items-center flex-wrap gap-2">
                                         <p className="font-black text-white text-2xl leading-tight drop-shadow-md">Büyük Elifba Macerası</p>
                                         <span className="bg-amber-400 text-slate-950 text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">
-                                            Adım {(user as any)?.elifbaAdventure?.unlockedStage || 1}/24
+                                            Adım {((user as any)?.elifbaAdventure?.curriculumVersion === 'diyanet_30' ? (user as any)?.elifbaAdventure?.unlockedStage : 1) || 1}/30
                                         </span>
                                     </div>
                                     <p className="text-emerald-100/85 text-sm font-semibold mt-0.5 truncate">
-                                        {(user as any)?.elifbaAdventure
-                                            ? `Tamamlanan: ${(user as any).elifbaAdventure.completedCount || 0}/24 • ⭐ ${(user as any).elifbaAdventure.totalStars || 0} Yıldız`
-                                            : "Harfleri ve Kur'an okumayı oyunla adım adım öğren"}
+                                        {(user as any)?.elifbaAdventure?.curriculumVersion === 'diyanet_30'
+                                            ? `Tamamlanan: ${(user as any).elifbaAdventure.completedCount || 0}/30 • ⭐ ${(user as any).elifbaAdventure.totalStars || 0} Yıldız`
+                                            : "Diyanet 30 Adım ile harfleri ve Kur'an okumayı oyunla öğren"}
                                     </p>
                                 </div>
                                 <div className="w-10 h-10 rounded-xl bg-white/15 border border-white/25 flex items-center justify-center shrink-0 group-hover:translate-x-1 transition-transform duration-300">

@@ -6,6 +6,7 @@ import {
     ADVENTURE_STAGES,
     AdventureStage,
     AdventureItem,
+    AdventureMiniRound,
     playAdventureTone
 } from '@/lib/elifba-adventure-data';
 import {
@@ -13,7 +14,6 @@ import {
     ChevronLeft,
     ChevronRight,
     CheckCircle2,
-    Sparkles,
     Gamepad2,
     Trophy,
     Heart,
@@ -57,7 +57,7 @@ export function StageItemMedia({
         return (
             <div
                 className={cn(
-                    "font-bold font-serif select-none flex items-center justify-center text-sky-900",
+                    'font-bold font-serif select-none flex items-center justify-center text-sky-900',
                     textClassName
                 )}
                 dir="rtl"
@@ -72,7 +72,7 @@ export function StageItemMedia({
             src={src}
             alt={alt}
             onError={() => setHasError(true)}
-            className={cn("select-none pointer-events-none", className)}
+            className={cn('select-none pointer-events-none', className)}
         />
     );
 }
@@ -87,8 +87,8 @@ function PhaseStepper({ currentPhase }: { currentPhase: 'learn' | 'reinforce' | 
     const currentIdx = steps.findIndex(s => s.id === currentPhase);
 
     return (
-        <div className="w-full max-w-2xl mx-auto mb-5">
-            <div className="grid grid-cols-3 gap-2 bg-white/80 backdrop-blur-sm p-1.5 rounded-2xl border-2 border-slate-200/80 shadow-sm">
+        <div className="w-full max-w-2xl mx-auto mb-4">
+            <div className="grid grid-cols-3 gap-2 bg-white/85 backdrop-blur-sm p-1.5 rounded-2xl border-2 border-slate-200/80 shadow-sm">
                 {steps.map((step, idx) => {
                     const isActive = step.id === currentPhase;
                     const isPast = idx < currentIdx;
@@ -97,12 +97,12 @@ function PhaseStepper({ currentPhase }: { currentPhase: 'learn' | 'reinforce' | 
                         <div
                             key={step.id}
                             className={cn(
-                                "flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl text-xs sm:text-sm font-black transition-all",
+                                'flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl text-xs sm:text-sm font-black transition-all',
                                 isActive
-                                    ? "bg-gradient-to-r from-sky-500 to-indigo-600 text-white shadow-md scale-[1.02]"
+                                    ? 'bg-gradient-to-r from-sky-500 to-indigo-600 text-white shadow-md scale-[1.02]'
                                     : isPast
-                                    ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                                    : "text-slate-400"
+                                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                    : 'text-slate-400'
                             )}
                         >
                             <span>{isPast ? '✅' : step.icon}</span>
@@ -115,19 +115,87 @@ function PhaseStepper({ currentPhase }: { currentPhase: 'learn' | 'reinforce' | 
     );
 }
 
-// Çeldirici havuzu oluşturucu (aynı aşamadan veya komşu aşamalardan temiz benzersiz seçenekler)
+function MiniRoundBar({
+    miniRounds,
+    activeRoundIndex,
+    completedRounds,
+    teacherFreeMode,
+    onSelectRound
+}: {
+    miniRounds: AdventureMiniRound[];
+    activeRoundIndex: number;
+    completedRounds: number[];
+    teacherFreeMode: boolean;
+    onSelectRound?: (roundIdx: number) => void;
+}) {
+    if (miniRounds.length <= 1) return null;
+
+    const maxUnlockedRound = Math.min(
+        miniRounds.length,
+        Math.max(1, (completedRounds.length > 0 ? Math.max(...completedRounds) : 0) + 1)
+    );
+
+    return (
+        <div className="w-full max-w-2xl mx-auto mb-4 bg-white/85 backdrop-blur-sm rounded-2xl border-2 border-sky-200/80 p-2.5 shadow-sm">
+            <div className="flex items-center justify-between text-[11px] font-black text-slate-600 mb-2 px-1">
+                <span>🎯 Mini Öğrenme Turları (5&apos;li Adımlar)</span>
+                <span className="text-emerald-700">
+                    {completedRounds.length} / {miniRounds.length} Tur Bitti
+                </span>
+            </div>
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5">
+                {miniRounds.map(mr => {
+                    const isDone = completedRounds.includes(mr.roundIndex);
+                    const isCurrent = mr.roundIndex === activeRoundIndex;
+                    const isUnlocked = teacherFreeMode || isDone || mr.roundIndex <= maxUnlockedRound;
+
+                    return (
+                        <button
+                            key={mr.roundIndex}
+                            type="button"
+                            disabled={!isUnlocked || !onSelectRound}
+                            onClick={() => onSelectRound?.(mr.roundIndex)}
+                            title={mr.title}
+                            className={cn(
+                                'px-3 py-1.5 rounded-xl text-xs font-black border-2 transition-all shrink-0 flex items-center gap-1',
+                                isCurrent
+                                    ? 'bg-sky-600 text-white border-sky-700 shadow-sm scale-[1.03] cursor-pointer'
+                                    : isDone
+                                    ? 'bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100 cursor-pointer'
+                                    : isUnlocked
+                                    ? 'bg-white text-slate-700 border-slate-200 hover:border-sky-300 cursor-pointer'
+                                    : 'bg-slate-100 text-slate-400 border-slate-200 opacity-70 cursor-not-allowed'
+                            )}
+                        >
+                            <span>{isDone ? '✅' : isUnlocked ? '📘' : '🔒'}</span>
+                            <span>Tur {mr.roundIndex}</span>
+                        </button>
+                    );
+                })}
+            </div>
+        </div>
+    );
+}
+
+// Çeldirici havuzu oluşturucu (aynı aşamadan veya komşu aşamalardan benzersiz seçenekler)
 function buildDistractorPool(
     target: AdventureItem,
     stage: AdventureStage,
     count: number = 3
 ): AdventureItem[] {
-    let pool = stage.items.filter(it => it.id !== target.id && it.name !== target.name);
+    let pool = stage.items.filter(
+        it => it.id !== target.id && it.imgSrc !== target.imgSrc && it.name !== target.name
+    );
 
     if (pool.length < count) {
         const sameIsland = ADVENTURE_STAGES.filter(s => s.islandId === stage.islandId);
         for (const st of sameIsland) {
             for (const it of st.items) {
-                if (it.id !== target.id && !pool.some(p => p.id === it.id)) {
+                if (
+                    it.id !== target.id &&
+                    it.imgSrc !== target.imgSrc &&
+                    !pool.some(p => p.id === it.id || p.imgSrc === it.imgSrc)
+                ) {
                     pool.push(it);
                 }
             }
@@ -137,7 +205,11 @@ function buildDistractorPool(
     if (pool.length < count) {
         for (const st of ADVENTURE_STAGES) {
             for (const it of st.items) {
-                if (it.id !== target.id && !pool.some(p => p.id === it.id)) {
+                if (
+                    it.id !== target.id &&
+                    it.imgSrc !== target.imgSrc &&
+                    !pool.some(p => p.id === it.id || p.imgSrc === it.imgSrc)
+                ) {
                     pool.push(it);
                 }
             }
@@ -161,42 +233,58 @@ function getReviewItems(stage: AdventureStage, maxCount: number = 2): AdventureI
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// FAZ 1: KEŞFET & BOL TEKRAR (LEARN & REPEAT)
+// FAZ 1: KEŞFET & BOL TEKRAR (MİNİ TUR DESTEKLİ)
 // ─────────────────────────────────────────────────────────────────────────────
 
 export function LearnPhaseView({
     stage,
+    roundIndex = 1,
+    completedRounds = [],
     soundEnabled,
     teacherFreeMode,
     playAudio,
     onAddXp,
     onBackToMap,
+    onSelectRound,
     onCompleteLearn,
+    onSkipToExam,
     onMascotMessage
 }: {
     stage: AdventureStage;
+    roundIndex?: number;
+    completedRounds?: number[];
     soundEnabled: boolean;
     teacherFreeMode: boolean;
     playAudio: (url: string, rate?: number) => void;
     onAddXp: (amount: number) => void;
     onBackToMap: () => void;
-    onCompleteLearn: () => void;
+    onSelectRound?: (r: number) => void;
+    onCompleteLearn: (roundIdx: number) => void;
+    onSkipToExam?: () => void;
     onMascotMessage: (msg: string) => void;
 }) {
+    const activeRound =
+        stage.miniRounds.find(mr => mr.roundIndex === roundIndex) ||
+        stage.miniRounds[0] || {
+            roundIndex: 1,
+            title: stage.shortTitle,
+            items: stage.items
+        };
+
+    const items = activeRound.items;
     const [cardIdx, setCardIdx] = useState(0);
     const [repeats, setRepeats] = useState<Record<string, number>>({});
     const [slowRate, setSlowRate] = useState(false);
 
-    const items = stage.items;
     const currentItem = items[cardIdx] || items[0];
     const reqRepeats = stage.requiredRepeats;
-    const currentCount = repeats[currentItem.id] || 0;
+    const currentCount = currentItem ? repeats[currentItem.id] || 0 : 0;
 
-    // Aşama değiştiğinde sıfırla
+    // Aşama veya mini tur değiştiğinde sıfırla
     useEffect(() => {
         setCardIdx(0);
         setRepeats({});
-    }, [stage.id]);
+    }, [stage.id, activeRound.roundIndex]);
 
     // Kart açıldığında sesi otomatik çal
     useEffect(() => {
@@ -206,15 +294,18 @@ export function LearnPhaseView({
             }, 220);
             return () => clearTimeout(timer);
         }
-    }, [cardIdx, stage.id, currentItem, playAudio, slowRate]);
+    }, [cardIdx, stage.id, activeRound.roundIndex, currentItem, playAudio, slowRate]);
 
     const completedCount = useMemo(() => {
         return items.filter(it => (repeats[it.id] || 0) >= reqRepeats).length;
     }, [items, repeats, reqRepeats]);
 
-    const allCompleted = completedCount === items.length;
+    const allCompleted = items.length > 0 && completedCount === items.length;
+    const allRoundsDone =
+        stage.miniRounds.length <= 1 || completedRounds.length >= stage.miniRounds.length;
 
     const handleRepeatTap = () => {
+        if (!currentItem) return;
         if (soundEnabled) playAdventureTone('pop');
         playAudio(currentItem.audSrc, slowRate ? 0.75 : 1.0);
 
@@ -229,21 +320,34 @@ export function LearnPhaseView({
             if (soundEnabled) playAdventureTone('correct', 1);
             onMascotMessage(`Harika! "${currentItem.name}" için ${reqRepeats} tekrarı tamamladın! 🌟`);
 
-            // Otomatik sonraki tamamlanmamış karta nazik geçiş
             if (cardIdx < items.length - 1) {
                 setTimeout(() => {
                     setCardIdx(prev => Math.min(items.length - 1, prev + 1));
-                }, 650);
+                }, 600);
             } else if (completedCount + 1 === items.length) {
                 confetti({ particleCount: 55, spread: 70, origin: { y: 0.65 } });
-                onMascotMessage("Süper! Tüm kartları bol tekrar ile öğrendin. Şimdi Pekiştirme Oyununa geçebilirsin! 🎮");
+                onMascotMessage(
+                    stage.miniRounds.length > 1
+                        ? `Süper! ${activeRound.roundIndex}. turun kartlarını tamamladın. Şimdi mini pekiştirme oyununa geç! 🎮`
+                        : 'Süper! Tüm kartları bol tekrar ile öğrendin. Şimdi Pekiştirme Oyununa geçebilirsin! 🎮'
+                );
             }
         }
     };
 
+    if (!currentItem) return null;
+
     return (
         <div className="w-full max-w-2xl mx-auto px-3 sm:px-4 pb-10">
             <PhaseStepper currentPhase="learn" />
+
+            <MiniRoundBar
+                miniRounds={stage.miniRounds}
+                activeRoundIndex={activeRound.roundIndex}
+                completedRounds={completedRounds}
+                teacherFreeMode={teacherFreeMode}
+                onSelectRound={onSelectRound}
+            />
 
             <div className="bg-white rounded-[2rem] border-4 border-sky-200 shadow-[0_12px_35px_rgba(2,132,199,0.12)] p-5 sm:p-8 relative overflow-hidden">
                 {/* Üst Bilgi Satırı */}
@@ -274,10 +378,10 @@ export function LearnPhaseView({
                             playAudio(currentItem.audSrc, nextSlow ? 0.75 : 1.0);
                         }}
                         className={cn(
-                            "inline-flex items-center gap-1 px-3 py-1.5 rounded-2xl text-xs font-black border-2 transition-all cursor-pointer",
+                            'inline-flex items-center gap-1 px-3 py-1.5 rounded-2xl text-xs font-black border-2 transition-all cursor-pointer',
                             slowRate
-                                ? "bg-amber-100 border-amber-400 text-amber-900 shadow-sm"
-                                : "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
+                                ? 'bg-amber-100 border-amber-400 text-amber-900 shadow-sm'
+                                : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
                         )}
                         title="Harfin çıkışını tane tane dinlemek için yavaşlat"
                     >
@@ -290,7 +394,12 @@ export function LearnPhaseView({
                 <div className="text-center mb-5">
                     <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-[11px] font-black uppercase tracking-wider mb-1.5">
                         <BookOpen className="w-3.5 h-3.5" />
-                        <span>Adım {stage.id}: {stage.shortTitle}</span>
+                        <span>
+                            Adım {stage.id}: {stage.shortTitle}
+                            {stage.miniRounds.length > 1
+                                ? ` • ${activeRound.roundIndex}. Tur (${activeRound.title})`
+                                : ''}
+                        </span>
                     </div>
                     <h2 className="text-xl sm:text-2xl font-black text-slate-900">
                         Dinle, Bak ve {reqRepeats} Kez Sesli Tekrar Et!
@@ -310,10 +419,10 @@ export function LearnPhaseView({
                                 <div
                                     key={i}
                                     className={cn(
-                                        "w-4 h-4 rounded-full transition-all duration-300 flex items-center justify-center text-[10px]",
+                                        'w-4 h-4 rounded-full transition-all duration-300 flex items-center justify-center text-[10px]',
                                         filled
-                                            ? "bg-gradient-to-br from-emerald-400 to-green-600 text-white scale-110 shadow-sm shadow-emerald-400/50"
-                                            : "bg-slate-200 border border-slate-300"
+                                            ? 'bg-gradient-to-br from-emerald-400 to-green-600 text-white scale-110 shadow-sm shadow-emerald-400/50'
+                                            : 'bg-slate-200 border border-slate-300'
                                     )}
                                 >
                                     {filled ? '✓' : ''}
@@ -329,7 +438,7 @@ export function LearnPhaseView({
                     <button
                         type="button"
                         onClick={() => playAudio(currentItem.audSrc, slowRate ? 0.75 : 1.0)}
-                        className="w-44 h-40 sm:w-52 sm:h-44 bg-white rounded-3xl border-3 border-sky-100 shadow-md flex items-center justify-center p-4 hover:scale-[1.03] active:scale-95 transition-transform cursor-pointer group relative"
+                        className="w-52 h-40 sm:w-64 sm:h-44 bg-white rounded-3xl border-3 border-sky-100 shadow-md flex items-center justify-center p-4 hover:scale-[1.03] active:scale-95 transition-transform cursor-pointer group relative"
                         title="Dinlemek için karta dokun"
                     >
                         <StageItemMedia
@@ -337,7 +446,7 @@ export function LearnPhaseView({
                             alt={currentItem.name}
                             fallbackText={currentItem.arabic || currentItem.name}
                             className="max-h-full max-w-full object-contain"
-                            textClassName="text-6xl sm:text-7xl"
+                            textClassName="text-5xl sm:text-6xl"
                         />
                         <div className="absolute bottom-2 right-2 w-8 h-8 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center opacity-80 group-hover:opacity-100 transition-opacity">
                             <Volume2 className="w-4 h-4" />
@@ -346,7 +455,7 @@ export function LearnPhaseView({
 
                     {/* Okunuş Adı */}
                     <div className="mt-4 text-center">
-                        <div className="text-2xl sm:text-3xl font-black text-sky-900 tracking-tight">
+                        <div className="text-xl sm:text-2xl font-black text-sky-900 tracking-tight">
                             {currentItem.name}
                         </div>
                     </div>
@@ -376,10 +485,10 @@ export function LearnPhaseView({
                             type="button"
                             onClick={handleRepeatTap}
                             className={cn(
-                                "inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl font-black text-sm border-b-4 active:border-b-0 active:translate-y-1 transition-all cursor-pointer shadow-md",
+                                'inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl font-black text-sm border-b-4 active:border-b-0 active:translate-y-1 transition-all cursor-pointer shadow-md',
                                 currentCount >= reqRepeats
-                                    ? "bg-emerald-500 hover:bg-emerald-400 text-white border-emerald-700"
-                                    : "bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 border-orange-700 animate-pulse"
+                                    ? 'bg-emerald-500 hover:bg-emerald-400 text-white border-emerald-700'
+                                    : 'bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 border-orange-700 animate-pulse'
                             )}
                         >
                             <span>🗣️ Dinledim &amp; Tekrar Ettim</span>
@@ -417,12 +526,12 @@ export function LearnPhaseView({
                                         setCardIdx(idx);
                                     }}
                                     className={cn(
-                                        "min-w-[38px] h-9 px-2 rounded-xl font-black text-xs border-2 transition-all cursor-pointer flex items-center justify-center gap-1 shrink-0",
+                                        'min-w-[38px] h-9 px-2 rounded-xl font-black text-xs border-2 transition-all cursor-pointer flex items-center justify-center gap-1 shrink-0',
                                         isActive
-                                            ? "bg-sky-600 text-white border-sky-700 scale-105 shadow-sm"
+                                            ? 'bg-sky-600 text-white border-sky-700 scale-105 shadow-sm'
                                             : isDone
-                                            ? "bg-emerald-100 text-emerald-800 border-emerald-300"
-                                            : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100"
+                                            ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                                            : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
                                     )}
                                 >
                                     <span>{idx + 1}</span>
@@ -446,30 +555,32 @@ export function LearnPhaseView({
                 </div>
 
                 {/* Faz 2 Geçiş Butonu */}
-                <div className="mt-6 pt-5 border-t-2 border-slate-100 space-y-2">
+                <div className="mt-6 pt-5 border-t-2 border-slate-100 space-y-2.5">
                     <button
                         type="button"
                         disabled={!allCompleted && !teacherFreeMode}
                         onClick={() => {
                             if (soundEnabled) playAdventureTone('unlock');
-                            onCompleteLearn();
+                            onCompleteLearn(activeRound.roundIndex);
                         }}
                         className={cn(
-                            "w-full py-4 px-6 rounded-2xl font-black text-base sm:text-lg flex items-center justify-center gap-2 transition-all",
+                            'w-full py-4 px-6 rounded-2xl font-black text-base sm:text-lg flex items-center justify-center gap-2 transition-all',
                             allCompleted || teacherFreeMode
-                                ? "bg-gradient-to-r from-emerald-500 via-teal-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-white border-b-4 border-emerald-800 active:border-b-0 active:translate-y-1 cursor-pointer shadow-lg shadow-emerald-200"
-                                : "bg-slate-200 text-slate-500 border-b-4 border-slate-300 cursor-not-allowed"
+                                ? 'bg-gradient-to-r from-emerald-500 via-teal-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-white border-b-4 border-emerald-800 active:border-b-0 active:translate-y-1 cursor-pointer shadow-lg shadow-emerald-200'
+                                : 'bg-slate-200 text-slate-500 border-b-4 border-slate-300 cursor-not-allowed'
                         )}
                     >
                         {allCompleted ? (
                             <>
                                 <Gamepad2 className="w-6 h-6" />
-                                <span>🚀 Harika! Faz 2: Pekiştirme Oyununa Geç</span>
+                                <span>
+                                    🚀 {stage.miniRounds.length > 1 ? `Tur ${activeRound.roundIndex}` : 'Harika!'} Pekiştirme Oyununa Geç
+                                </span>
                             </>
                         ) : teacherFreeMode ? (
                             <>
                                 <FastForward className="w-5 h-5" />
-                                <span>Öğretmen Modu: Pekiştirme Oyununa Geç</span>
+                                <span>Öğretmen Modu: Tur {activeRound.roundIndex} Pekiştirme Oyununa Geç</span>
                             </>
                         ) : (
                             <>
@@ -480,6 +591,20 @@ export function LearnPhaseView({
                             </>
                         )}
                     </button>
+
+                    {(allRoundsDone || teacherFreeMode) && onSkipToExam && (
+                        <button
+                            type="button"
+                            onClick={() => {
+                                if (soundEnabled) playAdventureTone('click');
+                                onSkipToExam();
+                            }}
+                            className="w-full py-3 px-4 rounded-2xl bg-amber-50 hover:bg-amber-100 text-amber-900 border-2 border-amber-300 font-black text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer transition-all"
+                        >
+                            <Trophy className="w-4 h-4 text-amber-600" />
+                            <span>Doğrudan Adım {stage.id} Ustalık Sınavına Geç</span>
+                        </button>
+                    )}
                 </div>
             </div>
         </div>
@@ -487,7 +612,7 @@ export function LearnPhaseView({
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// FAZ 2: PEKİŞTİRME MİNİ OYUNLARI (EŞLEŞTİRME + GÜVENLİ SESLİ OYUN)
+// FAZ 2: PEKİŞTİRME MİNİ OYUNLARI (MİNİ TUR BAZLI EŞLEŞTİRME + SESLİ AV)
 // ─────────────────────────────────────────────────────────────────────────────
 
 interface PracticeDrillQuestion {
@@ -498,33 +623,55 @@ interface PracticeDrillQuestion {
 
 export function ReinforcePhaseView({
     stage,
+    roundIndex = 1,
+    completedRounds = [],
+    teacherFreeMode,
     soundEnabled,
     playAudio,
     onAddXp,
     onBackToMap,
     onBackToLearn,
-    onCompleteReinforce,
+    onSelectRound,
+    onCompleteRound,
+    onNextRound,
+    onProceedToExam,
     onMascotMessage
 }: {
     stage: AdventureStage;
+    roundIndex?: number;
+    completedRounds?: number[];
+    teacherFreeMode: boolean;
     soundEnabled: boolean;
     playAudio: (url: string, rate?: number) => void;
     onAddXp: (amount: number) => void;
     onBackToMap: () => void;
     onBackToLearn: () => void;
-    onCompleteReinforce: () => void;
+    onSelectRound?: (r: number) => void;
+    onCompleteRound: (roundIdx: number) => void;
+    onNextRound: (nextRoundIdx: number) => void;
+    onProceedToExam: () => void;
     onMascotMessage: (msg: string) => void;
 }) {
-    // Eğer okuma metni net ise (harfler, üstün/esre/ötre hece, kelimeler) Tur 1: Eşleştirme + Tur 2: Sesli Oyun
-    const hasMatchRound = stage.hasExactReading && stage.items.length >= 3;
+    const activeRound =
+        stage.miniRounds.find(mr => mr.roundIndex === roundIndex) ||
+        stage.miniRounds[0] || {
+            roundIndex: 1,
+            title: stage.shortTitle,
+            items: stage.items
+        };
+
+    const roundItems = activeRound.items;
+    const hasMatchRound =
+        stage.hasExactReading && stage.curriculumId !== 'dualar' && roundItems.length >= 3;
+
     const [subRound, setSubRound] = useState<'match' | 'audio' | 'done'>(
         hasMatchRound ? 'match' : 'audio'
     );
 
-    // ── Tur 1: İkili Kart Eşleştirme State ──
+    // Tur 1: İkili Kart Eşleştirme State
     const matchItems = useMemo(() => {
-        return [...stage.items].sort(() => Math.random() - 0.5).slice(0, 4);
-    }, [stage.id, stage.items]);
+        return [...roundItems].sort(() => Math.random() - 0.5).slice(0, 4);
+    }, [stage.id, activeRound.roundIndex, roundItems]);
 
     const shuffledNames = useMemo(() => {
         return [...matchItems].sort(() => Math.random() - 0.5);
@@ -536,26 +683,38 @@ export function ReinforcePhaseView({
     const [wrongPair, setWrongPair] = useState<[string, string] | null>(null);
     const [matchCombo, setMatchCombo] = useState(0);
 
-    // ── Tur 2: Güvenli Sesli Tanıma Oyunu State ──
+    // Tur 2: Güvenli Sesli Tanıma Oyunu State
     const drillQuestions: PracticeDrillQuestion[] = useMemo(() => {
         const list: PracticeDrillQuestion[] = [];
-        const baseShuffled = [...stage.items].sort(() => Math.random() - 0.5).slice(0, 4);
+        const baseShuffled = [...roundItems].sort(() => Math.random() - 0.5);
         baseShuffled.forEach(item => {
             const distractors = buildDistractorPool(item, stage, 3);
             const options = [item, ...distractors].sort(() => Math.random() - 0.5);
             list.push({ target: item, options, isReview: false });
         });
 
-        // Aralıklı tekrar ekle
-        const reviews = getReviewItems(stage, 2);
-        reviews.forEach(rev => {
-            const distractors = buildDistractorPool(rev, stage, 3);
-            const options = [rev, ...distractors].sort(() => Math.random() - 0.5);
-            list.push({ target: rev, options, isReview: true });
-        });
+        // Önceki mini turlardan veya önceki adımlardan 1 hatırlama sorusu
+        if (activeRound.roundIndex > 1) {
+            const prevRoundItems = stage.miniRounds
+                .filter(mr => mr.roundIndex < activeRound.roundIndex)
+                .flatMap(mr => mr.items);
+            if (prevRoundItems.length > 0) {
+                const rev = prevRoundItems[Math.floor(Math.random() * prevRoundItems.length)];
+                const distractors = buildDistractorPool(rev, stage, 3);
+                const options = [rev, ...distractors].sort(() => Math.random() - 0.5);
+                list.push({ target: rev, options, isReview: true });
+            }
+        } else {
+            const reviews = getReviewItems(stage, 1);
+            reviews.forEach(rev => {
+                const distractors = buildDistractorPool(rev, stage, 3);
+                const options = [rev, ...distractors].sort(() => Math.random() - 0.5);
+                list.push({ target: rev, options, isReview: true });
+            });
+        }
 
         return list;
-    }, [stage]);
+    }, [stage, activeRound.roundIndex, roundItems]);
 
     const [drillIdx, setDrillIdx] = useState(0);
     const [drillWrongIds, setDrillWrongIds] = useState<string[]>([]);
@@ -563,9 +722,8 @@ export function ReinforcePhaseView({
     const [drillHint, setDrillHint] = useState<string | null>(null);
     const [drillCombo, setDrillCombo] = useState(0);
 
-    // Aşama değişiminde sıfırla
     useEffect(() => {
-        setSubRound(stage.hasExactReading && stage.items.length >= 3 ? 'match' : 'audio');
+        setSubRound(hasMatchRound ? 'match' : 'audio');
         setMatchedIds([]);
         setSelectedImgId(null);
         setSelectedNameId(null);
@@ -573,9 +731,8 @@ export function ReinforcePhaseView({
         setDrillWrongIds([]);
         setDrillSuccessId(null);
         setDrillHint(null);
-    }, [stage.id, stage.hasExactReading, stage.items.length]);
+    }, [stage.id, activeRound.roundIndex, hasMatchRound]);
 
-    // Sesli oyunda soru değişince sesi çal
     useEffect(() => {
         if (subRound === 'audio' && drillQuestions[drillIdx]) {
             const t = setTimeout(() => {
@@ -607,23 +764,32 @@ export function ReinforcePhaseView({
                 confetti({ particleCount: 45, spread: 60, origin: { y: 0.65 } });
                 setTimeout(() => {
                     setSubRound('audio');
-                    onMascotMessage("Eşleştirme tamam! Şimdi sesi dinleyip harfi bulma oyunu başlıyor! 🎧");
-                }, 850);
+                    onMascotMessage('Eşleştirme tamam! Şimdi sesi dinleyip kartı yakala! 🎧');
+                }, 800);
             }
         } else {
             setMatchCombo(0);
             if (soundEnabled) playAdventureTone('wrong');
             setWrongPair([selectedImgId, selectedNameId]);
-            onMascotMessage("Bu ikisi eşleşmedi, şekle tekrar dikkatle bak bakalım! 🔍");
+            onMascotMessage('Bu ikisi eşleşmedi, şekle tekrar dikkatle bak bakalım! 🔍');
             setTimeout(() => {
                 setWrongPair(null);
                 setSelectedImgId(null);
                 setSelectedNameId(null);
-            }, 650);
+            }, 600);
         }
     }, [selectedImgId, selectedNameId, matchCombo, matchedIds, matchItems, soundEnabled, playAudio, onAddXp, onMascotMessage]);
 
     const currentDrill = drillQuestions[drillIdx];
+
+    const updatedCompletedRounds = useMemo(() => {
+        return Array.from(new Set([...completedRounds, activeRound.roundIndex]));
+    }, [completedRounds, activeRound.roundIndex]);
+
+    const hasMoreRounds = updatedCompletedRounds.length < stage.miniRounds.length;
+    const nextUncompletedRound =
+        stage.miniRounds.find(mr => !updatedCompletedRounds.includes(mr.roundIndex))?.roundIndex ||
+        Math.min(stage.miniRounds.length, activeRound.roundIndex + 1);
 
     const handleSelectDrillOption = (opt: AdventureItem) => {
         if (!currentDrill || drillSuccessId) return;
@@ -636,7 +802,7 @@ export function ReinforcePhaseView({
             if (soundEnabled) playAdventureTone('correct', nextCombo);
             confetti({ particleCount: 25, spread: 50, origin: { y: 0.7 } });
             onAddXp(10);
-            onMascotMessage(`Harika! "${opt.name}" sesini hemen tanıdın! ✨`);
+            onMascotMessage(`Harika! "${opt.name}" doğru! ✨`);
 
             setTimeout(() => {
                 setDrillSuccessId(null);
@@ -645,12 +811,18 @@ export function ReinforcePhaseView({
                     setDrillIdx(prev => prev + 1);
                 } else {
                     if (soundEnabled) playAdventureTone('fanfare');
-                    confetti({ particleCount: 90, spread: 80, origin: { y: 0.55 } });
-                    onAddXp(25);
+                    confetti({ particleCount: 85, spread: 80, origin: { y: 0.55 } });
+                    onAddXp(20);
+                    onCompleteRound(activeRound.roundIndex);
                     setSubRound('done');
-                    onMascotMessage("Pekiştirme oyunlarını başarıyla tamamladın! Artık Ustalık Sınavına hazırsın! 🏆");
+                    const willFinishAll = updatedCompletedRounds.length >= stage.miniRounds.length;
+                    onMascotMessage(
+                        willFinishAll
+                            ? 'Tüm mini turlar bitti! Artık Adım Ustalık Sınavına hazırsın! 🏆'
+                            : `Harika! ${activeRound.roundIndex}. tur tamamlandı! Sıradaki tura geçebilirsin! 🚀`
+                    );
                 }
-            }, 950);
+            }, 900);
         } else {
             setDrillCombo(0);
             if (soundEnabled) playAdventureTone('wrong');
@@ -661,13 +833,21 @@ export function ReinforcePhaseView({
             playAudio(opt.audSrc);
             setTimeout(() => {
                 playAudio(currentDrill.target.audSrc);
-            }, 950);
+            }, 900);
         }
     };
 
     return (
         <div className="w-full max-w-2xl mx-auto px-3 sm:px-4 pb-10">
             <PhaseStepper currentPhase="reinforce" />
+
+            <MiniRoundBar
+                miniRounds={stage.miniRounds}
+                activeRoundIndex={activeRound.roundIndex}
+                completedRounds={completedRounds}
+                teacherFreeMode={teacherFreeMode}
+                onSelectRound={onSelectRound}
+            />
 
             <div className="bg-white rounded-[2rem] border-4 border-emerald-200 shadow-[0_12px_35px_rgba(16,185,129,0.12)] p-5 sm:p-8 relative">
                 {/* Üst Bar */}
@@ -683,10 +863,10 @@ export function ReinforcePhaseView({
 
                     <div className="px-3.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-black">
                         {subRound === 'match'
-                            ? `Tur 1: Eşleştirme (${matchedIds.length}/${matchItems.length})`
+                            ? `Tur ${activeRound.roundIndex} • Eşleştirme (${matchedIds.length}/${matchItems.length})`
                             : subRound === 'audio'
-                            ? `Tur ${hasMatchRound ? '2' : '1'}: Sesli Av (${drillIdx + 1}/${drillQuestions.length})`
-                            : 'Pekiştirme Tamamlandı! 🎉'}
+                            ? `Tur ${activeRound.roundIndex} • Sesli Av (${drillIdx + 1}/${drillQuestions.length})`
+                            : `Tur ${activeRound.roundIndex} Tamamlandı! 🎉`}
                     </div>
 
                     <button
@@ -731,14 +911,14 @@ export function ReinforcePhaseView({
                                                 setSelectedImgId(item.id);
                                             }}
                                             className={cn(
-                                                "w-full h-20 sm:h-24 rounded-2xl border-3 bg-white flex items-center justify-center p-2 transition-all cursor-pointer shadow-sm",
+                                                'w-full h-20 sm:h-24 rounded-2xl border-3 bg-white flex items-center justify-center p-2 transition-all cursor-pointer shadow-sm',
                                                 isMatched
-                                                    ? "opacity-40 bg-emerald-50 border-emerald-300 scale-95 cursor-default"
+                                                    ? 'opacity-40 bg-emerald-50 border-emerald-300 scale-95 cursor-default'
                                                     : isWrong
-                                                    ? "border-rose-500 bg-rose-50 animate-shake"
+                                                    ? 'border-rose-500 bg-rose-50 animate-shake'
                                                     : isSelected
-                                                    ? "border-sky-500 ring-4 ring-sky-200 scale-[1.03] shadow-md"
-                                                    : "border-slate-200 hover:border-sky-300 border-b-4"
+                                                    ? 'border-sky-500 ring-4 ring-sky-200 scale-[1.03] shadow-md'
+                                                    : 'border-slate-200 hover:border-sky-300 border-b-4'
                                             )}
                                         >
                                             <StageItemMedia
@@ -772,17 +952,17 @@ export function ReinforcePhaseView({
                                                 setSelectedNameId(item.id);
                                             }}
                                             className={cn(
-                                                "w-full h-20 sm:h-24 rounded-2xl border-3 flex items-center justify-center px-3 font-black text-base sm:text-lg transition-all cursor-pointer shadow-sm",
+                                                'w-full h-20 sm:h-24 rounded-2xl border-3 flex items-center justify-center px-3 font-black text-sm sm:text-base transition-all cursor-pointer shadow-sm',
                                                 isMatched
-                                                    ? "opacity-40 bg-emerald-50 border-emerald-300 text-emerald-700 scale-95 cursor-default"
+                                                    ? 'opacity-40 bg-emerald-50 border-emerald-300 text-emerald-700 scale-95 cursor-default'
                                                     : isWrong
-                                                    ? "border-rose-500 bg-rose-50 text-rose-700 animate-shake"
+                                                    ? 'border-rose-500 bg-rose-50 text-rose-700 animate-shake'
                                                     : isSelected
-                                                    ? "bg-emerald-50 border-emerald-500 text-emerald-900 ring-4 ring-emerald-200 scale-[1.03] shadow-md"
-                                                    : "bg-slate-50 border-slate-200 hover:border-emerald-300 text-slate-800 border-b-4"
+                                                    ? 'bg-emerald-50 border-emerald-500 text-emerald-900 ring-4 ring-emerald-200 scale-[1.03] shadow-md'
+                                                    : 'bg-slate-50 border-slate-200 hover:border-emerald-300 text-slate-800 border-b-4'
                                             )}
                                         >
-                                            <span>{item.name}</span>
+                                            <span className="line-clamp-2 text-center">{item.name}</span>
                                         </button>
                                     );
                                 })}
@@ -797,7 +977,7 @@ export function ReinforcePhaseView({
                         {currentDrill.isReview && (
                             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-xs font-black mb-2">
                                 <RotateCcw className="w-3.5 h-3.5" />
-                                <span>Önceki Adımlardan Hatırlama Tekrarı!</span>
+                                <span>Hatırlama Tekrarı!</span>
                             </div>
                         )}
 
@@ -814,14 +994,12 @@ export function ReinforcePhaseView({
                             <span>Sesi Tekrar Dinle</span>
                         </button>
 
-                        {/* Güvenli Öğrenme Geri Bildirim İpucu */}
                         {drillHint && (
                             <div className="mt-4 bg-amber-50 border-2 border-amber-300 text-amber-950 rounded-2xl px-4 py-2 text-xs sm:text-sm font-extrabold animate-in fade-in">
                                 💡 {drillHint}
                             </div>
                         )}
 
-                        {/* 4 Saf Arapça Kart (Altta İsim Kopyası Yok - Seçilince Açılır!) */}
                         <div className="grid grid-cols-2 gap-3.5 sm:gap-4 mt-6">
                             {currentDrill.options.map(opt => {
                                 const isSuccess = drillSuccessId === opt.id;
@@ -833,12 +1011,12 @@ export function ReinforcePhaseView({
                                         disabled={Boolean(drillSuccessId)}
                                         onClick={() => handleSelectDrillOption(opt)}
                                         className={cn(
-                                            "bg-white rounded-3xl border-3 p-4 sm:p-5 min-h-[135px] sm:min-h-[155px] flex flex-col items-center justify-center transition-all cursor-pointer relative shadow-sm",
+                                            'bg-white rounded-3xl border-3 p-4 sm:p-5 min-h-[135px] sm:min-h-[155px] flex flex-col items-center justify-center transition-all cursor-pointer relative shadow-sm',
                                             isSuccess
-                                                ? "border-emerald-500 bg-emerald-50 ring-4 ring-emerald-200 scale-[1.03]"
+                                                ? 'border-emerald-500 bg-emerald-50 ring-4 ring-emerald-200 scale-[1.03]'
                                                 : isWrong
-                                                ? "border-rose-400 bg-rose-50 opacity-65 animate-shake"
-                                                : "border-slate-200 hover:border-sky-400 border-b-[5px] active:border-b-2 active:translate-y-[3px]"
+                                                ? 'border-rose-400 bg-rose-50 opacity-65 animate-shake'
+                                                : 'border-slate-200 hover:border-sky-400 border-b-[5px] active:border-b-2 active:translate-y-[3px]'
                                         )}
                                     >
                                         <div className="h-20 sm:h-24 flex items-center justify-center">
@@ -846,19 +1024,16 @@ export function ReinforcePhaseView({
                                                 src={opt.imgSrc}
                                                 alt={opt.name}
                                                 fallbackText={opt.arabic || opt.name}
-                                                className="max-h-full max-w-[120px] object-contain"
+                                                className="max-h-full max-w-[135px] object-contain"
                                                 textClassName="text-4xl sm:text-5xl"
                                             />
                                         </div>
 
-                                        {/* Yanlış veya doğru seçimden sonra öğrenmeyi pekiştirmek için adı göster */}
                                         {(isSuccess || isWrong) && (
                                             <div
                                                 className={cn(
-                                                    "mt-2 text-xs font-black px-2.5 py-0.5 rounded-full",
-                                                    isSuccess
-                                                        ? "bg-emerald-600 text-white"
-                                                        : "bg-rose-200 text-rose-900"
+                                                    'mt-2 text-xs font-black px-2.5 py-0.5 rounded-full',
+                                                    isSuccess ? 'bg-emerald-600 text-white' : 'bg-rose-200 text-rose-900'
                                                 )}
                                             >
                                                 {opt.name}
@@ -871,38 +1046,90 @@ export function ReinforcePhaseView({
                     </div>
                 )}
 
-                {/* ── PEKİŞTİRME BİTTİ -> FAZ 3 GEÇİŞ EKRANI ── */}
+                {/* ── TUR BİTTİ -> SONRAKİ MİNİ TUR VEYA USTALIK SINAVI ── */}
                 {subRound === 'done' && (
                     <div className="text-center py-6 space-y-5">
                         <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br from-emerald-400 to-teal-600 text-white flex items-center justify-center text-4xl shadow-lg shadow-emerald-200 animate-bounce">
                             🎯
                         </div>
-                        <div>
-                            <h2 className="text-2xl sm:text-3xl font-black text-emerald-700">
-                                Pekiştirme Tamamlandı!
-                            </h2>
-                            <p className="text-sm sm:text-base font-bold text-slate-600 mt-1 max-w-md mx-auto">
-                                Artık hem gözünle hem kulağınla harfleri tanıdın. Şimdi sonraki adımın kilidini açmak için <strong>Ustalık Sınavı</strong> seni bekliyor!
-                            </p>
-                        </div>
 
-                        <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl p-4 max-w-md mx-auto text-xs sm:text-sm font-extrabold text-amber-950 space-y-1">
-                            <div>🏆 Sınav Hedefi: En az <strong>%{stage.passingScorePercent}</strong> başarı</div>
-                            <div>❤️ Hak: <strong>3 Kalp</strong></div>
-                            <div>⭐ Ödül: Yıldızlar, Rozet ve Sıradaki Adım Kilidi!</div>
-                        </div>
+                        {hasMoreRounds ? (
+                            <>
+                                <div>
+                                    <h2 className="text-2xl sm:text-3xl font-black text-emerald-700">
+                                        {activeRound.roundIndex}. Tur Başarıyla Tamamlandı!
+                                    </h2>
+                                    <p className="text-sm sm:text-base font-bold text-slate-600 mt-1 max-w-md mx-auto">
+                                        Harikasın! Adım {stage.id} ({stage.shortTitle}) içinde{' '}
+                                        <strong>
+                                            {updatedCompletedRounds.length}/{stage.miniRounds.length}
+                                        </strong>{' '}
+                                        mini turu bitirdin. Sıradaki tura geçelim!
+                                    </p>
+                                </div>
 
-                        <button
-                            type="button"
-                            onClick={() => {
-                                if (soundEnabled) playAdventureTone('unlock');
-                                onCompleteReinforce();
-                            }}
-                            className="w-full max-w-md mx-auto py-4 px-6 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white font-black text-base sm:text-lg border-b-4 border-rose-800 active:border-b-0 active:translate-y-1 transition-all cursor-pointer shadow-xl flex items-center justify-center gap-2"
-                        >
-                            <Trophy className="w-6 h-6" />
-                            <span>🏆 Faz 3: Ustalık Sınavına Başla!</span>
-                        </button>
+                                <div className="flex flex-col gap-3 max-w-md mx-auto">
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            if (soundEnabled) playAdventureTone('unlock');
+                                            onNextRound(nextUncompletedRound);
+                                        }}
+                                        className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-black text-base sm:text-lg border-b-4 border-indigo-900 active:border-b-0 active:translate-y-1 transition-all cursor-pointer shadow-xl flex items-center justify-center gap-2"
+                                    >
+                                        <span>➡️ {nextUncompletedRound}. Tura Geç (Yeni Kartlar)</span>
+                                        <ArrowRight className="w-5 h-5" />
+                                    </button>
+
+                                    {teacherFreeMode && (
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                if (soundEnabled) playAdventureTone('click');
+                                                onProceedToExam();
+                                            }}
+                                            className="w-full py-3 px-5 rounded-2xl bg-amber-50 hover:bg-amber-100 text-amber-900 font-black text-xs border-2 border-amber-300 cursor-pointer"
+                                        >
+                                            🏆 Öğretmen Modu: Ustalık Sınavına Geç
+                                        </button>
+                                    )}
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div>
+                                    <h2 className="text-2xl sm:text-3xl font-black text-emerald-700">
+                                        Adım {stage.id} Pekiştirmesi Tamamlandı!
+                                    </h2>
+                                    <p className="text-sm sm:text-base font-bold text-slate-600 mt-1 max-w-md mx-auto">
+                                        Bu adımdaki tüm turları bitirdin! Şimdi sıradaki Diyanet adımının kilidini açmak için{' '}
+                                        <strong>Ustalık Sınavı</strong> seni bekliyor!
+                                    </p>
+                                </div>
+
+                                <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl p-4 max-w-md mx-auto text-xs sm:text-sm font-extrabold text-amber-950 space-y-1">
+                                    <div>
+                                        🏆 Sınav Hedefi: En az <strong>%{stage.passingScorePercent}</strong> başarı
+                                    </div>
+                                    <div>
+                                        ❤️ Hak: <strong>3 Kalp</strong>
+                                    </div>
+                                    <div>⭐ Ödül: Yıldızlar, Rozet ve Sıradaki Diyanet Adımı!</div>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        if (soundEnabled) playAdventureTone('unlock');
+                                        onProceedToExam();
+                                    }}
+                                    className="w-full max-w-md mx-auto py-4 px-6 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white font-black text-base sm:text-lg border-b-4 border-rose-800 active:border-b-0 active:translate-y-1 transition-all cursor-pointer shadow-xl flex items-center justify-center gap-2"
+                                >
+                                    <Trophy className="w-6 h-6" />
+                                    <span>🏆 Faz 3: Ustalık Sınavına Başla!</span>
+                                </button>
+                            </>
+                        )}
                     </div>
                 )}
             </div>
@@ -911,7 +1138,7 @@ export function ReinforcePhaseView({
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// FAZ 3: USTALIK SINAVI & KİLİT AÇMA GEÇİŞ TESTİ
+// FAZ 3: USTALIK SINAVI & KİLİT AÇMA GEÇİŞ TESTİ (ADIMIN TAMAMI ÜZERİNDEN)
 // ─────────────────────────────────────────────────────────────────────────────
 
 interface ExamQuestion {
@@ -954,29 +1181,46 @@ export function ExamPhaseView({
     const [mistakes, setMistakes] = useState<AdventureItem[]>([]);
     const [isFinished, setIsFinished] = useState(false);
 
-    // 7 Soruluk Ustalık Sınavı Oluştur (Aşamadan + Önceki aşamalardan aralıklı tekrar)
+    // Her mini turdan en az 1 örnek içerecek dengeli Ustalık Sınavı
     const questions: ExamQuestion[] = useMemo(() => {
         const list: ExamQuestion[] = [];
-        const targetCount = stage.isGate ? 8 : 6;
-        const shuffledItems = [...stage.items].sort(() => Math.random() - 0.5);
+        const picked: AdventureItem[] = [];
 
-        // Yeni aşamadan ana sorular
-        const mainCount = stage.reviewPoolIds?.length ? targetCount - 2 : targetCount;
-        for (let i = 0; i < mainCount; i++) {
-            const target = shuffledItems[i % shuffledItems.length];
+        // Önce her mini turdan 1 temsilci seç (tüm adımı kapsaması için)
+        stage.miniRounds.forEach(mr => {
+            if (mr.items.length > 0) {
+                const pick = mr.items[Math.floor(Math.random() * mr.items.length)];
+                if (!picked.some(p => p.id === pick.id)) {
+                    picked.push(pick);
+                }
+            }
+        });
+
+        // En az 6-8 ana soruya tamamla
+        const targetMainCount = stage.isGate ? 8 : Math.max(6, picked.length);
+        const remainingPool = [...stage.items]
+            .filter(it => !picked.some(p => p.id === it.id))
+            .sort(() => Math.random() - 0.5);
+        while (picked.length < targetMainCount && remainingPool.length > 0) {
+            picked.push(remainingPool.shift()!);
+        }
+
+        const allowTextNameMode = stage.hasExactReading && stage.curriculumId !== 'dualar';
+
+        picked.forEach((target, idx) => {
             const distractors = buildDistractorPool(target, stage, 3);
             const options = [target, ...distractors].sort(() => Math.random() - 0.5);
-            const useNameMode = stage.hasExactReading && i % 2 === 1;
+            const useNameMode = allowTextNameMode && idx % 3 === 1;
             list.push({
                 mode: useNameMode ? 'arabic_to_name' : 'audio_to_arabic',
                 target,
                 options,
                 isReview: false
             });
-        }
+        });
 
-        // Aralıklı tekrar soruları
-        const reviews = getReviewItems(stage, targetCount - mainCount);
+        // Önceki adımlardan 2 aralıklı tekrar sorusu
+        const reviews = getReviewItems(stage, stage.isGate ? 2 : 1);
         reviews.forEach(rev => {
             const distractors = buildDistractorPool(rev, stage, 3);
             const options = [rev, ...distractors].sort(() => Math.random() - 0.5);
@@ -993,7 +1237,6 @@ export function ExamPhaseView({
 
     const currentQ = questions[qIdx];
 
-    // Sınav sıfırlama
     const handleRestartExam = () => {
         setQIdx(0);
         setLives(3);
@@ -1004,10 +1247,9 @@ export function ExamPhaseView({
         setMistakes([]);
         setIsFinished(false);
         setExamKey(k => k + 1);
-        onMascotMessage(`${stage.title} Ustalık Sınavı yeniden başladı! Başarılar! 🏆`);
+        onMascotMessage(`Adım ${stage.id}: ${stage.shortTitle} Ustalık Sınavı başladı! Başarılar! 🏆`);
     };
 
-    // Soru değişince ses sorusuysa otomatik oynat
     useEffect(() => {
         if (!isFinished && currentQ && currentQ.mode === 'audio_to_arabic') {
             const timer = setTimeout(() => {
@@ -1019,7 +1261,7 @@ export function ExamPhaseView({
 
     const finalizeExam = useCallback(
         (finalCorrect: number, finalLives: number) => {
-            const accuracy = Math.round((finalCorrect / questions.length) * 100);
+            const accuracy = Math.round((finalCorrect / Math.max(1, questions.length)) * 100);
             const passed = finalLives > 0 && accuracy >= stage.passingScorePercent;
 
             setIsFinished(true);
@@ -1030,13 +1272,17 @@ export function ExamPhaseView({
                 if (soundEnabled) playAdventureTone('fanfare');
                 confetti({ particleCount: 130, spread: 95, origin: { y: 0.5 } });
                 onExamPassed(stars, accuracy, xpEarned);
-                onMascotMessage(`Muhteşemsin! %${accuracy} başarı ile Ustalık Sınavını geçtin ve sıradaki adımın kilidini açtın! 🎉`);
+                onMascotMessage(
+                    `Muhteşemsin! Adım ${stage.id}'i %${accuracy} başarı ile geçtin ve sıradaki Diyanet adımını açtın! 🎉`
+                );
             } else {
                 if (soundEnabled) playAdventureTone('wrong');
-                onMascotMessage(`Az kaldı! Hedef %${stage.passingScorePercent}, sen %${accuracy} yaptın. Yanlış yaptığın harfleri hemen dinleyip tekrar dene! 🐥`);
+                onMascotMessage(
+                    `Az kaldı! Hedef %${stage.passingScorePercent}, sen %${accuracy} yaptın. Yanlışları dinleyip tekrar dene! 🐥`
+                );
             }
         },
-        [questions.length, stage.passingScorePercent, soundEnabled, onExamPassed, onMascotMessage]
+        [questions.length, stage.id, stage.passingScorePercent, soundEnabled, onExamPassed, onMascotMessage]
     );
 
     const handleSelectOption = (opt: AdventureItem) => {
@@ -1063,7 +1309,7 @@ export function ExamPhaseView({
                 } else {
                     finalizeExam(nextCorrect, lives);
                 }
-            }, 950);
+            }, 900);
         } else {
             const nextLives = Math.max(0, lives - 1);
             setLives(nextLives);
@@ -1074,7 +1320,9 @@ export function ExamPhaseView({
                 setMistakes(prev => [...prev, currentQ.target]);
             }
             playAudio(currentQ.target.audSrc);
-            onMascotMessage(`Dikkat! Doğrusu "${currentQ.target.name}" olacaktı. Bir sonraki soruda başaracaksın! 🐥`);
+            onMascotMessage(
+                `Dikkat! Doğrusu "${currentQ.target.name}" olacaktı. Bir sonraki soruda başaracaksın! 🐥`
+            );
 
             setTimeout(() => {
                 setSelectedOptId(null);
@@ -1084,7 +1332,7 @@ export function ExamPhaseView({
                 } else {
                     setQIdx(prev => prev + 1);
                 }
-            }, 1300);
+            }, 1200);
         }
     };
 
@@ -1134,10 +1382,10 @@ export function ExamPhaseView({
                                         <Heart
                                             key={i}
                                             className={cn(
-                                                "w-4 h-4 transition-all",
+                                                'w-4 h-4 transition-all',
                                                 i < lives
-                                                    ? "fill-rose-500 text-rose-500 scale-100"
-                                                    : "text-slate-300 scale-75"
+                                                    ? 'fill-rose-500 text-rose-500 scale-100'
+                                                    : 'text-slate-300 scale-75'
                                             )}
                                         />
                                     ))}
@@ -1147,9 +1395,9 @@ export function ExamPhaseView({
 
                         {/* Soru Başlığı */}
                         <div className="text-center mb-5">
-                            <div className="flex items-center justify-center gap-2 mb-2">
+                            <div className="flex items-center justify-center gap-2 mb-2 flex-wrap">
                                 <span className="px-3 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-xs font-black">
-                                    🏆 Ustalık Sınavı • Baraj %{stage.passingScorePercent}
+                                    🏆 Adım {stage.id} Ustalık Sınavı • Baraj %{stage.passingScorePercent}
                                 </span>
                                 {currentQ.isReview && (
                                     <span className="px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-800 border border-indigo-200 text-[11px] font-black">
@@ -1161,7 +1409,7 @@ export function ExamPhaseView({
                             {currentQ.mode === 'audio_to_arabic' ? (
                                 <>
                                     <h2 className="text-xl sm:text-2xl font-black text-slate-900 mb-4">
-                                        Sesi dinle ve doğru harfi / kelimeyi seç!
+                                        Sesi dinle ve doğru kartı seç!
                                     </h2>
                                     <button
                                         type="button"
@@ -1175,9 +1423,9 @@ export function ExamPhaseView({
                             ) : (
                                 <>
                                     <h2 className="text-xl sm:text-2xl font-black text-slate-900 mb-3">
-                                        Bu harf veya kelimenin okunuşu hangisidir?
+                                        Bu kartın okunuşu hangisidir?
                                     </h2>
-                                    <div className="w-40 h-36 mx-auto bg-white rounded-3xl border-3 border-sky-200 shadow-md flex items-center justify-center p-4">
+                                    <div className="w-44 h-36 mx-auto bg-white rounded-3xl border-3 border-sky-200 shadow-md flex items-center justify-center p-4">
                                         <StageItemMedia
                                             src={currentQ.target.imgSrc}
                                             alt={currentQ.target.name}
@@ -1190,24 +1438,24 @@ export function ExamPhaseView({
                             )}
                         </div>
 
-                        {/* 4 Seçenek (Sınavda kesinlikle kopyasız!) */}
+                        {/* 4 Seçenek (Sınavda kopyasız!) */}
                         <div className="grid grid-cols-2 gap-3.5 sm:gap-4 mt-5">
                             {currentQ.options.map(opt => {
                                 const isSelected = selectedOptId === opt.id;
                                 const isTarget = opt.id === currentQ.target.id;
 
                                 let stateClass =
-                                    "border-slate-200 bg-white hover:border-sky-400 border-b-[5px] active:border-b-2 active:translate-y-[3px]";
+                                    'border-slate-200 bg-white hover:border-sky-400 border-b-[5px] active:border-b-2 active:translate-y-[3px]';
 
                                 if (selectedOptId !== null) {
                                     if (isTarget) {
                                         stateClass =
-                                            "border-emerald-500 bg-emerald-50 ring-4 ring-emerald-200 scale-[1.03]";
+                                            'border-emerald-500 bg-emerald-50 ring-4 ring-emerald-200 scale-[1.03]';
                                     } else if (isSelected && feedback === 'wrong') {
                                         stateClass =
-                                            "border-rose-500 bg-rose-50 ring-4 ring-rose-200 animate-shake";
+                                            'border-rose-500 bg-rose-50 ring-4 ring-rose-200 animate-shake';
                                     } else {
-                                        stateClass = "border-slate-200 bg-slate-50 opacity-50";
+                                        stateClass = 'border-slate-200 bg-slate-50 opacity-50';
                                     }
                                 }
 
@@ -1217,7 +1465,7 @@ export function ExamPhaseView({
                                         disabled={selectedOptId !== null}
                                         onClick={() => handleSelectOption(opt)}
                                         className={cn(
-                                            "rounded-3xl border-3 p-4 min-h-[120px] sm:min-h-[140px] flex flex-col items-center justify-center transition-all cursor-pointer relative shadow-sm",
+                                            'rounded-3xl border-3 p-4 min-h-[120px] sm:min-h-[140px] flex flex-col items-center justify-center transition-all cursor-pointer relative shadow-sm',
                                             stateClass
                                         )}
                                     >
@@ -1228,18 +1476,17 @@ export function ExamPhaseView({
                                                         src={opt.imgSrc}
                                                         alt={opt.name}
                                                         fallbackText={opt.arabic || opt.name}
-                                                        className="max-h-full max-w-[115px] object-contain"
+                                                        className="max-h-full max-w-[130px] object-contain"
                                                         textClassName="text-4xl sm:text-5xl"
                                                     />
                                                 </div>
-                                                {/* Yanıtlandıktan sonra doğru adı teyit için göster */}
                                                 {selectedOptId !== null && (isTarget || isSelected) && (
                                                     <span
                                                         className={cn(
-                                                            "mt-2 text-xs font-black px-2.5 py-0.5 rounded-full",
+                                                            'mt-2 text-xs font-black px-2.5 py-0.5 rounded-full',
                                                             isTarget
-                                                                ? "bg-emerald-600 text-white"
-                                                                : "bg-rose-500 text-white"
+                                                                ? 'bg-emerald-600 text-white'
+                                                                : 'bg-rose-500 text-white'
                                                         )}
                                                     >
                                                         {opt.name}
@@ -1247,7 +1494,7 @@ export function ExamPhaseView({
                                                 )}
                                             </>
                                         ) : (
-                                            <div className="text-lg sm:text-xl font-black text-slate-900">
+                                            <div className="text-base sm:text-lg font-black text-slate-900">
                                                 {opt.name}
                                             </div>
                                         )}
@@ -1257,7 +1504,7 @@ export function ExamPhaseView({
                         </div>
                     </>
                 ) : (
-                    /* ── SINAV SONUÇ EKRANI (GEÇTİ / TEKRAR GEREKLİ) ── */
+                    /* ── SINAV SONUÇ EKRANI ── */
                     <div className="text-center py-4 space-y-5">
                         {didPass ? (
                             <>
@@ -1267,26 +1514,24 @@ export function ExamPhaseView({
                                         Muhteşem! Ustalık Sınavını Geçtin!
                                     </h2>
                                     <p className="text-sm font-bold text-slate-600 mt-1">
-                                        {stage.title} adımını gerçekten öğrendiğini kanıtladın!
+                                        Adım {stage.id}: {stage.title} basamağını başarıyla tamamladın!
                                     </p>
                                 </div>
 
-                                {/* Kazanılan Yıldızlar */}
                                 <div className="flex items-center justify-center gap-3 text-4xl sm:text-5xl">
                                     {[1, 2, 3].map(starNum => (
                                         <Star
                                             key={starNum}
                                             className={cn(
-                                                "w-11 h-11 transition-all",
+                                                'w-11 h-11 transition-all',
                                                 starNum <= earnedStars
-                                                    ? "fill-amber-400 text-amber-500 drop-shadow-md scale-110"
-                                                    : "text-slate-200 fill-slate-100"
+                                                    ? 'fill-amber-400 text-amber-500 drop-shadow-md scale-110'
+                                                    : 'text-slate-200 fill-slate-100'
                                             )}
                                         />
                                     ))}
                                 </div>
 
-                                {/* Özet İstatistik */}
                                 <div className="grid grid-cols-3 gap-2.5 max-w-md mx-auto">
                                     <div className="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-3">
                                         <div className="text-[11px] font-bold text-emerald-700">Başarı</div>
@@ -1308,8 +1553,8 @@ export function ExamPhaseView({
                                     <Unlock className="w-4 h-4 text-emerald-600" />
                                     <span>
                                         {hasNextStage
-                                            ? `Sıradaki Adım Kilidi Açıldı & "${stage.badgeName}" Rozeti Eklendi!`
-                                            : 'Tüm Büyük Elifba Macerası Tamamlandı! Sertifikan Hazır! 👑'}
+                                            ? `Diyanet Adım ${stage.id + 1} Kilidi Açıldı & "${stage.badgeName}" Rozeti Eklendi!`
+                                            : "30 Diyanet Adımı'nın Tamamı Bitti! Sertifikan Hazır! 👑"}
                                     </span>
                                 </div>
 
@@ -1320,7 +1565,7 @@ export function ExamPhaseView({
                                             onClick={onProceedNextStage}
                                             className="flex-1 py-3.5 px-5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-black text-base border-b-4 border-emerald-800 active:border-b-0 transition-all cursor-pointer shadow-lg flex items-center justify-center gap-2"
                                         >
-                                            <span>Sıradaki Adıma Geç</span>
+                                            <span>Adım {stage.id + 1}&apos;e Geç</span>
                                             <ArrowRight className="w-5 h-5" />
                                         </button>
                                     ) : (
@@ -1351,11 +1596,11 @@ export function ExamPhaseView({
                                         Az Kaldı! Biraz Daha Tekrar Edelim
                                     </h2>
                                     <p className="text-sm font-bold text-slate-600 mt-1 max-w-md mx-auto">
-                                        Bu sınavda <strong>%{accuracyPercent}</strong> başarı sağladın. Sıradaki adımın kilidini açmak için en az <strong>%{stage.passingScorePercent}</strong> gerekiyor.
+                                        Bu sınavda <strong>%{accuracyPercent}</strong> başarı sağladın. Sıradaki adımın kilidini açmak için en az{' '}
+                                        <strong>%{stage.passingScorePercent}</strong> gerekiyor.
                                     </p>
                                 </div>
 
-                                {/* Yanlış Yapılan Kartları Hemen Dinle */}
                                 {mistakes.length > 0 && (
                                     <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl p-4 max-w-md mx-auto text-left">
                                         <div className="flex items-center gap-1.5 text-xs font-black text-amber-900 mb-2.5">

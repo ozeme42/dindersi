@@ -540,7 +540,7 @@ export async function resetCustomQuranBookPages(): Promise<{ success: boolean; p
 
 /**
  * Belirli bir sınıf ve şube için KAYITLI (role === 'student') öğrencileri ve
- * Büyük Elifba Macerası (24 Adım) ilerlemelerini getirir.
+ * Büyük Elifba Macerası (Diyanet 30 Adım) ilerlemelerini getirir.
  */
 export async function getRegisteredStudentsAdventureData(
     classId: string,
@@ -615,6 +615,62 @@ export async function getRegisteredStudentsAdventureData(
     } catch (error: any) {
         console.error('Error fetching registered students adventure data:', error);
         return { success: false, error: error.message || 'Kayıtlı öğrenci verileri alınamadı.' };
+    }
+}
+
+/**
+ * Kayıtlı öğrencinin Elifba Macerası'nda tamamladığı Diyanet adımlarını
+ * eşleşen sanal öğrencinin (quran_progress) kaydına işler.
+ */
+export async function syncAdventureStagesToGuestProgress(data: {
+    guestStudent: { uid: string; displayName: string; studentNumber?: string };
+    completedCurriculumIds: string[];
+    activeStageId: string;
+    classInfo: { classId: string; className: string; branch: string };
+}): Promise<{ success: boolean; error?: string }> {
+    if (!data.guestStudent?.uid) {
+        return { success: false, error: 'Sanal öğrenci kimliği eksik.' };
+    }
+
+    try {
+        const docRef = doc(db, 'quran_progress', data.guestStudent.uid);
+        const snap = await getDoc(docRef);
+        const existingData = snap.exists() ? (snap.data() as QuranStudentProgress) : null;
+        const stages: Record<string, any> = { ...(existingData?.stages || {}) };
+        const now = new Date().toISOString();
+
+        for (const stageId of data.completedCurriculumIds) {
+            if (stageId === 'cuz') continue;
+            const prevStage = stages[stageId] || {};
+            stages[stageId] = {
+                ...prevStage,
+                status: 'completed',
+                completedAt: prevStage.completedAt || now,
+                score: prevStage.score ?? 100,
+                notes: prevStage.notes || 'Elifba Macerası eşitlemesinden aktarıldı.'
+            };
+        }
+
+        const payload = cleanUndefined({
+            studentUid: data.guestStudent.uid,
+            studentName: data.guestStudent.displayName || existingData?.studentName || 'Öğrenci',
+            studentNumber: data.guestStudent.studentNumber ?? existingData?.studentNumber ?? '',
+            classId: data.classInfo.classId || existingData?.classId || '',
+            className: data.classInfo.className || existingData?.className || '',
+            branch: data.classInfo.branch || existingData?.branch || '',
+            currentStageId: data.activeStageId || existingData?.currentStageId || 'cuz1',
+            stages,
+            cuzPage: existingData?.cuzPage,
+            teacherNotes: existingData?.teacherNotes,
+            lastAssessedAt: now,
+            updatedAt: serverTimestamp()
+        });
+
+        await setDoc(docRef, payload, { merge: true });
+        return { success: true };
+    } catch (error: any) {
+        console.error('syncAdventureStagesToGuestProgress error:', error);
+        return { success: false, error: error.message || 'Sanal öğrenci kaydı güncellenemedi.' };
     }
 }
 
