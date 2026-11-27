@@ -81,6 +81,7 @@ import {
 } from '@/lib/elifba-curriculum';
 import {
     getQuranTrackerData,
+    getRegisteredStudentsAdventureData,
     saveStudentQuranProgress,
     batchUpdateQuranStage,
     getCustomQuranBookPages,
@@ -89,6 +90,7 @@ import {
     resetCustomQuranBookPages,
     type QuranStudentProgress
 } from './actions';
+import { TeacherClassAdventureTracker } from '@/components/elifba-macera/teacher-adventure-panel';
 import { LiveQuranTester } from './live-quran-tester';
 import { BookReadingTester } from './book-reading-tester';
 import { StudentLetterReportDialog } from './student-letter-report-dialog';
@@ -158,8 +160,10 @@ export default function QuranTrackerPage() {
     const [editingCuzStudentUid, setEditingCuzStudentUid] = useState<string | null>(null);
     const [tempCuzPage, setTempCuzPage] = useState<string>('');
 
-    // MEB Kur'an Ders Kitabı Okuma Sayfaları Modülü State
-    const [activeModule, setActiveModule] = useState<'elifba' | 'book_readings'>('elifba');
+    // MEB Kur'an Ders Kitabı Okuma Sayfaları & Elifba Macerası (Kayıtlı Öğrenci) Modülü State
+    const [activeModule, setActiveModule] = useState<'elifba' | 'book_readings' | 'elifba_macera'>('elifba');
+    const [registeredStudents, setRegisteredStudents] = useState<UserProfile[]>([]);
+    const [isLoadingRegistered, setIsLoadingRegistered] = useState<boolean>(false);
     const [isBookTesterOpen, setIsBookTesterOpen] = useState<boolean>(false);
     const [testingBookStudent, setTestingBookStudent] = useState<UserProfile | null>(null);
     const [testingBookPageId, setTestingBookPageId] = useState<string>('p5-1');
@@ -237,12 +241,18 @@ export default function QuranTrackerPage() {
         if (!selectedClassId || !selectedBranch) {
             setStudents([]);
             setProgressMap({});
+            setRegisteredStudents([]);
             setClassName('');
             return;
         }
         setIsLoadingData(true);
+        setIsLoadingRegistered(true);
 
-        const res = await getQuranTrackerData(selectedClassId, selectedBranch, user?.uid);
+        const [res, regRes] = await Promise.all([
+            getQuranTrackerData(selectedClassId, selectedBranch, user?.uid),
+            getRegisteredStudentsAdventureData(selectedClassId, selectedBranch, user?.uid)
+        ]);
+
         if (res.success && res.students) {
             setStudents(res.students);
             setProgressMap(res.progress || {});
@@ -256,7 +266,15 @@ export default function QuranTrackerPage() {
             setStudents([]);
             setProgressMap({});
         }
+
+        if (regRes.success && regRes.students) {
+            setRegisteredStudents(regRes.students);
+        } else {
+            setRegisteredStudents([]);
+        }
+
         setIsLoadingData(false);
+        setIsLoadingRegistered(false);
     }, [selectedClassId, selectedBranch, user?.uid, toast]);
 
     useEffect(() => {
@@ -911,8 +929,13 @@ export default function QuranTrackerPage() {
                                 <Badge className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-black text-[11px] px-2.5 py-0.5 shadow-sm border-0">
                                     Diyanet 30 Adım Müfredatı
                                 </Badge>
-                                <Badge className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-black text-[11px] px-2.5 py-0.5 shadow-sm border-0">
-                                    Sanal Öğrenciler
+                                <Badge className={cn(
+                                    "text-white font-black text-[11px] px-2.5 py-0.5 shadow-sm border-0",
+                                    activeModule === 'elifba_macera'
+                                        ? "bg-gradient-to-r from-sky-500 to-indigo-600"
+                                        : "bg-gradient-to-r from-purple-500 to-indigo-500"
+                                )}>
+                                    {activeModule === 'elifba_macera' ? 'Kayıtlı Öğrenciler' : 'Sanal Öğrenciler'}
                                 </Badge>
                                 {className && (
                                     <Badge variant="outline" className={cn(
@@ -1068,11 +1091,11 @@ export default function QuranTrackerPage() {
                 </div>
 
                 {/* ──────────────────────────────────────────────────────────── */}
-                {/* MODÜL GEÇİŞ SEKMELERİ: ELİFBA & DİYANET vs MEB DERS KİTABI */}
+                {/* MODÜL GEÇİŞ SEKMELERİ: ELİFBA & DİYANET vs MEB vs MACERA     */}
                 {/* ──────────────────────────────────────────────────────────── */}
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 print-hide">
                     <div className={cn(
-                        "flex items-center p-1.5 rounded-2xl border transition-all shadow-xl gap-2",
+                        "flex items-center flex-wrap p-1.5 rounded-2xl border transition-all shadow-xl gap-2",
                         ambianceTheme === 'dark' ? "bg-white/6 border-white/12 backdrop-blur-xl" : "bg-white border-slate-200 shadow-sm"
                     )}>
                         <button
@@ -1087,6 +1110,28 @@ export default function QuranTrackerPage() {
                         >
                             <Sparkles className="w-4 h-4 text-emerald-400" />
                             <span>Elifba &amp; Diyanet Takibi (30 Adım)</span>
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={() => setActiveModule('elifba_macera')}
+                            className={cn(
+                                "flex items-center gap-2 px-4 py-2.5 rounded-xl font-black text-xs sm:text-sm transition-all cursor-pointer",
+                                activeModule === 'elifba_macera'
+                                    ? "bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 text-white shadow-lg shadow-sky-900/40 ring-1 ring-white/20"
+                                    : ambianceTheme === 'dark' ? "text-slate-400 hover:text-white hover:bg-white/5" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                            )}
+                        >
+                            <span>🗺️</span>
+                            <span>Elifba Macerası (Kayıtlı Öğrenciler)</span>
+                            <Badge className={cn(
+                                "font-mono text-[10px] px-1.5 py-0",
+                                activeModule === 'elifba_macera'
+                                    ? "bg-white/20 text-white border-white/30"
+                                    : ambianceTheme === 'dark' ? "bg-sky-400/20 text-sky-300 border-sky-400/40" : "bg-sky-100 text-sky-800 border-sky-200"
+                            )}>
+                                24 Adım
+                            </Badge>
                         </button>
 
                         <button
@@ -1116,6 +1161,11 @@ export default function QuranTrackerPage() {
                             <span className="flex items-center gap-1.5">
                                 <span className="w-2 h-2 rounded-full bg-emerald-400" />
                                 30 basamaklı Diyanet müfredatı üzerinden harf, tecvid ve cüz takibi
+                            </span>
+                        ) : activeModule === 'elifba_macera' ? (
+                            <span className="flex items-center gap-1.5">
+                                <span className="w-2 h-2 rounded-full bg-sky-400" />
+                                Kayıtlı öğrencilerin ev/bireysel Elifba Macerası (24 adım) canlı takibi
                             </span>
                         ) : (
                             <span className="flex items-center gap-1.5">
@@ -2111,6 +2161,20 @@ export default function QuranTrackerPage() {
                     </Card>
                 )}
                     </>
+                ) : activeModule === 'elifba_macera' ? (
+                    <TeacherClassAdventureTracker
+                        students={registeredStudents}
+                        isLoading={isLoadingRegistered}
+                        className={className}
+                        selectedClassId={selectedClassId}
+                        selectedBranch={selectedBranch}
+                        ambianceTheme={ambianceTheme}
+                        onStudentUpdated={(uid, nextAdv) => {
+                            setRegisteredStudents(prev =>
+                                prev.map(s => (s.uid === uid ? { ...s, elifbaAdventure: nextAdv } : s))
+                            );
+                        }}
+                    />
                 ) : (
                     /* ──────────────────────────────────────────────────────────── */
                     /* MEB KUR'AN-I KERİM DERS KİTABI OKUMA SAYFALARI & TİLAVET MODÜLÜ */

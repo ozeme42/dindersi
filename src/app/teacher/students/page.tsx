@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { z } from "zod";
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 // UI Imports
 import {
@@ -15,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { 
     FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Search, 
     UserCheck, UserCog, PlusCircle, ArrowLeft, ChevronLeft, ChevronRight,
-    Star, X
+    Star, X, TrendingUp
 } from "lucide-react";
 import {
     DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger, DropdownMenuSeparator
@@ -37,6 +38,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { deleteUserFromFirestore } from '@/app/teacher/superadmin/actions';
 import { getStudentData, saveUser, bulkAddStudents, approveStudent, addStudentScore } from "./actions";
+import { computeAdventureStats } from "@/lib/elifba-adventure-data";
 
 // Types
 import type { UserProfile, SchoolClass, School } from "@/lib/types";
@@ -194,6 +196,7 @@ function StudentTable({
                         </TableHead>
                         <TableHead className="text-slate-300 font-bold">Öğrenci</TableHead>
                         <TableHead className="text-slate-300 font-bold">Sınıf/Şube</TableHead>
+                        <TableHead className="text-slate-300 font-bold">Elifba Macerası</TableHead>
                         <TableHead className="text-slate-300 font-bold text-right">Puan</TableHead>
                         <TableHead className="text-right text-slate-300 font-bold">Eylemler</TableHead>
                     </TableRow>
@@ -201,6 +204,7 @@ function StudentTable({
                 <TableBody>
                     {students.length > 0 ? students.map((student) => {
                         const isSelected = selectedIds.includes(student.uid);
+                        const advStats = computeAdventureStats(student.elifbaAdventure);
                         return (
                         <TableRow key={student.uid} className={`border-white/5 hover:bg-white/5 transition-colors group ${isSelected ? 'bg-indigo-500/10 hover:bg-indigo-500/20' : ''}`}>
                             <TableCell className="pl-4">
@@ -212,15 +216,26 @@ function StudentTable({
                                 />
                             </TableCell>
                             <TableCell>
-                                <div className="flex items-center gap-3">
+                                <Link href={`/teacher/students/${student.uid}`} className="flex items-center gap-3">
                                     <UserAvatar user={student} className="h-10 w-10 border-2 border-slate-700"/>
                                     <span className="font-bold text-white group-hover:text-indigo-400 transition-colors">{student.displayName}</span>
-                                </div>
+                                </Link>
                             </TableCell>
                             <TableCell>
                                 <Badge variant="secondary" className="bg-slate-800 text-slate-400 border-white/10">
                                     {student.class || 'Sınıfsız'}
                                 </Badge>
+                            </TableCell>
+                            <TableCell>
+                                <Link href={`/teacher/students/${student.uid}`}>
+                                    {student.elifbaAdventure ? (
+                                        <Badge className="bg-emerald-500/15 text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/25 cursor-pointer font-bold">
+                                            🗺️ Adım {student.elifbaAdventure.unlockedStage}/24 • ⭐ {advStats.totalStars}
+                                        </Badge>
+                                    ) : (
+                                        <span className="text-xs text-slate-500 italic hover:text-slate-300">Başlamadı</span>
+                                    )}
+                                </Link>
                             </TableCell>
                              <TableCell className="text-right font-bold text-lg text-amber-400 font-mono">
                                 {student.score || 0}
@@ -232,8 +247,14 @@ function StudentTable({
                                              <MoreHorizontal className="h-5 w-5" />
                                          </Button>
                                      </DropdownMenuTrigger>
-                                     <DropdownMenuContent align="end" className="bg-slate-900 border-white/10 text-white w-48">
+                                     <DropdownMenuContent align="end" className="bg-slate-900 border-white/10 text-white w-52">
                                          <DropdownMenuLabel className="text-slate-500 text-xs uppercase tracking-wider">Seçenekler</DropdownMenuLabel>
+
+                                         <DropdownMenuItem asChild className="focus:bg-white/10 focus:text-white cursor-pointer text-emerald-400 focus:text-emerald-300">
+                                             <Link href={`/teacher/students/${student.uid}`}>
+                                                 <TrendingUp className="mr-2 h-4 w-4" /> Gelişim &amp; Elifba Takibi
+                                             </Link>
+                                         </DropdownMenuItem>
                                          
                                          <DropdownMenuItem onClick={() => onAddScore(student)} className="focus:bg-white/10 focus:text-white cursor-pointer text-amber-400 focus:text-amber-300">
                                              <Star className="mr-2 h-4 w-4" /> Puan Ver
@@ -273,7 +294,7 @@ function StudentTable({
                         )
                     }) : (
                         <TableRow>
-                            <TableCell colSpan={5} className="h-24 text-center text-slate-500 italic">Bu görünümde öğrenci bulunmuyor.</TableCell>
+                            <TableCell colSpan={6} className="h-24 text-center text-slate-500 italic">Bu görünümde öğrenci bulunmuyor.</TableCell>
                         </TableRow>
                     )}
                 </TableBody>

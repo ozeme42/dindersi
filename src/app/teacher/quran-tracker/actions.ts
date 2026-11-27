@@ -538,4 +538,84 @@ export async function resetCustomQuranBookPages(): Promise<{ success: boolean; p
     }
 }
 
+/**
+ * Belirli bir sınıf ve şube için KAYITLI (role === 'student') öğrencileri ve
+ * Büyük Elifba Macerası (24 Adım) ilerlemelerini getirir.
+ */
+export async function getRegisteredStudentsAdventureData(
+    classId: string,
+    branch: string,
+    teacherId?: string
+): Promise<{
+    success: boolean;
+    students?: UserProfile[];
+    className?: string;
+    error?: string;
+}> {
+    noStore();
+    if (!classId || !branch) {
+        return { success: false, error: 'Sınıf ve şube seçilmelidir.' };
+    }
+
+    try {
+        const classDoc = await getDoc(doc(db, 'classes', classId));
+        if (!classDoc.exists()) {
+            return { success: false, error: 'Seçilen sınıf bulunamadı.' };
+        }
+        const className = classDoc.data().name as string;
+
+        let studentsQuery;
+        if (branch === 'all') {
+            studentsQuery = query(
+                collection(db, 'users'),
+                where('class', '>=', className),
+                where('class', '<', className + '\uf8ff')
+            );
+        } else {
+            const fullClassName = `${className} - ${branch}`;
+            const poolClassName = `${fullClassName} (Havuz)`;
+            studentsQuery = query(
+                collection(db, 'users'),
+                where('class', 'in', [fullClassName, poolClassName])
+            );
+        }
+
+        const studentsSnap = await getDocs(studentsQuery);
+        let rawStudents = studentsSnap.docs
+            .map(d => ({ uid: d.id, ...d.data() }) as UserProfile)
+            .filter(s => s.role === 'student');
+
+        if (teacherId) {
+            const teacherSnap = await getDoc(doc(db, 'users', teacherId));
+            if (teacherSnap.exists()) {
+                const teacherData = teacherSnap.data() as UserProfile;
+                if (teacherData.role !== 'superadmin') {
+                    if (teacherData.schoolName) {
+                        const targetSchool = teacherData.schoolName.trim().toLocaleLowerCase('tr');
+                        rawStudents = rawStudents.filter(
+                            s => s.schoolName && s.schoolName.trim().toLocaleLowerCase('tr') === targetSchool
+                        );
+                    } else {
+                        rawStudents = rawStudents.filter(s => s.teacherId === teacherId);
+                    }
+                }
+            }
+        }
+
+        const students = deduplicateStudents(rawStudents);
+        students.sort((a, b) =>
+            (a.displayName || '').localeCompare(b.displayName || '', 'tr', { sensitivity: 'base' })
+        );
+
+        return {
+            success: true,
+            students: serialize(students),
+            className
+        };
+    } catch (error: any) {
+        console.error('Error fetching registered students adventure data:', error);
+        return { success: false, error: error.message || 'Kayıtlı öğrenci verileri alınamadı.' };
+    }
+}
+
 

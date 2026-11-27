@@ -21,6 +21,28 @@ export type UserProfile = {
     longestStreak?: number;
     lastStreakDate?: string; // ISO string 'yyyy-MM-dd'
     lastWheelSpin?: any; // Can be a server timestamp on write, string on read
+    // Büyük Elifba Macerası ilerleme özeti
+    elifbaAdventure?: {
+        name: string;
+        avatar: string;
+        unlockedStage: number;
+        totalStars: number;
+        completedCount: number;
+        xp: number;
+        streak: number;
+        badges: string[];
+        stageStars: Record<number, number>;
+        stageScores: Record<number, number>;
+        stageMastered: Record<number, {
+            learnDone: boolean;
+            reinforceDone: boolean;
+            examPassed: boolean;
+            bestAccuracy: number;
+        }>;
+        teacherFreeMode?: boolean;
+        lastStageTitle?: string;
+        lastActivityAt?: string;
+    };
 };
 
 export type ShopItem = {

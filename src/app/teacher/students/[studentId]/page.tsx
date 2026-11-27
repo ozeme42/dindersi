@@ -17,6 +17,7 @@ import { formatDistanceToNow } from "date-fns";
 import { tr } from 'date-fns/locale';
 import { cn } from "@/lib/utils";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { TeacherStudentAdventureCard } from "@/components/elifba-macera/teacher-adventure-panel";
 
 
 function ErrorWithLink({ message }: { message: string }) {
@@ -212,7 +213,17 @@ export default function StudentDetailPage() {
                     <CourseProgress coursesProgress={coursesProgress} />
                     <QuestionBankStats questionBankStats={questionBankStats} />
                 </div>
-                <div className="lg:col-span-2">
+                <div className="lg:col-span-2 space-y-8">
+                    <TeacherStudentAdventureCard
+                        student={profile}
+                        onStudentUpdated={(uid, nextAdv) => {
+                            setDetails(prev =>
+                                prev && prev.profile.uid === uid
+                                    ? { ...prev, profile: { ...prev.profile, elifbaAdventure: nextAdv } }
+                                    : prev
+                            );
+                        }}
+                    />
                    <RecentActivityList recentActivity={recentActivity} />
                 </div>
             </div>

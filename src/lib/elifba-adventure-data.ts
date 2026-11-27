@@ -64,6 +64,8 @@ export interface AdventurePlayerData {
     xp: number;
     streak: number;
     teacherFreeMode: boolean;
+    lastStageTitle?: string;
+    lastActivityAt?: string;
 }
 
 export const AVATAR_CHOICES = ['🦁', '🦉', '🦊', '🐼', '🐥', '🚀', '🌙', '🌟'];
@@ -879,9 +881,9 @@ const STORAGE_KEY_NAME = 'elifbam_adventure_player_name';
 const STORAGE_KEY_DATA = 'elifbam_adventure_progress_v2';
 const LEGACY_STORAGE_KEY_DATA = 'elifbam_adventure_progress';
 
-export function loadAdventurePlayerData(): AdventurePlayerData {
-    const defaultData: AdventurePlayerData = {
-        name: "Küçük Hafız",
+export function getDefaultAdventurePlayerData(defaultName: string = "Küçük Hafız"): AdventurePlayerData {
+    return {
+        name: defaultName || "Küçük Hafız",
         avatar: "🦉",
         unlockedStage: 1,
         stageStars: {},
@@ -892,10 +894,26 @@ export function loadAdventurePlayerData(): AdventurePlayerData {
         streak: 0,
         teacherFreeMode: false
     };
+}
 
+export function loadAdventurePlayerData(userId?: string, defaultName?: string): AdventurePlayerData {
+    const defaultData = getDefaultAdventurePlayerData(defaultName);
     if (typeof window === 'undefined') return defaultData;
 
     try {
+        if (userId) {
+            const scopedRaw = localStorage.getItem(`${STORAGE_KEY_DATA}_${userId}`);
+            if (scopedRaw) {
+                const parsed = JSON.parse(scopedRaw);
+                return {
+                    ...defaultData,
+                    ...parsed,
+                    name: parsed.name || defaultName || defaultData.name
+                };
+            }
+            return defaultData;
+        }
+
         const savedName = localStorage.getItem(STORAGE_KEY_NAME);
         if (savedName) defaultData.name = savedName;
 
@@ -927,12 +945,107 @@ export function loadAdventurePlayerData(): AdventurePlayerData {
     return defaultData;
 }
 
-export function saveAdventurePlayerData(data: AdventurePlayerData): void {
+export function saveAdventurePlayerData(data: AdventurePlayerData, userId?: string): void {
     if (typeof window === 'undefined') return;
     try {
+        if (userId) {
+            localStorage.setItem(`${STORAGE_KEY_DATA}_${userId}`, JSON.stringify(data));
+            return;
+        }
         localStorage.setItem(STORAGE_KEY_NAME, data.name);
         localStorage.setItem(STORAGE_KEY_DATA, JSON.stringify(data));
     } catch (e) {
         console.error("Player data save error:", e);
     }
+}
+
+export function computeAdventureStats(data?: Partial<AdventurePlayerData> | null) {
+    if (!data) {
+        return { totalStars: 0, completedCount: 0, maxStars: ADVENTURE_STAGES.length * 3, percent: 0 };
+    }
+    const stageStars = data.stageStars || {};
+    const stageMastered = data.stageMastered || {};
+    const totalStars = Object.values(stageStars).reduce((acc, s) => acc + (Number(s) || 0), 0);
+    const completedCount = ADVENTURE_STAGES.filter(
+        st => stageMastered[st.id]?.examPassed || (Number(stageStars[st.id]) || 0) > 0
+    ).length;
+    const maxStars = ADVENTURE_STAGES.length * 3;
+    const percent = Math.round((completedCount / ADVENTURE_STAGES.length) * 100);
+    return { totalStars, completedCount, maxStars, percent };
+}
+
+export function toCloudAdventurePayload(data: AdventurePlayerData, lastStageTitle?: string) {
+    const stats = computeAdventureStats(data);
+    return {
+        name: data.name || 'Küçük Hafız',
+        avatar: data.avatar || '🦉',
+        unlockedStage: Math.min(ADVENTURE_STAGES.length, Math.max(1, Number(data.unlockedStage) || 1)),
+        totalStars: stats.totalStars,
+        completedCount: stats.completedCount,
+        xp: Number(data.xp) || 0,
+        streak: Number(data.streak) || 0,
+        badges: Array.isArray(data.badges) ? data.badges : [],
+        stageStars: data.stageStars || {},
+        stageScores: data.stageScores || {},
+        stageMastered: data.stageMastered || {},
+        teacherFreeMode: Boolean(data.teacherFreeMode),
+        lastStageTitle: lastStageTitle || data.lastStageTitle || `Adım ${data.unlockedStage || 1}`,
+        lastActivityAt: new Date().toISOString()
+    };
+}
+
+export function mergeAdventureProgress(
+    local: AdventurePlayerData,
+    cloud?: Partial<AdventurePlayerData> | null
+): AdventurePlayerData {
+    if (!cloud) return local;
+
+    const mergedStars: Record<number, number> = { ...(local.stageStars || {}) };
+    for (const [k, v] of Object.entries(cloud.stageStars || {})) {
+        const id = Number(k);
+        mergedStars[id] = Math.max(Number(mergedStars[id]) || 0, Number(v) || 0);
+    }
+
+    const mergedScores: Record<number, number> = { ...(local.stageScores || {}) };
+    for (const [k, v] of Object.entries(cloud.stageScores || {})) {
+        const id = Number(k);
+        mergedScores[id] = Math.max(Number(mergedScores[id]) || 0, Number(v) || 0);
+    }
+
+    const mergedMastered: Record<number, StageMasteryProgress> = { ...(local.stageMastered || {}) };
+    for (const [k, v] of Object.entries(cloud.stageMastered || {})) {
+        const id = Number(k);
+        const cur = mergedMastered[id] || {
+            learnDone: false,
+            reinforceDone: false,
+            examPassed: false,
+            bestAccuracy: 0
+        };
+        mergedMastered[id] = {
+            learnDone: Boolean(cur.learnDone || v?.learnDone),
+            reinforceDone: Boolean(cur.reinforceDone || v?.reinforceDone),
+            examPassed: Boolean(cur.examPassed || v?.examPassed),
+            bestAccuracy: Math.max(Number(cur.bestAccuracy) || 0, Number(v?.bestAccuracy) || 0)
+        };
+    }
+
+    const badges = Array.from(new Set([...(local.badges || []), ...(cloud.badges || [])]));
+    const useCloudMeta =
+        (cloud.lastActivityAt && (!local.lastActivityAt || cloud.lastActivityAt >= local.lastActivityAt)) ||
+        (!local.xp && Number(cloud.xp) > 0);
+
+    return {
+        name: (useCloudMeta ? cloud.name : local.name) || cloud.name || local.name || 'Küçük Hafız',
+        avatar: (useCloudMeta ? cloud.avatar : local.avatar) || cloud.avatar || local.avatar || '🦉',
+        unlockedStage: Math.max(Number(local.unlockedStage) || 1, Number(cloud.unlockedStage) || 1),
+        stageStars: mergedStars,
+        stageScores: mergedScores,
+        stageMastered: mergedMastered,
+        badges,
+        xp: Math.max(Number(local.xp) || 0, Number(cloud.xp) || 0),
+        streak: Math.max(Number(local.streak) || 0, Number(cloud.streak) || 0),
+        teacherFreeMode: Boolean(cloud.teacherFreeMode ?? local.teacherFreeMode),
+        lastStageTitle: cloud.lastStageTitle || local.lastStageTitle,
+        lastActivityAt: cloud.lastActivityAt || local.lastActivityAt
+    };
 }

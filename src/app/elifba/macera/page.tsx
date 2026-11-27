@@ -2,6 +2,10 @@
 
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import Link from 'next/link';
+import { doc, updateDoc, addDoc, collection, increment, serverTimestamp } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { useAuth } from '@/context/auth-context';
+import { forceStreakCheck } from '@/app/student/actions';
 import {
     ADVENTURE_STAGES,
     ADVENTURE_ISLANDS,
@@ -11,7 +15,9 @@ import {
     getPlayerRank,
     playAdventureTone,
     loadAdventurePlayerData,
-    saveAdventurePlayerData
+    saveAdventurePlayerData,
+    toCloudAdventurePayload,
+    mergeAdventureProgress
 } from '@/lib/elifba-adventure-data';
 import {
     LearnPhaseView,
@@ -55,6 +61,8 @@ const WINDING_OFFSETS_DESKTOP = [0, -56, -84, -56, 0, 56, 84, 56];
 const WINDING_OFFSETS_MOBILE = [0, -28, -42, -28, 0, 28, 42, 28];
 
 export default function ElifbaMaceraPage() {
+    const { user, loading: authLoading } = useAuth();
+
     const [playerData, setPlayerData] = useState<AdventurePlayerData>({
         name: 'Küçük Hafız',
         avatar: '🦉',
@@ -69,6 +77,7 @@ export default function ElifbaMaceraPage() {
     });
 
     const [isLoaded, setIsLoaded] = useState(false);
+    const [cloudSyncStatus, setCloudSyncStatus] = useState<'guest' | 'syncing' | 'synced' | 'error'>('guest');
     const [activeIslandFilter, setActiveIslandFilter] = useState<number>(0);
     const [screen, setScreen] = useState<ActiveScreen>({ mode: 'map' });
     const [soundEnabled, setSoundEnabled] = useState(true);
@@ -89,33 +98,98 @@ export default function ElifbaMaceraPage() {
     const [mascotBubbleOpen, setMascotBubbleOpen] = useState(true);
 
     const audioRef = useRef<HTMLAudioElement | null>(null);
+    const syncTimerRef = useRef<NodeJS.Timeout | null>(null);
+    const hasInitializedUserRef = useRef<string | null>(null);
 
-    // İlk yükleme + Viewport takibi
+    // Firestore Bulut Yazma Yardımcısı (Debounce veya Anında)
+    const persistToFirestore = useCallback(
+        async (data: AdventurePlayerData, lastStageTitle?: string, immediate: boolean = false) => {
+            if (!user?.uid) return;
+            const runWrite = async () => {
+                try {
+                    setCloudSyncStatus('syncing');
+                    const payload = toCloudAdventurePayload(data, lastStageTitle);
+                    await updateDoc(doc(db, 'users', user.uid), {
+                        elifbaAdventure: payload
+                    });
+                    setCloudSyncStatus('synced');
+                } catch (err) {
+                    console.warn('Firestore elifbaAdventure sync error:', err);
+                    setCloudSyncStatus('error');
+                }
+            };
+
+            if (syncTimerRef.current) clearTimeout(syncTimerRef.current);
+            if (immediate) {
+                await runWrite();
+            } else {
+                syncTimerRef.current = setTimeout(runWrite, 500);
+            }
+        },
+        [user?.uid]
+    );
+
+    // Viewport takibi
     useEffect(() => {
-        const loaded = loadAdventurePlayerData();
-        setPlayerData(loaded);
-        setIsLoaded(true);
+        if (typeof window === 'undefined') return;
+        const checkWidth = () => setIsMobileViewport(window.innerWidth < 640);
+        checkWidth();
+        window.addEventListener('resize', checkWidth);
+        return () => window.removeEventListener('resize', checkWidth);
+    }, []);
 
-        if (typeof window !== 'undefined') {
-            const checkWidth = () => setIsMobileViewport(window.innerWidth < 640);
-            checkWidth();
-            window.addEventListener('resize', checkWidth);
+    // Kullanıcı ve Bulut Verisi Senkronizasyonu
+    useEffect(() => {
+        if (authLoading) return;
 
-            if (!localStorage.getItem('elifbam_adventure_player_name')) {
+        const uid = user?.uid;
+        if (uid) {
+            const cloudData = (user as any)?.elifbaAdventure as Partial<AdventurePlayerData> | undefined;
+            const localScoped = loadAdventurePlayerData(uid, user.displayName || 'Öğrenci');
+            const merged = mergeAdventureProgress(localScoped, cloudData);
+
+            setPlayerData(merged);
+            saveAdventurePlayerData(merged, uid);
+            setCloudSyncStatus('synced');
+            setIsLoaded(true);
+
+            // Eğer ilk defa girişte bulutta hiç kayıt yoksa veya öğretmen/yerel ilerleme öndeyse buluta yaz
+            if (hasInitializedUserRef.current !== uid) {
+                hasInitializedUserRef.current = uid;
+                if (!cloudData || merged.xp > (cloudData.xp || 0) || merged.unlockedStage > (cloudData.unlockedStage || 1)) {
+                    persistToFirestore(merged, merged.lastStageTitle, true);
+                }
+            }
+        } else {
+            hasInitializedUserRef.current = null;
+            const loadedGuest = loadAdventurePlayerData();
+            setPlayerData(loadedGuest);
+            setCloudSyncStatus('guest');
+            setIsLoaded(true);
+
+            if (typeof window !== 'undefined' && !localStorage.getItem('elifbam_adventure_player_name')) {
                 setIsProfileModalOpen(true);
             }
-            return () => window.removeEventListener('resize', checkWidth);
         }
-    }, []);
+    }, [authLoading, user, persistToFirestore]);
 
-    // Güncelleme Yardımcısı
-    const updatePlayerData = useCallback((updater: (prev: AdventurePlayerData) => AdventurePlayerData) => {
-        setPlayerData(prev => {
-            const next = updater(prev);
-            saveAdventurePlayerData(next);
-            return next;
-        });
-    }, []);
+    // Güncelleme Yardımcısı (Hem LocalStorage hem Bulut)
+    const updatePlayerData = useCallback(
+        (
+            updater: (prev: AdventurePlayerData) => AdventurePlayerData,
+            options?: { stageTitle?: string; immediateCloud?: boolean }
+        ) => {
+            setPlayerData(prev => {
+                const next = updater(prev);
+                saveAdventurePlayerData(next, user?.uid);
+                if (user?.uid) {
+                    persistToFirestore(next, options?.stageTitle, options?.immediateCloud ?? false);
+                }
+                return next;
+            });
+        },
+        [user?.uid, persistToFirestore]
+    );
 
     // Ses Çalma Yardımcısı
     const playAudio = useCallback(
@@ -183,22 +257,26 @@ export default function ElifbaMaceraPage() {
     // Faz 1 Tamamlandı
     const handleCompleteLearn = useCallback(
         (stageId: number) => {
-            updatePlayerData(prev => {
-                const existing = prev.stageMastered[stageId] || {
-                    learnDone: false,
-                    reinforceDone: false,
-                    examPassed: false,
-                    bestAccuracy: 0
-                };
-                return {
-                    ...prev,
-                    xp: (prev.xp || 0) + 15,
-                    stageMastered: {
-                        ...prev.stageMastered,
-                        [stageId]: { ...existing, learnDone: true }
-                    }
-                };
-            });
+            const stageObj = ADVENTURE_STAGES.find(s => s.id === stageId);
+            updatePlayerData(
+                prev => {
+                    const existing = prev.stageMastered[stageId] || {
+                        learnDone: false,
+                        reinforceDone: false,
+                        examPassed: false,
+                        bestAccuracy: 0
+                    };
+                    return {
+                        ...prev,
+                        xp: (prev.xp || 0) + 15,
+                        stageMastered: {
+                            ...prev.stageMastered,
+                            [stageId]: { ...existing, learnDone: true }
+                        }
+                    };
+                },
+                { stageTitle: stageObj ? `Adım ${stageObj.id}: ${stageObj.shortTitle}` : undefined, immediateCloud: true }
+            );
             setScreen({ mode: 'stage', stageId, phase: 'reinforce' });
         },
         [updatePlayerData]
@@ -207,73 +285,106 @@ export default function ElifbaMaceraPage() {
     // Faz 2 Tamamlandı
     const handleCompleteReinforce = useCallback(
         (stageId: number) => {
-            updatePlayerData(prev => {
-                const existing = prev.stageMastered[stageId] || {
-                    learnDone: true,
-                    reinforceDone: false,
-                    examPassed: false,
-                    bestAccuracy: 0
-                };
-                return {
-                    ...prev,
-                    xp: (prev.xp || 0) + 25,
-                    stageMastered: {
-                        ...prev.stageMastered,
-                        [stageId]: { ...existing, learnDone: true, reinforceDone: true }
-                    }
-                };
-            });
+            const stageObj = ADVENTURE_STAGES.find(s => s.id === stageId);
+            updatePlayerData(
+                prev => {
+                    const existing = prev.stageMastered[stageId] || {
+                        learnDone: true,
+                        reinforceDone: false,
+                        examPassed: false,
+                        bestAccuracy: 0
+                    };
+                    return {
+                        ...prev,
+                        xp: (prev.xp || 0) + 25,
+                        stageMastered: {
+                            ...prev.stageMastered,
+                            [stageId]: { ...existing, learnDone: true, reinforceDone: true }
+                        }
+                    };
+                },
+                { stageTitle: stageObj ? `Adım ${stageObj.id}: ${stageObj.shortTitle}` : undefined, immediateCloud: true }
+            );
             setScreen({ mode: 'stage', stageId, phase: 'exam' });
         },
         [updatePlayerData]
     );
 
-    // Faz 3 Ustalık Sınavı Başarısı
+    // Faz 3 Ustalık Sınavı Başarısı (+ Kayıtlı Öğrenci Sistem Puanı & Seri Güncellemesi)
     const handleExamPassed = useCallback(
         (stageId: number, stars: number, accuracy: number, xpEarned: number) => {
             const stageObj = ADVENTURE_STAGES.find(s => s.id === stageId);
-            updatePlayerData(prev => {
-                const prevStars = prev.stageStars[stageId] || 0;
-                const existingMaster = prev.stageMastered[stageId] || {
-                    learnDone: true,
-                    reinforceDone: true,
-                    examPassed: false,
-                    bestAccuracy: 0
-                };
-                const nextBadges = [...prev.badges];
-                if (stageObj?.badgeId && !nextBadges.includes(stageObj.badgeId)) {
-                    nextBadges.push(stageObj.badgeId);
-                }
+            const stageLabel = stageObj ? `Adım ${stageObj.id}: ${stageObj.shortTitle}` : `Adım ${stageId}`;
 
-                const nextUnlock = Math.min(ADVENTURE_STAGES.length, Math.max(prev.unlockedStage, stageId + 1));
-
-                return {
-                    ...prev,
-                    unlockedStage: nextUnlock,
-                    xp: (prev.xp || 0) + xpEarned,
-                    streak: (prev.streak || 0) + 1,
-                    badges: nextBadges,
-                    stageStars: {
-                        ...prev.stageStars,
-                        [stageId]: Math.max(stars, prevStars)
-                    },
-                    stageScores: {
-                        ...prev.stageScores,
-                        [stageId]: Math.max(accuracy, prev.stageScores[stageId] || 0)
-                    },
-                    stageMastered: {
-                        ...prev.stageMastered,
-                        [stageId]: {
-                            learnDone: true,
-                            reinforceDone: true,
-                            examPassed: true,
-                            bestAccuracy: Math.max(accuracy, existingMaster.bestAccuracy || 0)
-                        }
+            updatePlayerData(
+                prev => {
+                    const prevStars = prev.stageStars[stageId] || 0;
+                    const existingMaster = prev.stageMastered[stageId] || {
+                        learnDone: true,
+                        reinforceDone: true,
+                        examPassed: false,
+                        bestAccuracy: 0
+                    };
+                    const nextBadges = [...prev.badges];
+                    if (stageObj?.badgeId && !nextBadges.includes(stageObj.badgeId)) {
+                        nextBadges.push(stageObj.badgeId);
                     }
-                };
-            });
+
+                    const nextUnlock = Math.min(ADVENTURE_STAGES.length, Math.max(prev.unlockedStage, stageId + 1));
+
+                    return {
+                        ...prev,
+                        unlockedStage: nextUnlock,
+                        xp: (prev.xp || 0) + xpEarned,
+                        streak: (prev.streak || 0) + 1,
+                        badges: nextBadges,
+                        stageStars: {
+                            ...prev.stageStars,
+                            [stageId]: Math.max(stars, prevStars)
+                        },
+                        stageScores: {
+                            ...prev.stageScores,
+                            [stageId]: Math.max(accuracy, prev.stageScores[stageId] || 0)
+                        },
+                        stageMastered: {
+                            ...prev.stageMastered,
+                            [stageId]: {
+                                learnDone: true,
+                                reinforceDone: true,
+                                examPassed: true,
+                                bestAccuracy: Math.max(accuracy, existingMaster.bestAccuracy || 0)
+                            }
+                        }
+                    };
+                },
+                { stageTitle: stageLabel, immediateCloud: true }
+            );
+
+            // Kayıtlı öğrenci için okul puanını & etkinlik geçmişini Firestore'a işle
+            if (user?.uid) {
+                const schoolPoints = Math.min(300, Math.max(20, xpEarned));
+                (async () => {
+                    try {
+                        await Promise.all([
+                            updateDoc(doc(db, 'users', user.uid), {
+                                score: increment(schoolPoints)
+                            }),
+                            addDoc(collection(db, 'scoreEvents'), {
+                                userId: user.uid,
+                                points: schoolPoints,
+                                gameType: 'Elifba Macerası',
+                                context: `${stageLabel} (%${accuracy} Başarı • ${'⭐'.repeat(stars)})`,
+                                timestamp: serverTimestamp()
+                            })
+                        ]);
+                        await forceStreakCheck(user.uid);
+                    } catch (err) {
+                        console.warn('Adventure school XP update error:', err);
+                    }
+                })();
+            }
         },
-        [updatePlayerData]
+        [updatePlayerData, user?.uid]
     );
 
     if (!isLoaded) {
@@ -322,13 +433,24 @@ export default function ElifbaMaceraPage() {
                                 <span>Haritaya Dön</span>
                             </button>
                         ) : (
-                            <Link
-                                href="/elifba"
-                                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-black text-xs border border-slate-200 transition-all"
-                            >
-                                <Home className="w-4 h-4 text-emerald-600" />
-                                <span className="hidden xs:inline">Elifba Portalı</span>
-                            </Link>
+                            <>
+                                {user?.role === 'student' && (
+                                    <Link
+                                        href="/student"
+                                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-2xl bg-indigo-50 hover:bg-indigo-100 text-indigo-800 font-black text-xs border-2 border-indigo-200 transition-all"
+                                    >
+                                        <span>🎒</span>
+                                        <span className="hidden xs:inline">Öğrenci Panelim</span>
+                                    </Link>
+                                )}
+                                <Link
+                                    href="/elifba"
+                                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-black text-xs border border-slate-200 transition-all"
+                                >
+                                    <Home className="w-4 h-4 text-emerald-600" />
+                                    <span className="hidden xs:inline">Elifba Portalı</span>
+                                </Link>
+                            </>
                         )}
 
                         <button
@@ -419,14 +541,36 @@ export default function ElifbaMaceraPage() {
                     <section className="bg-white/95 rounded-[2rem] border-4 border-sky-200 shadow-[0_14px_40px_rgba(2,132,199,0.1)] p-5 sm:p-7 relative overflow-hidden">
                         <div className="flex flex-col md:flex-row items-center justify-between gap-5">
                             <div className="text-center md:text-left space-y-1.5">
-                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-sky-100 to-emerald-100 border border-sky-200 text-sky-900 text-xs font-black">
-                                    <span>{rank.icon}</span>
-                                    <span>Ünvan: {rank.title}</span>
-                                    {playerData.teacherFreeMode && (
-                                        <span className="ml-1 px-2 py-0.5 rounded-full bg-amber-400 text-slate-950 text-[10px]">
-                                            Öğretmen Serbest Mod
+                                <div className="flex items-center justify-center md:justify-start gap-2 flex-wrap">
+                                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-sky-100 to-emerald-100 border border-sky-200 text-sky-900 text-xs font-black">
+                                        <span>{rank.icon}</span>
+                                        <span>Ünvan: {rank.title}</span>
+                                        {playerData.teacherFreeMode && (
+                                            <span className="ml-1 px-2 py-0.5 rounded-full bg-amber-400 text-slate-950 text-[10px]">
+                                                Öğretmen Serbest Mod
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    {cloudSyncStatus === 'synced' ? (
+                                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-black">
+                                            <span>☁️</span>
+                                            <span>Öğrenci Hesabınla Senkronize</span>
                                         </span>
-                                    )}
+                                    ) : cloudSyncStatus === 'syncing' ? (
+                                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-sky-50 border border-sky-200 text-sky-800 text-[11px] font-black animate-pulse">
+                                            <span>⏳</span>
+                                            <span>Kaydediliyor...</span>
+                                        </span>
+                                    ) : cloudSyncStatus === 'guest' ? (
+                                        <Link
+                                            href="/login"
+                                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-600 text-[11px] font-bold transition-colors"
+                                            title="İlerlemeni buluta ve öğretmen takibine bağlamak için giriş yap"
+                                        >
+                                            <span>👤 Misafir Modu • Öğrenci Girişi Yap</span>
+                                        </Link>
+                                    ) : null}
                                 </div>
                                 <h1 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
                                     🗺️ Büyük Elifba Macerası

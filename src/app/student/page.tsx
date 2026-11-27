@@ -548,6 +548,40 @@ function PageContent() {
                             </div>
                         </div>
                     </Link>
+
+                    {/* Büyük Elifba Macerası (Kayıtlı Öğrenci Bulut Takibi) */}
+                    <Link href="/elifba/macera">
+                        <div className="group relative rounded-3xl overflow-hidden border border-emerald-400/35 shadow-[0_12px_40px_rgba(16,185,129,0.28)] active:scale-[0.98] transition-all duration-200 cursor-pointer">
+                            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500 via-teal-600 to-cyan-700" />
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,rgba(255,255,255,0.22),transparent_55%)]" />
+                            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+                            <div className="absolute bottom-0 left-0 right-0 h-1 bg-black/25 rounded-b-3xl" />
+                            <div className="absolute -right-3 -bottom-3 opacity-10">
+                                <BookOpen className="w-32 h-32" />
+                            </div>
+                            <div className="relative p-5 flex items-center gap-4">
+                                <div className="w-16 h-16 rounded-2xl bg-white/20 border border-white/30 flex items-center justify-center shrink-0 shadow-inner backdrop-blur-sm group-hover:scale-110 transition-transform duration-300 text-3xl">
+                                    🗺️
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                    <div className="flex items-center flex-wrap gap-2">
+                                        <p className="font-black text-white text-2xl leading-tight drop-shadow-md">Büyük Elifba Macerası</p>
+                                        <span className="bg-amber-400 text-slate-950 text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">
+                                            Adım {(user as any)?.elifbaAdventure?.unlockedStage || 1}/24
+                                        </span>
+                                    </div>
+                                    <p className="text-emerald-100/85 text-sm font-semibold mt-0.5 truncate">
+                                        {(user as any)?.elifbaAdventure
+                                            ? `Tamamlanan: ${(user as any).elifbaAdventure.completedCount || 0}/24 • ⭐ ${(user as any).elifbaAdventure.totalStars || 0} Yıldız`
+                                            : "Harfleri ve Kur'an okumayı oyunla adım adım öğren"}
+                                    </p>
+                                </div>
+                                <div className="w-10 h-10 rounded-xl bg-white/15 border border-white/25 flex items-center justify-center shrink-0 group-hover:translate-x-1 transition-transform duration-300">
+                                    <ArrowRight className="h-5 w-5 text-white" />
+                                </div>
+                            </div>
+                        </div>
+                    </Link>
                 </div>
             </section>
 
